@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<title>Tipitaka Reader (GitHub → Blogspot)</title>
+<style>
+  body{font-family:"Myanmar Text","Padauk",sans-serif;max-width:820px;margin:0 auto;padding:20px;line-height:1.9;}
+  #tp-breadcrumb{font-size:.9em;color:#666;margin-bottom:12px;}
+  #tp-breadcrumb a{color:#0645ad;cursor:pointer;text-decoration:none;}
+  #tp-breadcrumb a:hover{text-decoration:underline;}
+  .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:16px 0;}
+  .tp-card{border:1px solid #ddd;border-radius:8px;padding:12px;cursor:pointer;text-align:center;transition:.15s;}
+  .tp-card:hover{background:#f5f5f5;border-color:#999;}
+  .tp-card .tp-count{font-size:.8em;color:#888;display:block;margin-top:4px;}
+  #tp-nav{display:flex;justify-content:space-between;margin-bottom:16px;}
+  #tp-nav button{padding:8px 16px;cursor:pointer;}
+  #tp-nav button:disabled{opacity:.4;cursor:default;}
+  #tp-meta{color:#666;font-size:.9em;margin-bottom:12px;}
+  #tp-content .nikaya{font-weight:bold;font-size:1.2em;}
+  #tp-content .book{font-weight:bold;}
+  #tp-content .centered{text-align:center;}
+  #tp-content .chapter{font-weight:bold;text-align:center;margin-top:1em;}
+  #tp-content .paranum{color:#a00;font-weight:bold;margin-right:4px;}
+  #tp-content .note{font-size:.8em;color:#888;vertical-align:super;}
+  .tp-loading{color:#888;}
+</style>
+</head>
+<body>
+
+<!-- ==== Blogspot HTML/JavaScript Gadget ထဲကို ဒီ block ကို တစ်ခုလုံး ကူးထည့်နိုင်ပါတယ် ==== -->
+<div id="tp-breadcrumb"></div>
+<div id="tp-view"><p class="tp-loading">Loading...</p></div>
+
+<script>
+(function(){
+  // ---------------------------------------------------------
+  // CONFIG
+  // ---------------------------------------------------------
+  const GITHUB_USER = "sayadawtejinda";
+  const GITHUB_REPO = "tipitaka";
+  const GITHUB_BRANCH = "main";
+  const DATA_FOLDER = "data";
+  const INDEX_FILE = "books.json"; // repo root မှာ ရှိရင်, data/ ထဲထား ရင် "data/books.json"
+
+  function cdnUrl(path){
+    return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
+  }
+
+  let bookIndex = null;   // books.json ကို memory ထဲ cache
+  let currentRows = [];
+  let currentBookId = "";
+
+  async function fetchJson(url){
+    const res = await fetch(url);
+    if(!res.ok) throw new Error("Fetch failed: " + url);
+    return res.json();
+  }
+
+  async function ensureIndex(){
+    if(!bookIndex) bookIndex = await fetchJson(cdnUrl(INDEX_FILE));
+    return bookIndex;
+  }
+
+  // ---------- URL state ----------
+  function getParams(){
+    const p = new URLSearchParams(window.location.search);
+    return {
+      basket: p.get("basket") || "",
+      category: p.get("category") || "",
+      book: p.get("book") || "",
+      page: p.get("page") ? parseInt(p.get("page"),10) : null
+    };
+  }
+  function setParams(obj){
+    const p = new URLSearchParams();
+    if(obj.basket) p.set("basket", obj.basket);
+    if(obj.category) p.set("category", obj.category);
+    if(obj.book) p.set("book", obj.book);
+    if(obj.page) p.set("page", obj.page);
+    history.pushState({}, "", "?" + p.toString());
+  }
+
+  // ---------- breadcrumb ----------
+  function renderBreadcrumb(parts){
+    // parts: [{label, onclick}]
+    const el = document.getElementById("tp-breadcrumb");
+    el.innerHTML = parts.map((p,i) => {
+      const sep = i>0 ? " › " : "";
+      if(p.onclick){
+        return sep + `<a data-idx="${i}">${p.label}</a>`;
+      }
+      return sep + p.label;
+    }).join("");
+    parts.forEach((p,i) => {
+      if(p.onclick){
+        el.querySelector(`a[data-idx="${i}"]`).addEventListener("click", p.onclick);
+      }
+    });
+  }
+
+  // ---------- Level 1: basket list ----------
+  async function showBaskets(){
+    const idx = await ensureIndex();
+    renderBreadcrumb([{label:"တိပိဋက"}]);
+    const baskets = Object.keys(idx.basket_labels);
+    const html = baskets.map(b => {
+      const count = idx.books.filter(bk => bk.basket === b).length;
+      return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${count} အုပ်</span></div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-basket]").forEach(el=>{
+      el.addEventListener("click", ()=> showCategories(el.dataset.basket));
+    });
+    setParams({});
+  }
+
+  // ---------- Level 2: category list within a basket ----------
+  async function showCategories(basketId){
+    const idx = await ensureIndex();
+    const basketLabel = idx.basket_labels[basketId] || basketId;
+    renderBreadcrumb([
+      {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+      {label: basketLabel}
+    ]);
+    const cats = [...new Set(idx.books.filter(b=>b.basket===basketId).map(b=>b.category))];
+    const html = cats.map(c => {
+      const count = idx.books.filter(b=>b.basket===basketId && b.category===c).length;
+      const label = idx.category_labels[c] || c;
+      return `<div class="tp-card" data-category="${c}">${label}<span class="tp-count">${count} အုပ်</span></div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-category]").forEach(el=>{
+      el.addEventListener("click", ()=> showBookList(basketId, el.dataset.category));
+    });
+    setParams({basket: basketId});
+  }
+
+  // ---------- Level 3: book list within a category ----------
+  async function showBookList(basketId, categoryId){
+    const idx = await ensureIndex();
+    const basketLabel = idx.basket_labels[basketId] || basketId;
+    const categoryLabel = idx.category_labels[categoryId] || categoryId;
+    renderBreadcrumb([
+      {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+      {label: basketLabel, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}},
+      {label: categoryLabel}
+    ]);
+    const books = idx.books.filter(b=>b.basket===basketId && b.category===categoryId);
+    const html = books.map(b=>{
+      return `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${b.pagecount} စာမျက်နှာ</span></div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-book]").forEach(el=>{
+      el.addEventListener("click", ()=> loadPage(basketId, categoryId, el.dataset.book, 1));
+    });
+    setParams({basket: basketId, category: categoryId});
+  }
+
+  // ---------- Level 4: page reader ----------
+  async function fetchBookPages(bookId){
+    return fetchJson(cdnUrl(`${DATA_FOLDER}/${bookId}.json`));
+  }
+
+  async function loadPage(basketId, categoryId, bookId, pageNum){
+    document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+    try{
+      const idx = await ensureIndex();
+      const bookMeta = idx.books.find(b=>b.id===bookId) || {};
+
+      if(bookId !== currentBookId){
+        currentRows = await fetchBookPages(bookId);
+        currentBookId = bookId;
+      }
+      const row = currentRows.find(r => parseInt(r.page,10) === pageNum);
+
+      renderBreadcrumb([
+        {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+        {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}},
+        {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}},
+        {label: bookMeta.name || bookId}
+      ]);
+
+      if(!row){
+        document.getElementById("tp-view").innerHTML = "<p>ဒီစာမျက်နှာ မတွေ့ပါ။</p>";
+        return;
+      }
+
+      const maxPage = Math.max(...currentRows.map(r=>parseInt(r.page,10)));
+      document.getElementById("tp-view").innerHTML = `
+        <div id="tp-nav">
+          <button id="tp-prev">← ရှေ့</button>
+          <span id="tp-pageinfo">${pageNum} / ${maxPage}</span>
+          <button id="tp-next">နောက် →</button>
+        </div>
+        <div id="tp-meta">${bookMeta.name || bookId} • စာမျက်နှာ ${row.page}</div>
+        <div id="tp-content">${row.content}</div>
+      `;
+      document.getElementById("tp-prev").disabled = pageNum <= 1;
+      document.getElementById("tp-next").disabled = pageNum >= maxPage;
+      document.getElementById("tp-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1));
+      document.getElementById("tp-next").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum+1));
+
+      setParams({basket: basketId, category: categoryId, book: bookId, page: pageNum});
+      window.scrollTo({top:0, behavior:"smooth"});
+    }catch(err){
+      document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>";
+    }
+  }
+
+  // ---------- boot: resume from URL if params exist ----------
+  (async function init(){
+    const {basket, category, book, page} = getParams();
+    try{
+      if(book){
+        const idx = await ensureIndex();
+        const meta = idx.books.find(b=>b.id===book);
+        const b = basket || (meta && meta.basket) || "";
+        const c = category || (meta && meta.category) || "";
+        loadPage(b, c, book, page || 1);
+      } else if(category && basket){
+        showBookList(basket, category);
+      } else if(basket){
+        showCategories(basket);
+      } else {
+        showBaskets();
+      }
+    }catch(err){
+      document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>";
+    }
+  })();
+})();
+</script>
+
+</body>
+</html>

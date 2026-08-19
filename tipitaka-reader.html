@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<title>Tipitaka JSON Reader (GitHub → Blogspot Demo)</title>
+<style>
+  body{font-family:"Myanmar Text","Padauk",sans-serif;max-width:820px;margin:0 auto;padding:20px;line-height:1.9;}
+  #tipitaka-nav{display:flex;justify-content:space-between;margin-bottom:16px;}
+  #tipitaka-nav button{padding:8px 16px;cursor:pointer;}
+  #tipitaka-nav button:disabled{opacity:.4;cursor:default;}
+  #tipitaka-meta{color:#666;font-size:.9em;margin-bottom:12px;}
+  #tipitaka-content .nikaya{font-weight:bold;font-size:1.2em;}
+  #tipitaka-content .book{font-weight:bold;}
+  #tipitaka-content .centered{text-align:center;}
+  #tipitaka-content .chapter{font-weight:bold;text-align:center;margin-top:1em;}
+  #tipitaka-content .paranum{color:#a00;font-weight:bold;margin-right:4px;}
+  #tipitaka-content .note{font-size:.8em;color:#888;vertical-align:super;}
+  #tipitaka-loading{color:#888;}
+</style>
+</head>
+<body>
+
+<!-- ==== Blogspot HTML/JavaScript Gadget ထဲကို ဒီ block ကို တစ်ခုလုံး ကူးထည့်နိုင်ပါတယ် ==== -->
+<div id="tipitaka-nav">
+  <button id="tp-prev">← ရှေ့စာမျက်နှာ</button>
+  <span id="tp-pageinfo"></span>
+  <button id="tp-next">နောက်စာမျက်နှာ →</button>
+</div>
+<div id="tipitaka-meta"></div>
+<div id="tipitaka-content"><p id="tipitaka-loading">Loading...</p></div>
+
+<script>
+(function(){
+  // ---------------------------------------------------------
+  // CONFIG: ဒီ 2 လိုင်းကို သင့် GitHub username/repo အမှန်ထည့်ပါ
+  // ---------------------------------------------------------
+  const GITHUB_USER = "sayadawtejinda";
+  const GITHUB_REPO = "tipitaka";
+  const GITHUB_BRANCH = "main";
+  // JSON ဖိုင်တွေကို book_id အလိုက် ခွဲထားပါ, ဥပမာ: data/mula_di_01.json
+  const JSON_FOLDER = "data";
+
+  function jsonUrl(bookId){
+    // jsDelivr ကို CDN အဖြစ်သုံးထားတယ် (raw.githubusercontent.com ထက် ပိုမြန်၊ CORS ပြသနာ မရှိ)
+    return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${JSON_FOLDER}/${bookId}.json`;
+  }
+
+  // URL query string ကနေ book_id, page ကို ဖတ်တယ် (?book=mula_vi_01&page=1)
+  function getParams(){
+    const p = new URLSearchParams(window.location.search);
+    return {
+      book: p.get("book") || "mula_vi_01",
+      page: parseInt(p.get("page") || "1", 10)
+    };
+  }
+
+  function setUrl(book, page){
+    const p = new URLSearchParams(window.location.search);
+    p.set("book", book);
+    p.set("page", page);
+    history.pushState({}, "", "?" + p.toString());
+  }
+
+  // ရှေ့/နောက် စာမျက်နှာ ကူးရန် link တွေကို click နားထောင်ခြင်း
+  function attachInternalLinkHandler(){
+    document.querySelectorAll("#tipitaka-content a[data-book]").forEach(a=>{
+      a.addEventListener("click", e=>{
+        e.preventDefault();
+        loadPage(a.dataset.book, parseInt(a.dataset.page,10));
+      });
+    });
+  }
+
+  let currentRows = [];   // လက်ရှိ book ရဲ့ row အားလုံး
+  let currentBook = "";
+
+  async function fetchBookJson(bookId){
+    const res = await fetch(jsonUrl(bookId));
+    if(!res.ok) throw new Error("JSON fetch failed: " + bookId);
+    const data = await res.json(); // [{id, book_id, page, content, paranum}, ...]
+    return data;
+  }
+
+  async function loadPage(bookId, pageNum){
+    document.getElementById("tipitaka-content").innerHTML = '<p id="tipitaka-loading">Loading...</p>';
+    try{
+      if(bookId !== currentBook){
+        currentRows = await fetchBookJson(bookId);
+        currentBook = bookId;
+      }
+      const row = currentRows.find(r => parseInt(r.page,10) === pageNum);
+      if(!row){
+        document.getElementById("tipitaka-content").innerHTML = "<p>ဒီစာမျက်နှာ မတွေ့ပါ။</p>";
+        return;
+      }
+
+      // content ကို ဒီအတိုင်း HTML အဖြစ် render (JSON ထဲမှာ HTML string ပါပြီးသားမို့)
+      document.getElementById("tipitaka-content").innerHTML = row.content;
+      document.getElementById("tipitaka-meta").textContent =
+        `${bookId}  •  စာမျက်နှာ ${row.page}`;
+
+      const maxPage = Math.max(...currentRows.map(r=>parseInt(r.page,10)));
+      document.getElementById("tp-pageinfo").textContent = `${pageNum} / ${maxPage}`;
+      document.getElementById("tp-prev").disabled = pageNum <= 1;
+      document.getElementById("tp-next").disabled = pageNum >= maxPage;
+
+      setUrl(bookId, pageNum);
+      attachInternalLinkHandler();
+      window.scrollTo({top:0, behavior:"smooth"});
+    }catch(err){
+      document.getElementById("tipitaka-content").innerHTML =
+        "<p style='color:red'>Error: " + err.message + "</p>";
+    }
+  }
+
+  document.getElementById("tp-prev").addEventListener("click", ()=>{
+    const {book, page} = getParams();
+    loadPage(book, page-1);
+  });
+  document.getElementById("tp-next").addEventListener("click", ()=>{
+    const {book, page} = getParams();
+    loadPage(book, page+1);
+  });
+
+  // initial load
+  const {book, page} = getParams();
+  loadPage(book, page);
+})();
+</script>
+
+</body>
+</html>
