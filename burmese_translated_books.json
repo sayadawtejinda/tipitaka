@@ -1,0 +1,533 @@
+[
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "01_vinaya_01",
+        "mm_first_page": 1,
+        "mm_last_page": 434,
+        "pali_book_id": "mula_vi_01",
+        "pali_first_page": 1,
+        "pali_last_page": 381
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "01_vinaya_02",
+        "mm_first_page": 1,
+        "mm_last_page": 661,
+        "pali_book_id": "mula_vi_02",
+        "pali_first_page": 1,
+        "pali_last_page": 470
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "01_vinaya_03",
+        "mm_first_page": 1,
+        "mm_last_page": 552,
+        "pali_book_id": "mula_vi_03",
+        "pali_first_page": 1,
+        "pali_last_page": 511
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "01_vinaya_04",
+        "mm_first_page": 1,
+        "mm_last_page": 547,
+        "pali_book_id": "mula_vi_04",
+        "pali_first_page": 1,
+        "pali_last_page": 508
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "01_vinaya_05",
+        "mm_first_page": 1,
+        "mm_last_page": 518,
+        "pali_book_id": "mula_vi_05",
+        "pali_first_page": 1,
+        "pali_last_page": 390
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "02_digha_01",
+        "mm_first_page": 1,
+        "mm_last_page": 280,
+        "pali_book_id": "mula_di_01",
+        "pali_first_page": 1,
+        "pali_last_page": 236
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "02_digha_02",
+        "mm_first_page": 1,
+        "mm_last_page": 323,
+        "pali_book_id": "mula_di_02",
+        "pali_first_page": 1,
+        "pali_last_page": 283
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "02_digha_03",
+        "mm_first_page": 1,
+        "mm_last_page": 285,
+        "pali_book_id": "mula_di_03",
+        "pali_first_page": 1,
+        "pali_last_page": 260
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "03_majjhima_01",
+        "mm_first_page": 1,
+        "mm_last_page": 394,
+        "pali_book_id": "mula_ma_01",
+        "pali_first_page": 1,
+        "pali_last_page": 415
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "03_majjhima_02",
+        "mm_first_page": 1,
+        "mm_last_page": 402,
+        "pali_book_id": "mula_ma_02",
+        "pali_first_page": 1,
+        "pali_last_page": 439
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "03_majjhima_03",
+        "mm_first_page": 1,
+        "mm_last_page": 332,
+        "pali_book_id": "mula_ma_03",
+        "pali_first_page": 1,
+        "pali_last_page": 352
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "04_sanyutta_01",
+        "mm_first_page": 1,
+        "mm_last_page": 256,
+        "pali_book_id": "mula_sa_01",
+        "pali_first_page": 1,
+        "pali_last_page": 242
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "04_sanyutta_02",
+        "mm_first_page": 1,
+        "mm_last_page": 263,
+        "pali_book_id": "mula_sa_02",
+        "pali_first_page": 243,
+        "pali_last_page": 472
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "04_sanyutta_03",
+        "mm_first_page": 1,
+        "mm_last_page": 158,
+        "pali_book_id": "mula_sa_03",
+        "pali_first_page": 1,
+        "pali_last_page": 235
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "04_sanyutta_04",
+        "mm_first_page": 1,
+        "mm_last_page": 370,
+        "pali_book_id": "mula_sa_04",
+        "pali_first_page": 236,
+        "pali_last_page": 567
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "04_sanyutta_05",
+        "mm_first_page": 1,
+        "mm_last_page": 514,
+        "pali_book_id": "mula_sa_05",
+        "pali_first_page": 1,
+        "pali_last_page": 415
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_01",
+        "mm_first_page": 1,
+        "mm_last_page": 65,
+        "pali_book_id": "mula_an_01",
+        "pali_first_page": 1,
+        "pali_last_page": 48
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_02",
+        "mm_first_page": 1,
+        "mm_last_page": 54,
+        "pali_book_id": "mula_an_02",
+        "pali_first_page": 49,
+        "pali_last_page": 98
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_03",
+        "mm_first_page": 1,
+        "mm_last_page": 227,
+        "pali_book_id": "mula_an_03",
+        "pali_first_page": 99,
+        "pali_last_page": 305
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_04",
+        "mm_first_page": 1,
+        "mm_last_page": 302,
+        "pali_book_id": "mula_an_04",
+        "pali_first_page": 307,
+        "pali_last_page": 580
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_05",
+        "mm_first_page": 1,
+        "mm_last_page": 345,
+        "pali_book_id": "mula_an_05",
+        "pali_first_page": 1,
+        "pali_last_page": 246
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_06",
+        "mm_first_page": 1,
+        "mm_last_page": 184,
+        "pali_book_id": "mula_an_06",
+        "pali_first_page": 247,
+        "pali_last_page": 393
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_07",
+        "mm_first_page": 1,
+        "mm_last_page": 144,
+        "pali_book_id": "mula_an_07",
+        "pali_first_page": 395,
+        "pali_last_page": 513
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_08",
+        "mm_first_page": 1,
+        "mm_last_page": 153,
+        "pali_book_id": "mula_an_08",
+        "pali_first_page": 1,
+        "pali_last_page": 162
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_09",
+        "mm_first_page": 1,
+        "mm_last_page": 97,
+        "pali_book_id": "mula_an_09",
+        "pali_first_page": 163,
+        "pali_last_page": 256
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_10",
+        "mm_first_page": 1,
+        "mm_last_page": 242,
+        "pali_book_id": "mula_an_10",
+        "pali_first_page": 257,
+        "pali_last_page": 513
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "05_anguttara_11",
+        "mm_first_page": 1,
+        "mm_last_page": 41,
+        "pali_book_id": "mula_an_11",
+        "pali_first_page": 515,
+        "pali_last_page": 558
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_01",
+        "mm_first_page": 1,
+        "mm_last_page": 12,
+        "pali_book_id": "mula_ku_01",
+        "pali_first_page": 1,
+        "pali_last_page": 11
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_02",
+        "mm_first_page": 1,
+        "mm_last_page": 84,
+        "pali_book_id": "mula_ku_02",
+        "pali_first_page": 13,
+        "pali_last_page": 76
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_03",
+        "mm_first_page": 1,
+        "mm_last_page": 111,
+        "pali_book_id": "mula_ku_03",
+        "pali_first_page": 77,
+        "pali_last_page": 193
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_04",
+        "mm_first_page": 1,
+        "mm_last_page": 103,
+        "pali_book_id": "mula_ku_04",
+        "pali_first_page": 195,
+        "pali_last_page": 277
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_05",
+        "mm_first_page": 1,
+        "mm_last_page": 159,
+        "pali_book_id": "mula_ku_05",
+        "pali_first_page": 279,
+        "pali_last_page": 455
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_06",
+        "mm_first_page": 1,
+        "mm_last_page": 138,
+        "pali_book_id": "mula_ku_06",
+        "pali_first_page": 1,
+        "pali_last_page": 125
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_07",
+        "mm_first_page": 1,
+        "mm_last_page": 91,
+        "pali_book_id": "mula_ku_07",
+        "pali_first_page": 127,
+        "pali_last_page": 218
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_08",
+        "mm_first_page": 1,
+        "mm_last_page": 181,
+        "pali_book_id": "mula_ku_08",
+        "pali_first_page": 219,
+        "pali_last_page": 375
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_09",
+        "mm_first_page": 183,
+        "mm_last_page": 255,
+        "pali_book_id": "mula_ku_09",
+        "pali_first_page": 377,
+        "pali_last_page": 435
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_10",
+        "mm_first_page": 1,
+        "mm_last_page": 480,
+        "pali_book_id": "mula_ku_10",
+        "pali_first_page": 1,
+        "pali_last_page": 445
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_11",
+        "mm_first_page": 1,
+        "mm_last_page": 290,
+        "pali_book_id": "mula_ku_11",
+        "pali_first_page": 1,
+        "pali_last_page": 298
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_12",
+        "mm_first_page": 1,
+        "mm_last_page": 91,
+        "pali_book_id": "mula_ku_12",
+        "pali_first_page": 299,
+        "pali_last_page": 384
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_13",
+        "mm_first_page": 1,
+        "mm_last_page": 38,
+        "pali_book_id": "mula_ku_13",
+        "pali_first_page": 385,
+        "pali_last_page": 420
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_18",
+        "mm_first_page": 1,
+        "mm_last_page": 84,
+        "pali_book_id": "mula_ku_18",
+        "pali_first_page": 1,
+        "pali_last_page": 419
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "06_khuddaka_19",
+        "mm_first_page": 1,
+        "mm_last_page": 798,
+        "pali_book_id": "mula_ku_19",
+        "pali_first_page": 1,
+        "pali_last_page": 408
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "07_abhidhamma_01",
+        "mm_first_page": 1,
+        "mm_last_page": 555,
+        "pali_book_id": "mula_bi_01",
+        "pali_first_page": 1,
+        "pali_last_page": 298
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "07_abhidhamma_02",
+        "mm_first_page": 1,
+        "mm_last_page": 686,
+        "pali_book_id": "mula_bi_02",
+        "pali_first_page": 1,
+        "pali_last_page": 453
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "07_abhidhamma_03",
+        "mm_first_page": 1,
+        "mm_last_page": 853,
+        "pali_book_id": "mula_bi_04",
+        "pali_first_page": 101,
+        "pali_last_page": 185
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "07_abhidhamma_05",
+        "mm_first_page": 1,
+        "mm_last_page": 929,
+        "pali_book_id": "mula_bi_05",
+        "pali_first_page": 1,
+        "pali_last_page": 454
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_dhammapada_01",
+        "mm_first_page": 1,
+        "mm_last_page": 822,
+        "pali_book_id": "attha_ku_02_01",
+        "pali_first_page": 1,
+        "pali_last_page": 447
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_dhammapada_02",
+        "mm_first_page": 1,
+        "mm_last_page": 823,
+        "pali_book_id": "attha_ku_02_02",
+        "pali_first_page": 1,
+        "pali_last_page": 456
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_jataka_01",
+        "mm_first_page": 1,
+        "mm_last_page": 555,
+        "pali_book_id": "attha_ku_zat_01",
+        "pali_first_page": 1,
+        "pali_last_page": 538
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_jataka_02",
+        "mm_first_page": 1,
+        "mm_last_page": 686,
+        "pali_book_id": "attha_ku_zat_02",
+        "pali_first_page": 1,
+        "pali_last_page": 408
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_jataka_03",
+        "mm_first_page": 1,
+        "mm_last_page": 853,
+        "pali_book_id": "attha_ku_zat_03",
+        "pali_first_page": 1,
+        "pali_last_page": 517
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_jataka_04",
+        "mm_first_page": 1,
+        "mm_last_page": 929,
+        "pali_book_id": "attha_ku_zat_04",
+        "pali_first_page": 1,
+        "pali_last_page": 504
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_jataka_05",
+        "mm_first_page": 1,
+        "mm_last_page": 973,
+        "pali_book_id": "attha_ku_zat_05",
+        "pali_first_page": 1,
+        "pali_last_page": 553
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_jataka_06",
+        "mm_first_page": 1,
+        "mm_last_page": 230,
+        "pali_book_id": "attha_ku_zat_066",
+        "pali_first_page": 1,
+        "pali_last_page": 332
+    },
+    {
+        "link_type": "page",
+        "mm_book_id": "08_jataka_07",
+        "mm_first_page": 1,
+        "mm_last_page": 352,
+        "pali_book_id": "attha_ku_zat_077",
+        "pali_first_page": 1,
+        "pali_last_page": 387
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "08_visuddhimagga_01",
+        "mm_first_page": 1,
+        "mm_last_page": 549,
+        "pali_book_id": "annya_bi_01",
+        "pali_first_page": 1,
+        "pali_last_page": 172
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "08_visuddhimagga_02",
+        "mm_first_page": 1,
+        "mm_last_page": 702,
+        "pali_book_id": "annya_bi_01",
+        "pali_first_page": 173,
+        "pali_last_page": 370
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "08_visuddhimagga_03",
+        "mm_first_page": 1,
+        "mm_last_page": 472,
+        "pali_book_id": "annya_bi_02",
+        "pali_first_page": 1,
+        "pali_last_page": 147
+    },
+    {
+        "link_type": "paragraph",
+        "mm_book_id": "08_visuddhimagga_04",
+        "mm_first_page": 1,
+        "mm_last_page": 544,
+        "pali_book_id": "annya_bi_02",
+        "pali_first_page": 148,
+        "pali_last_page": 356
+    }
+]
