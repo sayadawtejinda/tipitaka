@@ -68,6 +68,7 @@
   .tp-xref-links{display:flex;flex-direction:column;gap:6px;}
   .tp-xref-item-btn{text-align:left;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;padding:6px 12px;font-size:.9em;cursor:pointer;color:#0645ad;transition:.15s;}
   .tp-xref-item-btn:hover{background:#e2e8f0;text-decoration:underline;}
+  .tp-mm-highlight{background:#fff3b0;border-radius:2px;padding:0 2px;}
   .tp-xref-empty{font-size:.85em;color:#888;text-align:center;padding:10px;}
 
   /* Sutta Search Box Specific */
@@ -112,6 +113,8 @@
   const PARAGRAPH_MAP_FILE = "paragraph_mapping.json"; 
   const SUTTA_FILE = "suttas.json"; 
   const SUTTA_CENTRAL_FILE = "sutta_central.json"; 
+  const BURMESE_MAP_FILE = "burmese_translated_books.json"; 
+  const PAGE_MAP_FILE = "pali_mm_page_map.json"; 
 
   function cdnUrl(path){
     return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
@@ -123,6 +126,10 @@
   let paragraphMapIndex = null; 
   let suttaIndex = null; 
   let suttaCentralIndex = null; 
+  let burmeseMapIndex = null; 
+  let pageMapIndex = null; 
+  let mmHtmlCache = {}; 
+  let mmBackContext = null; 
   let currentRows = [];
   let currentRow = null;   
   let currentBookId = "";
@@ -133,6 +140,12 @@
     const res = await fetch(url);
     if(!res.ok) throw new Error("Fetch failed: " + url);
     return res.json();
+  }
+
+  async function fetchText(url){
+    const res = await fetch(url);
+    if(!res.ok) throw new Error("Fetch failed: " + url);
+    return res.text();
   }
 
   async function ensureIndex(){
@@ -183,6 +196,42 @@
     if(candidates.length === 0) return null;
     candidates.sort((a,b)=> b.page_number - a.page_number);
     return candidates[0].sutta_id || null;
+  }
+
+  async function ensureBurmeseMap(){
+    if(!burmeseMapIndex){
+      try{
+        const data = await fetchJson(cdnUrl(BURMESE_MAP_FILE));
+        burmeseMapIndex = Array.isArray(data) ? data : (data.burmese_translated_books || Object.values(data));
+      } catch(e){
+        console.warn("[Tipitaka] burmese_translated_books.json ဖတ်၍မရပါ:", e.message);
+        burmeseMapIndex = [];
+      }
+    }
+    return burmeseMapIndex;
+  }
+  // Pali book_id + page ကနေ ဆိုင်ရာ မြန်မာပြန် mm_book_id ကို ရှာမည်
+  function findBurmeseMapping(bookId, pageNum){
+    if(!burmeseMapIndex) return null;
+    return burmeseMapIndex.find(m => m.pali_book_id === bookId && m.pali_first_page <= pageNum && pageNum <= m.pali_last_page) || null;
+  }
+
+  async function ensurePageMap(){
+    if(!pageMapIndex){
+      try{
+        const data = await fetchJson(cdnUrl(PAGE_MAP_FILE));
+        pageMapIndex = Array.isArray(data) ? data : (data.pali_mm_page_map || Object.values(data));
+      } catch(e){
+        console.warn("[Tipitaka] pali_mm_page_map.json ဖတ်၍မရပါ:", e.message);
+        pageMapIndex = [];
+      }
+    }
+    return pageMapIndex;
+  }
+  // link_type "page" ဖြစ်တဲ့ စာအုပ်များ (ဓမ္မပဒ၊ ဇာတက) အတွက် တိကျသော pali page <-> mm page ကို ရှာမည်
+  function findExactMmPage(bookId, pageNum){
+    if(!pageMapIndex) return null;
+    return pageMapIndex.find(m => m.pali_book_id === bookId && m.pali_page_number === pageNum) || null;
   }
 
   // Helper: Close all dropdowns
@@ -288,6 +337,9 @@
       const paranums = parseParanums(currentRow && currentRow.paranum);
       const listParanums = paranums.length > 0 ? paranums : [null];
 
+      await ensureBurmeseMap();
+      const burmeseEntry = findBurmeseMapping(bookId, pageNum);
+
       let containerHtml = "";
       let hasAnyRefs = false;
 
@@ -323,6 +375,13 @@
           }
         }
 
+        if(burmeseEntry){
+          groupHtml += `<button class="tp-xref-item-btn tp-xref-mm-btn" data-mmbook="${burmeseEntry.mm_book_id}" data-linktype="${burmeseEntry.link_type}" data-paranum="${p != null ? p : ''}" data-palifirstpage="${burmeseEntry.pali_first_page}" data-palilastpage="${burmeseEntry.pali_last_page}" data-mmfirstpage="${burmeseEntry.mm_first_page}" data-mmlastpage="${burmeseEntry.mm_last_page}">
+            📖 မြန်မာပြန် ဖတ်ရန်
+          </button>`;
+          hasAnyRefs = true;
+        }
+
         groupHtml += `</div></div>`;
         containerHtml += groupHtml;
       }
@@ -336,7 +395,7 @@
       el.innerHTML = containerHtml;
       toggleBtn.disabled = false;
 
-      el.querySelectorAll(".tp-xref-item-btn").forEach(btn=>{
+      el.querySelectorAll(".tp-xref-item-btn:not(.tp-xref-mm-btn)").forEach(btn=>{
         btn.addEventListener("click", ()=>{
           const toBook = btn.dataset.tobook;
           const toPage = parseInt(btn.dataset.topage,10);
@@ -347,9 +406,95 @@
         });
       });
 
+      el.querySelectorAll(".tp-xref-mm-btn").forEach(btn=>{
+        btn.addEventListener("click", async ()=>{
+          closeAllDropdowns();
+          let mmBookId = btn.dataset.mmbook;
+          const linkType = btn.dataset.linktype;
+          const paranum = btn.dataset.paranum ? parseInt(btn.dataset.paranum,10) : null;
+          mmBackContext = { basketId, categoryId, bookId, pageNum, firstpageHint: currentBookMeta.firstpage };
+
+          let targetParagraph = null, targetMmPage = null;
+          if(linkType === "paragraph"){
+            targetParagraph = paranum;
+          } else {
+            await ensurePageMap();
+            const exact = findExactMmPage(bookId, pageNum);
+            if(exact){
+              mmBookId = exact.mm_book_id;
+              targetMmPage = exact.mm_page_number;
+            } else {
+              const pf = parseInt(btn.dataset.palifirstpage,10), pl = parseInt(btn.dataset.palilastpage,10);
+              const mf = parseInt(btn.dataset.mmfirstpage,10), ml = parseInt(btn.dataset.mmlastpage,10);
+              const ratio = pl > pf ? (pageNum - pf) / (pl - pf) : 0;
+              targetMmPage = Math.round(mf + ratio * (ml - mf));
+            }
+          }
+          openBurmeseTranslation(mmBookId, targetParagraph, targetMmPage);
+        });
+      });
+
     }catch(e){
       console.warn("[Tipitaka] cross-ref မအောင်မြင်ပါ:", e.message);
       toggleBtn.disabled = true;
+    }
+  }
+
+  // မြန်မာပြန် html ဖိုင်ကို ဖတ်ပြီး ပါဠိ စာပိုဒ်နံပါတ်နှင့် ကိုက်ညီသော span ကို ရှာပြသမည်
+  async function openBurmeseTranslation(mmBookId, targetParagraph, targetMmPage){
+    document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+    try{
+      if(!mmHtmlCache[mmBookId]){
+        mmHtmlCache[mmBookId] = await fetchText(cdnUrl(`${DATA_FOLDER}/${mmBookId}.html`));
+      }
+      const doc = new DOMParser().parseFromString(mmHtmlCache[mmBookId], "text/html");
+      const bodyHtml = doc.body ? doc.body.innerHTML : mmHtmlCache[mmBookId];
+
+      const metaLabel = targetParagraph != null
+        ? `မြန်မာပြန် - စာပိုဒ် ${toMyanmarDigits(targetParagraph)}`
+        : (targetMmPage != null ? `မြန်မာပြန် - စာမျက်နှာ ${toMyanmarDigits(targetMmPage)}` : "မြန်မာပြန်");
+
+      document.getElementById("tp-view").innerHTML = `
+        <div id="tp-nav">
+          <div id="tp-nav-left">
+            <button id="tp-mm-back" class="tp-icon-btn" title="ပါဠိတော်သို့ ပြန်သွားရန်">← ပါဠိတော်</button>
+          </div>
+        </div>
+        <div id="tp-meta">${metaLabel}</div>
+        <div id="tp-content">${bodyHtml}</div>
+      `;
+
+      document.getElementById("tp-mm-back").addEventListener("click", ()=>{
+        if(mmBackContext){
+          loadPage(mmBackContext.basketId, mmBackContext.categoryId, mmBackContext.bookId, mmBackContext.pageNum, mmBackContext.firstpageHint);
+        }
+      });
+
+      if(targetParagraph != null){
+        const targetText = toMyanmarDigits(targetParagraph);
+        const spans = document.querySelectorAll("#tp-content span.paragraph");
+        let matched = null;
+        spans.forEach(sp => { if(sp.textContent.trim() === targetText) matched = sp; });
+        if(matched){
+          matched.classList.add("tp-mm-highlight");
+          matched.scrollIntoView({behavior:"smooth", block:"center"});
+        }
+      } else if(targetMmPage != null){
+        // page marker ဖော်ပြပုံ ကွဲပြားနိုင်လို့ ဖြစ်နိုင်ချေရှိတဲ့ pattern အချို့ကို စမ်းရှာမည်
+        const targetText = toMyanmarDigits(targetMmPage);
+        const candidates = document.querySelectorAll("#tp-content span.page, #tp-content [data-page], #tp-content a[name]");
+        let matched = null;
+        candidates.forEach(el => {
+          const val = el.dataset.page || el.getAttribute("name") || el.textContent.trim();
+          if(val === targetText || val === String(targetMmPage)) matched = el;
+        });
+        if(matched){
+          matched.classList.add("tp-mm-highlight");
+          matched.scrollIntoView({behavior:"smooth", block:"center"});
+        }
+      }
+    } catch(e){
+      document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`;
     }
   }
 
@@ -360,9 +505,8 @@
 
   function citationText(bookMeta, pageNum){
     const shortName = bookMeta.short_name || bookMeta.name || "";
-    const volNum = bookMeta.vol || bookMeta.volume || bookMeta.vol_no || 1;
     const mmPage = toMyanmarDigits(pageNum);
-    return `(${shortName}၊${toMyanmarDigits(volNum)}၊${mmPage}။)`;
+    return `(${shortName}${mmPage}။)`;
   }
 
   // ---------- URL state ----------
