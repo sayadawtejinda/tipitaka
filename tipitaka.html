@@ -12,9 +12,18 @@
   .tp-card{border:1px solid #ddd;border-radius:8px;padding:12px;cursor:pointer;text-align:center;transition:.15s;}
   .tp-card:hover{background:#f5f5f5;border-color:#999;}
   .tp-card .tp-count{font-size:.8em;color:#888;display:block;margin-top:4px;}
-  #tp-nav{display:flex;justify-content:space-between;margin-bottom:16px;}
+  #tp-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
   #tp-nav button{padding:8px 16px;cursor:pointer;}
   #tp-nav button:disabled{opacity:.4;cursor:default;}
+  #tp-jumpbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+  #tp-jumpbar input[type=range]{flex:1;}
+  #tp-jumpbar input[type=number]{width:70px;padding:4px;}
+  #tp-jumpbar button{padding:6px 12px;cursor:pointer;}
+  #tp-toclist{margin-top:8px;}
+  .tp-toc-chapter{font-weight:bold;margin-top:14px;cursor:pointer;color:#0645ad;}
+  .tp-toc-chapter:hover{text-decoration:underline;}
+  .tp-toc-subhead{margin-left:20px;padding:2px 0;cursor:pointer;color:#333;}
+  .tp-toc-subhead:hover{color:#0645ad;text-decoration:underline;}
   #tp-meta{color:#666;font-size:.9em;margin-bottom:12px;}
   #tp-content .nikaya{font-weight:bold;font-size:1.2em;}
   #tp-content .book{font-weight:bold;}
@@ -40,15 +49,18 @@
   const GITHUB_REPO = "tipitaka";
   const GITHUB_BRANCH = "main";
   const DATA_FOLDER = "data";
-  const INDEX_FILE = "books.json"; // repo root မှာ ရှိရင်, data/ ထဲထား ရင် "data/books.json"
+  const INDEX_FILE = "books.json";
+  const TOC_FILE = "toc.json"; // <-- GitHub ထဲက မာတိကာပေါင်း json ဖိုင်လမ်းကြောင်းကို ဒီနေရာမှာ စစ်ပေးပါ (root မှာမဟုတ်ရင် "data/toc.json" စသည်)
 
   function cdnUrl(path){
     return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
   }
 
-  let bookIndex = null;   // books.json ကို memory ထဲ cache
+  let bookIndex = null;   // books.json cache
+  let tocIndex = null;    // toc.json cache (all books' TOC combined)
   let currentRows = [];
   let currentBookId = "";
+  let currentBookMeta = null;
 
   async function fetchJson(url){
     const res = await fetch(url);
@@ -61,6 +73,57 @@
     return bookIndex;
   }
 
+  async function ensureToc(){
+    if(!tocIndex){
+      try{
+        tocIndex = await fetchJson(cdnUrl(TOC_FILE));
+      }catch(e){
+        tocIndex = [];
+      }
+    }
+    return tocIndex;
+  }
+
+  // short_name ရဲ့ အဆုံးက ဂဏန်းကို ဖြုတ်ထုတ်ပေးသည် ("အပါဒန်၂" -> "အပါဒန်")
+  function baseShortName(shortName){
+    return (shortName || "").replace(/[0-9၀-၉]+$/,"");
+  }
+
+  // "၁။ ဗြဟ္မဇာလသုတ္တံ" ကဲ့သို့ အမည်ရှေ့က ဂဏန်းကို ဖတ်သည်
+  function parseLeadingNumber(str, fallback){
+    if(!str) return fallback;
+    const m = str.match(/^[\s(]*([0-9]+|[၀-၉]+)/);
+    if(!m) return fallback;
+    let s = m[1];
+    if(/[၀-၉]/.test(s)){
+      const map = {"၀":"0","၁":"1","၂":"2","၃":"3","၄":"4","၅":"5","၆":"6","၇":"7","၈":"8","၉":"9"};
+      s = s.split("").map(c => map[c] !== undefined ? map[c] : c).join("");
+    }
+    const n = parseInt(s,10);
+    return isNaN(n) ? fallback : n;
+  }
+
+  // ဒီစာမျက်နှာနှင့်ဆိုင်တဲ့ "အခန်း" နံပါတ် (ဒီစာအုပ်အတွင်း အစဉ်လိုက်) ကိုရှာသည်
+  async function chapterNumberForPage(bookId, pageNum){
+    const toc = await ensureToc();
+    const chapters = toc.filter(t => t.book_id === bookId && t.type === "chapter")
+                         .sort((a,b) => a.page_number - b.page_number);
+    if(chapters.length === 0) return null;
+    let idx = 0;
+    for(let i=0;i<chapters.length;i++){
+      if(chapters[i].page_number <= pageNum) idx = i; else break;
+    }
+    return parseLeadingNumber(chapters[idx].name, idx+1);
+  }
+
+  function citationText(bookMeta, chapterNum, pageNum){
+    const name = baseShortName(bookMeta.short_name || bookMeta.name || "");
+    if(chapterNum === null || chapterNum === undefined){
+      return `(${name}၊${pageNum}။)`;
+    }
+    return `(${name}၊${chapterNum}၊${pageNum}။)`;
+  }
+
   // ---------- URL state ----------
   function getParams(){
     const p = new URLSearchParams(window.location.search);
@@ -68,6 +131,7 @@
       basket: p.get("basket") || "",
       category: p.get("category") || "",
       book: p.get("book") || "",
+      firstpage: p.get("firstpage") ? parseInt(p.get("firstpage"),10) : null,
       page: p.get("page") ? parseInt(p.get("page"),10) : null
     };
   }
@@ -76,13 +140,13 @@
     if(obj.basket) p.set("basket", obj.basket);
     if(obj.category) p.set("category", obj.category);
     if(obj.book) p.set("book", obj.book);
+    if(obj.firstpage) p.set("firstpage", obj.firstpage);
     if(obj.page) p.set("page", obj.page);
     history.pushState({}, "", "?" + p.toString());
   }
 
   // ---------- breadcrumb ----------
   function renderBreadcrumb(parts){
-    // parts: [{label, onclick}]
     const el = document.getElementById("tp-breadcrumb");
     el.innerHTML = parts.map((p,i) => {
       const sep = i>0 ? " › " : "";
@@ -114,7 +178,7 @@
     setParams({});
   }
 
-  // ---------- Level 2: category list within a basket ----------
+  // ---------- Level 2: category list ----------
   async function showCategories(basketId){
     const idx = await ensureIndex();
     const basketLabel = idx.basket_labels[basketId] || basketId;
@@ -135,7 +199,7 @@
     setParams({basket: basketId});
   }
 
-  // ---------- Level 3: book list within a category ----------
+  // ---------- Level 3: book list ----------
   async function showBookList(basketId, categoryId){
     const idx = await ensureIndex();
     const basketLabel = idx.basket_labels[basketId] || basketId;
@@ -147,11 +211,12 @@
     ]);
     const books = idx.books.filter(b=>b.basket===basketId && b.category===categoryId);
     const html = books.map(b=>{
-      return `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${b.pagecount} စာမျက်နှာ</span></div>`;
+      return `<div class="tp-card" data-book="${b.id}" data-firstpage="${b.firstpage}">${b.name}<span class="tp-count">${b.pagecount} စာမျက်နှာ</span></div>`;
     }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     document.querySelectorAll("[data-book]").forEach(el=>{
-      el.addEventListener("click", ()=> loadPage(basketId, categoryId, el.dataset.book, 1));
+      const fp = parseInt(el.dataset.firstpage,10);
+      el.addEventListener("click", ()=> loadPage(basketId, categoryId, el.dataset.book, fp, fp));
     });
     setParams({basket: basketId, category: categoryId});
   }
@@ -161,16 +226,36 @@
     return fetchJson(cdnUrl(`${DATA_FOLDER}/${bookId}.json`));
   }
 
-  async function loadPage(basketId, categoryId, bookId, pageNum){
+  // id တူတဲ့ စာအုပ်နှစ်အုပ်ရှိရင် firstpage ဖြင့် ခွဲခြားသတ်မှတ်သည်
+  function findBookMeta(idx, bookId, firstpageHint){
+    const matches = idx.books.filter(b=>b.id===bookId);
+    if(matches.length<=1) return matches[0];
+    if(firstpageHint!=null){
+      const exact = matches.find(b=>b.firstpage===firstpageHint);
+      if(exact) return exact;
+    }
+    return matches[0];
+  }
+
+  async function loadPage(basketId, categoryId, bookId, pageNum, firstpageHint){
     document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
       const idx = await ensureIndex();
-      const bookMeta = idx.books.find(b=>b.id===bookId) || {};
+      const bookMeta = findBookMeta(idx, bookId, firstpageHint) || {};
+      currentBookMeta = bookMeta;
 
       if(bookId !== currentBookId){
         currentRows = await fetchBookPages(bookId);
         currentBookId = bookId;
       }
+
+      const minPage = bookMeta.firstpage || 1;
+      const maxPage = bookMeta.lastpage || Math.max(...currentRows.map(r=>parseInt(r.page,10)));
+
+      if(pageNum == null) pageNum = minPage;
+      if(pageNum < minPage) pageNum = minPage;
+      if(pageNum > maxPage) pageNum = maxPage;
+
       const row = currentRows.find(r => parseInt(r.page,10) === pageNum);
 
       renderBreadcrumb([
@@ -181,42 +266,82 @@
       ]);
 
       if(!row){
-        document.getElementById("tp-view").innerHTML = "<p>ဒီစာမျက်နှာ မတွေ့ပါ။</p>";
+        document.getElementById("tp-view").innerHTML = `
+          <div id="tp-nav"><button id="tp-toc">မာတိကာ</button></div>
+          <p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`;
+        const tb = document.getElementById("tp-toc");
+        if(tb) tb.addEventListener("click", ()=> showToc(basketId, categoryId, bookId, firstpageHint));
         return;
       }
 
-      const maxPage = Math.max(...currentRows.map(r=>parseInt(r.page,10)));
+      const chapterNum = await chapterNumberForPage(bookId, pageNum).catch(()=>null);
+      const citation = citationText(bookMeta, chapterNum, row.page);
+
       document.getElementById("tp-view").innerHTML = `
         <div id="tp-nav">
+          <button id="tp-toc">မာတိကာ</button>
           <button id="tp-prev">← ရှေ့</button>
           <span id="tp-pageinfo">${pageNum} / ${maxPage}</span>
           <button id="tp-next">နောက် →</button>
         </div>
-        <div id="tp-meta">${bookMeta.name || bookId} • စာမျက်နှာ ${row.page}</div>
+        <div id="tp-jumpbar">
+          <input type="range" id="tp-slider" min="${minPage}" max="${maxPage}" value="${pageNum}">
+          <input type="number" id="tp-jumpinput" min="${minPage}" max="${maxPage}" value="${pageNum}">
+          <button id="tp-jumpgo">သွားမည်</button>
+        </div>
+        <div id="tp-meta">${citation}</div>
         <div id="tp-content">${row.content}</div>
       `;
-      document.getElementById("tp-prev").disabled = pageNum <= 1;
+      document.getElementById("tp-prev").disabled = pageNum <= minPage;
       document.getElementById("tp-next").disabled = pageNum >= maxPage;
-      document.getElementById("tp-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1));
-      document.getElementById("tp-next").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum+1));
+      document.getElementById("tp-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1, firstpageHint));
+      document.getElementById("tp-next").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum+1, firstpageHint));
+      document.getElementById("tp-toc").addEventListener("click", ()=> showToc(basketId, categoryId, bookId, firstpageHint));
 
-      setParams({basket: basketId, category: categoryId, book: bookId, page: pageNum});
+      const slider = document.getElementById("tp-slider");
+      slider.addEventListener("change", ()=> loadPage(basketId, categoryId, bookId, parseInt(slider.value,10), firstpageHint));
+
+      const jumpGo = document.getElementById("tp-jumpgo");
+      const jumpInput = document.getElementById("tp-jumpinput");
+      jumpGo.addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, parseInt(jumpInput.value,10), firstpageHint));
+      jumpInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") loadPage(basketId, categoryId, bookId, parseInt(jumpInput.value,10), firstpageHint); });
+
+      setParams({basket: basketId, category: categoryId, book: bookId, firstpage: firstpageHint, page: pageNum});
       window.scrollTo({top:0, behavior:"smooth"});
     }catch(err){
       document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>";
     }
   }
 
-  // ---------- boot: resume from URL if params exist ----------
+  // ---------- TOC panel (ဒီစာအုပ်ချည်း မာတိကာသာ ပြပေးသည်) ----------
+  async function showToc(basketId, categoryId, bookId, firstpageHint){
+    document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+    const toc = await ensureToc();
+    const items = toc.filter(t=>t.book_id===bookId).sort((a,b)=>a.page_number-b.page_number);
+    const html = items.map(it=>{
+      const cls = it.type==="chapter" ? "tp-toc-chapter" : "tp-toc-subhead";
+      return `<div class="${cls}" data-page="${it.page_number}">${it.name}</div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `
+      <div id="tp-nav"><button id="tp-back">← ပြန်သွားမည်</button></div>
+      <div id="tp-toclist">${html || "<p>ဒီစာအုပ်အတွက် မာတိကာ မရှိသေးပါ။</p>"}</div>
+    `;
+    document.getElementById("tp-back").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, null, firstpageHint));
+    document.querySelectorAll("#tp-toclist [data-page]").forEach(el=>{
+      el.addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, parseInt(el.dataset.page,10), firstpageHint));
+    });
+  }
+
+  // ---------- boot ----------
   (async function init(){
-    const {basket, category, book, page} = getParams();
+    const {basket, category, book, page, firstpage} = getParams();
     try{
       if(book){
         const idx = await ensureIndex();
-        const meta = idx.books.find(b=>b.id===book);
+        const meta = findBookMeta(idx, book, firstpage);
         const b = basket || (meta && meta.basket) || "";
         const c = category || (meta && meta.category) || "";
-        loadPage(b, c, book, page || 1);
+        loadPage(b, c, book, page || (meta && meta.firstpage) || 1, firstpage);
       } else if(category && basket){
         showBookList(basket, category);
       } else if(basket){
@@ -229,6 +354,7 @@
     }
   })();
 })();
+
 </script>
 
 </body>
