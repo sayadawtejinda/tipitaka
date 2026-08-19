@@ -1,0 +1,598 @@
+[
+    {
+        "base": "mula_vi_01",
+        "exp": "attha_vi_01_01"
+    },
+    {
+        "base": "mula_vi_01",
+        "exp": "attha_vi_01_02"
+    },
+    {
+        "base": "mula_vi_02",
+        "exp": "attha_vi_02"
+    },
+    {
+        "base": "mula_vi_03",
+        "exp": "attha_vi_03"
+    },
+    {
+        "base": "mula_vi_04",
+        "exp": "attha_vi_04"
+    },
+    {
+        "base": "mula_vi_05",
+        "exp": "attha_vi_05"
+    },
+    {
+        "base": "mula_di_01",
+        "exp": "attha_di_01"
+    },
+    {
+        "base": "mula_di_02",
+        "exp": "attha_di_02"
+    },
+    {
+        "base": "mula_di_03",
+        "exp": "attha_di_03"
+    },
+    {
+        "base": "mula_ma_01",
+        "exp": "attha_ma_01_01"
+    },
+    {
+        "base": "mula_ma_01",
+        "exp": "attha_ma_01_02"
+    },
+    {
+        "base": "mula_ma_02",
+        "exp": "attha_ma_02"
+    },
+    {
+        "base": "mula_ma_03",
+        "exp": "attha_ma_03"
+    },
+    {
+        "base": "mula_sa_01",
+        "exp": "attha_sa_01"
+    },
+    {
+        "base": "mula_sa_02",
+        "exp": "attha_sa_02"
+    },
+    {
+        "base": "mula_sa_03",
+        "exp": "attha_sa_03"
+    },
+    {
+        "base": "mula_sa_04",
+        "exp": "attha_sa_04"
+    },
+    {
+        "base": "mula_sa_05",
+        "exp": "attha_sa_05"
+    },
+    {
+        "base": "mula_an_01",
+        "exp": "attha_an_01"
+    },
+    {
+        "base": "mula_an_02",
+        "exp": "attha_an_02"
+    },
+    {
+        "base": "mula_an_03",
+        "exp": "attha_an_02"
+    },
+    {
+        "base": "mula_an_04",
+        "exp": "attha_an_02"
+    },
+    {
+        "base": "mula_an_05",
+        "exp": "attha_an_03"
+    },
+    {
+        "base": "mula_an_06",
+        "exp": "attha_an_03"
+    },
+    {
+        "base": "mula_an_07",
+        "exp": "attha_an_03"
+    },
+    {
+        "base": "mula_an_08",
+        "exp": "attha_an_04"
+    },
+    {
+        "base": "mula_an_09",
+        "exp": "attha_an_04"
+    },
+    {
+        "base": "mula_an_10",
+        "exp": "attha_an_04"
+    },
+    {
+        "base": "mula_an_11",
+        "exp": "attha_an_04"
+    },
+    {
+        "base": "mula_ku_01",
+        "exp": "attha_ku_01"
+    },
+    {
+        "base": "mula_ku_02",
+        "exp": "attha_ku_02_01"
+    },
+    {
+        "base": "mula_ku_02",
+        "exp": "attha_ku_02_02"
+    },
+    {
+        "base": "mula_ku_03",
+        "exp": "attha_ku_03"
+    },
+    {
+        "base": "mula_ku_04",
+        "exp": "attha_ku_04"
+    },
+    {
+        "base": "mula_ku_05",
+        "exp": "attha_ku_05_01"
+    },
+    {
+        "base": "mula_ku_05",
+        "exp": "attha_ku_05_02"
+    },
+    {
+        "base": "mula_ku_06",
+        "exp": "attha_ku_06"
+    },
+    {
+        "base": "mula_ku_07",
+        "exp": "attha_ku_07"
+    },
+    {
+        "base": "mula_ku_08",
+        "exp": "attha_ku_08_01"
+    },
+    {
+        "base": "mula_ku_08",
+        "exp": "attha_ku_08_02"
+    },
+    {
+        "base": "mula_ku_09",
+        "exp": "attha_ku_09"
+    },
+    {
+        "base": "mula_ku_10",
+        "exp": "attha_ku_10"
+    },
+    {
+        "base": "mula_ku_11",
+        "exp": "attha_ku_11"
+    },
+    {
+        "base": "mula_ku_12",
+        "exp": "attha_ku_12"
+    },
+    {
+        "base": "mula_ku_13",
+        "exp": "attha_ku_13"
+    },
+    {
+        "base": "mula_ku_14",
+        "exp": "attha_ku_zat_01"
+    },
+    {
+        "base": "mula_ku_14",
+        "exp": "attha_ku_zat_02"
+    },
+    {
+        "base": "mula_ku_14",
+        "exp": "attha_ku_zat_03"
+    },
+    {
+        "base": "mula_ku_14",
+        "exp": "attha_ku_zat_04"
+    },
+    {
+        "base": "mula_ku_14",
+        "exp": "attha_ku_zat_05"
+    },
+    {
+        "base": "mula_ku_15",
+        "exp": "attha_ku_zat_06"
+    },
+    {
+        "base": "mula_ku_15",
+        "exp": "attha_ku_zat_07"
+    },
+    {
+        "base": "mula_ku_16",
+        "exp": "attha_ku_16"
+    },
+    {
+        "base": "mula_ku_17",
+        "exp": "attha_ku_17"
+    },
+    {
+        "base": "mula_ku_18",
+        "exp": "attha_ku_18_01"
+    },
+    {
+        "base": "mula_ku_18",
+        "exp": "attha_ku_18_02"
+    },
+    {
+        "base": "mula_ku_20",
+        "exp": "attha_ku_20"
+    },
+    {
+        "base": "mula_bi_01",
+        "exp": "attha_bi_01"
+    },
+    {
+        "base": "mula_bi_02",
+        "exp": "attha_bi_02"
+    },
+    {
+        "base": "mula_bi_03",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_04",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_05",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_06_01",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_06_02",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_06_03",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_07_01",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_07_02",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_07_03",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_07_04",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "mula_bi_07_05",
+        "exp": "attha_bi_03"
+    },
+    {
+        "base": "attha_vi_01_01",
+        "exp": "tika_vi_01"
+    },
+    {
+        "base": "attha_vi_01_01",
+        "exp": "tika_vi_02"
+    },
+    {
+        "base": "attha_vi_01_02",
+        "exp": "tika_vi_02"
+    },
+    {
+        "base": "attha_vi_01_02",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "attha_vi_02",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "attha_vi_03",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "attha_vi_04",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "attha_vi_05",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "attha_di_01",
+        "exp": "tika_di_01_02"
+    },
+    {
+        "base": "attha_di_01",
+        "exp": "tika_di_01_03"
+    },
+    {
+        "base": "attha_di_02",
+        "exp": "tika_di_02"
+    },
+    {
+        "base": "attha_di_03",
+        "exp": "tika_di_03"
+    },
+    {
+        "base": "attha_ma_01_01",
+        "exp": "tika_ma_01"
+    },
+    {
+        "base": "attha_ma_01_01",
+        "exp": "tika_ma_02"
+    },
+    {
+        "base": "attha_ma_01_02",
+        "exp": "tika_ma_02"
+    },
+    {
+        "base": "attha_ma_02",
+        "exp": "tika_ma_03"
+    },
+    {
+        "base": "attha_ma_03",
+        "exp": "tika_ma_04"
+    },
+    {
+        "base": "attha_sa_01",
+        "exp": "tika_sa_01"
+    },
+    {
+        "base": "attha_sa_02",
+        "exp": "tika_sa_02"
+    },
+    {
+        "base": "attha_sa_03",
+        "exp": "tika_sa_03"
+    },
+    {
+        "base": "attha_sa_04",
+        "exp": "tika_sa_04"
+    },
+    {
+        "base": "attha_sa_05",
+        "exp": "tika_sa_05"
+    },
+    {
+        "base": "attha_an_01",
+        "exp": "tika_an_01"
+    },
+    {
+        "base": "attha_an_02",
+        "exp": "tika_an_02"
+    },
+    {
+        "base": "attha_an_03",
+        "exp": "tika_an_03"
+    },
+    {
+        "base": "attha_an_04",
+        "exp": "tika_an_04"
+    },
+    {
+        "base": "attha_ku_20",
+        "exp": "tika_ku_20_01"
+    },
+    {
+        "base": "attha_bi_01",
+        "exp": "tika_bi_01"
+    },
+    {
+        "base": "attha_bi_02",
+        "exp": "tika_bi_02_01"
+    },
+    {
+        "base": "attha_bi_02",
+        "exp": "tika_bi_02_02"
+    },
+    {
+        "base": "attha_bi_03",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "annya_bi_01",
+        "exp": "annya_bi_03"
+    },
+    {
+        "base": "annya_bi_02",
+        "exp": "annya_bi_04"
+    },
+    {
+        "base": "mula_vi_01",
+        "exp": "tika_vi_01"
+    },
+    {
+        "base": "mula_vi_01",
+        "exp": "tika_vi_02"
+    },
+    {
+        "base": "mula_vi_01",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "mula_vi_02",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "mula_vi_03",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "mula_vi_04",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "mula_vi_05",
+        "exp": "tika_vi_03"
+    },
+    {
+        "base": "mula_di_01",
+        "exp": "tika_di_01_02"
+    },
+    {
+        "base": "mula_di_01",
+        "exp": "tika_di_01_03"
+    },
+    {
+        "base": "mula_di_02",
+        "exp": "tika_di_02"
+    },
+    {
+        "base": "mula_di_03",
+        "exp": "tika_di_03"
+    },
+    {
+        "base": "mula_ma_01",
+        "exp": "tika_ma_01"
+    },
+    {
+        "base": "mula_ma_01",
+        "exp": "tika_ma_02"
+    },
+    {
+        "base": "mula_ma_02",
+        "exp": "tika_ma_03"
+    },
+    {
+        "base": "mula_ma_03",
+        "exp": "tika_ma_04"
+    },
+    {
+        "base": "mula_sa_01",
+        "exp": "tika_sa_01"
+    },
+    {
+        "base": "mula_sa_02",
+        "exp": "tika_sa_02"
+    },
+    {
+        "base": "mula_sa_03",
+        "exp": "tika_sa_03"
+    },
+    {
+        "base": "mula_sa_04",
+        "exp": "tika_sa_04"
+    },
+    {
+        "base": "mula_sa_05",
+        "exp": "tika_sa_05"
+    },
+    {
+        "base": "mula_an_01",
+        "exp": "tika_an_01"
+    },
+    {
+        "base": "mula_an_02",
+        "exp": "tika_an_02"
+    },
+    {
+        "base": "mula_an_03",
+        "exp": "tika_an_02"
+    },
+    {
+        "base": "mula_an_04",
+        "exp": "tika_an_02"
+    },
+    {
+        "base": "mula_an_05",
+        "exp": "tika_an_03"
+    },
+    {
+        "base": "mula_an_06",
+        "exp": "tika_an_03"
+    },
+    {
+        "base": "mula_an_07",
+        "exp": "tika_an_03"
+    },
+    {
+        "base": "mula_an_08",
+        "exp": "tika_an_04"
+    },
+    {
+        "base": "mula_an_09",
+        "exp": "tika_an_04"
+    },
+    {
+        "base": "mula_an_10",
+        "exp": "tika_an_04"
+    },
+    {
+        "base": "mula_an_11",
+        "exp": "tika_an_04"
+    },
+    {
+        "base": "mula_ku_20",
+        "exp": "tika_ku_20_01"
+    },
+    {
+        "base": "mula_bi_01",
+        "exp": "tika_bi_01"
+    },
+    {
+        "base": "mula_bi_02",
+        "exp": "tika_bi_02_01"
+    },
+    {
+        "base": "mula_bi_02",
+        "exp": "tika_bi_02_02"
+    },
+    {
+        "base": "mula_bi_03",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_04",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_05",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_06_01",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_06_02",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_06_03",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_07_01",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_07_02",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_07_03",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_07_04",
+        "exp": "tika_bi_03"
+    },
+    {
+        "base": "mula_bi_07_05",
+        "exp": "tika_bi_03"
+    }
+]
