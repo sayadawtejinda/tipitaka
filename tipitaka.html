@@ -15,6 +15,8 @@
   #tp-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
   #tp-nav button{padding:8px 16px;cursor:pointer;}
   #tp-nav button:disabled{opacity:.4;cursor:default;}
+  #tp-nav-left{display:flex;gap:6px;}
+  #tp-nav button.tp-icon-btn{padding:6px 10px;font-size:1.25em;line-height:1;}
   #tp-jumpbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
   #tp-jumpbar input[type=range]{flex:1;}
   #tp-slider-live{min-width:2.5em;text-align:center;font-weight:bold;color:#a00;}
@@ -26,6 +28,13 @@
   .tp-toc-subhead{margin-left:20px;padding:2px 0;cursor:pointer;color:#333;}
   .tp-toc-subhead:hover{color:#0645ad;text-decoration:underline;}
   #tp-meta{color:#666;font-size:.9em;margin-bottom:12px;}
+  #tp-crossref{margin-bottom:14px;display:none;flex-wrap:wrap;gap:8px;}
+  #tp-crossref.tp-open{display:flex;}
+  .tp-xref-btn{background:#eef4ff;border:1px solid #a9c6f5;border-radius:16px;padding:6px 14px;font-size:.85em;cursor:pointer;color:#0645ad;}
+  .tp-xref-btn:hover{background:#dbe8ff;}
+  .tp-xref-back{background:#f0f0f0;border:1px solid #ccc;border-radius:16px;padding:6px 14px;font-size:.85em;cursor:pointer;color:#555;}
+  .tp-xref-back:hover{background:#e2e2e2;}
+  .tp-xref-empty{font-size:.85em;color:#888;}
   #tp-content .nikaya{font-weight:bold;font-size:1.2em;}
   #tp-content .book{font-weight:bold;}
   #tp-content .centered{text-align:center;}
@@ -52,6 +61,8 @@
   const DATA_FOLDER = "data";
   const INDEX_FILE = "books.json";
   const TOC_FILE = "data/toc.json"; // GitHub repo ထဲမှာ data/toc.json အနေနဲ့ ထားထားလို့ ဒီအတိုင်း ချိန်ညှိထားသည်
+  const MATCH_FILE = "data/pali_attha_tika_match.json"; // base(mula/attha) -> exp(attha/tika) စာအုပ်အဆင့် ဆက်စပ်မှု
+  const PARAGRAPH_MAP_FILE = "data/paragraph_mapping.json"; // စာပိုဒ်အဆင့် တိကျတဲ့ ကိုးကားချက် ဆက်စပ်မှု (ဖိုင်နာမည်/လမ်းကြောင်း မှားနေရင် ဒီနေရာမှာ ပြင်ပါ)
 
   function cdnUrl(path){
     return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
@@ -59,7 +70,10 @@
 
   let bookIndex = null;   // books.json cache
   let tocIndex = null;    // toc.json cache (all books' TOC combined)
+  let matchIndex = null;  // pali_attha_tika_match.json cache
+  let paragraphMapIndex = null; // paragraph_mapping.json cache
   let currentRows = [];
+  let currentRow = null;   // present page's row data (has .paranum listing paragraph numbers on this page)
   let currentBookId = "";
   let currentBookMeta = null;
 
@@ -83,6 +97,154 @@
       }
     }
     return tocIndex;
+  }
+
+  async function ensureMatch(){
+    if(!matchIndex){
+      try{
+        matchIndex = await fetchJson(cdnUrl(MATCH_FILE));
+      }catch(e){
+        console.warn("[Tipitaka] pali_attha_tika_match.json ကို ဖတ်လို့မရပါ:", cdnUrl(MATCH_FILE), e.message);
+        matchIndex = [];
+      }
+    }
+    return matchIndex;
+  }
+
+  async function ensureParagraphMap(){
+    if(!paragraphMapIndex){
+      try{
+        paragraphMapIndex = await fetchJson(cdnUrl(PARAGRAPH_MAP_FILE));
+      }catch(e){
+        console.warn("[Tipitaka] paragraph_mapping.json ကို ဖတ်လို့မရပါ:", cdnUrl(PARAGRAPH_MAP_FILE), e.message);
+        paragraphMapIndex = [];
+      }
+    }
+    return paragraphMapIndex;
+  }
+
+  // id တူတဲ့ စာအုပ်နှစ်အုပ်ရှိရင် (firstpage-lastpage အပိုင်းအခြား) ဖြင့် ခွဲခြားရှာသည်
+  function findBookMetaByPageRange(idx, bookId, pageNum){
+    const matches = idx.books.filter(b=>b.id===bookId);
+    if(matches.length<=1) return matches[0];
+    const exact = matches.find(b => pageNum!=null && b.firstpage<=pageNum && pageNum<=b.lastpage);
+    return exact || matches[0];
+  }
+
+  // ဒီစာမျက်နှာအတွက် (paragraph_mapping.json ထဲက) တိကျတဲ့ ကိုးကားချက်များကို ရှာသည်
+  async function crossRefsForPage(bookId, pageNum){
+    const map = await ensureParagraphMap();
+    return map.filter(m => m.from_book_id===bookId && m.from_page_number===pageNum);
+  }
+
+  // row.paranum ဟာ "-1-2-" ကဲ့သို့ ပုံစံဖြင့် ဒီစာမျက်နှာပေါ်ရှိ စာပိုဒ်နံပါတ်များကို ဖော်ပြထားသည်
+  // ("-1-2-" => [1, 2]) — စာမျက်နှာတစ်ခုတည်းအတွင်း စာပိုဒ်တစ်ခုထက်ပို၍ ပါဝင်နိုင်သည်
+  function parseParanums(str){
+    if(!str) return [];
+    return String(str).split("-")
+      .map(s=>s.trim())
+      .filter(s=>s.length>0)
+      .map(s=>parseInt(s,10))
+      .filter(n=>!isNaN(n));
+  }
+
+  // paragraph_mapping.json ထဲ တိကျတဲ့ အချက်အလက် မရှိသေးရင် pali_attha_tika_match.json ကို သုံးပြီး
+  // အနီးစပ်ဆုံး (အစအပိုင်း) ဖွင့်ရန် အတွက် fallback list ကိုပြန်ပေးသည်
+  async function fallbackExpBooks(bookId){
+    const match = await ensureMatch();
+    return match.filter(m => m.base===bookId).map(m => m.exp);
+  }
+
+  function expTypeLabel(expBookId){
+    if(expBookId.startsWith("attha_")) return "အဋ္ဌကထာ";
+    if(expBookId.startsWith("tika_")) return "ဋီကာ";
+    return "ဆက်စပ်ကျမ်း";
+  }
+
+  // "အဋ္ဌကထာ/ဋီကာ ဖွင့်ရန်" ခလုတ်များကို ရေးဆွဲ၍ #tp-crossref ထဲ ထည့်ပေးသည်
+  // စာမျက်နှာတစ်ခုတွင်း စာပိုဒ်တစ်ခုထက်ပိုပါရင် စာပိုဒ်ကို အရင်ရွေးခိုင်းပြီးမှ
+  // ရွေးလိုက်တဲ့ စာပိုဒ်နဲ့ ဆက်စပ်တဲ့ အဋ္ဌကထာ/ဋီကာ ခလုတ်များကို ပြပေးသည်
+  async function renderCrossRef(basketId, categoryId, bookId, pageNum){
+    const el = document.getElementById("tp-crossref");
+    const toggleBtn = document.getElementById("tp-xref-toggle");
+    if(!el || !toggleBtn) return;
+    el.classList.remove("tp-open");
+    el.innerHTML = "";
+    toggleBtn.disabled = true;
+    toggleBtn.onclick = null;
+
+    try{
+      const idx = await ensureIndex();
+      const pageRefs = await crossRefsForPage(bookId, pageNum);
+      const paranums = parseParanums(currentRow && currentRow.paranum);
+
+      // ရွေးထားတဲ့ (သို့) စာမျက်နှာတစ်ခုလုံးအတွက် အဋ္ဌကထာ/ဋီကာ ခလုတ်များ HTML ကို ပြန်ပေးသည်
+      // (paragraph အလိုက် တိကျတဲ့ data မရှိရင် pali_attha_tika_match.json ဖြင့် fallback သုံးသည်)
+      async function buttonsHtmlFor(refs){
+        if(refs.length>0){
+          return refs.map(r=>{
+            const label = `${expTypeLabel(r.to_book_id)} ဖွင့်ရန်`;
+            return `<button class="tp-xref-btn" data-tobook="${r.to_book_id}" data-topage="${r.to_page_number}">${label}</button>`;
+          }).join("");
+        }
+        const expIds = await fallbackExpBooks(bookId);
+        return expIds.map(expId=>{
+          const meta = idx.books.find(b=>b.id===expId);
+          const label = `${expTypeLabel(expId)} ဖွင့်ရန် (အစမှ)`;
+          return `<button class="tp-xref-btn" data-tobook="${expId}" data-topage="${meta?meta.firstpage:1}">${label}</button>`;
+        }).join("");
+      }
+
+      function wireXrefButtons(){
+        el.querySelectorAll(".tp-xref-btn").forEach(btn=>{
+          btn.addEventListener("click", ()=>{
+            const toBook = btn.dataset.tobook;
+            const toPage = parseInt(btn.dataset.topage,10);
+            const meta = findBookMetaByPageRange(idx, toBook, toPage);
+            if(!meta) return;
+            el.classList.remove("tp-open");
+            loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage);
+          });
+        });
+      }
+
+      // step 2: ရွေးထားတဲ့ (paragraphNum, ဒါမှမဟုတ် စာမျက်နှာတစ်ခုလုံး) အတွက် အဋ္ဌကထာ/ဋီကာ ခလုတ်များ ပြသည်
+      async function showBooksStep(paragraphNum){
+        const refs = paragraphNum!=null ? pageRefs.filter(r=>r.paragraph===paragraphNum) : pageRefs;
+        const html = await buttonsHtmlFor(refs);
+        const backBtn = paranums.length>1 ? `<button class="tp-xref-back">← စာပိုဒ် ပြန်ရွေးမည်</button>` : "";
+        el.innerHTML = (html || `<span class="tp-xref-empty">ဆက်စပ်ကျမ်း အချက်အလက် မရှိသေးပါ။</span>`) + backBtn;
+        wireXrefButtons();
+        const back = el.querySelector(".tp-xref-back");
+        if(back) back.addEventListener("click", showParagraphStep);
+      }
+
+      // step 1: စာမျက်နှာပေါ်က စာပိုဒ်နံပါတ်များထဲက တစ်ခုကို ရွေးခိုင်းသည်
+      function showParagraphStep(){
+        el.innerHTML = paranums.map(p=>
+          `<button class="tp-xref-btn" data-para="${p}">စာပိုဒ် ${toMyanmarDigits(p)}</button>`
+        ).join("");
+        el.querySelectorAll("[data-para]").forEach(btn=>{
+          btn.addEventListener("click", ()=> showBooksStep(parseInt(btn.dataset.para,10)));
+        });
+      }
+
+      // ဒီစာမျက်နှာအတွက် ဆက်စပ်ကျမ်း တစ်စုံတစ်ရာ ရှိမရှိ စစ်ပြီး icon ကို ဖွင့်/ပိတ် သတ်မှတ်သည်
+      const fallbackAvailable = pageRefs.length===0 ? (await fallbackExpBooks(bookId)).length>0 : true;
+      if(!fallbackAvailable) return; // toggleBtn.disabled = true အတိုင်း ကျန်နေမည်
+
+      toggleBtn.disabled = false;
+      const openStep = paranums.length>1 ? showParagraphStep : ()=> showBooksStep(paranums.length===1 ? paranums[0] : null);
+      toggleBtn.onclick = ()=>{
+        const willOpen = !el.classList.contains("tp-open");
+        if(willOpen) openStep();
+        el.classList.toggle("tp-open", willOpen);
+      };
+    }catch(e){
+      console.warn("[Tipitaka] cross-ref ခလုတ်များ ပြရန် မအောင်မြင်ပါ:", e.message);
+      el.innerHTML = "";
+      toggleBtn.disabled = true;
+    }
   }
 
   // အင်္ဂလိပ်ဂဏန်း (0-9) ကို မြန်မာဂဏန်း (၀-၉) အဖြစ် ပြောင်းပေးသည်
@@ -265,6 +427,7 @@
       if(pageNum > maxPage) pageNum = maxPage;
 
       const row = currentRows.find(r => parseInt(r.page,10) === pageNum);
+      currentRow = row || null;
 
       renderBreadcrumb([
         {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
@@ -275,7 +438,7 @@
 
       if(!row){
         document.getElementById("tp-view").innerHTML = `
-          <div id="tp-nav"><button id="tp-toc">မာတိကာ</button></div>
+          <div id="tp-nav"><button id="tp-toc" class="tp-icon-btn" title="မာတိကာ">☰</button></div>
           <p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`;
         const tb = document.getElementById("tp-toc");
         if(tb) tb.addEventListener("click", ()=> showToc(basketId, categoryId, bookId, firstpageHint));
@@ -287,7 +450,10 @@
 
       document.getElementById("tp-view").innerHTML = `
         <div id="tp-nav">
-          <button id="tp-toc">မာတိကာ</button>
+          <div id="tp-nav-left">
+            <button id="tp-toc" class="tp-icon-btn" title="မာတိကာ">☰</button>
+            <button id="tp-xref-toggle" class="tp-icon-btn" title="အဋ္ဌကထာ/ဋီကာ ဖတ်ရန်" disabled>📖</button>
+          </div>
           <button id="tp-prev">← ရှေ့</button>
           <span id="tp-pageinfo">${toMyanmarDigits(pageNum)} / ${toMyanmarDigits(maxPage)}</span>
           <button id="tp-next">နောက် →</button>
@@ -299,6 +465,7 @@
           <button id="tp-jumpgo">သွားမည်</button>
         </div>
         <div id="tp-meta">${citation}</div>
+        <div id="tp-crossref"></div>
         <div id="tp-content">${row.content}</div>
       `;
       document.getElementById("tp-prev").disabled = pageNum <= minPage;
@@ -318,6 +485,7 @@
       jumpInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") loadPage(basketId, categoryId, bookId, parseInt(jumpInput.value,10), firstpageHint); });
 
       setParams({basket: basketId, category: categoryId, book: bookId, firstpage: firstpageHint, page: pageNum});
+      renderCrossRef(basketId, categoryId, bookId, pageNum);
       window.scrollTo({top:0, behavior:"smooth"});
     }catch(err){
       document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>";
