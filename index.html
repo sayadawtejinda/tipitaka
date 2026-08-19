@@ -111,6 +111,7 @@
   const MATCH_FILE = "pali_attha_tika_match.json"; 
   const PARAGRAPH_MAP_FILE = "paragraph_mapping.json"; 
   const SUTTA_FILE = "suttas.json"; 
+  const SUTTA_CENTRAL_FILE = "sutta_central.json"; 
 
   function cdnUrl(path){
     return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
@@ -121,6 +122,7 @@
   let matchIndex = null;  
   let paragraphMapIndex = null; 
   let suttaIndex = null; 
+  let suttaCentralIndex = null; 
   let currentRows = [];
   let currentRow = null;   
   let currentBookId = "";
@@ -162,10 +164,30 @@
     }
     return suttaIndex;
   }
+  async function ensureSuttaCentral(){
+    if(!suttaCentralIndex){
+      try{
+        const data = await fetchJson(cdnUrl(SUTTA_CENTRAL_FILE));
+        suttaCentralIndex = Array.isArray(data) ? data : (data.sutta_central || Object.values(data));
+      } catch(e){
+        console.warn("[Tipitaka] sutta_central.json ဖတ်၍မရပါ:", e.message);
+        suttaCentralIndex = [];
+      }
+    }
+    return suttaCentralIndex;
+  }
+  // Given the book being read and the page currently open, find which sutta (by sutta_id) that page falls under
+  function getCurrentSuttaId(bookId, pageNum){
+    if(!suttaIndex) return null;
+    const candidates = suttaIndex.filter(s => s.book_id === bookId && s.page_number <= pageNum);
+    if(candidates.length === 0) return null;
+    candidates.sort((a,b)=> b.page_number - a.page_number);
+    return candidates[0].sutta_id || null;
+  }
 
   // Helper: Close all dropdowns
   function closeAllDropdowns(exceptId) {
-    const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search'];
+    const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown'];
     dropdowns.forEach(id => {
       if(id !== exceptId) {
         const el = document.getElementById(id);
@@ -465,6 +487,7 @@
             <button id="tp-xref-toggle" class="tp-icon-btn" title="အဋ္ဌကထာ/ဋီကာ ဖတ်ရန်" disabled>📖</button>
             <button id="tp-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ/စာပိုဒ် သွားမည်">📄</button>
             <button id="tp-search-toggle" class="tp-icon-btn" title="သုတ္တန်ရှာရန်">🔍</button>
+            <button id="tp-lang-toggle" class="tp-icon-btn" title="အင်္ဂလိပ်ဘာသာပြန် ဖတ်ရန်">🌐</button>
             
             <!-- Floating Dropdowns -->
             <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
@@ -486,6 +509,8 @@
               <input type="text" id="tp-sutta-input" placeholder="သုတ္တန်အမည် ရိုက်ထည့်ပါ..." autocomplete="off">
               <div id="tp-sutta-results"></div>
             </div>
+
+            <div id="tp-lang-dropdown" class="tp-dropdown-box"><div id="tp-lang-list"></div></div>
           </div>
         </div>
         <button id="tp-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
@@ -556,6 +581,43 @@
         closeAllDropdowns("tp-sutta-search");
         searchBox.classList.toggle("tp-open", willOpen);
         if(willOpen){ searchInput.focus(); ensureSuttas(); }
+      });
+
+      // 🌐 Language Switch Toggle - show English translators for the sutta on this page
+      const langBox = document.getElementById("tp-lang-dropdown");
+      document.getElementById("tp-lang-toggle").addEventListener("click", async ()=>{
+        const willOpen = !langBox.classList.contains("tp-open");
+        closeAllDropdowns("tp-lang-dropdown");
+        langBox.classList.toggle("tp-open", willOpen);
+        if(!willOpen) return;
+
+        const langList = document.getElementById("tp-lang-list");
+        langList.innerHTML = "<div class='tp-sutta-empty'>ရှာဖွေနေပါသည်...</div>";
+        try{
+          await ensureSuttas();
+          const suttaId = getCurrentSuttaId(bookId, pageNum);
+          if(!suttaId){
+            langList.innerHTML = "<div class='tp-sutta-empty'>ဒီစာမျက်နှာက ဘယ်သုတ္တန်ဆိုတာ မတွေ့ပါ။</div>";
+            return;
+          }
+          const scData = await ensureSuttaCentral();
+          const matches = scData.filter(s => s.sutta_id === suttaId);
+          // အင်္ဂလိပ်ဘာသာပြန်များအပြင် မြန်မာနှင့် ဗီယက်နမ်ဘာသာပြန်ကိုပါ တွဲထည့်ပါ
+          const allOptions = [
+            ...matches.map(s => ({label: `${s.author} (English)`, url: s.url})),
+            {label: "မြန်မာဘာသာပြန် (pmt)", url: `https://suttacentral.net/${suttaId}/my/pmt`},
+            {label: "ဗီယက်နမ်ဘာသာပြန် (Minh Châu)", url: `https://suttacentral.net/${suttaId}/vi/minh_chau`}
+          ];
+          langList.innerHTML = allOptions.map(o => `<div class="tp-sutta-item" data-url="${o.url}">${o.label}</div>`).join("");
+          langList.querySelectorAll("[data-url]").forEach(item=>{
+            item.addEventListener("click", ()=>{
+              closeAllDropdowns();
+              window.open(item.dataset.url, "_blank");
+            });
+          });
+        } catch(err){
+          langList.innerHTML = `<div class='tp-sutta-empty' style="color:red;">ဖိုင်ရှာမတွေ့ပါ (${err.message})</div>`;
+        }
       });
 
       // Sutta Live Search Logic
