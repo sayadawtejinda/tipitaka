@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<title>Tipitaka Reader (GitHub → Blogspot)</title>
+<style>
+  body{font-family:"Myanmar Text","Padauk",sans-serif;max-width:820px;margin:0 auto;padding:20px;line-height:1.9;}
+  #tp-breadcrumb{font-size:.9em;color:#666;margin-bottom:12px;}
+  #tp-breadcrumb a{color:#0645ad;cursor:pointer;text-decoration:none;}
+  #tp-breadcrumb a:hover{text-decoration:underline;}
+  .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:16px 0;}
+  .tp-card{border:1px solid #ddd;border-radius:8px;padding:12px;cursor:pointer;text-align:center;transition:.15s;}
+  .tp-card:hover{background:#f5f5f5;border-color:#999;}
+  .tp-card .tp-count{font-size:.8em;color:#888;display:block;margin-top:4px;}
+  #tp-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+  #tp-nav button{padding:8px 16px;cursor:pointer;}
+  #tp-nav button:disabled{opacity:.4;cursor:default;}
+  #tp-nav-left{display:flex;gap:6px;}
+  #tp-nav button.tp-icon-btn{padding:6px 10px;font-size:1.25em;line-height:1;}
+  .tp-float-nav{position:fixed;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid #ccc;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.25);font-size:1.4em;line-height:1;cursor:pointer;z-index:100;}
+  .tp-float-nav:disabled{opacity:.3;cursor:default;}
+  #tp-float-prev{left:12px;}
+  #tp-float-next{right:12px;}
+  @media (max-width:900px){ .tp-float-nav{width:40px;height:40px;font-size:1.2em;} #tp-float-prev{left:6px;} #tp-float-next{right:6px;} }
+  
+  /* Jump bar (Page / Paragraph input) */
+  #tp-jumpbar{display:none;align-items:center;gap:8px;margin-bottom:16px;background:#f8fafc;padding:10px;border-radius:8px;border:1px solid #e2e8f0;}
+  #tp-jumpbar.tp-open{display:flex;}
+  #tp-jumpbar input[type=range]{flex:1;}
+  #tp-slider-live{min-width:2.5em;text-align:center;font-weight:bold;color:#a00;}
+  #tp-jumpbar input[type=number]{width:80px;padding:4px;}
+  #tp-jumpbar button{padding:6px 12px;cursor:pointer;}
+
+  #tp-toclist{margin-top:8px;}
+  .tp-toc-chapter{font-weight:bold;margin-top:14px;cursor:pointer;color:#0645ad;}
+  .tp-toc-chapter:hover{text-decoration:underline;}
+  .tp-toc-subhead{margin-left:20px;padding:2px 0;cursor:pointer;color:#333;}
+  .tp-toc-subhead:hover{color:#0645ad;text-decoration:underline;}
+  #tp-meta{color:#666;font-size:.9em;margin-bottom:12px;}
+
+  /* Crossref Dropdown Styling */
+  #tp-crossref{display:none;margin-bottom:14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:12px;}
+  #tp-crossref.tp-open{display:block;}
+  .tp-xref-group{margin-bottom:10px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;}
+  .tp-xref-group:last-child{margin-bottom:0;}
+  .tp-xref-group-title{font-weight:bold;color:#a00;margin-bottom:6px;border-bottom:1px dashed #cbd5e1;padding-bottom:4px;}
+  .tp-xref-links{display:flex;flex-direction:column;gap:6px;}
+  .tp-xref-item-btn{text-align:left;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;padding:6px 12px;font-size:.9em;cursor:pointer;color:#0645ad;transition:.15s;}
+  .tp-xref-item-btn:hover{background:#e2e8f0;text-decoration:underline;}
+  .tp-xref-empty{font-size:.85em;color:#888;}
+
+  #tp-content .nikaya{font-weight:bold;font-size:1.2em;}
+  #tp-content .book{font-weight:bold;}
+  #tp-content .centered{text-align:center;}
+  #tp-content .chapter{font-weight:bold;text-align:center;margin-top:1em;}
+  #tp-content .paranum{color:#a00;font-weight:bold;margin-right:4px;}
+  #tp-content .note{font-size:.8em;color:#888;vertical-align:super;}
+  .tp-loading{color:#888;}
+</style>
+</head>
+<body>
+
+<div id="tp-breadcrumb"></div>
+<div id="tp-view"><p class="tp-loading">Loading...</p></div>
+
+<script>
+(function(){
+  // ---------------------------------------------------------
+  // CONFIG
+  // ---------------------------------------------------------
+  const GITHUB_USER = "sayadawtejinda";
+  const GITHUB_REPO = "tipitaka";
+  const GITHUB_BRANCH = "main";
+  const DATA_FOLDER = "data";
+  const INDEX_FILE = "books.json";
+  const TOC_FILE = "toc.json"; 
+  const MATCH_FILE = "pali_attha_tika_match.json"; 
+  const PARAGRAPH_MAP_FILE = "paragraph_mapping.json"; 
+
+  function cdnUrl(path){
+    return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
+  }
+
+  let bookIndex = null;   
+  let tocIndex = null;    
+  let matchIndex = null;  
+  let paragraphMapIndex = null; 
+  let currentRows = [];
+  let currentRow = null;   
+  let currentBookId = "";
+  let currentBookMeta = null;
+  let bookPagesCache = {}; 
+
+  async function fetchJson(url){
+    const res = await fetch(url);
+    if(!res.ok) throw new Error("Fetch failed: " + url);
+    return res.json();
+  }
+
+  async function ensureIndex(){
+    if(!bookIndex) bookIndex = await fetchJson(cdnUrl(INDEX_FILE));
+    return bookIndex;
+  }
+
+  async function ensureToc(){
+    if(!tocIndex){
+      try{
+        tocIndex = await fetchJson(cdnUrl(TOC_FILE));
+      }catch(e){
+        tocIndex = [];
+      }
+    }
+    return tocIndex;
+  }
+
+  async function ensureMatch(){
+    if(!matchIndex){
+      try{
+        matchIndex = await fetchJson(cdnUrl(MATCH_FILE));
+      }catch(e){
+        console.warn("[Tipitaka] pali_attha_tika_match.json ဖတ်၍မရပါ:", cdnUrl(MATCH_FILE), e.message);
+        matchIndex = [];
+      }
+    }
+    return matchIndex;
+  }
+
+  async function ensureParagraphMap(){
+    if(!paragraphMapIndex){
+      try{
+        paragraphMapIndex = await fetchJson(cdnUrl(PARAGRAPH_MAP_FILE));
+      }catch(e){
+        console.warn("[Tipitaka] paragraph_mapping.json ဖတ်၍မရပါ:", cdnUrl(PARAGRAPH_MAP_FILE), e.message);
+        paragraphMapIndex = [];
+      }
+    }
+    return paragraphMapIndex;
+  }
+
+  function findBookMetaByPageRange(idx, bookId, pageNum){
+    const matches = idx.books.filter(b=>b.id===bookId);
+    if(matches.length<=1) return matches[0];
+    const exact = matches.find(b => pageNum!=null && b.firstpage<=pageNum && pageNum<=b.lastpage);
+    return exact || matches[0];
+  }
+
+  async function crossRefsForPage(bookId, pageNum){
+    const map = await ensureParagraphMap();
+    return map.filter(m => m.from_book_id===bookId && m.from_page_number===pageNum);
+  }
+
+  function parseParanums(str){
+    if(!str) return [];
+    return String(str).split("-")
+      .map(s=>s.trim())
+      .filter(s=>s.length>0)
+      .map(s=>parseInt(s,10))
+      .filter(n=>!isNaN(n));
+  }
+
+  async function findPageForParagraph(bookId, paragraphNum){
+    if(paragraphNum==null || isNaN(paragraphNum)) return null;
+    try{
+      if(!bookPagesCache[bookId]) bookPagesCache[bookId] = await fetchBookPages(bookId);
+      const rows = bookPagesCache[bookId];
+      const row = rows.find(r => parseParanums(r.paranum).includes(paragraphNum));
+      return row ? parseInt(row.page,10) : null;
+    }catch(e){
+      return null;
+    }
+  }
+
+  async function fallbackExpBooks(bookId){
+    const match = await ensureMatch();
+    return match.filter(m => m.base===bookId).map(m => m.exp);
+  }
+
+  // Dropdown ပုံစံဖြင့် စာပိုဒ်အလိုက် အဋ္ဌကထာ/ဋီကာ စာမျက်နှာများကို ပြသပေးခြင်း
+  async function renderCrossRef(basketId, categoryId, bookId, pageNum){
+    const el = document.getElementById("tp-crossref");
+    const toggleBtn = document.getElementById("tp-xref-toggle");
+    if(!el || !toggleBtn) return;
+    el.classList.remove("tp-open");
+    el.innerHTML = "";
+    toggleBtn.disabled = true;
+    toggleBtn.onclick = null;
+
+    try{
+      const idx = await ensureIndex();
+      const pageRefs = await crossRefsForPage(bookId, pageNum);
+      const paranums = parseParanums(currentRow && currentRow.paranum);
+      const listParanums = paranums.length > 0 ? paranums : [null];
+
+      let containerHtml = "";
+      let hasAnyRefs = false;
+
+      for(const p of listParanums){
+        const pTitle = p != null ? `စာပိုဒ် - ${toMyanmarDigits(p)}` : "ဆက်စပ်ကျမ်းများ";
+        let groupHtml = `<div class="tp-xref-group"><div class="tp-xref-group-title">${pTitle}</div><div class="tp-xref-links">`;
+
+        let refs = p != null ? pageRefs.filter(r => r.paragraph === p) : pageRefs;
+
+        if(refs.length === 0){
+          const expIds = await fallbackExpBooks(bookId);
+          for(const expId of expIds){
+            const meta = idx.books.find(b=>b.id===expId);
+            const matchedPage = p != null ? await findPageForParagraph(expId, p) : null;
+            const targetPage = matchedPage || (meta ? meta.firstpage : 1);
+            const bName = meta ? meta.name : expId;
+            groupHtml += `<button class="tp-xref-item-btn" data-tobook="${expId}" data-topage="${targetPage}">
+              ${bName} - စာမျက်နှာ ${toMyanmarDigits(targetPage)}
+            </button>`;
+            hasAnyRefs = true;
+          }
+        } else {
+          for(const r of refs){
+            const meta = idx.books.find(b=>b.id===r.to_book_id);
+            const bName = meta ? meta.name : r.to_book_id;
+            groupHtml += `<button class="tp-xref-item-btn" data-tobook="${r.to_book_id}" data-topage="${r.to_page_number}">
+              ${bName} - စာမျက်နှာ ${toMyanmarDigits(r.to_page_number)}
+            </button>`;
+            hasAnyRefs = true;
+          }
+        }
+
+        groupHtml += `</div></div>`;
+        containerHtml += groupHtml;
+      }
+
+      if(!hasAnyRefs){
+        el.innerHTML = '<span class="tp-xref-empty">ဆက်စပ်ကျမ်း အချက်အလက် မရှိသေးပါ။</span>';
+        toggleBtn.disabled = true;
+        return;
+      }
+
+      el.innerHTML = containerHtml;
+      toggleBtn.disabled = false;
+
+      el.querySelectorAll(".tp-xref-item-btn").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          const toBook = btn.dataset.tobook;
+          const toPage = parseInt(btn.dataset.topage,10);
+          const meta = findBookMetaByPageRange(idx, toBook, toPage);
+          if(!meta) return;
+          el.classList.remove("tp-open");
+          loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage);
+        });
+      });
+
+      toggleBtn.onclick = ()=>{
+        const willOpen = !el.classList.contains("tp-open");
+        el.classList.toggle("tp-open", willOpen);
+      };
+    }catch(e){
+      console.warn("[Tipitaka] cross-ref မအောင်မြင်ပါ:", e.message);
+      el.innerHTML = "";
+      toggleBtn.disabled = true;
+    }
+  }
+
+  function toMyanmarDigits(n){
+    const map = {"0":"၀","1":"၁","2":"၂","3":"၃","4":"၄","5":"၅","6":"၆","7":"၇","8":"၈","9":"၉"};
+    return String(n).split("").map(c => map[c] !== undefined ? map[c] : c).join("");
+  }
+
+  // ကျမ်းညွန်းစာသား တည်ဆောက်ခြင်း (အလယ်ဂဏန်းကို Volume ပုံသေအဖြစ် ပြင်ဆင်ထားသည်)
+  function citationText(bookMeta, pageNum){
+    const shortName = bookMeta.short_name || bookMeta.name || "";
+    const volNum = bookMeta.vol || bookMeta.volume || bookMeta.vol_no || 1;
+    const mmPage = toMyanmarDigits(pageNum);
+    return `(${shortName}၊${toMyanmarDigits(volNum)}၊${mmPage}။)`;
+  }
+
+  // ---------- URL state ----------
+  function getParams(){
+    const p = new URLSearchParams(window.location.search);
+    return {
+      basket: p.get("basket") || "",
+      category: p.get("category") || "",
+      book: p.get("book") || "",
+      firstpage: p.get("firstpage") ? parseInt(p.get("firstpage"),10) : null,
+      page: p.get("page") ? parseInt(p.get("page"),10) : null
+    };
+  }
+  function setParams(obj){
+    const p = new URLSearchParams();
+    if(obj.basket) p.set("basket", obj.basket);
+    if(obj.category) p.set("category", obj.category);
+    if(obj.book) p.set("book", obj.book);
+    if(obj.firstpage) p.set("firstpage", obj.firstpage);
+    if(obj.page) p.set("page", obj.page);
+    history.pushState({}, "", "?" + p.toString());
+  }
+
+  // ---------- breadcrumb ----------
+  function renderBreadcrumb(parts){
+    const el = document.getElementById("tp-breadcrumb");
+    el.innerHTML = parts.map((p,i) => {
+      const sep = i>0 ? " › " : "";
+      if(p.onclick){
+        return sep + `<a data-idx="${i}">${p.label}</a>`;
+      }
+      return sep + p.label;
+    }).join("");
+    parts.forEach((p,i) => {
+      if(p.onclick){
+        el.querySelector(`a[data-idx="${i}"]`).addEventListener("click", p.onclick);
+      }
+    });
+  }
+
+  // ---------- Level 1: basket list ----------
+  async function showBaskets(){
+    const idx = await ensureIndex();
+    renderBreadcrumb([{label:"တိပိဋက"}]);
+    const baskets = Object.keys(idx.basket_labels);
+    const html = baskets.map(b => {
+      const count = idx.books.filter(bk => bk.basket === b).length;
+      return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${count} အုပ်</span></div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-basket]").forEach(el=>{
+      el.addEventListener("click", ()=> showCategories(el.dataset.basket));
+    });
+    setParams({});
+  }
+
+  // ---------- Level 2: category list ----------
+  async function showCategories(basketId){
+    const idx = await ensureIndex();
+    const basketLabel = idx.basket_labels[basketId] || basketId;
+    renderBreadcrumb([
+      {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+      {label: basketLabel}
+    ]);
+    const cats = [...new Set(idx.books.filter(b=>b.basket===basketId).map(b=>b.category))];
+    const html = cats.map(c => {
+      const count = idx.books.filter(b=>b.basket===basketId && b.category===c).length;
+      const label = idx.category_labels[c] || c;
+      return `<div class="tp-card" data-category="${c}">${label}<span class="tp-count">${count} အုပ်</span></div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-category]").forEach(el=>{
+      el.addEventListener("click", ()=> showBookList(basketId, el.dataset.category));
+    });
+    setParams({basket: basketId});
+  }
+
+  // ---------- Level 3: book list ----------
+  async function showBookList(basketId, categoryId){
+    const idx = await ensureIndex();
+    const basketLabel = idx.basket_labels[basketId] || basketId;
+    const categoryLabel = idx.category_labels[categoryId] || categoryId;
+    renderBreadcrumb([
+      {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+      {label: basketLabel, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}},
+      {label: categoryLabel}
+    ]);
+    const books = idx.books.filter(b=>b.basket===basketId && b.category===categoryId);
+    const html = books.map(b=>{
+      return `<div class="tp-card" data-book="${b.id}" data-firstpage="${b.firstpage}">${b.name}<span class="tp-count">${b.pagecount} စာမျက်နှာ</span></div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-book]").forEach(el=>{
+      const fp = parseInt(el.dataset.firstpage,10);
+      el.addEventListener("click", ()=> loadPage(basketId, categoryId, el.dataset.book, fp, fp));
+    });
+    setParams({basket: basketId, category: categoryId});
+  }
+
+  // ---------- Level 4: page reader ----------
+  async function fetchBookPages(bookId){
+    return fetchJson(cdnUrl(`${DATA_FOLDER}/${bookId}.json`));
+  }
+
+  function findBookMeta(idx, bookId, firstpageHint){
+    const matches = idx.books.filter(b=>b.id===bookId);
+    if(matches.length<=1) return matches[0];
+    if(firstpageHint!=null){
+      const exact = matches.find(b=>b.firstpage===firstpageHint);
+      if(exact) return exact;
+    }
+    return matches[0];
+  }
+
+  async function loadPage(basketId, categoryId, bookId, pageNum, firstpageHint){
+    document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+    try{
+      const idx = await ensureIndex();
+      const bookMeta = findBookMeta(idx, bookId, firstpageHint) || {};
+      currentBookMeta = bookMeta;
+
+      if(bookId !== currentBookId){
+        currentRows = await fetchBookPages(bookId);
+        currentBookId = bookId;
+      }
+
+      const minPage = bookMeta.firstpage || 1;
+      const maxPage = bookMeta.lastpage || Math.max(...currentRows.map(r=>parseInt(r.page,10)));
+
+      if(pageNum == null) pageNum = minPage;
+      if(pageNum < minPage) pageNum = minPage;
+      if(pageNum > maxPage) pageNum = maxPage;
+
+      const row = currentRows.find(r => parseInt(r.page,10) === pageNum);
+      currentRow = row || null;
+
+      renderBreadcrumb([
+        {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+        {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}},
+        {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}},
+        {label: bookMeta.name || bookId}
+      ]);
+
+      if(!row){
+        document.getElementById("tp-view").innerHTML = `
+          <div id="tp-nav"><button id="tp-toc" class="tp-icon-btn" title="မာတိကာ">☰</button></div>
+          <p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`;
+        const tb = document.getElementById("tp-toc");
+        if(tb) tb.addEventListener("click", ()=> showToc(basketId, categoryId, bookId, firstpageHint));
+        return;
+      }
+
+      const citation = citationText(bookMeta, row.page);
+
+      document.getElementById("tp-view").innerHTML = `
+        <div id="tp-nav">
+          <div id="tp-nav-left">
+            <button id="tp-toc" class="tp-icon-btn" title="မာတိကာ">☰</button>
+            <button id="tp-xref-toggle" class="tp-icon-btn" title="အဋ္ဌကထာ/ဋီကာ ဖတ်ရန်" disabled>📖</button>
+            <button id="tp-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ/စာပိုဒ် သွားမည်">📄</button>
+          </div>
+        </div>
+        <button id="tp-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
+        <button id="tp-float-next" class="tp-float-nav" title="နောက်စာမျက်နှာ">→</button>
+        <div id="tp-jumpbar">
+          <input type="range" id="tp-slider" min="${minPage}" max="${maxPage}" value="${pageNum}">
+          <span id="tp-slider-live">${toMyanmarDigits(pageNum)}</span>
+          <input type="number" id="tp-jumpinput" placeholder="စာပိုဒ်နံပါတ်" value="">
+          <button id="tp-jumpgo">သွားမည်</button>
+        </div>
+        <div id="tp-meta">${citation}</div>
+        <div id="tp-crossref"></div>
+        <div id="tp-content">${row.content}</div>
+      `;
+      
+      document.getElementById("tp-float-prev").disabled = pageNum <= minPage;
+      document.getElementById("tp-float-next").disabled = pageNum >= maxPage;
+      document.getElementById("tp-float-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1, firstpageHint));
+      document.getElementById("tp-float-next").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum+1, firstpageHint));
+      document.getElementById("tp-toc").addEventListener("click", ()=> showToc(basketId, categoryId, bookId, firstpageHint));
+
+      // Page Icon (📄) နှိပ်မှ စာပိုဒ်/စာမျက်နှာ ရွေးသည့် Box ပေါ်စေခြင်း
+      const jumpToggle = document.getElementById("tp-jump-toggle");
+      const jumpBar = document.getElementById("tp-jumpbar");
+      jumpToggle.addEventListener("click", ()=>{
+        jumpBar.classList.toggle("tp-open");
+      });
+
+      const slider = document.getElementById("tp-slider");
+      const sliderLive = document.getElementById("tp-slider-live");
+      slider.addEventListener("input", ()=>{ sliderLive.textContent = toMyanmarDigits(slider.value); });
+      slider.addEventListener("change", ()=> loadPage(basketId, categoryId, bookId, parseInt(slider.value,10), firstpageHint));
+
+      function goToParagraph(){
+        const paragraphNum = parseInt(jumpInput.value,10);
+        if(isNaN(paragraphNum)) return;
+        const row = currentRows.find(r => parseParanums(r.paranum).includes(paragraphNum));
+        if(row){
+          jumpBar.classList.remove("tp-open");
+          loadPage(basketId, categoryId, bookId, parseInt(row.page,10), firstpageHint);
+        } else {
+          alert("စာပိုဒ် " + toMyanmarDigits(paragraphNum) + " ကို ဒီစာအုပ်ထဲမှာ မတွေ့ပါ။");
+        }
+      }
+      const jumpGo = document.getElementById("tp-jumpgo");
+      const jumpInput = document.getElementById("tp-jumpinput");
+      jumpGo.addEventListener("click", goToParagraph);
+      jumpInput.addEventListener("keydown", (e)=>{ if(e.key==="Enter") goToParagraph(); });
+
+      setParams({basket: basketId, category: categoryId, book: bookId, firstpage: firstpageHint, page: pageNum});
+      renderCrossRef(basketId, categoryId, bookId, pageNum);
+      window.scrollTo({top:0, behavior:"smooth"});
+    }catch(err){
+      document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>";
+    }
+  }
+
+  // ---------- TOC panel ----------
+  async function showToc(basketId, categoryId, bookId, firstpageHint){
+    document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+    const toc = await ensureToc();
+    const items = toc.filter(t=>t.book_id===bookId).sort((a,b)=>a.page_number-b.page_number);
+    const html = items.map(it=>{
+      const cls = it.type==="chapter" ? "tp-toc-chapter" : "tp-toc-subhead";
+      return `<div class="${cls}" data-page="${it.page_number}">${it.name}</div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `
+      <div id="tp-nav"><button id="tp-back">← ပြန်သွားမည်</button></div>
+      <div id="tp-toclist">${html || "<p>ဒီစာအုပ်အတွက် မာတိကာ မရှိသေးပါ။</p>"}</div>
+    `;
+    document.getElementById("tp-back").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, null, firstpageHint));
+    document.querySelectorAll("#tp-toclist [data-page]").forEach(el=>{
+      el.addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, parseInt(el.dataset.page,10), firstpageHint));
+    });
+  }
+
+  // ---------- boot ----------
+  (async function init(){
+    const {basket, category, book, page, firstpage} = getParams();
+    try{
+      if(book){
+        const idx = await ensureIndex();
+        const meta = findBookMeta(idx, book, firstpage);
+        const b = basket || (meta && meta.basket) || "";
+        const c = category || (meta && meta.category) || "";
+        loadPage(b, c, book, page || (meta && meta.firstpage) || 1, firstpage);
+      } else if(category && basket){
+        showBookList(basket, category);
+      } else if(basket){
+        showCategories(basket);
+      } else {
+        showBaskets();
+      }
+    }catch(err){
+      document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>";
+    }
+  })();
+})();
+</script>
+
+</body>
+</html>
