@@ -17,6 +17,7 @@
   #tp-nav button:disabled{opacity:.4;cursor:default;}
   #tp-jumpbar{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
   #tp-jumpbar input[type=range]{flex:1;}
+  #tp-slider-live{min-width:2.5em;text-align:center;font-weight:bold;color:#a00;}
   #tp-jumpbar input[type=number]{width:70px;padding:4px;}
   #tp-jumpbar button{padding:6px 12px;cursor:pointer;}
   #tp-toclist{margin-top:8px;}
@@ -50,7 +51,7 @@
   const GITHUB_BRANCH = "main";
   const DATA_FOLDER = "data";
   const INDEX_FILE = "books.json";
-  const TOC_FILE = "toc.json"; // <-- GitHub ထဲက မာတိကာပေါင်း json ဖိုင်လမ်းကြောင်းကို ဒီနေရာမှာ စစ်ပေးပါ (root မှာမဟုတ်ရင် "data/toc.json" စသည်)
+  const TOC_FILE = "data/toc.json"; // GitHub repo ထဲမှာ data/toc.json အနေနဲ့ ထားထားလို့ ဒီအတိုင်း ချိန်ညှိထားသည်
 
   function cdnUrl(path){
     return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
@@ -82,6 +83,12 @@
       }
     }
     return tocIndex;
+  }
+
+  // အင်္ဂလိပ်ဂဏန်း (0-9) ကို မြန်မာဂဏန်း (၀-၉) အဖြစ် ပြောင်းပေးသည်
+  function toMyanmarDigits(n){
+    const map = {"0":"၀","1":"၁","2":"၂","3":"၃","4":"၄","5":"၅","6":"၆","7":"၇","8":"၈","9":"၉"};
+    return String(n).split("").map(c => map[c] !== undefined ? map[c] : c).join("");
   }
 
   // short_name ရဲ့ အဆုံးက ဂဏန်းကို ဖြုတ်ထုတ်ပေးသည် ("အပါဒန်၂" -> "အပါဒန်")
@@ -118,10 +125,11 @@
 
   function citationText(bookMeta, chapterNum, pageNum){
     const name = baseShortName(bookMeta.short_name || bookMeta.name || "");
+    const mmPage = toMyanmarDigits(pageNum);
     if(chapterNum === null || chapterNum === undefined){
-      return `(${name}၊${pageNum}။)`;
+      return `(${name}၊${mmPage}။)`;
     }
-    return `(${name}၊${chapterNum}၊${pageNum}။)`;
+    return `(${name}၊${toMyanmarDigits(chapterNum)}၊${mmPage}။)`;
   }
 
   // ---------- URL state ----------
@@ -281,11 +289,12 @@
         <div id="tp-nav">
           <button id="tp-toc">မာတိကာ</button>
           <button id="tp-prev">← ရှေ့</button>
-          <span id="tp-pageinfo">${pageNum} / ${maxPage}</span>
+          <span id="tp-pageinfo">${toMyanmarDigits(pageNum)} / ${toMyanmarDigits(maxPage)}</span>
           <button id="tp-next">နောက် →</button>
         </div>
         <div id="tp-jumpbar">
           <input type="range" id="tp-slider" min="${minPage}" max="${maxPage}" value="${pageNum}">
+          <span id="tp-slider-live">${toMyanmarDigits(pageNum)}</span>
           <input type="number" id="tp-jumpinput" min="${minPage}" max="${maxPage}" value="${pageNum}">
           <button id="tp-jumpgo">သွားမည်</button>
         </div>
@@ -299,6 +308,8 @@
       document.getElementById("tp-toc").addEventListener("click", ()=> showToc(basketId, categoryId, bookId, firstpageHint));
 
       const slider = document.getElementById("tp-slider");
+      const sliderLive = document.getElementById("tp-slider-live");
+      slider.addEventListener("input", ()=>{ sliderLive.textContent = toMyanmarDigits(slider.value); });
       slider.addEventListener("change", ()=> loadPage(basketId, categoryId, bookId, parseInt(slider.value,10), firstpageHint));
 
       const jumpGo = document.getElementById("tp-jumpgo");
