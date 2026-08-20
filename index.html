@@ -4,19 +4,18 @@
 <meta charset="UTF-8">
 <title>Tipitaka Reader (GitHub → Blogspot)</title>
 <style>
-  body{font-family:"Myanmar Text","Padauk",sans-serif;max-width:820px;margin:0 auto;padding:20px;line-height:1.9;}
+  body{font-family:"Myanmar Text","Padauk",sans-serif;max-width:820px;margin:0 auto;padding:20px;line-height:1.9;background:#f4f1e8;color:#3a3229;}
   #tp-breadcrumb{font-size:.9em;color:#666;margin-bottom:12px;}
   #tp-breadcrumb a{color:#0645ad;cursor:pointer;text-decoration:none;}
   #tp-breadcrumb a:hover{text-decoration:underline;}
   .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:16px 0;}
-  .tp-card{border:1px solid #ddd;border-radius:8px;padding:12px;cursor:pointer;text-align:center;transition:.15s;}
-  .tp-card:hover{background:#f5f5f5;border-color:#999;}
-  .tp-card .tp-count{font-size:.8em;color:#888;display:block;margin-top:4px;}
+    .tp-card{border:1px solid #d9d0b8;border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:.2s;background:#fffdf7;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+  .tp-card:hover{background:#eef3ea;border-color:#9fb8a8;box-shadow:0 3px 8px rgba(0,0,0,.08);}
+  .tp-card .tp-count{font-size:.8em;color:#7d8f83;display:block;margin-top:4px;}
   #tp-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
   #tp-nav button{padding:8px 16px;cursor:pointer;}
   #tp-nav button:disabled{opacity:.4;cursor:default;}
   
-  /* Make left nav relative to hold ALL floating dropdowns */
   #tp-nav-left{display:flex;gap:6px;position:relative;}
   
   #tp-nav button.tp-icon-btn{padding:6px 10px;font-size:1.25em;line-height:1;}
@@ -28,7 +27,6 @@
   #tp-float-search-toggle{ left:50%; transform:translate(-50%,-50%); z-index:150; cursor:grab; }
   #tp-float-search-box.tp-dropdown-box{ position:fixed; margin-top:0; }
   
-  /* General Floating Dropdown Box Style for All Icons */
   .tp-dropdown-box {
     display: none;
     position: absolute;
@@ -48,7 +46,6 @@
   }
   .tp-dropdown-box.tp-open { display: block; }
   
-  /* Jump bar Specific (flex layout) */
   #tp-jumpbar.tp-dropdown-box.tp-open { display: flex; flex-direction: column; gap: 12px; }
   .tp-jump-row { display: flex; align-items: center; gap: 8px; }
   #tp-jumpbar input[type=range]{flex:1;}
@@ -56,14 +53,13 @@
   #tp-jumpbar input[type=number]{width:100%;padding:6px;border:1px solid #ccc;border-radius:4px;}
   #tp-jumpbar button{padding:6px 12px;white-space:nowrap;}
 
-  /* TOC Specific */
-  .tp-toc-chapter{font-weight:bold;margin-top:10px;cursor:pointer;color:#0645ad;}
+  .tp-toc-chapter{font-weight:bold;margin-top:10px;cursor:pointer;color:#0645ad; transition: background 0.2s;}
   .tp-toc-chapter:first-child{margin-top:0;}
   .tp-toc-chapter:hover{text-decoration:underline;}
-  .tp-toc-subhead{margin-left:16px;padding:4px 0;cursor:pointer;color:#333;font-size:0.95em;border-bottom:1px dashed #eee;}
+  .tp-toc-subhead{margin-left:16px;padding:4px 0;cursor:pointer;color:#333;font-size:0.95em;border-bottom:1px dashed #eee; transition: background 0.2s;}
   .tp-toc-subhead:hover{color:#0645ad;text-decoration:underline;}
+  .tp-toc-active{background:#fff3b0; border-radius:4px; font-weight:bold; color:#a00 !important; padding:4px;}
 
-  /* Crossref Specific */
   .tp-xref-group{margin-bottom:10px;background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:8px 12px;}
   .tp-xref-group:last-child{margin-bottom:0;}
   .tp-xref-group-title{font-weight:bold;color:#a00;margin-bottom:6px;border-bottom:1px dashed #cbd5e1;padding-bottom:4px;}
@@ -73,8 +69,7 @@
   .tp-mm-highlight{background:#fff3b0;border-radius:2px;padding:0 2px;}
   .tp-xref-empty{font-size:.85em;color:#888;text-align:center;padding:10px;}
 
-  /* Sutta Search Box Specific */
-  #tp-sutta-input {
+  #tp-sutta-input, #tp-float-search-input {
     width: 100%; padding: 8px; border: 1px solid #cbd5e1;
     border-radius: 4px; box-sizing: border-box; margin-bottom: 8px; font-family: inherit; font-size: 0.95em;
   }
@@ -86,12 +81,14 @@
   .tp-sutta-empty { color: #888; font-size: 0.9em; text-align: center; padding: 8px 0; }
 
   #tp-meta{color:#666;font-size:.9em;margin-bottom:12px;}
-  #tp-content .nikaya{font-weight:bold;font-size:1.2em;}
-  #tp-content .book{font-weight:bold;}
+  #tp-content .nikaya{font-weight:bold;font-size:1.2em;text-align:center;color:#1e3a5f;}
+  #tp-content .book{font-weight:bold;text-align:center;color:#1e3a5f;}
   #tp-content .centered{text-align:center;}
-  #tp-content .chapter{font-weight:bold;text-align:center;margin-top:1em;}
+  #tp-content .chapter{font-weight:bold;text-align:center;margin-top:1em;color:#1e3a5f;}
+  #tp-content .subhead{font-weight:bold;text-align:center;color:#1e3a5f;margin-top:.6em;}
   #tp-content .paranum{color:#a00;font-weight:bold;margin-right:4px;}
   #tp-content .note{font-size:.8em;color:#888;vertical-align:super;}
+  #tp-content .bodytext{text-indent:1.5em;}
   .tp-loading{color:#888;}
 </style>
 </head>
@@ -100,17 +97,14 @@
 <div id="tp-breadcrumb"></div>
 <div id="tp-view"><p class="tp-loading">Loading...</p></div>
 
-<button id="tp-float-search-toggle" class="tp-float-nav" title="သုတ္တန်ရှာရန်">🔍</button>
+<button id="tp-float-search-toggle" class="tp-float-nav" title="ရှာရန်">🔍</button>
 <div id="tp-float-search-box" class="tp-dropdown-box">
-  <input type="text" id="tp-float-search-input" placeholder="သုတ္တန်အမည် ရိုက်ထည့်ပါ..." autocomplete="off">
+  <input type="text" id="tp-float-search-input" placeholder="စာအုပ် (သို့) သုတ္တန်အမည် ရိုက်ရှာပါ..." autocomplete="off">
   <div id="tp-float-search-results"></div>
 </div>
 
 <script>
 (function(){
-  // ---------------------------------------------------------
-  // CONFIG
-  // ---------------------------------------------------------
   const GITHUB_USER = "sayadawtejinda";
   const GITHUB_REPO = "tipitaka";
   const GITHUB_BRANCH = "main";
@@ -125,114 +119,56 @@
   const PAGE_MAP_FILE = "pali_mm_page_map.json"; 
   const BURMESE_TOC_FILE = "tipitaka_myanmar_toc.csv"; 
 
-  function cdnUrl(path){
-    return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
-  }
+  function cdnUrl(path){ return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`; }
 
-  let bookIndex = null;   
-  let tocIndex = null;    
-  let matchIndex = null;  
-  let paragraphMapIndex = null; 
-  let suttaIndex = null; 
-  let suttaCentralIndex = null; 
-  let burmeseMapIndex = null; 
-  let pageMapIndex = null; 
-  let burmeseTocIndex = null; 
-  let burmeseBookMeta = null; 
-  let mmHtmlCache = {}; 
-  let mmPagesCache = {}; 
-  let mmBackContext = null; 
-  let mmCurrentBookId = null; 
-  let mmCurrentPageIdx = 1; 
-  let currentRows = [];
-  let currentRow = null;   
-  let currentBookId = "";
-  let currentBookMeta = null;
-  let bookPagesCache = {}; 
+  let bookIndex = null, tocIndex = null, matchIndex = null, paragraphMapIndex = null, suttaIndex = null;
+  let suttaCentralIndex = null, burmeseMapIndex = null, pageMapIndex = null, burmeseTocIndex = null, burmeseBookMeta = null;
+  let mmHtmlCache = {}, mmPagesCache = {}, mmBackContext = null, mmCurrentBookId = null, mmCurrentPageIdx = 1;
+  let currentRows = [], currentRow = null, currentBookId = "", currentBookMeta = null, bookPagesCache = {};
 
-  async function fetchJson(url){
-    const res = await fetch(url);
-    if(!res.ok) throw new Error("Fetch failed: " + url);
-    return res.json();
-  }
+  async function fetchJson(url){ const res = await fetch(url); if(!res.ok) throw new Error("Fetch failed: " + url); return res.json(); }
+  async function fetchText(url){ const res = await fetch(url); if(!res.ok) throw new Error("Fetch failed: " + url); return res.text(); }
 
-  async function fetchText(url){
-    const res = await fetch(url);
-    if(!res.ok) throw new Error("Fetch failed: " + url);
-    return res.text();
-  }
-
-  // mm html ဖိုင်တစ်ခုလုံးကို <hr> (သို့) "--" ဆိုတဲ့ page-break marker အလိုက် စာမျက်နှာချင်း ခွဲမည်
   function splitMmHtmlIntoPages(bodyEl){
     const pages = [];
     let current = document.createElement("div");
     Array.from(bodyEl.childNodes).forEach(node=>{
-      const isPageBreak = (node.nodeType === 1 && node.tagName === "HR") ||
-                           (node.nodeType === 3 && /^-{2,}$/.test((node.textContent||"").trim()));
-      if(isPageBreak){
-        pages.push(current.innerHTML);
-        current = document.createElement("div");
-      } else {
-        current.appendChild(node.cloneNode(true));
-      }
+      const isPageBreak = (node.nodeType === 1 && node.tagName === "HR") || (node.nodeType === 3 && /^-{2,}$/.test((node.textContent||"").trim()));
+      if(isPageBreak){ pages.push(current.innerHTML); current = document.createElement("div"); } 
+      else { current.appendChild(node.cloneNode(true)); }
     });
-    pages.push(current.innerHTML);
-    return pages;
+    pages.push(current.innerHTML); return pages;
   }
 
   async function ensureMmPages(mmBookId){
     if(!mmPagesCache[mmBookId]){
-      if(!mmHtmlCache[mmBookId]){
-        mmHtmlCache[mmBookId] = await fetchText(cdnUrl(`${DATA_FOLDER}/${mmBookId}.html`));
-      }
+      if(!mmHtmlCache[mmBookId]){ mmHtmlCache[mmBookId] = await fetchText(cdnUrl(`${DATA_FOLDER}/${mmBookId}.html`)); }
       const doc = new DOMParser().parseFromString(mmHtmlCache[mmBookId], "text/html");
       mmPagesCache[mmBookId] = doc.body ? splitMmHtmlIntoPages(doc.body) : [mmHtmlCache[mmBookId]];
     }
     return mmPagesCache[mmBookId];
   }
 
-  async function ensureIndex(){
-    if(!bookIndex) bookIndex = await fetchJson(cdnUrl(INDEX_FILE));
-    return bookIndex;
-  }
-  async function ensureToc(){
-    if(!tocIndex){ try{ tocIndex = await fetchJson(cdnUrl(TOC_FILE)); }catch(e){ tocIndex = []; } }
-    return tocIndex;
-  }
-  async function ensureMatch(){
-    if(!matchIndex){ try{ matchIndex = await fetchJson(cdnUrl(MATCH_FILE)); }catch(e){ matchIndex = []; } }
-    return matchIndex;
-  }
-  async function ensureParagraphMap(){
-    if(!paragraphMapIndex){ try{ paragraphMapIndex = await fetchJson(cdnUrl(PARAGRAPH_MAP_FILE)); }catch(e){ paragraphMapIndex = []; } }
-    return paragraphMapIndex;
-  }
+  async function ensureIndex(){ if(!bookIndex) bookIndex = await fetchJson(cdnUrl(INDEX_FILE)); return bookIndex; }
+  async function ensureToc(){ if(!tocIndex){ try{ tocIndex = await fetchJson(cdnUrl(TOC_FILE)); }catch(e){ tocIndex = []; } } return tocIndex; }
+  async function ensureMatch(){ if(!matchIndex){ try{ matchIndex = await fetchJson(cdnUrl(MATCH_FILE)); }catch(e){ matchIndex = []; } } return matchIndex; }
+  async function ensureParagraphMap(){ if(!paragraphMapIndex){ try{ paragraphMapIndex = await fetchJson(cdnUrl(PARAGRAPH_MAP_FILE)); }catch(e){ paragraphMapIndex = []; } } return paragraphMapIndex; }
   async function ensureSuttas(){
     if(!suttaIndex){
       try{ 
         const data = await fetchJson(cdnUrl(SUTTA_FILE)); 
-        // Handle array or object wrapper
         suttaIndex = Array.isArray(data) ? data : (data.suttas || Object.values(data));
-      } catch(e){ 
-        console.warn("[Tipitaka] suttas.json ဖတ်၍မရပါ:", e.message);
-        suttaIndex = []; 
-      }
+      } catch(e){ suttaIndex = []; }
     }
     return suttaIndex;
   }
   async function ensureSuttaCentral(){
     if(!suttaCentralIndex){
-      try{
-        const data = await fetchJson(cdnUrl(SUTTA_CENTRAL_FILE));
-        suttaCentralIndex = Array.isArray(data) ? data : (data.sutta_central || Object.values(data));
-      } catch(e){
-        console.warn("[Tipitaka] sutta_central.json ဖတ်၍မရပါ:", e.message);
-        suttaCentralIndex = [];
-      }
+      try{ const data = await fetchJson(cdnUrl(SUTTA_CENTRAL_FILE)); suttaCentralIndex = Array.isArray(data) ? data : (data.sutta_central || Object.values(data)); } 
+      catch(e){ suttaCentralIndex = []; }
     }
     return suttaCentralIndex;
   }
-  // Given the book being read and the page currently open, find which sutta (by sutta_id) that page falls under
   function getCurrentSuttaId(bookId, pageNum){
     if(!suttaIndex) return null;
     const candidates = suttaIndex.filter(s => s.book_id === bookId && s.page_number <= pageNum);
@@ -240,74 +176,45 @@
     candidates.sort((a,b)=> b.page_number - a.page_number);
     return candidates[0].sutta_id || null;
   }
-
   async function ensureBurmeseMap(){
     if(!burmeseMapIndex){
-      try{
-        const data = await fetchJson(cdnUrl(BURMESE_MAP_FILE));
-        burmeseMapIndex = Array.isArray(data) ? data : (data.burmese_translated_books || Object.values(data));
-      } catch(e){
-        console.warn("[Tipitaka] burmese_translated_books.json ဖတ်၍မရပါ:", e.message);
-        burmeseMapIndex = [];
-      }
+      try{ const data = await fetchJson(cdnUrl(BURMESE_MAP_FILE)); burmeseMapIndex = Array.isArray(data) ? data : (data.burmese_translated_books || Object.values(data)); } 
+      catch(e){ burmeseMapIndex = []; }
     }
     return burmeseMapIndex;
   }
-  // Pali book_id + page ကနေ ဆိုင်ရာ မြန်မာပြန် mm_book_id ကို ရှာမည်
   function findBurmeseMapping(bookId, pageNum){
     if(!burmeseMapIndex) return null;
     return burmeseMapIndex.find(m => m.pali_book_id === bookId && m.pali_first_page <= pageNum && pageNum <= m.pali_last_page) || null;
   }
-
   async function ensurePageMap(){
     if(!pageMapIndex){
-      try{
-        const data = await fetchJson(cdnUrl(PAGE_MAP_FILE));
-        pageMapIndex = Array.isArray(data) ? data : (data.pali_mm_page_map || Object.values(data));
-      } catch(e){
-        console.warn("[Tipitaka] pali_mm_page_map.json ဖတ်၍မရပါ:", e.message);
-        pageMapIndex = [];
-      }
+      try{ const data = await fetchJson(cdnUrl(PAGE_MAP_FILE)); pageMapIndex = Array.isArray(data) ? data : (data.pali_mm_page_map || Object.values(data)); } 
+      catch(e){ pageMapIndex = []; }
     }
     return pageMapIndex;
   }
-  // link_type "page" ဖြစ်တဲ့ စာအုပ်များ (ဓမ္မပဒ၊ ဇာတက) အတွက် တိကျသော pali page <-> mm page ကို ရှာမည်
   function findExactMmPage(bookId, pageNum){
     if(!pageMapIndex) return null;
     return pageMapIndex.find(m => m.pali_book_id === bookId && m.pali_page_number === pageNum) || null;
   }
 
-  // csv line တစ်ကြောင်းကို field များအဖြစ်ခွဲမည် (quote ထဲက comma/escaped-quote ("") ကို ကိုင်တွယ်ပေးသည်)
   function parseCsvLine(line){
-    const fields = [];
-    let cur = "";
-    let inQuotes = false;
+    const fields = []; let cur = "", inQuotes = false;
     for(let i = 0; i < line.length; i++){
       const ch = line[i];
       if(inQuotes){
-        if(ch === '"'){
-          if(line[i+1] === '"'){ cur += '"'; i++; }
-          else { inQuotes = false; }
-        } else {
-          cur += ch;
-        }
+        if(ch === '"'){ if(line[i+1] === '"'){ cur += '"'; i++; } else { inQuotes = false; } } else { cur += ch; }
       } else {
-        if(ch === '"'){ inQuotes = true; }
-        else if(ch === ','){ fields.push(cur); cur = ""; }
-        else { cur += ch; }
+        if(ch === '"'){ inQuotes = true; } else if(ch === ','){ fields.push(cur); cur = ""; } else { cur += ch; }
       }
     }
-    fields.push(cur);
-    return fields;
+    fields.push(cur); return fields;
   }
 
-  // tipitaka_myanmar_toc.csv ကို mm_book_id အလိုက် group လုပ်ပြီး ဖတ်မည်
-  // book header row: seq,mm_book_id,title,pagecount (col1 က <font ...> နဲ့ မစဘူး)
-  // toc entry row: "<font size=X>",title,page,   (font size က heading အဆင့်ကို ညွှန်းသည်)
   async function ensureBurmeseToc(){
     if(!burmeseTocIndex){
-      burmeseTocIndex = {};
-      burmeseBookMeta = {};
+      burmeseTocIndex = {}; burmeseBookMeta = {};
       try{
         const text = await fetchText(cdnUrl(BURMESE_TOC_FILE));
         const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
@@ -320,58 +227,30 @@
             currentBook = (f[1] || "").trim();
             if(currentBook && !burmeseTocIndex[currentBook]) burmeseTocIndex[currentBook] = [];
             if(currentBook){
-              burmeseBookMeta[currentBook] = {
-                title: (f[2] || "").trim(),
-                pagecount: parseInt((f[3] || "").trim(), 10) || null,
-                category: mmCategoryFromId(currentBook)
-              };
+              burmeseBookMeta[currentBook] = { title: (f[2] || "").trim(), pagecount: parseInt((f[3] || "").trim(), 10) || null, category: mmCategoryFromId(currentBook) };
             }
           } else if(currentBook){
             const sizeMatch = col1.match(/size=["']?([\d.]+)/);
             const level = sizeMatch ? parseFloat(sizeMatch[1]) : 1;
-            const title = (f[1] || "").trim();
-            const page = parseInt((f[2] || "").trim(), 10);
-            if(title && !isNaN(page)){
-              burmeseTocIndex[currentBook].push({ level, title, page });
-            }
+            const title = (f[1] || "").trim(), page = parseInt((f[2] || "").trim(), 10);
+            if(title && !isNaN(page)) burmeseTocIndex[currentBook].push({ level, title, page });
           }
         });
-      } catch(e){
-        console.warn("[Tipitaka] tipitaka_myanmar_toc.csv ဖတ်၍မရပါ:", e.message);
-      }
+      } catch(e){}
     }
     return burmeseTocIndex;
   }
 
-  // "01_vinaya_01" -> "vinaya" ကဲ့သို့ mm_book_id ရဲ့ အလယ်အပိုင်း (category slug) ကို ထုတ်ယူမည်
-  function mmCategoryFromId(mmBookId){
-    const parts = mmBookId.split("_");
-    if(parts.length < 3) return "other";
-    return parts.slice(1, parts.length - 1).join("_");
-  }
+  function mmCategoryFromId(mmBookId){ const parts = mmBookId.split("_"); if(parts.length < 3) return "other"; return parts.slice(1, parts.length - 1).join("_"); }
 
   const MM_CATEGORY_LABELS = {
-    vinaya: "ဝိနည်းပိဋက",
-    digha: "ဒီဃနိကာယ်",
-    majjhima: "မဇ္ဈိမနိကာယ်",
-    sanyutta: "သံယုတ်နိကာယ်",
-    anguttara: "အင်္ဂုတ္တိုရ်နိကာယ်",
-    khuddaka: "ခုဒ္ဒကနိကာယ်",
-    abhidhamma: "အဘိဓမ္မာပိဋက",
-    dhammapada: "ဓမ္မပဒ",
-    jataka: "ဇာတက",
-    visuddhimagga: "ဝိသုဒ္ဓိမဂ်"
+    vinaya: "ဝိနည်းပိဋက", digha: "ဒီဃနိကာယ်", majjhima: "မဇ္ဈိမနိကာယ်", sanyutta: "သံယုတ်နိကာယ်", anguttara: "အင်္ဂုတ္တိုရ်နိကာယ်",
+    khuddaka: "ခုဒ္ဒကနိကာယ်", abhidhamma: "အဘိဓမ္မာပိဋက", dhammapada: "ဓမ္မပဒ", jataka: "ဇာတက", visuddhimagga: "ဝိသုဒ္ဓိမဂ်"
   };
 
-  // Helper: Close all dropdowns
   function closeAllDropdowns(exceptId) {
     const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown', 'tp-float-search-box'];
-    dropdowns.forEach(id => {
-      if(id !== exceptId) {
-        const el = document.getElementById(id);
-        if(el) el.classList.remove('tp-open');
-      }
-    });
+    dropdowns.forEach(id => { if(id !== exceptId) { const el = document.getElementById(id); if(el) el.classList.remove('tp-open'); } });
   }
 
   function findBookMetaByPageRange(idx, bookId, pageNum){
@@ -381,351 +260,209 @@
     return exact || matches[0];
   }
 
-  // Sutta Live Search Logic (nav-bar 🔍 နဲ့ floating 🔍 နှစ်ခုစလုံး ဒီတစ်ခုတည်းကို ပြန်သုံးသည်)
+  // Sutta & Book Logic Search (Short Name, Book Name & Page support)
   function wireSuttaSearchInput(inputEl, resultsEl){
     inputEl.addEventListener("input", async (e) => {
-      const val = e.target.value.trim().replace(/\s+/g, "");
+      const rawVal = e.target.value.trim();
+      const val = rawVal.replace(/\s+/g, "");
       if(!val){ resultsEl.innerHTML = ""; return; }
       resultsEl.innerHTML = "<div class='tp-sutta-empty'>ရှာဖွေနေပါသည်...</div>";
+      
       try {
+        const idx = await ensureIndex();
+        let matchedBook = null;
+        let pageQuery = "";
+        let bookHtml = "";
+        
+        // 1. Exact Short Name
+        const booksWithShortName = idx.books.filter(b => b.short_name).sort((a,b) => b.short_name.length - a.short_name.length);
+        for(const b of booksWithShortName) {
+          const sn = b.short_name.replace(/\s+/g, "");
+          if(val.startsWith(sn)) { matchedBook = b; pageQuery = val.substring(sn.length); break; }
+        }
+        
+        let engPageNum = NaN;
+        if (matchedBook) {
+          engPageNum = parseInt(pageQuery.replace(/[၀-၉]/g, c => "၀၁၂၃၄၅၆၇၈၉".indexOf(c)), 10);
+          if (!isNaN(engPageNum)) {
+            bookHtml += `<div class="tp-sutta-item" data-action="book" data-book="${matchedBook.id}" data-page="${engPageNum}"><span style="color:#a00">📖</span> ${matchedBook.name} - စာမျက်နှာ ${toMyanmarDigits(engPageNum)} သို့ သွားမည်</div>`;
+          } else {
+            bookHtml += `<div class="tp-sutta-empty"><span style="color:#a00">📖</span> ${matchedBook.name} (စာမျက်နှာနံပါတ် ရိုက်ထည့်ပါ)</div>`;
+          }
+        } else {
+          // 2. Book Name + Option Page
+          const m = val.match(/^(.*?)([\d၀-၉]+)?$/);
+          const tQ = m[1], pQ = m[2] || "";
+          if (tQ) {
+            const matchedBooks = idx.books.filter(b => b.name && b.name.replace(/\s+/g, "").includes(tQ));
+            if (matchedBooks.length > 0) {
+              engPageNum = parseInt(pQ.replace(/[၀-၉]/g, c => "၀၁၂၃၄၅၆၇၈၉".indexOf(c)), 10);
+              matchedBooks.slice(0, 5).forEach(b => {
+                if (!isNaN(engPageNum)) {
+                  bookHtml += `<div class="tp-sutta-item" data-action="book" data-book="${b.id}" data-page="${engPageNum}"><span style="color:#a00">📖</span> ${b.name} - စာမျက်နှာ ${toMyanmarDigits(engPageNum)} သို့ သွားမည်</div>`;
+                } else {
+                  bookHtml += `<div class="tp-sutta-item" data-fill="${b.name}"><span style="color:#a00">📖</span> ${b.name} (စာမျက်နှာနံပါတ် ဆက်ရိုက်ပါ)</div>`;
+                }
+              });
+            }
+          }
+        }
+        
+        // 3. Sutta Name Match
         const suttas = await ensureSuttas();
-        if(!suttas || suttas.length === 0){
-           resultsEl.innerHTML = "<div class='tp-sutta-empty'>သုတ္တန်အချက်အလက်များ မရရှိသေးပါ</div>"; return;
+        let suttaHtml = "";
+        if(suttas && suttas.length > 0) {
+            const matchedSuttas = suttas.filter(s => s.name && s.name.replace(/\s+/g, "").includes(val)).slice(0, 15);
+            suttaHtml = matchedSuttas.map(s => `<div class="tp-sutta-item" data-action="sutta" data-book="${s.book_id}" data-page="${s.page_number}">📄 ${s.name}</div>`).join("");
         }
-        const matched = suttas.filter(s => s.name && s.name.replace(/\s+/g, "").includes(val)).slice(0, 20);
-        if(matched.length === 0){
-          resultsEl.innerHTML = "<div class='tp-sutta-empty'>သုတ္တန် မတွေ့ပါ</div>"; return;
-        }
-        resultsEl.innerHTML = matched.map(s => `<div class="tp-sutta-item" data-book="${s.book_id}" data-page="${s.page_number}">${s.name}</div>`).join("");
+        
+        if (!bookHtml && !suttaHtml) { resultsEl.innerHTML = "<div class='tp-sutta-empty'>ရှာမတွေ့ပါ</div>"; return; }
+        resultsEl.innerHTML = bookHtml + suttaHtml;
+        
+        // Listeners for action execution or input update
         resultsEl.querySelectorAll(".tp-sutta-item").forEach(item => {
           item.addEventListener("click", async () => {
-            closeAllDropdowns();
-            const toBook = item.dataset.book;
-            const toPage = parseInt(item.dataset.page, 10);
-            const indexData = await ensureIndex();
-            const meta = findBookMetaByPageRange(indexData, toBook, toPage);
-            if(meta) loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage);
-            else loadPage("", "", toBook, toPage, null);
+            if (item.dataset.fill) {
+                inputEl.value = item.dataset.fill + " "; inputEl.focus(); inputEl.dispatchEvent(new Event('input'));
+            } else if (item.dataset.action === "book" || item.dataset.action === "sutta") {
+                closeAllDropdowns();
+                const toBook = item.dataset.book, toPage = parseInt(item.dataset.page, 10);
+                const indexData = await ensureIndex();
+                const meta = findBookMetaByPageRange(indexData, toBook, toPage);
+                if(meta) loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage);
+                else loadPage("", "", toBook, toPage, null);
+            }
           });
         });
-      } catch (err) {
-         resultsEl.innerHTML = `<div class='tp-sutta-empty' style="color:red;">ဖိုင်ရှာမတွေ့ပါ သို့မဟုတ် JSON ဖော်မတ် မှားနေပါသည် (${err.message})</div>`;
-      }
+      } catch (err) { resultsEl.innerHTML = `<div class='tp-sutta-empty' style="color:red;">အမှားအယွင်းဖြစ်နေပါသည် (${err.message})</div>`; }
     });
   }
 
-  // 🔍 Floating Search (home/category/book-list screens နှင့် မြန်မာပြန်ဘက် အတွက်)
   function setFloatSearchVisible(visible){
-    const btn = document.getElementById("tp-float-search-toggle");
-    if(!btn) return;
+    const btn = document.getElementById("tp-float-search-toggle"); if(!btn) return;
     btn.style.display = visible ? "block" : "none";
-    if(!visible){
-      const box = document.getElementById("tp-float-search-box");
-      if(box) box.classList.remove("tp-open");
-    }
+    if(!visible){ const box = document.getElementById("tp-float-search-box"); if(box) box.classList.remove("tp-open"); }
   }
 
   (function setupFloatSearch(){
-    const floatBtn = document.getElementById("tp-float-search-toggle");
-    const floatBox = document.getElementById("tp-float-search-box");
-    const floatInput = document.getElementById("tp-float-search-input");
-    const floatResults = document.getElementById("tp-float-search-results");
+    const floatBtn = document.getElementById("tp-float-search-toggle"), floatBox = document.getElementById("tp-float-search-box");
+    const floatInput = document.getElementById("tp-float-search-input"), floatResults = document.getElementById("tp-float-search-results");
     if(!floatBtn) return;
-
     function positionFloatSearchBox(){
-      const rect = floatBtn.getBoundingClientRect();
-      const boxWidth = Math.min(320, window.innerWidth * 0.9);
-      let left = rect.left + rect.width/2 - boxWidth/2;
-      left = Math.max(8, Math.min(left, window.innerWidth - boxWidth - 8));
-      let top = rect.bottom + 8;
-      if(top + 200 > window.innerHeight) top = Math.max(8, rect.top - 8 - 200);
-      floatBox.style.left = left + "px";
-      floatBox.style.top = top + "px";
+      const rect = floatBtn.getBoundingClientRect(); const boxWidth = Math.min(320, window.innerWidth * 0.9);
+      let left = rect.left + rect.width/2 - boxWidth/2; left = Math.max(8, Math.min(left, window.innerWidth - boxWidth - 8));
+      let top = rect.bottom + 8; if(top + 200 > window.innerHeight) top = Math.max(8, rect.top - 8 - 200);
+      floatBox.style.left = left + "px"; floatBox.style.top = top + "px";
     }
-
-    // Drag support
     let dragging = false, moved = false, startX, startY, origLeft, origTop;
-    function toFixedPos(){
-      const rect = floatBtn.getBoundingClientRect();
-      floatBtn.style.left = rect.left + "px";
-      floatBtn.style.top = rect.top + "px";
-      floatBtn.style.transform = "none";
-    }
-    function onDown(e){
-      const point = e.touches ? e.touches[0] : e;
-      dragging = true; moved = false;
-      toFixedPos();
-      startX = point.clientX; startY = point.clientY;
-      origLeft = parseFloat(floatBtn.style.left);
-      origTop = parseFloat(floatBtn.style.top);
-      document.addEventListener("mousemove", onMove);
-      document.addEventListener("touchmove", onMove, {passive:false});
-      document.addEventListener("mouseup", onUp);
-      document.addEventListener("touchend", onUp);
-    }
-    function onMove(e){
-      if(!dragging) return;
-      const point = e.touches ? e.touches[0] : e;
-      const dx = point.clientX - startX, dy = point.clientY - startY;
-      if(Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
-      let newLeft = origLeft + dx, newTop = origTop + dy;
-      newLeft = Math.max(4, Math.min(newLeft, window.innerWidth - floatBtn.offsetWidth - 4));
-      newTop = Math.max(4, Math.min(newTop, window.innerHeight - floatBtn.offsetHeight - 4));
-      floatBtn.style.left = newLeft + "px";
-      floatBtn.style.top = newTop + "px";
-      if(e.cancelable) e.preventDefault();
-    }
-    function onUp(){
-      dragging = false;
-      document.removeEventListener("mousemove", onMove);
-      document.removeEventListener("touchmove", onMove);
-      document.removeEventListener("mouseup", onUp);
-      document.removeEventListener("touchend", onUp);
-      if(moved){
-        try{ localStorage.setItem("tp-float-search-pos", JSON.stringify({left:floatBtn.style.left, top:floatBtn.style.top})); }catch(e){}
-      }
-    }
-    floatBtn.addEventListener("mousedown", onDown);
-    floatBtn.addEventListener("touchstart", onDown, {passive:true});
-
-    try{
-      const saved = JSON.parse(localStorage.getItem("tp-float-search-pos"));
-      if(saved && saved.left && saved.top){
-        floatBtn.style.left = saved.left; floatBtn.style.top = saved.top; floatBtn.style.transform = "none";
-      }
-    }catch(e){}
-
-    floatBtn.addEventListener("click", ()=>{
-      if(moved){ moved = false; return; }
-      const willOpen = !floatBox.classList.contains("tp-open");
-      closeAllDropdowns("tp-float-search-box");
-      floatBox.classList.toggle("tp-open", willOpen);
-      if(willOpen){ positionFloatSearchBox(); floatInput.focus(); ensureSuttas(); }
-    });
-
+    function toFixedPos(){ const rect = floatBtn.getBoundingClientRect(); floatBtn.style.left = rect.left + "px"; floatBtn.style.top = rect.top + "px"; floatBtn.style.transform = "none"; }
+    function onDown(e){ const point = e.touches ? e.touches[0] : e; dragging = true; moved = false; toFixedPos(); startX = point.clientX; startY = point.clientY; origLeft = parseFloat(floatBtn.style.left); origTop = parseFloat(floatBtn.style.top); document.addEventListener("mousemove", onMove); document.addEventListener("touchmove", onMove, {passive:false}); document.addEventListener("mouseup", onUp); document.addEventListener("touchend", onUp); }
+    function onMove(e){ if(!dragging) return; const point = e.touches ? e.touches[0] : e; const dx = point.clientX - startX, dy = point.clientY - startY; if(Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true; let newLeft = origLeft + dx, newTop = origTop + dy; newLeft = Math.max(4, Math.min(newLeft, window.innerWidth - floatBtn.offsetWidth - 4)); newTop = Math.max(4, Math.min(newTop, window.innerHeight - floatBtn.offsetHeight - 4)); floatBtn.style.left = newLeft + "px"; floatBtn.style.top = newTop + "px"; if(e.cancelable) e.preventDefault(); }
+    function onUp(){ dragging = false; document.removeEventListener("mousemove", onMove); document.removeEventListener("touchmove", onMove); document.removeEventListener("mouseup", onUp); document.removeEventListener("touchend", onUp); if(moved){ try{ localStorage.setItem("tp-float-search-pos", JSON.stringify({left:floatBtn.style.left, top:floatBtn.style.top})); }catch(e){} } }
+    floatBtn.addEventListener("mousedown", onDown); floatBtn.addEventListener("touchstart", onDown, {passive:true});
+    try{ const saved = JSON.parse(localStorage.getItem("tp-float-search-pos")); if(saved && saved.left && saved.top){ floatBtn.style.left = saved.left; floatBtn.style.top = saved.top; floatBtn.style.transform = "none"; } }catch(e){}
+    floatBtn.addEventListener("click", ()=>{ if(moved){ moved = false; return; } const willOpen = !floatBox.classList.contains("tp-open"); closeAllDropdowns("tp-float-search-box"); floatBox.classList.toggle("tp-open", willOpen); if(willOpen){ positionFloatSearchBox(); floatInput.focus(); ensureSuttas(); } });
     wireSuttaSearchInput(floatInput, floatResults);
   })();
 
+  function parseParanums(str){ if(!str) return []; return String(str).split("-").map(s=>s.trim()).filter(s=>s.length>0).map(s=>parseInt(s,10)).filter(n=>!isNaN(n)); }
+  async function findPageForParagraph(bookId, paragraphNum){ if(paragraphNum==null || isNaN(paragraphNum)) return null; try{ if(!bookPagesCache[bookId]) bookPagesCache[bookId] = await fetchBookPages(bookId); const rows = bookPagesCache[bookId]; const row = rows.find(r => parseParanums(r.paranum).includes(paragraphNum)); return row ? parseInt(row.page,10) : null; }catch(e){ return null; } }
 
-  function parseParanums(str){
-    if(!str) return [];
-    return String(str).split("-").map(s=>s.trim()).filter(s=>s.length>0).map(s=>parseInt(s,10)).filter(n=>!isNaN(n));
-  }
-
-  async function findPageForParagraph(bookId, paragraphNum){
-    if(paragraphNum==null || isNaN(paragraphNum)) return null;
-    try{
-      if(!bookPagesCache[bookId]) bookPagesCache[bookId] = await fetchBookPages(bookId);
-      const rows = bookPagesCache[bookId];
-      const row = rows.find(r => parseParanums(r.paranum).includes(paragraphNum));
-      return row ? parseInt(row.page,10) : null;
-    }catch(e){
-      return null;
-    }
-  }
-
-  // --- Bidirectional Crossref Logic ---
   async function getAllRelatedForParagraph(bookId, p) {
     const map = await ensureParagraphMap();
-    // Current book ရဲ့ paragraph ကို mapping ထဲကနေ ရှာမည် (from ကော to ပါ ရှာမည်)
     const involvingMe = map.filter(m => m.paragraph === p && (m.from_book_id === bookId || m.to_book_id === bookId));
     if (involvingMe.length === 0) return [];
-    
-    // Base Pali book တွေကို စုစည်းမည်
-    const bases = [...new Set(involvingMe.map(m => m.from_book_id))];
-    let related = [];
-    
+    const bases = [...new Set(involvingMe.map(m => m.from_book_id))]; let related = [];
     for (const base of bases) {
-        // Base book ကနေ ခွဲထွက်သွားတဲ့ mapping တွေအားလုံးကို ပြန်ယူမည်
         const allForBase = map.filter(m => m.from_book_id === base && m.paragraph === p);
-        
-        // Base ကိုယ်တိုင်က လက်ရှိ book မဟုတ်ရင် ထည့်မည်
-        if (base !== bookId) {
-            // Find page for base book by matching paragraph mapping's from_page_number
-            const basePageMatch = allForBase.find(m => m.from_book_id === base);
-            if(basePageMatch) related.push({ book: basePageMatch.from_book_id, page: basePageMatch.from_page_number });
-        }
-        
-        // Target (Attha/Tika) တွေထဲက လက်ရှိ book မဟုတ်ရင် ထည့်မည်
-        for (const m of allForBase) {
-            if (m.to_book_id !== bookId) {
-                related.push({ book: m.to_book_id, page: m.to_page_number });
-            }
-        }
+        if (base !== bookId) { const basePageMatch = allForBase.find(m => m.from_book_id === base); if(basePageMatch) related.push({ book: basePageMatch.from_book_id, page: basePageMatch.from_page_number }); }
+        for (const m of allForBase) { if (m.to_book_id !== bookId) { related.push({ book: m.to_book_id, page: m.to_page_number }); } }
     }
-    
-    // ပုံတူထပ်နေသည်များကို ဖယ်ရှားမည်
-    const uniqueRelated = [];
-    const seen = new Set();
-    for (const r of related) {
-        const key = r.book + "-" + r.page;
-        if (!seen.has(key)) { seen.add(key); uniqueRelated.push(r); }
-    }
+    const uniqueRelated = []; const seen = new Set();
+    for (const r of related) { const key = r.book + "-" + r.page; if (!seen.has(key)) { seen.add(key); uniqueRelated.push(r); } }
     return uniqueRelated;
   }
 
   async function getFallbackRelatedBooks(bookId) {
-    const match = await ensureMatch();
-    let related = new Set();
-    
-    // လက်ရှိက Base ဆိုလျှင် ၎င်း၏ exp များကို ယူမည်
+    const match = await ensureMatch(); let related = new Set();
     match.filter(m => m.base === bookId).forEach(m => related.add(m.exp));
-    
-    // လက်ရှိက Exp ဆိုလျှင် ၎င်း၏ Base များကို ယူပြီး ထို Base မှ အခြား Exp များကိုပါ ယူမည်
     const myBases = match.filter(m => m.exp === bookId).map(m => m.base);
-    for (const base of myBases) {
-        related.add(base); 
-        match.filter(m => m.base === base && m.exp !== bookId).forEach(m => related.add(m.exp));
-    }
+    for (const base of myBases) { related.add(base); match.filter(m => m.base === base && m.exp !== bookId).forEach(m => related.add(m.exp)); }
     return Array.from(related);
   }
 
   async function renderCrossRef(basketId, categoryId, bookId, pageNum){
-    const el = document.getElementById("tp-crossref");
-    const toggleBtn = document.getElementById("tp-xref-toggle");
-    if(!el || !toggleBtn) return;
-    el.innerHTML = "";
-    toggleBtn.disabled = true;
-
+    const el = document.getElementById("tp-crossref"), toggleBtn = document.getElementById("tp-xref-toggle");
+    if(!el || !toggleBtn) return; el.innerHTML = ""; toggleBtn.disabled = true;
     try{
-      const idx = await ensureIndex();
-      const paranums = parseParanums(currentRow && currentRow.paranum);
+      const idx = await ensureIndex(); const paranums = parseParanums(currentRow && currentRow.paranum);
       const listParanums = paranums.length > 0 ? paranums : [null];
-
-      await ensureBurmeseMap();
-      const burmeseEntry = findBurmeseMapping(bookId, pageNum);
-
-      let containerHtml = "";
-      let hasAnyRefs = false;
-
+      await ensureBurmeseMap(); const burmeseEntry = findBurmeseMapping(bookId, pageNum);
+      let containerHtml = "", hasAnyRefs = false;
       for(const p of listParanums){
         const pTitle = p != null ? `စာပိုဒ် - ${toMyanmarDigits(p)}` : "ဆက်စပ်ကျမ်းများ";
         let groupHtml = `<div class="tp-xref-group"><div class="tp-xref-group-title">${pTitle}</div><div class="tp-xref-links">`;
-
-        let relatedBooks = [];
-        if(p != null) {
-            relatedBooks = await getAllRelatedForParagraph(bookId, p);
-        }
-
+        let relatedBooks = []; if(p != null) { relatedBooks = await getAllRelatedForParagraph(bookId, p); }
         if(relatedBooks.length === 0){
           const expIds = await getFallbackRelatedBooks(bookId);
           for(const expId of expIds){
-            const meta = idx.books.find(b=>b.id===expId);
-            const matchedPage = p != null ? await findPageForParagraph(expId, p) : null;
-            const targetPage = matchedPage || (meta ? meta.firstpage : 1);
-            const bName = meta ? meta.name : expId;
-            groupHtml += `<button class="tp-xref-item-btn" data-tobook="${expId}" data-topage="${targetPage}">
-              ${bName} - စာမျက်နှာ ${toMyanmarDigits(targetPage)}
-            </button>`;
+            const meta = idx.books.find(b=>b.id===expId); const matchedPage = p != null ? await findPageForParagraph(expId, p) : null;
+            const targetPage = matchedPage || (meta ? meta.firstpage : 1); const bName = meta ? meta.name : expId;
+            groupHtml += `<button class="tp-xref-item-btn" data-tobook="${expId}" data-topage="${targetPage}">${bName} - စာမျက်နှာ ${toMyanmarDigits(targetPage)}</button>`;
             hasAnyRefs = true;
           }
         } else {
           for(const r of relatedBooks){
-            const meta = idx.books.find(b=>b.id===r.book);
-            const bName = meta ? meta.name : r.book;
-            groupHtml += `<button class="tp-xref-item-btn" data-tobook="${r.book}" data-topage="${r.page}">
-              ${bName} - စာမျက်နှာ ${toMyanmarDigits(r.page)}
-            </button>`;
+            const meta = idx.books.find(b=>b.id===r.book); const bName = meta ? meta.name : r.book;
+            groupHtml += `<button class="tp-xref-item-btn" data-tobook="${r.book}" data-topage="${r.page}">${bName} - စာမျက်နှာ ${toMyanmarDigits(r.page)}</button>`;
             hasAnyRefs = true;
           }
         }
-
         if(burmeseEntry){
-          groupHtml += `<button class="tp-xref-item-btn tp-xref-mm-btn" data-mmbook="${burmeseEntry.mm_book_id}" data-linktype="${burmeseEntry.link_type}" data-paranum="${p != null ? p : ''}" data-palifirstpage="${burmeseEntry.pali_first_page}" data-palilastpage="${burmeseEntry.pali_last_page}" data-mmfirstpage="${burmeseEntry.mm_first_page}" data-mmlastpage="${burmeseEntry.mm_last_page}">
-            📖 မြန်မာပြန် ဖတ်ရန်
-          </button>`;
+          groupHtml += `<button class="tp-xref-item-btn tp-xref-mm-btn" data-mmbook="${burmeseEntry.mm_book_id}" data-linktype="${burmeseEntry.link_type}" data-paranum="${p != null ? p : ''}" data-palifirstpage="${burmeseEntry.pali_first_page}" data-palilastpage="${burmeseEntry.pali_last_page}" data-mmfirstpage="${burmeseEntry.mm_first_page}" data-mmlastpage="${burmeseEntry.mm_last_page}">📖 မြန်မာပြန် ဖတ်ရန်</button>`;
           hasAnyRefs = true;
         }
-
-        groupHtml += `</div></div>`;
-        containerHtml += groupHtml;
+        groupHtml += `</div></div>`; containerHtml += groupHtml;
       }
-
-      if(!hasAnyRefs){
-        el.innerHTML = '<div class="tp-xref-empty">ဆက်စပ်ကျမ်း အချက်အလက် မရှိသေးပါ။</div>';
-        toggleBtn.disabled = false;
-        return;
-      }
-
-      el.innerHTML = containerHtml;
-      toggleBtn.disabled = false;
-
-      el.querySelectorAll(".tp-xref-item-btn:not(.tp-xref-mm-btn)").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          const toBook = btn.dataset.tobook;
-          const toPage = parseInt(btn.dataset.topage,10);
-          const meta = findBookMetaByPageRange(idx, toBook, toPage);
-          if(!meta) return;
-          closeAllDropdowns();
-          loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage);
-        });
-      });
-
+      if(!hasAnyRefs){ el.innerHTML = '<div class="tp-xref-empty">ဆက်စပ်ကျမ်း အချက်အလက် မရှိသေးပါ။</div>'; toggleBtn.disabled = false; return; }
+      el.innerHTML = containerHtml; toggleBtn.disabled = false;
+      el.querySelectorAll(".tp-xref-item-btn:not(.tp-xref-mm-btn)").forEach(btn=>{ btn.addEventListener("click", ()=>{ const toBook = btn.dataset.tobook, toPage = parseInt(btn.dataset.topage,10), meta = findBookMetaByPageRange(idx, toBook, toPage); if(!meta) return; closeAllDropdowns(); loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage); }); });
       el.querySelectorAll(".tp-xref-mm-btn").forEach(btn=>{
         btn.addEventListener("click", async ()=>{
-          closeAllDropdowns();
-          let mmBookId = btn.dataset.mmbook;
-          const linkType = btn.dataset.linktype;
-          const paranum = btn.dataset.paranum ? parseInt(btn.dataset.paranum,10) : null;
+          closeAllDropdowns(); let mmBookId = btn.dataset.mmbook; const linkType = btn.dataset.linktype, paranum = btn.dataset.paranum ? parseInt(btn.dataset.paranum,10) : null;
           mmBackContext = { kind: "pali", basketId, categoryId, bookId, pageNum, firstpageHint: currentBookMeta.firstpage };
-
           let targetParagraph = null, targetMmPage = null;
-          if(linkType === "paragraph"){
-            targetParagraph = paranum;
-          } else {
-            await ensurePageMap();
-            const exact = findExactMmPage(bookId, pageNum);
-            if(exact){
-              mmBookId = exact.mm_book_id;
-              targetMmPage = exact.mm_page_number;
-            } else {
-              const pf = parseInt(btn.dataset.palifirstpage,10), pl = parseInt(btn.dataset.palilastpage,10);
-              const mf = parseInt(btn.dataset.mmfirstpage,10), ml = parseInt(btn.dataset.mmlastpage,10);
-              const ratio = pl > pf ? (pageNum - pf) / (pl - pf) : 0;
-              targetMmPage = Math.round(mf + ratio * (ml - mf));
+          if(linkType === "paragraph"){ targetParagraph = paranum; } else {
+            await ensurePageMap(); const exact = findExactMmPage(bookId, pageNum);
+            if(exact){ mmBookId = exact.mm_book_id; targetMmPage = exact.mm_page_number; } else {
+              const pf = parseInt(btn.dataset.palifirstpage,10), pl = parseInt(btn.dataset.palilastpage,10), mf = parseInt(btn.dataset.mmfirstpage,10), ml = parseInt(btn.dataset.mmlastpage,10);
+              const ratio = pl > pf ? (pageNum - pf) / (pl - pf) : 0; targetMmPage = Math.round(mf + ratio * (ml - mf));
             }
           }
           openBurmeseTranslation(mmBookId, targetParagraph, targetMmPage);
         });
       });
-
-    }catch(e){
-      console.warn("[Tipitaka] cross-ref မအောင်မြင်ပါ:", e.message);
-      toggleBtn.disabled = true;
-    }
+    }catch(e){ toggleBtn.disabled = true; }
   }
 
-  // မြန်မာပြန် html ဖိုင်ကို ဖတ်ပြီး ပါဠိ စာပိုဒ်နံပါတ်နှင့် ကိုက်ညီသော span ကို ရှာပြသမည်
   async function openBurmeseTranslation(mmBookId, targetParagraph, targetMmPage){
     document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
-      const pages = await ensureMmPages(mmBookId);
-      let pageIdx = 1;
-      let highlightText = null;
-
+      const pages = await ensureMmPages(mmBookId); let pageIdx = 1, highlightText = null;
       if(targetParagraph != null){
-        highlightText = toMyanmarDigits(targetParagraph);
-        const found = pages.findIndex(p => p.includes(`class="paragraph">${highlightText}<`));
+        highlightText = toMyanmarDigits(targetParagraph); const found = pages.findIndex(p => p.includes(`class="paragraph">${highlightText}<`));
         if(found >= 0) pageIdx = found + 1;
-      } else if(targetMmPage != null){
-        pageIdx = Math.min(Math.max(targetMmPage, 1), pages.length);
-      }
-
-      mmCurrentBookId = mmBookId;
-      mmCurrentPageIdx = pageIdx;
-      renderMmPage(highlightText, true);
-    } catch(e){
-      document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`;
-    }
+      } else if(targetMmPage != null){ pageIdx = Math.min(Math.max(targetMmPage, 1), pages.length); }
+      mmCurrentBookId = mmBookId; mmCurrentPageIdx = pageIdx;
+      // မြန်မာပြန်မာတိကာ အလိုလို မပွင့်စေရန် `false` ဖြင့် ပြင်ဆင်ထားသည်
+      renderMmPage(highlightText, false);
+    } catch(e){ document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`; }
   }
 
-  // မြန်မာပြန် စာမျက်နှာချင်း တစ်မျက်နှာစီ ပြသမည် (📄 icon logic နဲ့ တူညီအောင်)
   function renderMmPage(highlightText, autoOpenToc){
     setFloatSearchVisible(true);
-    const pages = mmPagesCache[mmCurrentBookId] || [];
-    const total = pages.length;
-    if(mmCurrentPageIdx < 1) mmCurrentPageIdx = 1;
-    if(mmCurrentPageIdx > total) mmCurrentPageIdx = total;
+    const pages = mmPagesCache[mmCurrentBookId] || []; const total = pages.length;
+    if(mmCurrentPageIdx < 1) mmCurrentPageIdx = 1; if(mmCurrentPageIdx > total) mmCurrentPageIdx = total;
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
     const backLabel = (mmBackContext && mmBackContext.kind === "browse") ? "← နောက်သို့" : "← ပါဠိတော်";
 
@@ -734,7 +471,7 @@
         <div id="tp-nav-left">
           <button id="tp-mm-back" class="tp-icon-btn" title="${backLabel}">${backLabel}</button>
           <button id="tp-toc-toggle" class="tp-icon-btn" title="မာတိကာ">☰</button>
-          <button id="tp-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ သွားမည်">📄</button>
+          <button id="tp-jump-toggle" class="tp-icon-btn" title="စာပိုဒ် သွားမည်">📄</button>
 
           <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
 
@@ -753,139 +490,83 @@
       </div>
       <button id="tp-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
       <button id="tp-float-next" class="tp-float-nav" title="နောက်စာမျက်နှာ">→</button>
-
       <div id="tp-meta">မြန်မာပြန် - စာမျက်နှာ ${toMyanmarDigits(mmCurrentPageIdx)} / ${toMyanmarDigits(total)}</div>
       <div id="tp-content">${pageHtml}</div>
     `;
 
-    document.getElementById("tp-float-prev").disabled = mmCurrentPageIdx <= 1;
-    document.getElementById("tp-float-next").disabled = mmCurrentPageIdx >= total;
+    document.getElementById("tp-float-prev").disabled = mmCurrentPageIdx <= 1; document.getElementById("tp-float-next").disabled = mmCurrentPageIdx >= total;
     document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
     document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
-
     document.getElementById("tp-mm-back").addEventListener("click", ()=>{
       if(!mmBackContext){ showBaskets(); return; }
-      if(mmBackContext.kind === "browse"){
-        showMmBookList(mmBackContext.categorySlug);
-      } else {
-        loadPage(mmBackContext.basketId, mmBackContext.categoryId, mmBackContext.bookId, mmBackContext.pageNum, mmBackContext.firstpageHint);
-      }
+      if(mmBackContext.kind === "browse"){ showMmBookList(mmBackContext.categorySlug); } else { loadPage(mmBackContext.basketId, mmBackContext.categoryId, mmBackContext.bookId, mmBackContext.pageNum, mmBackContext.firstpageHint); }
     });
 
-    // ☰ မာတိကာ
     const tocBox = document.getElementById("tp-toc-dropdown");
     async function loadTocPanel(){
       const toclistEl = document.getElementById("tp-toclist");
       toclistEl.innerHTML = "မာတိကာ ရှာဖွေနေပါသည်...";
-      const toc = await ensureBurmeseToc();
-      const entries = toc[mmCurrentBookId] || [];
-      if(entries.length === 0){
-        toclistEl.innerHTML = "<div class='tp-sutta-empty'>မာတိကာ မတွေ့ပါ။</div>";
-        return;
+      const toc = await ensureBurmeseToc(); const entries = toc[mmCurrentBookId] || [];
+      if(entries.length === 0){ toclistEl.innerHTML = "<div class='tp-sutta-empty'>မာတိကာ မတွေ့ပါ။</div>"; return; }
+      
+      let activeIdx = -1;
+      for (let i = 0; i < entries.length; i++) {
+         if (entries[i].page <= mmCurrentPageIdx) activeIdx = i; else break;
       }
-      toclistEl.innerHTML = entries.map(e => {
+      
+      toclistEl.innerHTML = entries.map((e, idx) => {
         const indent = Math.max(0, Math.round((2.5 - e.level) * 20));
-        return `<button class="tp-xref-item-btn tp-toc-item-btn" style="display:block;width:100%;margin-bottom:4px;padding-left:${12+indent}px;" data-page="${e.page}">${e.title}</button>`;
+        const activeCls = (idx === activeIdx) ? " tp-toc-active" : "";
+        return `<button class="tp-xref-item-btn tp-toc-item-btn${activeCls}" id="mm-toc-item-${idx}" style="display:block;width:100%;margin-bottom:4px;padding-left:${12+indent}px;" data-page="${e.page}">${e.title}</button>`;
       }).join("");
-      toclistEl.querySelectorAll(".tp-toc-item-btn").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          closeAllDropdowns();
-          mmCurrentPageIdx = parseInt(btn.dataset.page, 10);
-          renderMmPage();
-        });
-      });
+      
+      toclistEl.querySelectorAll(".tp-toc-item-btn").forEach(btn=>{ btn.addEventListener("click", ()=>{ closeAllDropdowns(); mmCurrentPageIdx = parseInt(btn.dataset.page, 10); renderMmPage(); }); });
+      
+      if (activeIdx !== -1) {
+          setTimeout(() => { const activeEl = document.getElementById(`mm-toc-item-${activeIdx}`); if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+      }
     }
+    
     document.getElementById("tp-toc-toggle").addEventListener("click", ()=>{
-      const willOpen = !tocBox.classList.contains("tp-open");
-      closeAllDropdowns("tp-toc-dropdown");
-      tocBox.classList.toggle("tp-open", willOpen);
-      if(willOpen) loadTocPanel();
+      const willOpen = !tocBox.classList.contains("tp-open"); closeAllDropdowns("tp-toc-dropdown"); tocBox.classList.toggle("tp-open", willOpen); if(willOpen) loadTocPanel();
     });
-    if(autoOpenToc){
-      tocBox.classList.add("tp-open");
-      loadTocPanel();
-    }
+    if(autoOpenToc){ tocBox.classList.add("tp-open"); loadTocPanel(); }
 
-    // 📄 Jump Toggle
     const mmJumpBar = document.getElementById("tp-jumpbar");
-    document.getElementById("tp-jump-toggle").addEventListener("click", ()=>{
-      closeAllDropdowns("tp-jumpbar");
-      mmJumpBar.classList.toggle("tp-open");
-    });
-    const mmSlider = document.getElementById("tp-slider");
-    const mmSliderLive = document.getElementById("tp-slider-live");
+    document.getElementById("tp-jump-toggle").addEventListener("click", ()=>{ closeAllDropdowns("tp-jumpbar"); mmJumpBar.classList.toggle("tp-open"); });
+    const mmSlider = document.getElementById("tp-slider"), mmSliderLive = document.getElementById("tp-slider-live");
     mmSlider.addEventListener("input", ()=>{ mmSliderLive.textContent = toMyanmarDigits(mmSlider.value); });
     mmSlider.addEventListener("change", ()=>{ mmCurrentPageIdx = parseInt(mmSlider.value,10); renderMmPage(); });
-    document.getElementById("tp-jumpgo").addEventListener("click", ()=>{
-      const v = parseInt(document.getElementById("tp-jumpinput").value,10);
-      if(!isNaN(v)){ mmCurrentPageIdx = v; renderMmPage(); }
-    });
+    document.getElementById("tp-jumpgo").addEventListener("click", ()=>{ const v = parseInt(document.getElementById("tp-jumpinput").value,10); if(!isNaN(v)){ mmCurrentPageIdx = v; renderMmPage(); } });
 
     if(highlightText){
-      const spans = document.querySelectorAll("#tp-content span.paragraph");
-      let matched = null;
+      const spans = document.querySelectorAll("#tp-content span.paragraph"); let matched = null;
       spans.forEach(sp => { if(sp.textContent.trim() === highlightText) matched = sp; });
-      if(matched){
-        matched.classList.add("tp-mm-highlight");
-        matched.scrollIntoView({behavior:"smooth", block:"center"});
-      }
+      if(matched){ matched.classList.add("tp-mm-highlight"); matched.scrollIntoView({behavior:"smooth", block:"center"}); }
     }
   }
 
-  function toMyanmarDigits(n){
-    const map = {"0":"၀","1":"၁","2":"၂","3":"၃","4":"၄","5":"၅","6":"၆","7":"၇","8":"၈","9":"၉"};
-    return String(n).split("").map(c => map[c] !== undefined ? map[c] : c).join("");
-  }
+  function toMyanmarDigits(n){ const map = {"0":"၀","1":"၁","2":"၂","3":"၃","4":"၄","5":"၅","6":"၆","7":"၇","8":"၈","9":"၉"}; return String(n).split("").map(c => map[c] !== undefined ? map[c] : c).join(""); }
+  function citationText(bookMeta, pageNum){ const shortName = bookMeta.short_name || bookMeta.name || ""; const mmPage = toMyanmarDigits(pageNum); return `(${shortName}${mmPage}။)`; }
 
-  function citationText(bookMeta, pageNum){
-    const shortName = bookMeta.short_name || bookMeta.name || "";
-    const mmPage = toMyanmarDigits(pageNum);
-    return `(${shortName}${mmPage}။)`;
-  }
+  function getParams(){ const p = new URLSearchParams(window.location.search); return { basket: p.get("basket") || "", category: p.get("category") || "", book: p.get("book") || "", firstpage: p.get("firstpage") ? parseInt(p.get("firstpage"),10) : null, page: p.get("page") ? parseInt(p.get("page"),10) : null }; }
+  function setParams(obj){ const p = new URLSearchParams(); if(obj.basket) p.set("basket", obj.basket); if(obj.category) p.set("category", obj.category); if(obj.book) p.set("book", obj.book); if(obj.firstpage) p.set("firstpage", obj.firstpage); if(obj.page) p.set("page", obj.page); history.pushState({}, "", "?" + p.toString()); }
 
-  // ---------- URL state ----------
-  function getParams(){
-    const p = new URLSearchParams(window.location.search);
-    return {
-      basket: p.get("basket") || "", category: p.get("category") || "",
-      book: p.get("book") || "",
-      firstpage: p.get("firstpage") ? parseInt(p.get("firstpage"),10) : null,
-      page: p.get("page") ? parseInt(p.get("page"),10) : null
-    };
-  }
-  function setParams(obj){
-    const p = new URLSearchParams();
-    if(obj.basket) p.set("basket", obj.basket);
-    if(obj.category) p.set("category", obj.category);
-    if(obj.book) p.set("book", obj.book);
-    if(obj.firstpage) p.set("firstpage", obj.firstpage);
-    if(obj.page) p.set("page", obj.page);
-    history.pushState({}, "", "?" + p.toString());
-  }
-
-  // ---------- breadcrumb ----------
   function renderBreadcrumb(parts){
     const el = document.getElementById("tp-breadcrumb");
-    el.innerHTML = parts.map((p,i) => {
-      const sep = i>0 ? " › " : "";
-      return p.onclick ? sep + `<a data-idx="${i}">${p.label}</a>` : sep + p.label;
-    }).join("");
-    parts.forEach((p,i) => {
-      if(p.onclick) el.querySelector(`a[data-idx="${i}"]`).addEventListener("click", p.onclick);
-    });
+    el.innerHTML = parts.map((p,i) => { const sep = i>0 ? " › " : ""; return p.onclick ? sep + `<a data-idx="${i}">${p.label}</a>` : sep + p.label; }).join("");
+    parts.forEach((p,i) => { if(p.onclick) el.querySelector(`a[data-idx="${i}"]`).addEventListener("click", p.onclick); });
   }
 
-  // ---------- Level 1, 2, 3 lists ----------
-  // ---------- မြန်မာပြန် Browse (tipitaka_myanmar_toc.csv အခြေခံ) ----------
   async function showMmCategories(){
-    setFloatSearchVisible(true);
-    renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်"}]);
+    setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်"}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     await ensureBurmeseToc();
-    const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))];
+    // 'other' အုပ်စုကို ဖယ်ထုတ်ရန် filter သုံးထားသည်
+    const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))].filter(slug => slug !== "other");
     const html = slugs.map(slug => {
       const count = Object.values(burmeseBookMeta).filter(m => m.category === slug).length;
-      return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${count} အုပ်</span></div>`;
+      return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`;
     }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     document.querySelectorAll("[data-mmcat]").forEach(el=> el.addEventListener("click", ()=> showMmBookList(el.dataset.mmcat)));
@@ -893,131 +574,61 @@
   }
 
   async function showMmBookList(categorySlug){
-    setFloatSearchVisible(true);
-    renderBreadcrumb([
-      {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
-      {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}},
-      {label: MM_CATEGORY_LABELS[categorySlug] || categorySlug}
-    ]);
+    setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}}, {label: MM_CATEGORY_LABELS[categorySlug] || categorySlug}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
-    await ensureBurmeseToc();
-    const bookIds = Object.keys(burmeseBookMeta).filter(id => burmeseBookMeta[id].category === categorySlug);
-    const html = bookIds.map(id => {
-      const meta = burmeseBookMeta[id];
-      const pageLabel = meta.pagecount ? `<span class="tp-count">${toMyanmarDigits(meta.pagecount)} စာမျက်နှာ</span>` : "";
-      return `<div class="tp-card" data-mmbook="${id}">${meta.title || id}${pageLabel}</div>`;
-    }).join("");
+    await ensureBurmeseToc(); const bookIds = Object.keys(burmeseBookMeta).filter(id => burmeseBookMeta[id].category === categorySlug);
+    const html = bookIds.map(id => { const meta = burmeseBookMeta[id]; const pageLabel = meta.pagecount ? `<span class="tp-count">${toMyanmarDigits(meta.pagecount)} စာမျက်နှာ</span>` : ""; return `<div class="tp-card" data-mmbook="${id}">${meta.title || id}${pageLabel}</div>`; }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
-    document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{
-      mmBackContext = { kind: "browse", categorySlug };
-      mmCurrentBookId = el.dataset.mmbook;
-      mmCurrentPageIdx = 1;
-      openBurmeseTranslationBrowse(el.dataset.mmbook);
-    }));
+    document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "browse", categorySlug }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
     setParams({basket: "myanmar", category: categorySlug});
   }
 
   async function openBurmeseTranslationBrowse(mmBookId){
     document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
-    try{
-      await ensureMmPages(mmBookId);
-      mmCurrentBookId = mmBookId;
-      mmCurrentPageIdx = 1;
-      renderMmPage(null, true);
-    } catch(e){
-      document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`;
-    }
+    try{ await ensureMmPages(mmBookId); mmCurrentBookId = mmBookId; mmCurrentPageIdx = 1; renderMmPage(null, false); } 
+    catch(e){ document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`; }
   }
 
   async function showBaskets(){
-    setFloatSearchVisible(true);
-    const idx = await ensureIndex();
-    renderBreadcrumb([{label:"တိပိဋက"}]);
-    const html = Object.keys(idx.basket_labels).map(b => {
-      const count = idx.books.filter(bk => bk.basket === b).length;
-      return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${count} အုပ်</span></div>`;
-    }).join("") + `<div class="tp-card" data-basket="myanmar">မြန်မာပြန်</div>`;
+    setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက"}]);
+    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="myanmar">မြန်မာပြန်</div>`;
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
-    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{
-      if(el.dataset.basket === "myanmar") showMmCategories();
-      else showCategories(el.dataset.basket);
-    }));
+    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{ if(el.dataset.basket === "myanmar") showMmCategories(); else showCategories(el.dataset.basket); }));
     setParams({});
   }
 
   async function showCategories(basketId){
-    setFloatSearchVisible(true);
-    const idx = await ensureIndex();
-    renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId}]);
+    setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId}]);
     const cats = [...new Set(idx.books.filter(b=>b.basket===basketId).map(b=>b.category))];
-    const html = cats.map(c => {
-      const count = idx.books.filter(b=>b.basket===basketId && b.category===c).length;
-      return `<div class="tp-card" data-category="${c}">${idx.category_labels[c] || c}<span class="tp-count">${count} အုပ်</span></div>`;
-    }).join("");
+    const html = cats.map(c => { const count = idx.books.filter(b=>b.basket===basketId && b.category===c).length; return `<div class="tp-card" data-category="${c}">${idx.category_labels[c] || c}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     document.querySelectorAll("[data-category]").forEach(el=> el.addEventListener("click", ()=> showBookList(basketId, el.dataset.category)));
     setParams({basket: basketId});
   }
 
   async function showBookList(basketId, categoryId){
-    setFloatSearchVisible(true);
-    const idx = await ensureIndex();
-    renderBreadcrumb([
-      {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
-      {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}},
-      {label: idx.category_labels[categoryId] || categoryId}
-    ]);
+    setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId}]);
     const books = idx.books.filter(b=>b.basket===basketId && b.category===categoryId);
-    const html = books.map(b=> `<div class="tp-card" data-book="${b.id}" data-firstpage="${b.firstpage}">${b.name}<span class="tp-count">${b.pagecount} စာမျက်နှာ</span></div>`).join("");
+    const html = books.map(b=> `<div class="tp-card" data-book="${b.id}" data-firstpage="${b.firstpage}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ</span></div>`).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     document.querySelectorAll("[data-book]").forEach(el=> el.addEventListener("click", ()=> loadPage(basketId, categoryId, el.dataset.book, parseInt(el.dataset.firstpage,10), parseInt(el.dataset.firstpage,10))));
     setParams({basket: basketId, category: categoryId});
   }
 
-  // ---------- Level 4: page reader ----------
   async function fetchBookPages(bookId){ return fetchJson(cdnUrl(`${DATA_FOLDER}/${bookId}.json`)); }
-
-  function findBookMeta(idx, bookId, firstpageHint){
-    const matches = idx.books.filter(b=>b.id===bookId);
-    if(matches.length<=1) return matches[0];
-    if(firstpageHint!=null){ const exact = matches.find(b=>b.firstpage===firstpageHint); if(exact) return exact; }
-    return matches[0];
-  }
+  function findBookMeta(idx, bookId, firstpageHint){ const matches = idx.books.filter(b=>b.id===bookId); if(matches.length<=1) return matches[0]; if(firstpageHint!=null){ const exact = matches.find(b=>b.firstpage===firstpageHint); if(exact) return exact; } return matches[0]; }
 
   async function loadPage(basketId, categoryId, bookId, pageNum, firstpageHint){
-    setFloatSearchVisible(false);
-    document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+    setFloatSearchVisible(false); document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
-      const idx = await ensureIndex();
-      const bookMeta = findBookMeta(idx, bookId, firstpageHint) || {};
-      currentBookMeta = bookMeta;
+      const idx = await ensureIndex(); const bookMeta = findBookMeta(idx, bookId, firstpageHint) || {}; currentBookMeta = bookMeta;
+      if(bookId !== currentBookId){ currentRows = await fetchBookPages(bookId); currentBookId = bookId; }
+      const minPage = bookMeta.firstpage || 1, maxPage = bookMeta.lastpage || Math.max(...currentRows.map(r=>parseInt(r.page,10)));
+      if(pageNum == null || pageNum < minPage) pageNum = minPage; if(pageNum > maxPage) pageNum = maxPage;
+      const row = currentRows.find(r => parseInt(r.page,10) === pageNum); currentRow = row || null;
+      renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}}, {label: bookMeta.name || bookId}]);
+      if(!row){ document.getElementById("tp-view").innerHTML = `<p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`; return; }
 
-      if(bookId !== currentBookId){
-        currentRows = await fetchBookPages(bookId);
-        currentBookId = bookId;
-      }
-
-      const minPage = bookMeta.firstpage || 1;
-      const maxPage = bookMeta.lastpage || Math.max(...currentRows.map(r=>parseInt(r.page,10)));
-      if(pageNum == null || pageNum < minPage) pageNum = minPage;
-      if(pageNum > maxPage) pageNum = maxPage;
-
-      const row = currentRows.find(r => parseInt(r.page,10) === pageNum);
-      currentRow = row || null;
-
-      renderBreadcrumb([
-        {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
-        {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}},
-        {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}},
-        {label: bookMeta.name || bookId}
-      ]);
-
-      if(!row){
-        document.getElementById("tp-view").innerHTML = `<p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`;
-        return;
-      }
-
-      // Main UI
       document.getElementById("tp-view").innerHTML = `
         <div id="tp-nav">
           <div id="tp-nav-left">
@@ -1027,24 +638,16 @@
             <button id="tp-search-toggle" class="tp-icon-btn" title="သုတ္တန်ရှာရန်">🔍</button>
             <button id="tp-lang-toggle" class="tp-icon-btn" title="အင်္ဂလိပ်ဘာသာပြန် ဖတ်ရန်">🌐</button>
             
-            <!-- Floating Dropdowns -->
             <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
             <div id="tp-crossref" class="tp-dropdown-box"></div>
             
             <div id="tp-jumpbar" class="tp-dropdown-box">
-              <div class="tp-jump-row">
-                <span>စာမျက်နှာ:</span>
-                <input type="range" id="tp-slider" min="${minPage}" max="${maxPage}" value="${pageNum}">
-                <span id="tp-slider-live">${toMyanmarDigits(pageNum)}</span>
-              </div>
-              <div class="tp-jump-row">
-                <input type="number" id="tp-jumpinput" placeholder="စာပိုဒ်နံပါတ် (ဥပမာ- ၁၂)">
-                <button id="tp-jumpgo">သွားမည်</button>
-              </div>
+              <div class="tp-jump-row"><span>စာမျက်နှာ:</span><input type="range" id="tp-slider" min="${minPage}" max="${maxPage}" value="${pageNum}"><span id="tp-slider-live">${toMyanmarDigits(pageNum)}</span></div>
+              <div class="tp-jump-row"><input type="number" id="tp-jumpinput" placeholder="စာပိုဒ်နံပါတ် (ဥပမာ- ၁၂)"><button id="tp-jumpgo">သွားမည်</button></div>
             </div>
             
             <div id="tp-sutta-search" class="tp-dropdown-box">
-              <input type="text" id="tp-sutta-input" placeholder="သုတ္တန်အမည် ရိုက်ထည့်ပါ..." autocomplete="off">
+              <input type="text" id="tp-sutta-input" placeholder="စာအုပ် (သို့) သုတ္တန်အမည် ရိုက်ရှာပါ..." autocomplete="off">
               <div id="tp-sutta-results"></div>
             </div>
 
@@ -1058,157 +661,73 @@
         <div id="tp-content">${row.content}</div>
       `;
       
-      document.getElementById("tp-float-prev").disabled = pageNum <= minPage;
-      document.getElementById("tp-float-next").disabled = pageNum >= maxPage;
+      document.getElementById("tp-float-prev").disabled = pageNum <= minPage; document.getElementById("tp-float-next").disabled = pageNum >= maxPage;
       document.getElementById("tp-float-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1, firstpageHint));
       document.getElementById("tp-float-next").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum+1, firstpageHint));
 
-      // ☰ TOC Logic (Floating)
       document.getElementById("tp-toc-toggle").addEventListener("click", async ()=>{
-        const tocBox = document.getElementById("tp-toc-dropdown");
-        const willOpen = !tocBox.classList.contains("tp-open");
-        closeAllDropdowns("tp-toc-dropdown");
-        tocBox.classList.toggle("tp-open", willOpen);
-        
+        const tocBox = document.getElementById("tp-toc-dropdown"), willOpen = !tocBox.classList.contains("tp-open");
+        closeAllDropdowns("tp-toc-dropdown"); tocBox.classList.toggle("tp-open", willOpen);
         if(willOpen) {
           const toclist = document.getElementById("tp-toclist");
-          if(toclist.dataset.loaded !== "true"){
-            const toc = await ensureToc();
-            const items = toc.filter(t=>t.book_id===bookId).sort((a,b)=>a.page_number-b.page_number);
-            if(items.length > 0){
-              toclist.innerHTML = items.map(it=>{
-                const cls = it.type==="chapter" ? "tp-toc-chapter" : "tp-toc-subhead";
-                return `<div class="${cls}" data-page="${it.page_number}">${it.name}</div>`;
-              }).join("");
-              toclist.querySelectorAll("[data-page]").forEach(el=>{
-                el.addEventListener("click", ()=> {
-                  closeAllDropdowns();
-                  loadPage(basketId, categoryId, bookId, parseInt(el.dataset.page,10), firstpageHint);
-                });
-              });
-            } else {
-              toclist.innerHTML = "<div class='tp-sutta-empty'>ဒီစာအုပ်အတွက် မာတိကာ မရှိသေးပါ။</div>";
-            }
-            toclist.dataset.loaded = "true";
-          }
+          const toc = await ensureToc(); const items = toc.filter(t=>t.book_id===bookId).sort((a,b)=>a.page_number-b.page_number);
+          if(items.length > 0){
+            let activeIdx = -1;
+            for (let i = 0; i < items.length; i++) { if (items[i].page_number <= pageNum) activeIdx = i; else break; }
+            toclist.innerHTML = items.map((it, idx)=>{
+              const cls = it.type==="chapter" ? "tp-toc-chapter" : "tp-toc-subhead", activeCls = (idx === activeIdx) ? " tp-toc-active" : "";
+              return `<div class="${cls}${activeCls}" id="toc-item-${idx}" data-page="${it.page_number}">${it.name}</div>`;
+            }).join("");
+            toclist.querySelectorAll("[data-page]").forEach(el=>{ el.addEventListener("click", ()=> { closeAllDropdowns(); loadPage(basketId, categoryId, bookId, parseInt(el.dataset.page,10), firstpageHint); }); });
+            if (activeIdx !== -1) { setTimeout(() => { const activeEl = document.getElementById(`toc-item-${activeIdx}`); if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50); }
+          } else { toclist.innerHTML = "<div class='tp-sutta-empty'>ဒီစာအုပ်အတွက် မာတိကာ မရှိသေးပါ။</div>"; }
         }
       });
 
-      // 📖 Crossref Toggle
-      const xrefToggle = document.getElementById("tp-xref-toggle");
-      xrefToggle.addEventListener("click", ()=>{
-        const xrefBox = document.getElementById("tp-crossref");
-        const willOpen = !xrefBox.classList.contains("tp-open");
-        closeAllDropdowns("tp-crossref");
-        xrefBox.classList.toggle("tp-open", willOpen);
-      });
+      const xrefToggle = document.getElementById("tp-xref-toggle"); xrefToggle.addEventListener("click", ()=>{ const xrefBox = document.getElementById("tp-crossref"), willOpen = !xrefBox.classList.contains("tp-open"); closeAllDropdowns("tp-crossref"); xrefBox.classList.toggle("tp-open", willOpen); });
+      document.getElementById("tp-jump-toggle").addEventListener("click", ()=>{ const jumpBar = document.getElementById("tp-jumpbar"), willOpen = !jumpBar.classList.contains("tp-open"); closeAllDropdowns("tp-jumpbar"); jumpBar.classList.toggle("tp-open", willOpen); });
+      
+      const searchBox = document.getElementById("tp-sutta-search"), searchInput = document.getElementById("tp-sutta-input");
+      document.getElementById("tp-search-toggle").addEventListener("click", ()=>{ const willOpen = !searchBox.classList.contains("tp-open"); closeAllDropdowns("tp-sutta-search"); searchBox.classList.toggle("tp-open", willOpen); if(willOpen){ searchInput.focus(); ensureSuttas(); } });
 
-      // 📄 Jump Toggle
-      document.getElementById("tp-jump-toggle").addEventListener("click", ()=>{
-        const jumpBar = document.getElementById("tp-jumpbar");
-        const willOpen = !jumpBar.classList.contains("tp-open");
-        closeAllDropdowns("tp-jumpbar");
-        jumpBar.classList.toggle("tp-open", willOpen);
-      });
-
-      // 🔍 Sutta Search Toggle
-      const searchBox = document.getElementById("tp-sutta-search");
-      const searchInput = document.getElementById("tp-sutta-input");
-      document.getElementById("tp-search-toggle").addEventListener("click", ()=>{
-        const willOpen = !searchBox.classList.contains("tp-open");
-        closeAllDropdowns("tp-sutta-search");
-        searchBox.classList.toggle("tp-open", willOpen);
-        if(willOpen){ searchInput.focus(); ensureSuttas(); }
-      });
-
-      // 🌐 Language Switch Toggle - show English translators for the sutta on this page
       const langBox = document.getElementById("tp-lang-dropdown");
       document.getElementById("tp-lang-toggle").addEventListener("click", async ()=>{
-        const willOpen = !langBox.classList.contains("tp-open");
-        closeAllDropdowns("tp-lang-dropdown");
-        langBox.classList.toggle("tp-open", willOpen);
-        if(!willOpen) return;
-
-        const langList = document.getElementById("tp-lang-list");
-        langList.innerHTML = "<div class='tp-sutta-empty'>ရှာဖွေနေပါသည်...</div>";
+        const willOpen = !langBox.classList.contains("tp-open"); closeAllDropdowns("tp-lang-dropdown"); langBox.classList.toggle("tp-open", willOpen); if(!willOpen) return;
+        const langList = document.getElementById("tp-lang-list"); langList.innerHTML = "<div class='tp-sutta-empty'>ရှာဖွေနေပါသည်...</div>";
         try{
-          await ensureSuttas();
-          const suttaId = getCurrentSuttaId(bookId, pageNum);
-          if(!suttaId){
-            langList.innerHTML = "<div class='tp-sutta-empty'>ဒီစာမျက်နှာက ဘယ်သုတ္တန်ဆိုတာ မတွေ့ပါ။</div>";
-            return;
-          }
-          const scData = await ensureSuttaCentral();
-          const matches = scData.filter(s => s.sutta_id === suttaId);
-          // အင်္ဂလိပ်ဘာသာပြန်များအပြင် မြန်မာနှင့် ဗီယက်နမ်ဘာသာပြန်ကိုပါ တွဲထည့်ပါ
-          const allOptions = [
-            ...matches.map(s => ({label: `${s.author} (English)`, url: s.url})),
-            {label: "မြန်မာဘာသာပြန် (pmt)", url: `https://suttacentral.net/${suttaId}/my/pmt`},
-            {label: "ဗီယက်နမ်ဘာသာပြန် (Minh Châu)", url: `https://suttacentral.net/${suttaId}/vi/minh_chau`}
-          ];
+          await ensureSuttas(); const suttaId = getCurrentSuttaId(bookId, pageNum);
+          if(!suttaId){ langList.innerHTML = "<div class='tp-sutta-empty'>ဒီစာမျက်နှာက ဘယ်သုတ္တန်ဆိုတာ မတွေ့ပါ။</div>"; return; }
+          const scData = await ensureSuttaCentral(), matches = scData.filter(s => s.sutta_id === suttaId);
+          const allOptions = [...matches.map(s => ({label: `${s.author} (English)`, url: s.url})), {label: "မြန်မာဘာသာပြန် (pmt)", url: `https://suttacentral.net/${suttaId}/my/pmt`}, {label: "ဗီယက်နမ်ဘာသာပြန် (Minh Châu)", url: `https://suttacentral.net/${suttaId}/vi/minh_chau`}];
           langList.innerHTML = allOptions.map(o => `<div class="tp-sutta-item" data-url="${o.url}">${o.label}</div>`).join("");
-          langList.querySelectorAll("[data-url]").forEach(item=>{
-            item.addEventListener("click", ()=>{
-              closeAllDropdowns();
-              window.open(item.dataset.url, "_blank");
-            });
-          });
-        } catch(err){
-          langList.innerHTML = `<div class='tp-sutta-empty' style="color:red;">ဖိုင်ရှာမတွေ့ပါ (${err.message})</div>`;
-        }
+          langList.querySelectorAll("[data-url]").forEach(item=>{ item.addEventListener("click", ()=>{ closeAllDropdowns(); window.open(item.dataset.url, "_blank"); }); });
+        } catch(err){ langList.innerHTML = `<div class='tp-sutta-empty' style="color:red;">ဖိုင်ရှာမတွေ့ပါ (${err.message})</div>`; }
       });
 
-      // Sutta Live Search Logic (shared helper — see wireSuttaSearchInput)
-      const searchResults = document.getElementById("tp-sutta-results");
-      wireSuttaSearchInput(searchInput, searchResults);
+      const searchResults = document.getElementById("tp-sutta-results"); wireSuttaSearchInput(searchInput, searchResults);
 
-      // Page Slider & Paragraph Jump Logic
-      const slider = document.getElementById("tp-slider");
-      const sliderLive = document.getElementById("tp-slider-live");
+      const slider = document.getElementById("tp-slider"), sliderLive = document.getElementById("tp-slider-live");
       slider.addEventListener("input", ()=>{ sliderLive.textContent = toMyanmarDigits(slider.value); });
       slider.addEventListener("change", ()=>{ closeAllDropdowns(); loadPage(basketId, categoryId, bookId, parseInt(slider.value,10), firstpageHint); });
 
       function goToParagraph(){
-        const paragraphNum = parseInt(document.getElementById("tp-jumpinput").value,10);
-        if(isNaN(paragraphNum)) return;
+        const paragraphNum = parseInt(document.getElementById("tp-jumpinput").value,10); if(isNaN(paragraphNum)) return;
         const row = currentRows.find(r => parseParanums(r.paranum).includes(paragraphNum));
-        if(row){
-          closeAllDropdowns(); loadPage(basketId, categoryId, bookId, parseInt(row.page,10), firstpageHint);
-        } else {
-          alert("စာပိုဒ် " + toMyanmarDigits(paragraphNum) + " ကို ဒီစာအုပ်ထဲမှာ မတွေ့ပါ။");
-        }
+        if(row){ closeAllDropdowns(); loadPage(basketId, categoryId, bookId, parseInt(row.page,10), firstpageHint); } else { alert("စာပိုဒ် " + toMyanmarDigits(paragraphNum) + " ကို ဒီစာအုပ်ထဲမှာ မတွေ့ပါ။"); }
       }
-      document.getElementById("tp-jumpgo").addEventListener("click", goToParagraph);
-      document.getElementById("tp-jumpinput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") goToParagraph(); });
-
-      // Click outside to close dropdowns
-      document.addEventListener("click", (e) => {
-        if (!e.target.closest('#tp-nav-left')) {
-          closeAllDropdowns();
-        }
-      });
+      document.getElementById("tp-jumpgo").addEventListener("click", goToParagraph); document.getElementById("tp-jumpinput").addEventListener("keydown", (e)=>{ if(e.key==="Enter") goToParagraph(); });
+      document.addEventListener("click", (e) => { if (!e.target.closest('#tp-nav-left') && !e.target.closest('#tp-float-search-toggle') && !e.target.closest('#tp-float-search-box')) { closeAllDropdowns(); } });
 
       setParams({basket: basketId, category: categoryId, book: bookId, firstpage: firstpageHint, page: pageNum});
-      renderCrossRef(basketId, categoryId, bookId, pageNum);
-      window.scrollTo({top:0, behavior:"smooth"});
-    }catch(err){
-      document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>";
-    }
+      renderCrossRef(basketId, categoryId, bookId, pageNum); window.scrollTo({top:0, behavior:"smooth"});
+    }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   }
 
-  // ---------- boot ----------
   (async function init(){
     const {basket, category, book, page, firstpage} = getParams();
     try{
-      if(book){
-        const idx = await ensureIndex();
-        const meta = findBookMeta(idx, book, firstpage);
-        loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage);
-      } else if(category && basket === "myanmar"){ showMmBookList(category);
-      } else if(category && basket){ showBookList(basket, category);
-      } else if(basket === "myanmar"){ showMmCategories();
-      } else if(basket){ showCategories(basket);
-      } else { showBaskets(); }
+      if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
+      else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
 })();
