@@ -124,10 +124,26 @@
   #tp-content .centered{text-align:center;}
   #tp-content .chapter{font-weight:bold;text-align:center;margin-top:1em;color:#1e3a5f;}
   #tp-content .subhead{font-weight:bold;text-align:center;color:#1e3a5f;margin-top:.6em;}
+#tp-content .subsubhead{font-weight:bold;text-align:center;color:#1e3a5f;margin-top:.6em;}
+#tp-content .title{font-weight:bold;text-align:center;color:#1e3a5f;margin-top:.6em;}
   #tp-content .paranum{color:#a00;font-weight:bold;margin-right:4px;}
   #tp-content .note{font-size:.8em;color:#888;vertical-align:super;}
   #tp-content .bodytext, #tp-nissaya-content .bodytext {text-indent:1.5em;}
   .tp-loading{color:#888;}
+p.hangnum {
+  margin-bottom: 0px !important;
+  margin-top: 15px !important; 
+}
+
+p.gatha1, p.gatha2, p.gatha3, p.gathalast {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+  line-height: 1.8;
+}
+
+p.gathalast {
+  margin-bottom: 15px !important; 
+}
 </style>
 </head>
 <body>
@@ -758,7 +774,6 @@ let isNissayaOpen = false;
               <input type="text" id="tp-sutta-input" placeholder="စာအုပ် (သို့) သုတ္တန်အမည် ရိုက်ရှာပါ..." autocomplete="off">
               <div id="tp-sutta-results"></div>
             </div>
-
             <div id="tp-lang-dropdown" class="tp-dropdown-box"><div id="tp-lang-list"></div></div>
           </div>
         </div>
