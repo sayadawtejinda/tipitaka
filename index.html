@@ -25,6 +25,8 @@
   #tp-float-prev{left:12px;}
   #tp-float-next{right:12px;}
   @media (max-width:900px){ .tp-float-nav{width:40px;height:40px;font-size:1.2em;} #tp-float-prev{left:6px;} #tp-float-next{right:6px;} }
+  #tp-float-search-toggle{ left:50%; transform:translate(-50%,-50%); z-index:150; cursor:grab; }
+  #tp-float-search-box.tp-dropdown-box{ position:fixed; margin-top:0; }
   
   /* General Floating Dropdown Box Style for All Icons */
   .tp-dropdown-box {
@@ -98,6 +100,12 @@
 <div id="tp-breadcrumb"></div>
 <div id="tp-view"><p class="tp-loading">Loading...</p></div>
 
+<button id="tp-float-search-toggle" class="tp-float-nav" title="သုတ္တန်ရှာရန်">🔍</button>
+<div id="tp-float-search-box" class="tp-dropdown-box">
+  <input type="text" id="tp-float-search-input" placeholder="သုတ္တန်အမည် ရိုက်ထည့်ပါ..." autocomplete="off">
+  <div id="tp-float-search-results"></div>
+</div>
+
 <script>
 (function(){
   // ---------------------------------------------------------
@@ -115,6 +123,7 @@
   const SUTTA_CENTRAL_FILE = "sutta_central.json"; 
   const BURMESE_MAP_FILE = "burmese_translated_books.json"; 
   const PAGE_MAP_FILE = "pali_mm_page_map.json"; 
+  const BURMESE_TOC_FILE = "tipitaka_myanmar_toc.csv"; 
 
   function cdnUrl(path){
     return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`;
@@ -128,6 +137,8 @@
   let suttaCentralIndex = null; 
   let burmeseMapIndex = null; 
   let pageMapIndex = null; 
+  let burmeseTocIndex = null; 
+  let burmeseBookMeta = null; 
   let mmHtmlCache = {}; 
   let mmPagesCache = {}; 
   let mmBackContext = null; 
@@ -266,9 +277,95 @@
     return pageMapIndex.find(m => m.pali_book_id === bookId && m.pali_page_number === pageNum) || null;
   }
 
+  // csv line တစ်ကြောင်းကို field များအဖြစ်ခွဲမည် (quote ထဲက comma/escaped-quote ("") ကို ကိုင်တွယ်ပေးသည်)
+  function parseCsvLine(line){
+    const fields = [];
+    let cur = "";
+    let inQuotes = false;
+    for(let i = 0; i < line.length; i++){
+      const ch = line[i];
+      if(inQuotes){
+        if(ch === '"'){
+          if(line[i+1] === '"'){ cur += '"'; i++; }
+          else { inQuotes = false; }
+        } else {
+          cur += ch;
+        }
+      } else {
+        if(ch === '"'){ inQuotes = true; }
+        else if(ch === ','){ fields.push(cur); cur = ""; }
+        else { cur += ch; }
+      }
+    }
+    fields.push(cur);
+    return fields;
+  }
+
+  // tipitaka_myanmar_toc.csv ကို mm_book_id အလိုက် group လုပ်ပြီး ဖတ်မည်
+  // book header row: seq,mm_book_id,title,pagecount (col1 က <font ...> နဲ့ မစဘူး)
+  // toc entry row: "<font size=X>",title,page,   (font size က heading အဆင့်ကို ညွှန်းသည်)
+  async function ensureBurmeseToc(){
+    if(!burmeseTocIndex){
+      burmeseTocIndex = {};
+      burmeseBookMeta = {};
+      try{
+        const text = await fetchText(cdnUrl(BURMESE_TOC_FILE));
+        const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+        let currentBook = null;
+        lines.forEach(line=>{
+          const f = parseCsvLine(line);
+          if(f.length < 3) return;
+          const col1 = (f[0] || "").trim();
+          if(!col1.startsWith("<font")){
+            currentBook = (f[1] || "").trim();
+            if(currentBook && !burmeseTocIndex[currentBook]) burmeseTocIndex[currentBook] = [];
+            if(currentBook){
+              burmeseBookMeta[currentBook] = {
+                title: (f[2] || "").trim(),
+                pagecount: parseInt((f[3] || "").trim(), 10) || null,
+                category: mmCategoryFromId(currentBook)
+              };
+            }
+          } else if(currentBook){
+            const sizeMatch = col1.match(/size=["']?([\d.]+)/);
+            const level = sizeMatch ? parseFloat(sizeMatch[1]) : 1;
+            const title = (f[1] || "").trim();
+            const page = parseInt((f[2] || "").trim(), 10);
+            if(title && !isNaN(page)){
+              burmeseTocIndex[currentBook].push({ level, title, page });
+            }
+          }
+        });
+      } catch(e){
+        console.warn("[Tipitaka] tipitaka_myanmar_toc.csv ဖတ်၍မရပါ:", e.message);
+      }
+    }
+    return burmeseTocIndex;
+  }
+
+  // "01_vinaya_01" -> "vinaya" ကဲ့သို့ mm_book_id ရဲ့ အလယ်အပိုင်း (category slug) ကို ထုတ်ယူမည်
+  function mmCategoryFromId(mmBookId){
+    const parts = mmBookId.split("_");
+    if(parts.length < 3) return "other";
+    return parts.slice(1, parts.length - 1).join("_");
+  }
+
+  const MM_CATEGORY_LABELS = {
+    vinaya: "ဝိနည်းပိဋက",
+    digha: "ဒီဃနိကာယ်",
+    majjhima: "မဇ္ဈိမနိကာယ်",
+    sanyutta: "သံယုတ်နိကာယ်",
+    anguttara: "အင်္ဂုတ္တိုရ်နိကာယ်",
+    khuddaka: "ခုဒ္ဒကနိကာယ်",
+    abhidhamma: "အဘိဓမ္မာပိဋက",
+    dhammapada: "ဓမ္မပဒ",
+    jataka: "ဇာတက",
+    visuddhimagga: "ဝိသုဒ္ဓိမဂ်"
+  };
+
   // Helper: Close all dropdowns
   function closeAllDropdowns(exceptId) {
-    const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown'];
+    const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown', 'tp-float-search-box'];
     dropdowns.forEach(id => {
       if(id !== exceptId) {
         const el = document.getElementById(id);
@@ -283,6 +380,132 @@
     const exact = matches.find(b => pageNum!=null && b.firstpage<=pageNum && pageNum<=b.lastpage);
     return exact || matches[0];
   }
+
+  // Sutta Live Search Logic (nav-bar 🔍 နဲ့ floating 🔍 နှစ်ခုစလုံး ဒီတစ်ခုတည်းကို ပြန်သုံးသည်)
+  function wireSuttaSearchInput(inputEl, resultsEl){
+    inputEl.addEventListener("input", async (e) => {
+      const val = e.target.value.trim().replace(/\s+/g, "");
+      if(!val){ resultsEl.innerHTML = ""; return; }
+      resultsEl.innerHTML = "<div class='tp-sutta-empty'>ရှာဖွေနေပါသည်...</div>";
+      try {
+        const suttas = await ensureSuttas();
+        if(!suttas || suttas.length === 0){
+           resultsEl.innerHTML = "<div class='tp-sutta-empty'>သုတ္တန်အချက်အလက်များ မရရှိသေးပါ</div>"; return;
+        }
+        const matched = suttas.filter(s => s.name && s.name.replace(/\s+/g, "").includes(val)).slice(0, 20);
+        if(matched.length === 0){
+          resultsEl.innerHTML = "<div class='tp-sutta-empty'>သုတ္တန် မတွေ့ပါ</div>"; return;
+        }
+        resultsEl.innerHTML = matched.map(s => `<div class="tp-sutta-item" data-book="${s.book_id}" data-page="${s.page_number}">${s.name}</div>`).join("");
+        resultsEl.querySelectorAll(".tp-sutta-item").forEach(item => {
+          item.addEventListener("click", async () => {
+            closeAllDropdowns();
+            const toBook = item.dataset.book;
+            const toPage = parseInt(item.dataset.page, 10);
+            const indexData = await ensureIndex();
+            const meta = findBookMetaByPageRange(indexData, toBook, toPage);
+            if(meta) loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage);
+            else loadPage("", "", toBook, toPage, null);
+          });
+        });
+      } catch (err) {
+         resultsEl.innerHTML = `<div class='tp-sutta-empty' style="color:red;">ဖိုင်ရှာမတွေ့ပါ သို့မဟုတ် JSON ဖော်မတ် မှားနေပါသည် (${err.message})</div>`;
+      }
+    });
+  }
+
+  // 🔍 Floating Search (home/category/book-list screens နှင့် မြန်မာပြန်ဘက် အတွက်)
+  function setFloatSearchVisible(visible){
+    const btn = document.getElementById("tp-float-search-toggle");
+    if(!btn) return;
+    btn.style.display = visible ? "block" : "none";
+    if(!visible){
+      const box = document.getElementById("tp-float-search-box");
+      if(box) box.classList.remove("tp-open");
+    }
+  }
+
+  (function setupFloatSearch(){
+    const floatBtn = document.getElementById("tp-float-search-toggle");
+    const floatBox = document.getElementById("tp-float-search-box");
+    const floatInput = document.getElementById("tp-float-search-input");
+    const floatResults = document.getElementById("tp-float-search-results");
+    if(!floatBtn) return;
+
+    function positionFloatSearchBox(){
+      const rect = floatBtn.getBoundingClientRect();
+      const boxWidth = Math.min(320, window.innerWidth * 0.9);
+      let left = rect.left + rect.width/2 - boxWidth/2;
+      left = Math.max(8, Math.min(left, window.innerWidth - boxWidth - 8));
+      let top = rect.bottom + 8;
+      if(top + 200 > window.innerHeight) top = Math.max(8, rect.top - 8 - 200);
+      floatBox.style.left = left + "px";
+      floatBox.style.top = top + "px";
+    }
+
+    // Drag support
+    let dragging = false, moved = false, startX, startY, origLeft, origTop;
+    function toFixedPos(){
+      const rect = floatBtn.getBoundingClientRect();
+      floatBtn.style.left = rect.left + "px";
+      floatBtn.style.top = rect.top + "px";
+      floatBtn.style.transform = "none";
+    }
+    function onDown(e){
+      const point = e.touches ? e.touches[0] : e;
+      dragging = true; moved = false;
+      toFixedPos();
+      startX = point.clientX; startY = point.clientY;
+      origLeft = parseFloat(floatBtn.style.left);
+      origTop = parseFloat(floatBtn.style.top);
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("touchmove", onMove, {passive:false});
+      document.addEventListener("mouseup", onUp);
+      document.addEventListener("touchend", onUp);
+    }
+    function onMove(e){
+      if(!dragging) return;
+      const point = e.touches ? e.touches[0] : e;
+      const dx = point.clientX - startX, dy = point.clientY - startY;
+      if(Math.abs(dx) > 4 || Math.abs(dy) > 4) moved = true;
+      let newLeft = origLeft + dx, newTop = origTop + dy;
+      newLeft = Math.max(4, Math.min(newLeft, window.innerWidth - floatBtn.offsetWidth - 4));
+      newTop = Math.max(4, Math.min(newTop, window.innerHeight - floatBtn.offsetHeight - 4));
+      floatBtn.style.left = newLeft + "px";
+      floatBtn.style.top = newTop + "px";
+      if(e.cancelable) e.preventDefault();
+    }
+    function onUp(){
+      dragging = false;
+      document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("touchmove", onMove);
+      document.removeEventListener("mouseup", onUp);
+      document.removeEventListener("touchend", onUp);
+      if(moved){
+        try{ localStorage.setItem("tp-float-search-pos", JSON.stringify({left:floatBtn.style.left, top:floatBtn.style.top})); }catch(e){}
+      }
+    }
+    floatBtn.addEventListener("mousedown", onDown);
+    floatBtn.addEventListener("touchstart", onDown, {passive:true});
+
+    try{
+      const saved = JSON.parse(localStorage.getItem("tp-float-search-pos"));
+      if(saved && saved.left && saved.top){
+        floatBtn.style.left = saved.left; floatBtn.style.top = saved.top; floatBtn.style.transform = "none";
+      }
+    }catch(e){}
+
+    floatBtn.addEventListener("click", ()=>{
+      if(moved){ moved = false; return; }
+      const willOpen = !floatBox.classList.contains("tp-open");
+      closeAllDropdowns("tp-float-search-box");
+      floatBox.classList.toggle("tp-open", willOpen);
+      if(willOpen){ positionFloatSearchBox(); floatInput.focus(); ensureSuttas(); }
+    });
+
+    wireSuttaSearchInput(floatInput, floatResults);
+  })();
+
 
   function parseParanums(str){
     if(!str) return [];
@@ -444,7 +667,7 @@
           let mmBookId = btn.dataset.mmbook;
           const linkType = btn.dataset.linktype;
           const paranum = btn.dataset.paranum ? parseInt(btn.dataset.paranum,10) : null;
-          mmBackContext = { basketId, categoryId, bookId, pageNum, firstpageHint: currentBookMeta.firstpage };
+          mmBackContext = { kind: "pali", basketId, categoryId, bookId, pageNum, firstpageHint: currentBookMeta.firstpage };
 
           let targetParagraph = null, targetMmPage = null;
           if(linkType === "paragraph"){
@@ -490,67 +713,111 @@
 
       mmCurrentBookId = mmBookId;
       mmCurrentPageIdx = pageIdx;
-      renderMmPage(highlightText);
+      renderMmPage(highlightText, true);
     } catch(e){
       document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`;
     }
   }
 
   // မြန်မာပြန် စာမျက်နှာချင်း တစ်မျက်နှာစီ ပြသမည် (📄 icon logic နဲ့ တူညီအောင်)
-  function renderMmPage(highlightText){
+  function renderMmPage(highlightText, autoOpenToc){
+    setFloatSearchVisible(true);
     const pages = mmPagesCache[mmCurrentBookId] || [];
     const total = pages.length;
     if(mmCurrentPageIdx < 1) mmCurrentPageIdx = 1;
     if(mmCurrentPageIdx > total) mmCurrentPageIdx = total;
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
+    const backLabel = (mmBackContext && mmBackContext.kind === "browse") ? "← နောက်သို့" : "← ပါဠိတော်";
 
     document.getElementById("tp-view").innerHTML = `
       <div id="tp-nav">
         <div id="tp-nav-left">
-          <button id="tp-mm-back" class="tp-icon-btn" title="ပါဠိတော်သို့ ပြန်သွားရန်">← ပါဠိတော်</button>
-          <button id="tp-mm-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ သွားမည်">📄</button>
-          <div id="tp-mm-jumpbar" class="tp-dropdown-box">
+          <button id="tp-mm-back" class="tp-icon-btn" title="${backLabel}">${backLabel}</button>
+          <button id="tp-toc-toggle" class="tp-icon-btn" title="မာတိကာ">☰</button>
+          <button id="tp-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ သွားမည်">📄</button>
+
+          <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
+
+          <div id="tp-jumpbar" class="tp-dropdown-box">
             <div class="tp-jump-row">
               <span>စာမျက်နှာ:</span>
-              <input type="range" id="tp-mm-slider" min="1" max="${total}" value="${mmCurrentPageIdx}">
-              <span id="tp-mm-slider-live">${toMyanmarDigits(mmCurrentPageIdx)}</span>
+              <input type="range" id="tp-slider" min="1" max="${total}" value="${mmCurrentPageIdx}">
+              <span id="tp-slider-live">${toMyanmarDigits(mmCurrentPageIdx)}</span>
             </div>
             <div class="tp-jump-row">
-              <input type="number" id="tp-mm-jumpinput" placeholder="စာမျက်နှာနံပါတ်" min="1" max="${total}">
-              <button id="tp-mm-jumpgo">သွားမည်</button>
+              <input type="number" id="tp-jumpinput" placeholder="စာမျက်နှာနံပါတ်" min="1" max="${total}">
+              <button id="tp-jumpgo">သွားမည်</button>
             </div>
           </div>
         </div>
       </div>
-      <button id="tp-mm-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
-      <button id="tp-mm-float-next" class="tp-float-nav" title="နောက်စာမျက်နှာ">→</button>
+      <button id="tp-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
+      <button id="tp-float-next" class="tp-float-nav" title="နောက်စာမျက်နှာ">→</button>
 
       <div id="tp-meta">မြန်မာပြန် - စာမျက်နှာ ${toMyanmarDigits(mmCurrentPageIdx)} / ${toMyanmarDigits(total)}</div>
       <div id="tp-content">${pageHtml}</div>
     `;
 
-    document.getElementById("tp-mm-float-prev").disabled = mmCurrentPageIdx <= 1;
-    document.getElementById("tp-mm-float-next").disabled = mmCurrentPageIdx >= total;
-    document.getElementById("tp-mm-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
-    document.getElementById("tp-mm-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
+    document.getElementById("tp-float-prev").disabled = mmCurrentPageIdx <= 1;
+    document.getElementById("tp-float-next").disabled = mmCurrentPageIdx >= total;
+    document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
+    document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
 
     document.getElementById("tp-mm-back").addEventListener("click", ()=>{
-      if(mmBackContext){
+      if(!mmBackContext){ showBaskets(); return; }
+      if(mmBackContext.kind === "browse"){
+        showMmBookList(mmBackContext.categorySlug);
+      } else {
         loadPage(mmBackContext.basketId, mmBackContext.categoryId, mmBackContext.bookId, mmBackContext.pageNum, mmBackContext.firstpageHint);
       }
     });
 
+    // ☰ မာတိကာ
+    const tocBox = document.getElementById("tp-toc-dropdown");
+    async function loadTocPanel(){
+      const toclistEl = document.getElementById("tp-toclist");
+      toclistEl.innerHTML = "မာတိကာ ရှာဖွေနေပါသည်...";
+      const toc = await ensureBurmeseToc();
+      const entries = toc[mmCurrentBookId] || [];
+      if(entries.length === 0){
+        toclistEl.innerHTML = "<div class='tp-sutta-empty'>မာတိကာ မတွေ့ပါ။</div>";
+        return;
+      }
+      toclistEl.innerHTML = entries.map(e => {
+        const indent = Math.max(0, Math.round((2.5 - e.level) * 20));
+        return `<button class="tp-xref-item-btn tp-toc-item-btn" style="display:block;width:100%;margin-bottom:4px;padding-left:${12+indent}px;" data-page="${e.page}">${e.title}</button>`;
+      }).join("");
+      toclistEl.querySelectorAll(".tp-toc-item-btn").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          closeAllDropdowns();
+          mmCurrentPageIdx = parseInt(btn.dataset.page, 10);
+          renderMmPage();
+        });
+      });
+    }
+    document.getElementById("tp-toc-toggle").addEventListener("click", ()=>{
+      const willOpen = !tocBox.classList.contains("tp-open");
+      closeAllDropdowns("tp-toc-dropdown");
+      tocBox.classList.toggle("tp-open", willOpen);
+      if(willOpen) loadTocPanel();
+    });
+    if(autoOpenToc){
+      tocBox.classList.add("tp-open");
+      loadTocPanel();
+    }
+
     // 📄 Jump Toggle
-    const mmJumpBar = document.getElementById("tp-mm-jumpbar");
-    document.getElementById("tp-mm-jump-toggle").addEventListener("click", ()=>{
+    const mmJumpBar = document.getElementById("tp-jumpbar");
+    document.getElementById("tp-jump-toggle").addEventListener("click", ()=>{
+      closeAllDropdowns("tp-jumpbar");
       mmJumpBar.classList.toggle("tp-open");
     });
-    const mmSlider = document.getElementById("tp-mm-slider");
-    const mmSliderLive = document.getElementById("tp-mm-slider-live");
+    const mmSlider = document.getElementById("tp-slider");
+    const mmSliderLive = document.getElementById("tp-slider-live");
     mmSlider.addEventListener("input", ()=>{ mmSliderLive.textContent = toMyanmarDigits(mmSlider.value); });
     mmSlider.addEventListener("change", ()=>{ mmCurrentPageIdx = parseInt(mmSlider.value,10); renderMmPage(); });
-    document.getElementById("tp-mm-jumpgo").addEventListener("click", ()=>{
-      const v = parseInt(document.getElementById("tp-mm-jumpinput").value,10);
+    document.getElementById("tp-jumpgo").addEventListener("click", ()=>{
+      const v = parseInt(document.getElementById("tp-jumpinput").value,10);
       if(!isNaN(v)){ mmCurrentPageIdx = v; renderMmPage(); }
     });
 
@@ -609,19 +876,77 @@
   }
 
   // ---------- Level 1, 2, 3 lists ----------
+  // ---------- မြန်မာပြန် Browse (tipitaka_myanmar_toc.csv အခြေခံ) ----------
+  async function showMmCategories(){
+    setFloatSearchVisible(true);
+    renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်"}]);
+    document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
+    await ensureBurmeseToc();
+    const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))];
+    const html = slugs.map(slug => {
+      const count = Object.values(burmeseBookMeta).filter(m => m.category === slug).length;
+      return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${count} အုပ်</span></div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-mmcat]").forEach(el=> el.addEventListener("click", ()=> showMmBookList(el.dataset.mmcat)));
+    setParams({basket: "myanmar"});
+  }
+
+  async function showMmBookList(categorySlug){
+    setFloatSearchVisible(true);
+    renderBreadcrumb([
+      {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+      {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}},
+      {label: MM_CATEGORY_LABELS[categorySlug] || categorySlug}
+    ]);
+    document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
+    await ensureBurmeseToc();
+    const bookIds = Object.keys(burmeseBookMeta).filter(id => burmeseBookMeta[id].category === categorySlug);
+    const html = bookIds.map(id => {
+      const meta = burmeseBookMeta[id];
+      const pageLabel = meta.pagecount ? `<span class="tp-count">${toMyanmarDigits(meta.pagecount)} စာမျက်နှာ</span>` : "";
+      return `<div class="tp-card" data-mmbook="${id}">${meta.title || id}${pageLabel}</div>`;
+    }).join("");
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{
+      mmBackContext = { kind: "browse", categorySlug };
+      mmCurrentBookId = el.dataset.mmbook;
+      mmCurrentPageIdx = 1;
+      openBurmeseTranslationBrowse(el.dataset.mmbook);
+    }));
+    setParams({basket: "myanmar", category: categorySlug});
+  }
+
+  async function openBurmeseTranslationBrowse(mmBookId){
+    document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+    try{
+      await ensureMmPages(mmBookId);
+      mmCurrentBookId = mmBookId;
+      mmCurrentPageIdx = 1;
+      renderMmPage(null, true);
+    } catch(e){
+      document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`;
+    }
+  }
+
   async function showBaskets(){
+    setFloatSearchVisible(true);
     const idx = await ensureIndex();
     renderBreadcrumb([{label:"တိပိဋက"}]);
     const html = Object.keys(idx.basket_labels).map(b => {
       const count = idx.books.filter(bk => bk.basket === b).length;
       return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${count} အုပ်</span></div>`;
-    }).join("");
+    }).join("") + `<div class="tp-card" data-basket="myanmar">မြန်မာပြန်</div>`;
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
-    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=> showCategories(el.dataset.basket)));
+    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{
+      if(el.dataset.basket === "myanmar") showMmCategories();
+      else showCategories(el.dataset.basket);
+    }));
     setParams({});
   }
 
   async function showCategories(basketId){
+    setFloatSearchVisible(true);
     const idx = await ensureIndex();
     renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId}]);
     const cats = [...new Set(idx.books.filter(b=>b.basket===basketId).map(b=>b.category))];
@@ -635,6 +960,7 @@
   }
 
   async function showBookList(basketId, categoryId){
+    setFloatSearchVisible(true);
     const idx = await ensureIndex();
     renderBreadcrumb([
       {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
@@ -659,6 +985,7 @@
   }
 
   async function loadPage(basketId, categoryId, bookId, pageNum, firstpageHint){
+    setFloatSearchVisible(false);
     document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
       const idx = await ensureIndex();
@@ -831,50 +1158,9 @@
         }
       });
 
-      // Sutta Live Search Logic
-      async function ensureSuttas(){
-    if(!suttaIndex){
-      const data = await fetchJson(cdnUrl(SUTTA_FILE)); 
-      suttaIndex = Array.isArray(data) ? data : (data.suttas || Object.values(data));
-    }
-    return suttaIndex;
-  }
-
-  // Sutta Live Search Logic
-  const searchResults = document.getElementById("tp-sutta-results");
-  searchInput.addEventListener("input", async (e) => {
-    const val = e.target.value.trim().replace(/\s+/g, ""); 
-    if(!val){ searchResults.innerHTML = ""; return; }
-    searchResults.innerHTML = "<div class='tp-sutta-empty'>ရှာဖွေနေပါသည်...</div>";
-    
-    try {
-      const suttas = await ensureSuttas();
-      if(!suttas || suttas.length === 0){
-         searchResults.innerHTML = "<div class='tp-sutta-empty'>သုတ္တန်အချက်အလက်များ မရရှိသေးပါ</div>"; return;
-      }
-
-      const matched = suttas.filter(s => s.name && s.name.replace(/\s+/g, "").includes(val)).slice(0, 20);
-      if(matched.length === 0){
-        searchResults.innerHTML = "<div class='tp-sutta-empty'>သုတ္တန် မတွေ့ပါ</div>"; return;
-      }
-
-      searchResults.innerHTML = matched.map(s => `<div class="tp-sutta-item" data-book="${s.book_id}" data-page="${s.page_number}">${s.name}</div>`).join("");
-      searchResults.querySelectorAll(".tp-sutta-item").forEach(item => {
-        item.addEventListener("click", async () => {
-          closeAllDropdowns();
-          const toBook = item.dataset.book;
-          const toPage = parseInt(item.dataset.page, 10);
-          const indexData = await ensureIndex();
-          const meta = findBookMetaByPageRange(indexData, toBook, toPage);
-          if(meta) loadPage(meta.basket, meta.category, toBook, toPage, meta.firstpage);
-          else loadPage("", "", toBook, toPage, null);
-        });
-      });
-    } catch (err) {
-       // JSON အမှား သို့မဟုတ် ဖိုင်မရှိပါက ဤနေရာတွင် အနီရောင်ဖြင့် ပြပေးပါမည်။
-       searchResults.innerHTML = `<div class='tp-sutta-empty' style="color:red;">ဖိုင်ရှာမတွေ့ပါ သို့မဟုတ် JSON ဖော်မတ် မှားနေပါသည် (${err.message})</div>`;
-    }
-  });
+      // Sutta Live Search Logic (shared helper — see wireSuttaSearchInput)
+      const searchResults = document.getElementById("tp-sutta-results");
+      wireSuttaSearchInput(searchInput, searchResults);
 
       // Page Slider & Paragraph Jump Logic
       const slider = document.getElementById("tp-slider");
@@ -918,7 +1204,9 @@
         const idx = await ensureIndex();
         const meta = findBookMeta(idx, book, firstpage);
         loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage);
+      } else if(category && basket === "myanmar"){ showMmBookList(category);
       } else if(category && basket){ showBookList(basket, category);
+      } else if(basket === "myanmar"){ showMmCategories();
       } else if(basket){ showCategories(basket);
       } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
