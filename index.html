@@ -153,6 +153,7 @@ p.gathalast {
 
 <button id="tp-float-search-toggle" class="tp-float-nav" title="ရှာရန်">🔍</button>
 <div id="tp-float-search-box" class="tp-dropdown-box">
+<button id="tp-float-refresh-btn" class="tp-float-nav" title="စာမျက်နှာကို အသစ်ပြန်ခေါ်မည် (Refresh)" style="top: calc(50% + 60px);">🔄</button>
   <input type="text" id="tp-float-search-input" placeholder="စာအုပ် (သို့) သုတ္တန်အမည် ရိုက်ရှာပါ..." autocomplete="off">
   <div id="tp-float-search-results"></div>
 </div>
@@ -173,7 +174,7 @@ p.gathalast {
   const PAGE_MAP_FILE = "pali_mm_page_map.json"; 
   const BURMESE_TOC_FILE = "tipitaka_myanmar_toc.csv"; 
 
-  function cdnUrl(path){ return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}`; }
+  function cdnUrl(path){ return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}?v=${new Date().getTime()}`; }
 
   let bookIndex = null, tocIndex = null, matchIndex = null, paragraphMapIndex = null, suttaIndex = null;
   let suttaCentralIndex = null, burmeseMapIndex = null, pageMapIndex = null, burmeseTocIndex = null, burmeseBookMeta = null;
@@ -894,6 +895,17 @@ let isNissayaOpen = false;
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
 })();
+// Refresh ခလုတ် နှိပ်လျှင် Cache များကို ရှင်းထုတ်ပြီး Page ကို Reload လုပ်ရန်
+  const mainRefreshBtn = document.getElementById("tp-float-refresh-btn");
+  if(mainRefreshBtn) {
+      mainRefreshBtn.addEventListener("click", () => {
+          if(confirm("စာမျက်နှာနှင့် ဒေတာအသစ်များကို ပြန်လည်ရယူမည်မှာ သေချာပါသလား?")) {
+              const currentUrl = new URL(window.location.href);
+              currentUrl.searchParams.set('nocache', Date.now());
+              window.location.href = currentUrl.toString();
+          }
+      });
+  }
 </script>
 
 </body>
