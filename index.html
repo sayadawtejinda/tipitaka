@@ -174,7 +174,7 @@ p.gathalast {
   const PAGE_MAP_FILE = "pali_mm_page_map.json"; 
   const BURMESE_TOC_FILE = "tipitaka_myanmar_toc.csv"; 
 
-  function cdnUrl(path){ return `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@${GITHUB_BRANCH}/${path}?v=${new Date().getTime()}`; }
+  function cdnUrl(path){ return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}?nocache=${new Date().getTime()}`; }
 
   let bookIndex = null, tocIndex = null, matchIndex = null, paragraphMapIndex = null, suttaIndex = null;
   let suttaCentralIndex = null, burmeseMapIndex = null, pageMapIndex = null, burmeseTocIndex = null, burmeseBookMeta = null;
