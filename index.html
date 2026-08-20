@@ -129,7 +129,10 @@
   let burmeseMapIndex = null; 
   let pageMapIndex = null; 
   let mmHtmlCache = {}; 
+  let mmPagesCache = {}; 
   let mmBackContext = null; 
+  let mmCurrentBookId = null; 
+  let mmCurrentPageIdx = 1; 
   let currentRows = [];
   let currentRow = null;   
   let currentBookId = "";
@@ -146,6 +149,35 @@
     const res = await fetch(url);
     if(!res.ok) throw new Error("Fetch failed: " + url);
     return res.text();
+  }
+
+  // mm html ဖိုင်တစ်ခုလုံးကို <hr> (သို့) "--" ဆိုတဲ့ page-break marker အလိုက် စာမျက်နှာချင်း ခွဲမည်
+  function splitMmHtmlIntoPages(bodyEl){
+    const pages = [];
+    let current = document.createElement("div");
+    Array.from(bodyEl.childNodes).forEach(node=>{
+      const isPageBreak = (node.nodeType === 1 && node.tagName === "HR") ||
+                           (node.nodeType === 3 && /^-{2,}$/.test((node.textContent||"").trim()));
+      if(isPageBreak){
+        pages.push(current.innerHTML);
+        current = document.createElement("div");
+      } else {
+        current.appendChild(node.cloneNode(true));
+      }
+    });
+    pages.push(current.innerHTML);
+    return pages;
+  }
+
+  async function ensureMmPages(mmBookId){
+    if(!mmPagesCache[mmBookId]){
+      if(!mmHtmlCache[mmBookId]){
+        mmHtmlCache[mmBookId] = await fetchText(cdnUrl(`${DATA_FOLDER}/${mmBookId}.html`));
+      }
+      const doc = new DOMParser().parseFromString(mmHtmlCache[mmBookId], "text/html");
+      mmPagesCache[mmBookId] = doc.body ? splitMmHtmlIntoPages(doc.body) : [mmHtmlCache[mmBookId]];
+    }
+    return mmPagesCache[mmBookId];
   }
 
   async function ensureIndex(){
@@ -444,57 +476,92 @@
   async function openBurmeseTranslation(mmBookId, targetParagraph, targetMmPage){
     document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
-      if(!mmHtmlCache[mmBookId]){
-        mmHtmlCache[mmBookId] = await fetchText(cdnUrl(`${DATA_FOLDER}/${mmBookId}.html`));
-      }
-      const doc = new DOMParser().parseFromString(mmHtmlCache[mmBookId], "text/html");
-      const bodyHtml = doc.body ? doc.body.innerHTML : mmHtmlCache[mmBookId];
-
-      const metaLabel = targetParagraph != null
-        ? `မြန်မာပြန် - စာပိုဒ် ${toMyanmarDigits(targetParagraph)}`
-        : (targetMmPage != null ? `မြန်မာပြန် - စာမျက်နှာ ${toMyanmarDigits(targetMmPage)}` : "မြန်မာပြန်");
-
-      document.getElementById("tp-view").innerHTML = `
-        <div id="tp-nav">
-          <div id="tp-nav-left">
-            <button id="tp-mm-back" class="tp-icon-btn" title="ပါဠိတော်သို့ ပြန်သွားရန်">← ပါဠိတော်</button>
-          </div>
-        </div>
-        <div id="tp-meta">${metaLabel}</div>
-        <div id="tp-content">${bodyHtml}</div>
-      `;
-
-      document.getElementById("tp-mm-back").addEventListener("click", ()=>{
-        if(mmBackContext){
-          loadPage(mmBackContext.basketId, mmBackContext.categoryId, mmBackContext.bookId, mmBackContext.pageNum, mmBackContext.firstpageHint);
-        }
-      });
+      const pages = await ensureMmPages(mmBookId);
+      let pageIdx = 1;
+      let highlightText = null;
 
       if(targetParagraph != null){
-        const targetText = toMyanmarDigits(targetParagraph);
-        const spans = document.querySelectorAll("#tp-content span.paragraph");
-        let matched = null;
-        spans.forEach(sp => { if(sp.textContent.trim() === targetText) matched = sp; });
-        if(matched){
-          matched.classList.add("tp-mm-highlight");
-          matched.scrollIntoView({behavior:"smooth", block:"center"});
-        }
+        highlightText = toMyanmarDigits(targetParagraph);
+        const found = pages.findIndex(p => p.includes(`class="paragraph">${highlightText}<`));
+        if(found >= 0) pageIdx = found + 1;
       } else if(targetMmPage != null){
-        // page marker ဖော်ပြပုံ ကွဲပြားနိုင်လို့ ဖြစ်နိုင်ချေရှိတဲ့ pattern အချို့ကို စမ်းရှာမည်
-        const targetText = toMyanmarDigits(targetMmPage);
-        const candidates = document.querySelectorAll("#tp-content span.page, #tp-content [data-page], #tp-content a[name]");
-        let matched = null;
-        candidates.forEach(el => {
-          const val = el.dataset.page || el.getAttribute("name") || el.textContent.trim();
-          if(val === targetText || val === String(targetMmPage)) matched = el;
-        });
-        if(matched){
-          matched.classList.add("tp-mm-highlight");
-          matched.scrollIntoView({behavior:"smooth", block:"center"});
-        }
+        pageIdx = Math.min(Math.max(targetMmPage, 1), pages.length);
       }
+
+      mmCurrentBookId = mmBookId;
+      mmCurrentPageIdx = pageIdx;
+      renderMmPage(highlightText);
     } catch(e){
       document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`;
+    }
+  }
+
+  // မြန်မာပြန် စာမျက်နှာချင်း တစ်မျက်နှာစီ ပြသမည် (📄 icon logic နဲ့ တူညီအောင်)
+  function renderMmPage(highlightText){
+    const pages = mmPagesCache[mmCurrentBookId] || [];
+    const total = pages.length;
+    if(mmCurrentPageIdx < 1) mmCurrentPageIdx = 1;
+    if(mmCurrentPageIdx > total) mmCurrentPageIdx = total;
+    const pageHtml = pages[mmCurrentPageIdx - 1] || "";
+
+    document.getElementById("tp-view").innerHTML = `
+      <div id="tp-nav">
+        <div id="tp-nav-left">
+          <button id="tp-mm-back" class="tp-icon-btn" title="ပါဠိတော်သို့ ပြန်သွားရန်">← ပါဠိတော်</button>
+          <button id="tp-mm-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ သွားမည်">📄</button>
+          <div id="tp-mm-jumpbar" class="tp-dropdown-box">
+            <div class="tp-jump-row">
+              <span>စာမျက်နှာ:</span>
+              <input type="range" id="tp-mm-slider" min="1" max="${total}" value="${mmCurrentPageIdx}">
+              <span id="tp-mm-slider-live">${toMyanmarDigits(mmCurrentPageIdx)}</span>
+            </div>
+            <div class="tp-jump-row">
+              <input type="number" id="tp-mm-jumpinput" placeholder="စာမျက်နှာနံပါတ်" min="1" max="${total}">
+              <button id="tp-mm-jumpgo">သွားမည်</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="tp-mm-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
+      <button id="tp-mm-float-next" class="tp-float-nav" title="နောက်စာမျက်နှာ">→</button>
+
+      <div id="tp-meta">မြန်မာပြန် - စာမျက်နှာ ${toMyanmarDigits(mmCurrentPageIdx)} / ${toMyanmarDigits(total)}</div>
+      <div id="tp-content">${pageHtml}</div>
+    `;
+
+    document.getElementById("tp-mm-float-prev").disabled = mmCurrentPageIdx <= 1;
+    document.getElementById("tp-mm-float-next").disabled = mmCurrentPageIdx >= total;
+    document.getElementById("tp-mm-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
+    document.getElementById("tp-mm-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
+
+    document.getElementById("tp-mm-back").addEventListener("click", ()=>{
+      if(mmBackContext){
+        loadPage(mmBackContext.basketId, mmBackContext.categoryId, mmBackContext.bookId, mmBackContext.pageNum, mmBackContext.firstpageHint);
+      }
+    });
+
+    // 📄 Jump Toggle
+    const mmJumpBar = document.getElementById("tp-mm-jumpbar");
+    document.getElementById("tp-mm-jump-toggle").addEventListener("click", ()=>{
+      mmJumpBar.classList.toggle("tp-open");
+    });
+    const mmSlider = document.getElementById("tp-mm-slider");
+    const mmSliderLive = document.getElementById("tp-mm-slider-live");
+    mmSlider.addEventListener("input", ()=>{ mmSliderLive.textContent = toMyanmarDigits(mmSlider.value); });
+    mmSlider.addEventListener("change", ()=>{ mmCurrentPageIdx = parseInt(mmSlider.value,10); renderMmPage(); });
+    document.getElementById("tp-mm-jumpgo").addEventListener("click", ()=>{
+      const v = parseInt(document.getElementById("tp-mm-jumpinput").value,10);
+      if(!isNaN(v)){ mmCurrentPageIdx = v; renderMmPage(); }
+    });
+
+    if(highlightText){
+      const spans = document.querySelectorAll("#tp-content span.paragraph");
+      let matched = null;
+      spans.forEach(sp => { if(sp.textContent.trim() === highlightText) matched = sp; });
+      if(matched){
+        matched.classList.add("tp-mm-highlight");
+        matched.scrollIntoView({behavior:"smooth", block:"center"});
+      }
     }
   }
 
