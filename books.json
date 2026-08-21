@@ -24,7 +24,7 @@
       "category": "vi",
       "name": "ပါရာဇိကပါဠိ",
       "short_name": "ဝိ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊၁", "ပါရာဇိက"],
       "firstpage": 1,
       "lastpage": 381,
       "pagecount": 381
@@ -35,7 +35,7 @@
       "category": "vi",
       "name": "ပါစိတ္တိယပါဠိ",
       "short_name": "ဝိ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊၂", "ပါစိတ္တိယ"],
       "firstpage": 1,
       "lastpage": 470,
       "pagecount": 470
@@ -46,7 +46,7 @@
       "category": "vi",
       "name": "မဟာဝဂ္ဂပါဠိ",
       "short_name": "ဝိ၊၃၊",
-      "ref_keys": ["မဟာဝ။", "", ""],
+      "ref_keys": ["မဟာဝ။", "ဝိ၊၃", "မဟာဝဂ္ဂ"],
       "firstpage": 1,
       "lastpage": 511,
       "pagecount": 511
@@ -57,7 +57,7 @@
       "category": "vi",
       "name": "စူဠဝဂ္ဂပါဠိ",
       "short_name": "ဝိ၊၄၊",
-      "ref_keys": ["စူဠဝ။", "", ""],
+      "ref_keys": ["စူဠဝ။", "ဝိ၊၄", "စူဠဝဂ္ဂ"],
       "firstpage": 1,
       "lastpage": 508,
       "pagecount": 508
@@ -68,7 +68,7 @@
       "category": "vi",
       "name": "ပရိဝါရပါဠိ",
       "short_name": "ဝိ၊၅၊",
-      "ref_keys": ["ပရိ။", "", ""],
+      "ref_keys": ["ပရိ။", "ဝိ၊၅", "ပရိဝါရ"],
       "firstpage": 1,
       "lastpage": 390,
       "pagecount": 390
@@ -79,7 +79,7 @@
       "category": "di",
       "name": "သီလက္ခန္ဓဝဂ္ဂပါဠိ",
       "short_name": "ဒီ၊၁၊",
-      "ref_keys": ["ဒီ။ နိ။ ၁။", "", ""],
+      "ref_keys": ["ဒီ။ နိ။ ၁။", "ဒီ၊၁"],
       "firstpage": 1,
       "lastpage": 236,
       "pagecount": 236
@@ -90,7 +90,7 @@
       "category": "di",
       "name": "မဟာဝဂ္ဂပါဠိ(သုတ်)",
       "short_name": "ဒီ၊၂၊",
-      "ref_keys": ["ဒီ။ နိ။ ၂။", "", ""],
+      "ref_keys": ["ဒီ။ နိ။ ၂။", "ဒီ၊၂"],
       "firstpage": 1,
       "lastpage": 283,
       "pagecount": 283
@@ -101,7 +101,7 @@
       "category": "di",
       "name": "ပါထိကဝဂ္ဂပါဠိ",
       "short_name": "ဒီ၊၃၊",
-      "ref_keys": ["ဒီ။ နိ။ ၃။", "", ""],
+      "ref_keys": ["ဒီ။ နိ။ ၃။", "ဒီ၊၃"],
       "firstpage": 1,
       "lastpage": 260,
       "pagecount": 260
@@ -112,7 +112,7 @@
       "category": "ma",
       "name": "မူလပဏ္ဏာသပါဠိ",
       "short_name": "မ၊၁၊",
-      "ref_keys": ["မ။ နိ။ ၁။", "", ""],
+      "ref_keys": ["မ။ နိ။ ၁။", "မ၊၁"],
       "firstpage": 1,
       "lastpage": 415,
       "pagecount": 415
@@ -123,7 +123,7 @@
       "category": "ma",
       "name": "မဇ္ဈိမပဏ္ဏာသပါဠိ",
       "short_name": "မ၊၂၊",
-      "ref_keys": ["မ။ နိ။ ၂။", "", ""],
+      "ref_keys": ["မ။ နိ။ ၂။", "မ၊၂"],
       "firstpage": 1,
       "lastpage": 439,
       "pagecount": 439
@@ -134,7 +134,7 @@
       "category": "ma",
       "name": "ဥပရိပဏ္ဏာသပါဠိ",
       "short_name": "မ၊၃၊",
-      "ref_keys": ["မ။ နိ။ ၃။", "", ""],
+      "ref_keys": ["မ။ နိ။ ၃။", "မ၊၃"],
       "firstpage": 1,
       "lastpage": 352,
       "pagecount": 352
@@ -145,7 +145,7 @@
       "category": "sa",
       "name": "သဂါထာဝဂ္ဂသံယုတ္တပါဠိ",
       "short_name": "သံ၊၁၊",
-      "ref_keys": ["သံ။ နိ။ ၁။", "", ""],
+      "ref_keys": ["သံ။ နိ။ ၁။", "သံ၊၁"],
       "firstpage": 1,
       "lastpage": 242,
       "pagecount": 242
@@ -156,7 +156,7 @@
       "category": "sa",
       "name": "နိဒါနဝဂ္ဂသံယုတ္တပါဠိ",
       "short_name": "သံ၊၁၊",
-      "ref_keys": ["သံ။ နိ။ ၂။", "", ""],
+      "ref_keys": ["သံ။ နိ။ ၂။", "သံ၊၁"],
       "firstpage": 243,
       "lastpage": 472,
       "pagecount": 230
@@ -167,7 +167,7 @@
       "category": "sa",
       "name": "ခန္ဓဝဂ္ဂသံယုတ္တပါဠိ",
       "short_name": "သံ၊၂၊",
-      "ref_keys": ["သံ။ နိ။ ၃။", "", ""],
+      "ref_keys": ["သံ။ နိ။ ၃။", "သံ၊၂"],
       "firstpage": 1,
       "lastpage": 235,
       "pagecount": 235
@@ -178,7 +178,7 @@
       "category": "sa",
       "name": "သဠာယတနဝဂ္ဂသံယုတ္တပါဠိ",
       "short_name": "သံ၊၂၊",
-      "ref_keys": ["သံ။ နိ။ ၄။", "", ""],
+      "ref_keys": ["သံ။ နိ။ ၄။", "သံ၊၂"],
       "firstpage": 236,
       "lastpage": 567,
       "pagecount": 332
@@ -189,7 +189,7 @@
       "category": "sa",
       "name": "မဟာဝဂ္ဂသံယုတ္တပါဠိ",
       "short_name": "သံ၊၃၊",
-      "ref_keys": ["သံ။ နိ။ ၅။", "", ""],
+      "ref_keys": ["သံ။ နိ။ ၅။", "သံ၊၃"],
       "firstpage": 1,
       "lastpage": 415,
       "pagecount": 415
@@ -200,7 +200,7 @@
       "category": "an",
       "name": "ဧကကနိပါတပါဠိ",
       "short_name": "အံ၊၁၊",
-      "ref_keys": ["အ။ နိ။ ၁။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၁။", "အံ၊၁"],
       "firstpage": 1,
       "lastpage": 48,
       "pagecount": 48
@@ -211,7 +211,7 @@
       "category": "an",
       "name": "ဒုကနိပါတပါဠိ",
       "short_name": "အံ၊၁၊",
-      "ref_keys": ["အ။ နိ။ ၂။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၂။", "အံ၊၁"],
       "firstpage": 49,
       "lastpage": 98,
       "pagecount": 50
@@ -222,7 +222,7 @@
       "category": "an",
       "name": "တိကနိပါတပါဠိ",
       "short_name": "အံ၊၁၊",
-      "ref_keys": ["အ။ နိ။ ၃။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၃။", "အံ၊၁"],
       "firstpage": 99,
       "lastpage": 305,
       "pagecount": 207
@@ -233,7 +233,7 @@
       "category": "an",
       "name": "စတုက္ကနိပါတပါဠိ",
       "short_name": "အံ၊၁၊",
-      "ref_keys": ["အ။ နိ။ ၄။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၄။", "အံ၊၁"],
       "firstpage": 307,
       "lastpage": 580,
       "pagecount": 274
@@ -244,7 +244,7 @@
       "category": "an",
       "name": "ပဉ္စကနိပါတပါဠိ",
       "short_name": "အံ၊၂၊",
-      "ref_keys": ["အ။ နိ။ ၅။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၅။", "အံ၊၂"],
       "firstpage": 1,
       "lastpage": 246,
       "pagecount": 246
@@ -255,7 +255,7 @@
       "category": "an",
       "name": "ဆက္ကနိပါတပါဠိ",
       "short_name": "အံ၊၂၊",
-      "ref_keys": ["အ။ နိ။ ၆။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၆။", "အံ၊၂"],
       "firstpage": 247,
       "lastpage": 393,
       "pagecount": 147
@@ -266,7 +266,7 @@
       "category": "an",
       "name": "သတ္တကနိပါတပါဠိ",
       "short_name": "အံ၊၂၊",
-      "ref_keys": ["အ။ နိ။ ၇။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၇။", "အံ၊၂"],
       "firstpage": 395,
       "lastpage": 513,
       "pagecount": 119
@@ -277,7 +277,7 @@
       "category": "an",
       "name": "အဋ္ဌကနိပါတပါဠိ",
       "short_name": "အံ၊၃၊",
-      "ref_keys": ["အ။ နိ။ ၈။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၈။", "အံ၊၃"],
       "firstpage": 1,
       "lastpage": 162,
       "pagecount": 162
@@ -288,7 +288,7 @@
       "category": "an",
       "name": "နဝကနိပါတပါဠိ",
       "short_name": "အံ၊၃၊",
-      "ref_keys": ["အ။ နိ။ ၉။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၉။", "အံ၊၃"],
       "firstpage": 163,
       "lastpage": 256,
       "pagecount": 94
@@ -299,7 +299,7 @@
       "category": "an",
       "name": "ဒသကနိပါတပါဠိ",
       "short_name": "အံ၊၃၊",
-      "ref_keys": ["အ။ နိ။ ၁၀။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၁၀။", "အံ၊၃"],
       "firstpage": 257,
       "lastpage": 513,
       "pagecount": 257
@@ -310,7 +310,7 @@
       "category": "an",
       "name": "ဧကာဒသကနိပါတပါဠိ",
       "short_name": "အံ၊၃၊",
-      "ref_keys": ["အ။ နိ။ ၁၁။", "", ""],
+      "ref_keys": ["အ။ နိ။ ၁၁။", "အံ၊၃"],
       "firstpage": 515,
       "lastpage": 558,
       "pagecount": 44
@@ -321,7 +321,7 @@
       "category": "ku",
       "name": "ခုဒ္ဒကပါဌပါဠိ",
       "short_name": "ခုဒ္ဒကပါဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ခုဒ္ဒကပါဌ"],
       "firstpage": 1,
       "lastpage": 11,
       "pagecount": 11
@@ -332,7 +332,7 @@
       "category": "ku",
       "name": "ဓမ္မပဒပါဠိ",
       "short_name": "ဓမ္မပဒ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဓမ္မပဒ"],
       "firstpage": 13,
       "lastpage": 76,
       "pagecount": 64
@@ -343,7 +343,7 @@
       "category": "ku",
       "name": "ဥဒါနပါဠိ",
       "short_name": "ဥဒါန၊",
-      "ref_keys": ["ဥဒါ။", "", ""],
+      "ref_keys": ["ဥဒါ။", "ဥဒါန"],
       "firstpage": 77,
       "lastpage": 193,
       "pagecount": 117
@@ -354,7 +354,7 @@
       "category": "ku",
       "name": "ဣတိဝုတ္တကပါဠိ",
       "short_name": "ဣတိဝုတ်၊",
-      "ref_keys": ["ဣတိဝု။", "", ""],
+      "ref_keys": ["ဣတိဝု။", "ဣတိဝုတ်"],
       "firstpage": 195,
       "lastpage": 277,
       "pagecount": 83
@@ -365,7 +365,7 @@
       "category": "ku",
       "name": "သုတ္တနိပါတပါဠိ",
       "short_name": "သုတ္တနိ၊",
-      "ref_keys": ["သု။ နိ။", "", ""],
+      "ref_keys": ["သု။ နိ။", "သုတ္တနိ"],
       "firstpage": 279,
       "lastpage": 455,
       "pagecount": 177
@@ -376,7 +376,7 @@
       "category": "ku",
       "name": "ဝိမာနဝတ္ထုပါဠိ",
       "short_name": "ဝိမာန၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိမာန"],
       "firstpage": 1,
       "lastpage": 125,
       "pagecount": 125
@@ -387,7 +387,7 @@
       "category": "ku",
       "name": "ပေတဝတ္ထုပါဠိ",
       "short_name": "ပေတ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပေတ"],
       "firstpage": 127,
       "lastpage": 218,
       "pagecount": 92
@@ -398,7 +398,7 @@
       "category": "ku",
       "name": "ထေရဂါထာပါဠိ",
       "short_name": "ထေရ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ထေရ"],
       "firstpage": 219,
       "lastpage": 375,
       "pagecount": 357
@@ -409,7 +409,7 @@
       "category": "ku",
       "name": "ထေရီဂါထာပါဠိ",
       "short_name": "ထေရီ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ထေရီ"],
       "firstpage": 377,
       "lastpage": 435,
       "pagecount": 59
@@ -420,7 +420,7 @@
       "category": "ku",
       "name": "အပဒါနပါဠိ (ပ)",
       "short_name": "အပဒါန၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အပဒါန၊၁"],
       "firstpage": 1,
       "lastpage": 445,
       "pagecount": 445
@@ -431,7 +431,7 @@
       "category": "ku",
       "name": "အပဒါနပါဠိ (ဒု)",
       "short_name": "အပဒါန၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အပဒါန၊၂"],
       "firstpage": 1,
       "lastpage": 298,
       "pagecount": 298
@@ -442,7 +442,7 @@
       "category": "ku",
       "name": "ဗုဒ္ဓဝံသပါဠိ",
       "short_name": "ဗုဒ္ဓဝံ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဗုဒ္ဓဝံ"],
       "firstpage": 299,
       "lastpage": 384,
       "pagecount": 86
@@ -453,7 +453,7 @@
       "category": "ku",
       "name": "စရိယာပိဋကပါဠိ",
       "short_name": "စရိယာ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["စရိယာ"],
       "firstpage": 385,
       "lastpage": 420,
       "pagecount": 36
@@ -464,7 +464,7 @@
       "category": "ku",
       "name": "ဇာတကပါဠိ (ပ)",
       "short_name": "ဇာတက၊၁၊",
-      "ref_keys": ["ဇာ။ ၁။", "", ""],
+      "ref_keys": ["ဇာ။ ၁။", "ဇာတက၊၁"],
       "firstpage": 1,
       "lastpage": 400,
       "pagecount": 400
@@ -475,7 +475,7 @@
       "category": "ku",
       "name": "ဇာတကပါဠိ (ဒု)",
       "short_name": "ဇာတက၊၂၊",
-      "ref_keys": ["ဇာ။ ၂။", "", ""],
+      "ref_keys": ["ဇာ။ ၂။", "ဇာတက၊၂"],
       "firstpage": 1,
       "lastpage": 378,
       "pagecount": 378
@@ -486,7 +486,7 @@
       "category": "ku",
       "name": "မဟာနိဒ္ဒေသပါဠိ",
       "short_name": "မဟာနိ၊",
-      "ref_keys": ["မဟာနိ။", "", ""],
+      "ref_keys": ["မဟာနိ။", "မဟာနိ"],
       "firstpage": 1,
       "lastpage": 410,
       "pagecount": 410
@@ -497,7 +497,7 @@
       "category": "ku",
       "name": "စူဠနိဒ္ဒေသပါဠိ",
       "short_name": "စူဠနိ၊",
-      "ref_keys": ["စူဠနိ။", "", ""],
+      "ref_keys": ["စူဠနိ။", "စူဠနိ"],
       "firstpage": 1,
       "lastpage": 307,
       "pagecount": 307
@@ -508,7 +508,7 @@
       "category": "ku",
       "name": "ပဋိသမ္ဘိဒါမဂ္ဂပါဠိ",
       "short_name": "ပဋိသံ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋိသံ"],
       "firstpage": 1,
       "lastpage": 419,
       "pagecount": 419
@@ -519,7 +519,7 @@
       "category": "ku",
       "name": "မိလိန္ဒပဉှပါဠိ",
       "short_name": "မိလိန္ဒ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["မိလိန္ဒ"],
       "firstpage": 1,
       "lastpage": 408,
       "pagecount": 408
@@ -530,7 +530,7 @@
       "category": "ku",
       "name": "နေတ္တိပ္ပကရဏပါဠိ",
       "short_name": "နေတ္တိ၊",
-      "ref_keys": ["နေတ္တိ။", "", ""],
+      "ref_keys": ["နေတ္တိ။", "နေတ္တိ"],
       "firstpage": 1,
       "lastpage": 166,
       "pagecount": 166
@@ -541,7 +541,7 @@
       "category": "ku",
       "name": "ပေဋကောပဒေသပါဠိ",
       "short_name": "ပေဋက၊",
-      "ref_keys": ["ပေဋကော။", "", ""],
+      "ref_keys": ["ပေဋကော။", "ပေဋက"],
       "firstpage": 167,
       "lastpage": 341,
       "pagecount": 175
@@ -552,7 +552,7 @@
       "category": "bi",
       "name": "ဓမ္မသင်္ဂဏီပါဠိ",
       "short_name": "အဘိ၊ဓ၊",
-      "ref_keys": ["ဓ။ သ။", "", ""],
+      "ref_keys": ["ဓ။ သ။", "အဘိ၊ဓ"],
       "firstpage": 1,
       "lastpage": 298,
       "pagecount": 298
@@ -563,7 +563,7 @@
       "category": "bi",
       "name": "ဝိဘင်္ဂပါဠိ",
       "short_name": "အဘိ၊ဝိ၊",
-      "ref_keys": ["ဝိဘ။", "", ""],
+      "ref_keys": ["ဝိဘ။", "အဘိ၊ဝိ"],
       "firstpage": 1,
       "lastpage": 453,
       "pagecount": 453
@@ -574,7 +574,7 @@
       "category": "bi",
       "name": "ဓာတုကထာပါဠိ",
       "short_name": "အဘိ၊ဓာ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အဘိ၊ဓာ"],
       "firstpage": 1,
       "lastpage": 100,
       "pagecount": 100
@@ -585,7 +585,7 @@
       "category": "bi",
       "name": "ပုဂ္ဂလပညတ္တိပါဠိ",
       "short_name": "အဘိ၊ပု၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အဘိ၊ပု"],
       "firstpage": 101,
       "lastpage": 185,
       "pagecount": 85
@@ -596,7 +596,7 @@
       "category": "bi",
       "name": "ကထာဝတ္ထုပါဠိ",
       "short_name": "အဘိ၊က၊",
-      "ref_keys": ["ကထာ။", "", ""],
+      "ref_keys": ["ကထာ။", "အဘိ၊က"],
       "firstpage": 1,
       "lastpage": 454,
       "pagecount": 454
@@ -607,7 +607,7 @@
       "category": "bi",
       "name": "ယမကပါဠိ (ပ)",
       "short_name": "ယမက၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ယမက၊၁"],
       "firstpage": 1,
       "lastpage": 265,
       "pagecount": 265
@@ -618,7 +618,7 @@
       "category": "bi",
       "name": "ယမကပါဠိ (ဒု)",
       "short_name": "ယမက၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ယမက၊၂"],
       "firstpage": 1,
       "lastpage": 316,
       "pagecount": 316
@@ -629,7 +629,7 @@
       "category": "bi",
       "name": "ယမကပါဠိ (တ)",
       "short_name": "ယမက၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ယမက၊၃"],
       "firstpage": 1,
       "lastpage": 330,
       "pagecount": 330
@@ -640,7 +640,7 @@
       "category": "bi",
       "name": "ပဋ္ဌာနပါဠိ (ပ)",
       "short_name": "ပဋ္ဌာန၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋ္ဌာန၊၁"],
       "firstpage": 1,
       "lastpage": 464,
       "pagecount": 464
@@ -651,7 +651,7 @@
       "category": "bi",
       "name": "ပဋ္ဌာနပါဠိ (ဒု)",
       "short_name": "ပဋ္ဌာန၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋ္ဌာန၊၂"],
       "firstpage": 1,
       "lastpage": 493,
       "pagecount": 493
@@ -662,7 +662,7 @@
       "category": "bi",
       "name": "ပဋ္ဌာနပါဠိ (တ)",
       "short_name": "ပဋ္ဌာန၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋ္ဌာန၊၃"],
       "firstpage": 1,
       "lastpage": 605,
       "pagecount": 605
@@ -673,7 +673,7 @@
       "category": "bi",
       "name": "ပဋ္ဌာနပါဠိ (စ)",
       "short_name": "ပဋ္ဌာန၊၄၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋ္ဌာန၊၄"],
       "firstpage": 1,
       "lastpage": 636,
       "pagecount": 636
@@ -684,7 +684,7 @@
       "category": "bi",
       "name": "ပဋ္ဌာနပါဠိ (ပဉ္စ)",
       "short_name": "ပဋ္ဌာန၊၅၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋ္ဌာန၊၅"],
       "firstpage": 1,
       "lastpage": 442,
       "pagecount": 442
@@ -695,7 +695,7 @@
       "category": "vi",
       "name": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ)",
       "short_name": "ဝိ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 345,
       "pagecount": 345
@@ -706,7 +706,7 @@
       "category": "vi",
       "name": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု)",
       "short_name": "ဝိ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 312,
       "pagecount": 312
@@ -717,7 +717,7 @@
       "category": "vi",
       "name": "ပါစိတ္တိယအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 231,
       "pagecount": 231
@@ -728,7 +728,7 @@
       "category": "vi",
       "name": "မဟာဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊ဋ္ဌ၊၃"],
       "firstpage": 233,
       "lastpage": 437,
       "pagecount": 205
@@ -739,7 +739,7 @@
       "category": "vi",
       "name": "စူဠဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၄၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊ဋ္ဌ၊၄"],
       "firstpage": 1,
       "lastpage": 136,
       "pagecount": 136
@@ -750,7 +750,7 @@
       "category": "vi",
       "name": "ပရိဝါရအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၄၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိ၊ဋ္ဌ၊၄"],
       "firstpage": 137,
       "lastpage": 265,
       "pagecount": 129
@@ -761,7 +761,7 @@
       "category": "di",
       "name": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ",
       "short_name": "ဒီ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဒီ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 338,
       "pagecount": 338
@@ -772,7 +772,7 @@
       "category": "di",
       "name": "မဟာဝဂ္ဂဋ္ဌကထာ",
       "short_name": "ဒီ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဒီ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 403,
       "pagecount": 403
@@ -783,7 +783,7 @@
       "category": "di",
       "name": "ပါထိကဝဂ္ဂဋ္ဌကထာ",
       "short_name": "ဒီ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဒီ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 251,
       "pagecount": 251
@@ -794,7 +794,7 @@
       "category": "ma",
       "name": "မူလပဏ္ဏာသအဋ္ဌကထာ (ပ)",
       "short_name": "မ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["မ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 398,
       "pagecount": 398
@@ -805,7 +805,7 @@
       "category": "ma",
       "name": "မူလပဏ္ဏာသအဋ္ဌကထာ (ဒု)",
       "short_name": "မ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["မ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 320,
       "pagecount": 320
@@ -816,7 +816,7 @@
       "category": "ma",
       "name": "မဇ္ဈိမပဏ္ဏာသအဋ္ဌကထာ",
       "short_name": "မ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["မ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 309,
       "pagecount": 309
@@ -827,7 +827,7 @@
       "category": "ma",
       "name": "ဥပရိပဏ္ဏာသအဋ္ဌကထာ",
       "short_name": "မ၊ဋ္ဌ၊၄၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["မ၊ဋ္ဌ၊၄"],
       "firstpage": 1,
       "lastpage": 254,
       "pagecount": 254
@@ -838,7 +838,7 @@
       "category": "sa",
       "name": "သဂါထာဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သံ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 325,
       "pagecount": 325
@@ -849,7 +849,7 @@
       "category": "sa",
       "name": "နိဒါနဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သံ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 227,
       "pagecount": 227
@@ -860,7 +860,7 @@
       "category": "sa",
       "name": "ခန္ဓဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သံ၊ဋ္ဌ၊၂"],
       "firstpage": 229,
       "lastpage": 324,
       "pagecount": 96
@@ -871,7 +871,7 @@
       "category": "sa",
       "name": "သဠာယတနဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သံ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 152,
       "pagecount": 152
@@ -882,7 +882,7 @@
       "category": "sa",
       "name": "မဟာဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သံ၊ဋ္ဌ၊၃"],
       "firstpage": 153,
       "lastpage": 341,
       "pagecount": 189
@@ -893,7 +893,7 @@
       "category": "an",
       "name": "ဧကကနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အံ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 416,
       "pagecount": 416
@@ -904,7 +904,7 @@
       "category": "an",
       "name": "ဒုကာဒိနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အံ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 397,
       "pagecount": 397
@@ -915,7 +915,7 @@
       "category": "an",
       "name": "ပဉ္စကာဒိနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အံ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 191,
       "pagecount": 191
@@ -926,7 +926,7 @@
       "category": "an",
       "name": "အဋ္ဌကာဒိနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အံ၊ဋ္ဌ၊၃"],
       "firstpage": 193,
       "lastpage": 357,
       "pagecount": 165
@@ -937,7 +937,7 @@
       "category": "ku",
       "name": "ခုဒ္ဒကပါဌအဋ္ဌကထာ",
       "short_name": "ခုဒ္ဒက၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ခုဒ္ဒက၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 216,
       "pagecount": 216
@@ -948,7 +948,7 @@
       "category": "ku",
       "name": "ဓမ္မပဒအဋ္ဌကထာ (ပ)",
       "short_name": "ဓမ္မပဒ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဓမ္မပဒ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 447,
       "pagecount": 447
@@ -959,7 +959,7 @@
       "category": "ku",
       "name": "ဓမ္မပဒအဋ္ဌကထာ (ဒု)",
       "short_name": "ဓမ္မပဒ၊ဋ္ဌ၊၂။",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဓမ္မပဒ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 456,
       "pagecount": 456
@@ -970,7 +970,7 @@
       "category": "ku",
       "name": "ဥဒါနအဋ္ဌကထာ",
       "short_name": "ဥဒါန၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဥဒါန၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 393,
       "pagecount": 393
@@ -981,7 +981,7 @@
       "category": "ku",
       "name": "ဣတိဝုတ္တကအဋ္ဌကထာ",
       "short_name": "ဣတိဝုတ်၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဣတိဝုတ်၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 355,
       "pagecount": 355
@@ -992,7 +992,7 @@
       "category": "ku",
       "name": "သုတ္တနိပါတအဋ္ဌကထာ (ပ)",
       "short_name": "သုတ္တနိ၊ဋ္ဌ၊၁",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သုတ္တနိ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 314,
       "pagecount": 314
@@ -1003,7 +1003,7 @@
       "category": "ku",
       "name": "သုတ္တနိပါတအဋ္ဌကထာ (ဒု)",
       "short_name": "သုတ္တနိ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သုတ္တနိ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 324,
       "pagecount": 324
@@ -1014,7 +1014,7 @@
       "category": "ku",
       "name": "ဝိမာနဝတ္ထုအဋ္ဌကထာ",
       "short_name": "ဝိမာန၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိမာန၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 335,
       "pagecount": 335
@@ -1025,7 +1025,7 @@
       "category": "ku",
       "name": "ပေတဝတ္ထုအဋ္ဌကထာ",
       "short_name": "ပေတ၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပေတ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 270,
       "pagecount": 270
@@ -1036,7 +1036,7 @@
       "category": "ku",
       "name": "ထေရဂါထာအဋ္ဌကထာ (ပ)",
       "short_name": "ထေရ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ထေရ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 485,
       "pagecount": 485
@@ -1047,7 +1047,7 @@
       "category": "ku",
       "name": "ထေရဂါထာအဋ္ဌကထာ (ဒု)",
       "short_name": "ထေရ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ထေရ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 546,
       "pagecount": 546
@@ -1058,7 +1058,7 @@
       "category": "ku",
       "name": "ထေရီဂါထာအဋ္ဌကထာ",
       "short_name": "ထေရီ၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ထေရီ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 305,
       "pagecount": 305
@@ -1069,7 +1069,7 @@
       "category": "ku",
       "name": "အပဒါနအဋ္ဌကထာ (ပ)",
       "short_name": "အပဒါန၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အပဒါန၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 352,
       "pagecount": 352
@@ -1080,7 +1080,7 @@
       "category": "ku",
       "name": "အပဒါနအဋ္ဌကထာ (ဒု)",
       "short_name": "အပဒါန၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အပဒါန၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 303,
       "pagecount": 303
@@ -1091,7 +1091,7 @@
       "category": "ku",
       "name": "ဗုဒ္ဓဝံသအဋ္ဌကထာ",
       "short_name": "ဗုဒ္ဓဝံ၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဗုဒ္ဓဝံ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 354,
       "pagecount": 354
@@ -1102,7 +1102,7 @@
       "category": "ku",
       "name": "စရိယာပိဋကအဋ္ဌကထာ",
       "short_name": "စရိယာ၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["စရိယာ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 328,
       "pagecount": 328
@@ -1113,7 +1113,7 @@
       "category": "ku",
       "name": "မဟာနိဒ္ဒေသအဋ္ဌကထာ",
       "short_name": "မဟာနိ၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["မဟာနိ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 419,
       "pagecount": 419
@@ -1124,7 +1124,7 @@
       "category": "ku",
       "name": "စူဠနိဒ္ဒေသအဋ္ဌကထာ",
       "short_name": "စူဋ္ဌနိ၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["စူဠနိ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 140,
       "pagecount": 140
@@ -1135,7 +1135,7 @@
       "category": "ku",
       "name": "ပဋိသမ္ဘိဒါမဂ္ဂအဋ္ဌကထာ (ပ)",
       "short_name": "ပဋိသံ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋိသံ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 345,
       "pagecount": 345
@@ -1146,7 +1146,7 @@
       "category": "ku",
       "name": "ပဋိသမ္ဘိဒါမဂ္ဂအဋ္ဌကထာ (ဒု)",
       "short_name": "ပဋိသံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ပဋိသံ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 323,
       "pagecount": 323
@@ -1157,7 +1157,7 @@
       "category": "ku",
       "name": "နေတ္တိပ္ပကရဏအဋ္ဌကထာ",
       "short_name": "နေတ္တိ၊ဋ္ဌ၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["နေတ္တိ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 276,
       "pagecount": 276
@@ -1168,7 +1168,7 @@
       "category": "ku",
       "name": "ဇာတကအဋ္ဌကထာ (ပ)",
       "short_name": "ဇာတက၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဇာတက၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 538,
       "pagecount": 538
@@ -1179,7 +1179,7 @@
       "category": "ku",
       "name": "ဇာတကအဋ္ဌကထာ (ဒု)",
       "short_name": "ဇာတက၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဇာတက၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 408,
       "pagecount": 408
@@ -1190,7 +1190,7 @@
       "category": "ku",
       "name": "ဇာတကအဋ္ဌကထာ (တ)",
       "short_name": "ဇာတက၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဇာတက၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 517,
       "pagecount": 517
@@ -1201,7 +1201,7 @@
       "category": "ku",
       "name": "ဇာတကအဋ္ဌကထာ (စ)",
       "short_name": "ဇာတက၊ဋ္ဌ၊၄၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဇာတက၊ဋ္ဌ၊၄"],
       "firstpage": 1,
       "lastpage": 504,
       "pagecount": 504
@@ -1212,7 +1212,7 @@
       "category": "ku",
       "name": "ဇာတကအဋ္ဌကထာ (ပဉ္စ)",
       "short_name": "ဇာတက၊ဋ္ဌ၊၅၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဇာတက၊ဋ္ဌ၊၅"],
       "firstpage": 1,
       "lastpage": 553,
       "pagecount": 553
@@ -1223,7 +1223,7 @@
       "category": "ku",
       "name": "ဇာတကအဋ္ဌကထာ (ဆ)",
       "short_name": "ဇာတက၊ဋ္ဌ၊၆၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဇာတက၊ဋ္ဌ၊၆"],
       "firstpage": 1,
       "lastpage": 332,
       "pagecount": 332
@@ -1234,7 +1234,7 @@
       "category": "ku",
       "name": "ဇာတကအဋ္ဌကထာ (သတ္တ)",
       "short_name": "ဇာတက၊ဋ္ဌ၊၇၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဇာတက၊ဋ္ဌ၊၇"],
       "firstpage": 1,
       "lastpage": 387,
       "pagecount": 387
@@ -1245,7 +1245,7 @@
       "category": "bi",
       "name": "ဓမ္မသင်္ဂဏီအဋ္ဌကထာ",
       "short_name": "အဘိ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အဘိ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 454,
       "pagecount": 454
@@ -1256,7 +1256,7 @@
       "category": "bi",
       "name": "ဝိဘင်္ဂအဋ္ဌကထာ",
       "short_name": "အဘိ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အဘိ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 508,
       "pagecount": 508
@@ -1267,7 +1267,7 @@
       "category": "bi",
       "name": "ပဉ္စပကရဏအဋ္ဌကထာ",
       "short_name": "အဘိ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["အဘိ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 499,
       "pagecount": 499
@@ -1278,7 +1278,7 @@
       "category": "vi",
       "name": "သာရတ္ထဒီပနီဋီကာ (ပ)",
       "short_name": "သာရတ္ထ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သာရတ္ထ၊၁"],
       "firstpage": 1,
       "lastpage": 460,
       "pagecount": 460
@@ -1289,7 +1289,7 @@
       "category": "vi",
       "name": "သာရတ္ထဒီပနီဋီကာ (ဒု)",
       "short_name": "သာရတ္ထ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သာရတ္ထ၊၂"],
       "firstpage": 1,
       "lastpage": 448,
       "pagecount": 448
@@ -1300,7 +1300,7 @@
       "category": "vi",
       "name": "သာရတ္ထဒီပနီဋီကာ (တ)",
       "short_name": "သာရတ္ထ၊၃၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["သာရတ္ထ၊၃"],
       "firstpage": 1,
       "lastpage": 496,
       "pagecount": 496
@@ -1311,7 +1311,7 @@
       "category": "vi",
       "name": "ဝဇိရဗုဒ္ဓိဋီကာ",
       "short_name": "ဝဇိရ",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝဇိရ"],
       "firstpage": 1,
       "lastpage": 585,
       "pagecount": 585
@@ -1322,7 +1322,7 @@
       "category": "vi",
       "name": "ဝိမတိဝိနောဒနီဋီကာ (ပ)",
       "short_name": "ဝိမတိ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိမတိ၊၁"],
       "firstpage": 1,
       "lastpage": 362,
       "pagecount": 362
@@ -1333,7 +1333,7 @@
       "category": "vi",
       "name": "ဝိမတိဝိနောဒနီဋီကာ (ဒု)",
       "short_name": "ဝိမတိ၊၂၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဝိမတိ၊၂"],
       "firstpage": 1,
       "lastpage": 322,
       "pagecount": 322
@@ -1344,791 +1344,779 @@
       "category": "di",
       "name": "သီလက္ခန္ဓဝဂ္ဂဋီကာ",
       "short_name": "ဒီ၊ဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
+      "ref_keys": ["ဒီ၊ဋီ၊၁"],
       "firstpage": 1,
       "lastpage": 405,
       "pagecount": 405
     },
     {
-      "id": "tika_di_01_02",
-      "basket": "tika",
-      "category": "di",
-      "name": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ပ)",
-      "short_name": "သီဋီသစ်၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 500,
-      "pagecount": 500
-    },
-    {
-      "id": "tika_di_01_03",
-      "basket": "tika",
-      "category": "di",
-      "name": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ဒု)",
-      "short_name": "သီဋီသစ်၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 437,
-      "pagecount": 437
-    },
-    {
-      "id": "tika_di_02",
-      "basket": "tika",
-      "category": "di",
-      "name": "မဟာဝဂ္ဂဋီကာ",
-      "short_name": "ဒီ၊ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 358,
-      "pagecount": 358
-    },
-    {
-      "id": "tika_di_03",
-      "basket": "tika",
-      "category": "di",
-      "name": "ပါထိကဝဂ္ဂဋီကာ",
-      "short_name": "ဒီ၊ဋီ၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 292,
-      "pagecount": 292
-    },
-    {
-      "id": "tika_ma_01",
-      "basket": "tika",
-      "category": "ma",
-      "name": "မူလပဏ္ဏာသဋီကာ (ပ)",
-      "short_name": "မ၊ဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 394,
-      "pagecount": 394
-    },
-    {
-      "id": "tika_ma_02",
-      "basket": "tika",
-      "category": "ma",
-      "name": "မူလပဏ္ဏာသဋီကာ (ဒု)",
-      "short_name": "မ၊ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 324,
-      "pagecount": 324
-    },
-    {
-      "id": "tika_ma_03",
-      "basket": "tika",
-      "category": "ma",
-      "name": "မဇ္ဈိမပဏ္ဏာသဋီကာ",
-      "short_name": "မ၊ဋီ၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 209,
-      "pagecount": 209
-    },
-    {
-      "id": "tika_ma_04",
-      "basket": "tika",
-      "category": "ma",
-      "name": "ဥပရိပဏ္ဏာသဋီကာ",
-      "short_name": "မ၊ဋီ၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 211,
-      "lastpage": 442,
-      "pagecount": 232
-    },
-    {
-      "id": "tika_sa_01",
-      "basket": "tika",
-      "category": "sa",
-      "name": "သဂါထာဝဂ္ဂဋီကာ",
-      "short_name": "သံ၊ဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 345,
-      "pagecount": 345
-    },
-    {
-      "id": "tika_sa_02",
-      "basket": "tika",
-      "category": "sa",
-      "name": "နိဒါနဝဂ္ဂဋီကာ",
-      "short_name": "သံ၊ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 200,
-      "pagecount": 200
-    },
-    {
-      "id": "tika_sa_03",
-      "basket": "tika",
-      "category": "sa",
-      "name": "ခန္ဓဝဂ္ဂဋီကာ",
-      "short_name": "သံ၊ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 201,
-      "lastpage": 279,
-      "pagecount": 79
-    },
-    {
-      "id": "tika_sa_04",
-      "basket": "tika",
-      "category": "sa",
-      "name": "သဠာယတနဝဂ္ဂဋီကာ",
-      "short_name": "သံ၊ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 281,
-      "lastpage": 391,
-      "pagecount": 111
-    },
-    {
-      "id": "tika_sa_05",
-      "basket": "tika",
-      "category": "sa",
-      "name": "မဟာဝဂ္ဂဋီကာ",
-      "short_name": "သံ၊ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 393,
-      "lastpage": 551,
-      "pagecount": 159
-    },
-    {
-      "id": "tika_an_01",
-      "basket": "tika",
-      "category": "an",
-      "name": "ဧကကနိပါတဋီကာ",
-      "short_name": "အံ၊ဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 288,
-      "pagecount": 288
-    },
-    {
-      "id": "tika_an_02",
-      "basket": "tika",
-      "category": "an",
-      "name": "ဒုကာဒိနိပါတဋီကာ",
-      "short_name": "အံ၊ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 396,
-      "pagecount": 396
-    },
-    {
-      "id": "tika_an_03",
-      "basket": "tika",
-      "category": "an",
-      "name": "ပဉ္စကာဒိနိပါတဋီကာ",
-      "short_name": "အံ၊ဋီ၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 202,
-      "pagecount": 202
-    },
-    {
-      "id": "tika_an_04",
-      "basket": "tika",
-      "category": "an",
-      "name": "အဋ္ဌကာဒိနိပါတဋီကာ",
-      "short_name": "အံ၊ဋီ၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 203,
-      "lastpage": 371,
-      "pagecount": 169
-    },
-    {
-      "id": "tika_ku_20_01",
-      "basket": "tika",
-      "category": "ku",
-      "name": "နေတ္တိပ္ပကရဏဋီကာ",
-      "short_name": "နေတ္တိ၊ဋီ၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 151,
-      "pagecount": 151
-    },
-    {
-      "id": "tika_ku_20_02",
-      "basket": "tika",
-      "category": "ku",
-      "name": "နေတ္တိဝိဘာဝိနီ",
-      "short_name": "နေတ္တိဝိဘာဝိနီ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 356,
-      "pagecount": 356
-    },
-    {
-      "id": "tika_ku_zat_01",
-      "basket": "tika",
-      "category": "ku",
-      "name": "ဇာတကအဘိနဝဋီကာ-ပ",
-      "short_name": "ဇာတ်ဋီသစ်၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 552,
-      "pagecount": 552
-    },
-    {
-      "id": "tika_ku_zat_02",
-      "basket": "tika",
-      "category": "ku",
-      "name": "ဇာတကအဘိနဝဋီကာ-ဒု",
-      "short_name": "ဇာတ်ဋီသစ်၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 563,
-      "pagecount": 563
-    },
-    {
-      "id": "tika_ku_zat_03",
-      "basket": "tika",
-      "category": "ku",
-      "name": "ဇာတကအဘိနဝဋီကာ-တ",
-      "short_name": "ဇာတ်ဋီသစ်၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 336,
-      "pagecount": 336
-    },
-    {
-      "id": "tika_ku_zat_04",
-      "basket": "tika",
-      "category": "ku",
-      "name": "ဇာတကအဘိနဝဋီကာ-စတု",
-      "short_name": "ဇာတ်ဋီသစ်၊၄၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 257,
-      "pagecount": 257
-    },
-    {
-      "id": "tika_ku_zat_05",
-      "basket": "tika",
-      "category": "ku",
-      "name": "ဇာတကအဘိနဝဋီကာ-ပဉ္စ",
-      "short_name": "ဇာတ်ဋီသစ်၊၅၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 352,
-      "pagecount": 352
-    },
-    {
-      "id": "tika_bi_01",
-      "basket": "tika",
-      "category": "bi",
-      "name": "ဓမ္မသင်္ဂဏီမူလဋီကာ",
-      "short_name": "မူလဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 203,
-      "pagecount": 203
-    },
-    {
-      "id": "tika_bi_02_01",
-      "basket": "tika",
-      "category": "bi",
-      "name": "ဝိဘင်္ဂမူလဋီကာ (ပ)",
-      "short_name": "မူလဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 235,
-      "pagecount": 235
-    },
-    {
-      "id": "tika_bi_02_02",
-      "basket": "tika",
-      "category": "bi",
-      "name": "ဝိဘင်္ဂအနုဋီကာ (ဒု)",
-      "short_name": "အနုဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 229,
-      "pagecount": 229
-    },
-    {
-      "id": "tika_bi_03",
-      "basket": "tika",
-      "category": "bi",
-      "name": "ပဉ္စပကရဏမူလဋီကာ",
-      "short_name": "မူလဋီ၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 248,
-      "pagecount": 248
-    },
-    {
-      "id": "tika_bi_04",
-      "basket": "tika",
-      "category": "bi",
-      "name": "ဓမ္မသင်္ဂဏီအနုဋီကာ",
-      "short_name": "အနုဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 220,
-      "pagecount": 220
-    },
-    {
-      "id": "tika_bi_05",
-      "basket": "tika",
-      "category": "bi",
-      "name": "ပဉ္စပကရဏအနုဋီကာ",
-      "short_name": "အနုဋီ၊၃၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 323,
-      "pagecount": 323
-    },
-    {
-      "id": "annya_vi_01_01",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဒွေမာတိကာ",
-      "short_name": "ဒွေမာတိကာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 129,
-      "pagecount": 129
-    },
-    {
-      "id": "annya_vi_01_02",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ",
-      "short_name": "ကင်္ခါ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 83,
-      "lastpage": 357,
-      "pagecount": 275
-    },
-    {
-      "id": "annya_vi_01_03",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ကင်္ခါဝိတရဏီပုရာဏဋီကာ",
-      "short_name": "ကင်္ခါဋီဟောင်း",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 117,
-      "pagecount": 117
-    },
-    {
-      "id": "annya_vi_01_04",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ကင်္ခါဝိတရဏီအဘိနဝဋီကာ",
-      "short_name": "ကင်္ခါဋီသစ်",
-      "ref_keys": ["", "", ""],
-      "firstpage": 119,
-      "lastpage": 489,
-      "pagecount": 371
-    },
-    {
-      "id": "annya_vi_02",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဝိနယသင်္ဂဟအဋ္ဌကထာ",
-      "short_name": "ဝိနယသင်္ဂဟ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 468,
-      "pagecount": 468
-    },
-    {
-      "id": "annya_vi_03",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဝိနယဝိနိစ္ဆယော",
-      "short_name": "ဝိနယဝိနိစ္ဆယ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 304,
-      "pagecount": 304
-    },
-    {
-      "id": "annya_vi_04",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဥတ္တရဝိနိစ္ဆယော",
-      "short_name": "ဥတ္တရဝိနိစ္ဆယ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 305,
-      "lastpage": 395,
-      "pagecount": 91
-    },
-    {
-      "id": "annya_vi_05_01",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ခုဒ္ဒသိက္ခာ",
-      "short_name": "ခုဒ္ဒသိက္ခာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 131,
-      "lastpage": 213,
-      "pagecount": 83
-    },
-    {
-      "id": "annya_vi_05_02",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ခုဒ္ဒသိက္ခာပုရာဏဋီကာ",
-      "short_name": "ခုဒ္ဒသိက္ခာဋီဟောင်း",
-      "ref_keys": ["", "", ""],
-      "firstpage": 59,
-      "lastpage": 235,
-      "pagecount": 177
-    },
-    {
-      "id": "annya_vi_05_03",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ခုဒ္ဒသိက္ခာအဘိနဝဋီကာ",
-      "short_name": "ခုဒ္ဒသိက္ခာဋီသစ်",
-      "ref_keys": ["", "", ""],
-      "firstpage": 237,
-      "lastpage": 441,
-      "pagecount": 205
-    },
-    {
-      "id": "annya_vi_06_01",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "မူလသိက္ခာ",
-      "short_name": "မူလသိက္ခာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 215,
-      "lastpage": 234,
-      "pagecount": 20
-    },
-    {
-      "id": "annya_vi_06_02",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "မူလသိက္ခာဋီကာ",
-      "short_name": "မူလသိက္ခာဋီကာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 457,
-      "lastpage": 498,
-      "pagecount": 42
-    },
-    {
-      "id": "annya_vi_07",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဝိနယာလင်္ကာရဋီကာ (ပ)",
-      "short_name": "ဝိလင်ဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 424,
-      "pagecount": 424
-    },
-    {
-      "id": "annya_vi_08",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဝိနယာလင်္ကာရဋီကာ (ဒု)",
-      "short_name": "ဝိလင်ဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 434,
-      "pagecount": 434
-    },
-    {
-      "id": "annya_vi_10",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဝိနယဝိနိစ္ဆယဋီကာ (ပ)",
-      "short_name": "ဝိနယဝိနိစ္ဆယဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 571,
-      "pagecount": 571
-    },
-    {
-      "id": "annya_vi_11",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ဝိနယဝိနိစ္ဆယဋီကာ (ဒု)",
-      "short_name": "ဝိနယဝိနိစ္ဆယဋီ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 530,
-      "pagecount": 530
-    },
-    {
-      "id": "annya_vi_12",
-      "basket": "annya",
-      "category": "annya_vi",
-      "name": "ပါစိတျာဒိယောဇနာ",
-      "short_name": "ပါစိတျာဒိယောဇနာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 655,
-      "pagecount": 655
-    },
-    {
-      "id": "annya_bi_01",
-      "basket": "annya",
-      "category": "annya_bi",
-      "name": "ဝိသုဒ္ဓိမဂ္ဂေါ (ပ)",
-      "short_name": "ဝိသုဒ္ဓိ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 370,
-      "pagecount": 370
-    },
-    {
-      "id": "annya_bi_02",
-      "basket": "annya",
-      "category": "annya_bi",
-      "name": "ဝိသုဒ္ဓိမဂ္ဂေါ (ဒု)",
-      "short_name": "ဝိသုဒ္ဓိ၊၂၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 356,
-      "pagecount": 356
-    },
-    {
-      "id": "annya_bi_03",
-      "basket": "annya",
-      "category": "annya_bi",
-      "name": "ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ (ပ)",
-      "short_name": "မဟာဋီ၊၁၊",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 461,
-      "pagecount": 461
-    },
-    {
-      "id": "annya_bi_04",
-      "basket": "annya",
-      "category": "annya_bi",
-      "name": "ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ (ဒု)",
-      "short_name": "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 535,
-      "pagecount": 535
-    },
-    {
-      "id": "annya_bi_05",
-      "basket": "annya",
-      "category": "annya_bi",
-      "name": "အဘိဓမ္မတ္ထသင်္ဂဟော",
-      "short_name": "သင်္ဂြိုဟ်",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 167,
-      "pagecount": 167
-    },
-    {
-      "id": "annya_bi_06",
-      "basket": "annya",
-      "category": "annya_bi",
-      "name": "အဘိဓမ္မတ္ထဝိဘာဝိနီဋီကာ",
-      "short_name": "ဋီကာကျော်",
-      "ref_keys": ["", "", ""],
-      "firstpage": 69,
-      "lastpage": 279,
-      "pagecount": 211
-    },
-    {
-      "id": "annya_bi_07",
-      "basket": "annya",
-      "category": "annya_bi",
-      "name": "ပရမတ္ထဒီပနီ",
-      "short_name": "ပရမတ္ထဒီပနီ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 456,
-      "pagecount": 456
-    },
-    {
-      "id": "annya_sadda_01",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "ကစ္စာယနဗျာကရဏံ",
-      "short_name": "ကစ္စည်း",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 315,
-      "pagecount": 315
-    },
-    {
-      "id": "annya_sadda_02",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "ပဒရူပသိဒ္ဓိ",
-      "short_name": "ရူ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 422,
-      "pagecount": 422
-    },
-    {
-      "id": "annya_sadda_03",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "မောဂ္ဂလ္လာနသုတ္တပါဌော",
-      "short_name": "မောဂ္ဂလာန်",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 292,
-      "pagecount": 292
-    },
-    {
-      "id": "annya_sadda_05",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "မောဂ္ဂလ္လာနပဉ္စိကာဋီကာ",
-      "short_name": "မောဂ်ပဉ္စိကာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 286,
-      "pagecount": 286
-    },
-    {
-      "id": "annya_sadda_06",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "ပယောဂသိဒ္ဓိပါဠိ",
-      "short_name": "ပယောဂသိဒ္ဓိ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 304,
-      "pagecount": 304
-    },
-    {
-      "id": "annya_sadda_07",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "သဒ္ဒနီတိပ္ပကရဏံ (ပဒမာလာ)",
-      "short_name": "ပဒမာလာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 418,
-      "pagecount": 418
-    },
-    {
-      "id": "annya_sadda_08",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "သဒ္ဒနီတိပ္ပကရဏံ (ဓာတုမာလာ)",
-      "short_name": "ဓာတုမာလာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 391,
-      "pagecount": 391
-    },
-    {
-      "id": "annya_sadda_09",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "သဒ္ဒနီတိပ္ပကရဏံ (သုတ္တမာလာ)",
-      "short_name": "သုတ္တမာလာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 488,
-      "pagecount": 488
-    },
-    {
-      "id": "annya_sadda_10",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "နိရုတ္တိဒီပနီပါဌ",
-      "short_name": "နိရုတ္တိဒီပနီ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 564,
-      "pagecount": 564
-    },
-    {
-      "id": "annya_sadda_11",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "အဘိဓာနပ္ပဒီပိကာ",
-      "short_name": "ဓာန်",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 151,
-      "pagecount": 151
-    },
-    {
-      "id": "annya_sadda_12",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "အဘိဓာနပ္ပဒီပိကာဋီကာ",
-      "short_name": "ဓာန်ဋီ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 621,
-      "pagecount": 621
-    },
-    {
-      "id": "annya_sadda_13",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "ဝုတ္တောဒယံ",
-      "short_name": "ဆန်း",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 35,
-      "pagecount": 35
-    },
-    {
-      "id": "annya_sadda_14",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "သုဗောဓာလင်္ကာရော",
-      "short_name": "အလင်္ကာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 77,
-      "pagecount": 77
-    },
-    {
-      "id": "annya_sadda_15",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "သုဗောဓာလင်္ကာရဋီကာ",
-      "short_name": "အလင်္ကာဋီ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 362,
-      "pagecount": 362
-    },
-    {
-      "id": "annya_sadda_16",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "ကစ္စာယနသာရ",
-      "short_name": "ကစ္စာယနသာရ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 15,
-      "pagecount": 15
-    },
-    {
-      "id": "annya_sadda_17",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "သဒ္ဒတ္ထဘေဒစိန္တာ",
-      "short_name": "ဘေဒစိန္တာ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 81,
-      "pagecount": 81
-    },
-    {
-      "id": "annya_sadda_18",
-      "basket": "annya",
-      "category": "annya_sadda",
-      "name": "မုခမတ္တဒီပနီ - နျာသ",
-      "short_name": "နျာသ",
-      "ref_keys": ["", "", ""],
-      "firstpage": 1,
-      "lastpage": 461,
-      "pagecount": 461
-    }
-  ]
-}
+    "id": "tika_di_01_03",
+    "basket": "tika",
+    "category": "di",
+    "name": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ဒု)",
+    "short_name": "သီဋီသစ်၊၂၊",
+    - "ref_keys": ["သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ", "သီဋီသစ်", "၂"],
+    "firstpage": 1,
+    "lastpage": 437,
+    "pagecount": 437
+  },
+  {
+    "id": "tika_di_02",
+    "basket": "tika",
+    "category": "di",
+    "name": "မဟာဝဂ္ဂဋီကာ",
+    "short_name": "ဒီ၊ဋီ၊၂၊",
+    - "ref_keys": ["မဟာဝဂ္ဂဋီကာ", "ဒီ၊ဋီ၊၂", "ဒီဃနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 358,
+    "pagecount": 358
+  },
+  {
+    "id": "tika_di_03",
+    "basket": "tika",
+    "category": "di",
+    "name": "ပါထိကဝဂ္ဂဋီကာ",
+    "short_name": "ဒီ၊ဋီ၊၃၊",
+    - "ref_keys": ["ပါထိကဝဂ္ဂဋီကာ", "ဒီ၊ဋီ၊၃", "ဒီဃနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 292,
+    "pagecount": 292
+  },
+  {
+    "id": "tika_ma_01",
+    "basket": "tika",
+    "category": "ma",
+    "name": "မူလပဏ္ဏာသဋီကာ (ပ)",
+    "short_name": "မ၊ဋီ၊၁၊",
+    - "ref_keys": ["မူလပဏ္ဏာသဋီကာ", "မ၊ဋီ၊၁", "မဇ္ဈိမနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 394,
+    "pagecount": 394
+  },
+  {
+    "id": "tika_ma_02",
+    "basket": "tika",
+    "category": "ma",
+    "name": "မူလပဏ္ဏာသဋီကာ (ဒု)",
+    "short_name": "မ၊ဋီ၊၂၊",
+    - "ref_keys": ["မူလပဏ္ဏာသဋီကာ", "မ၊ဋီ၊၂", "မဇ္ဈိမနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 324,
+    "pagecount": 324
+  },
+  {
+    "id": "tika_ma_03",
+    "basket": "tika",
+    "category": "ma",
+    "name": "မဇ္ဈိမပဏ္ဏာသဋီကာ",
+    "short_name": "မ၊ဋီ၊၃၊",
+    - "ref_keys": ["မဇ္ဈိမပဏ္ဏာသဋီကာ", "မ၊ဋီ၊၃", "မဇ္ဈိမနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 209,
+    "pagecount": 209
+  },
+  {
+    "id": "tika_ma_04",
+    "basket": "tika",
+    "category": "ma",
+    "name": "ဥပရိပဏ္ဏာသဋီကာ",
+    "short_name": "မ၊ဋီ၊၃၊",
+    - "ref_keys": ["ဥပရိပဏ္ဏာသဋီကာ", "မ၊ဋီ၊၃", "မဇ္ဈိမနိကာယဋီကာ"],
+    "firstpage": 211,
+    "lastpage": 442,
+    "pagecount": 232
+  },
+  {
+    "id": "tika_sa_01",
+    "basket": "tika",
+    "category": "sa",
+    "name": "သဂါထာဝဂ္ဂဋီကာ",
+    "short_name": "သံ၊ဋီ၊၁၊",
+    - "ref_keys": ["သဂါထာဝဂ္ဂဋီကာ", "သံ၊ဋီ၊၁", "သံယုတ္တနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 345,
+    "pagecount": 345
+  },
+  {
+    "id": "tika_sa_02",
+    "basket": "tika",
+    "category": "sa",
+    "name": "နိဒါနဝဂ္ဂဋီကာ",
+    "short_name": "သံ၊ဋီ၊၂၊",
+    - "ref_keys": ["နိဒါနဝဂ္ဂဋီကာ", "သံ၊ဋီ၊၂", "သံယုတ္တနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 200,
+    "pagecount": 200
+  },
+  {
+    "id": "tika_sa_03",
+    "basket": "tika",
+    "category": "sa",
+    "name": "ခန္ဓဝဂ္ဂဋီကာ",
+    "short_name": "သံ၊ဋီ၊၂၊",
+    - "ref_keys": ["ခန္ဓဝဂ္ဂဋီကာ", "သံ၊ဋီ၊၂", "သံယုတ္တနိကာယဋီကာ"],
+    "firstpage": 201,
+    "lastpage": 279,
+    "pagecount": 79
+  },
+  {
+    "id": "tika_sa_04",
+    "basket": "tika",
+    "category": "sa",
+    "name": "သဠာယတနဝဂ္ဂဋီကာ",
+    "short_name": "သံ၊ဋီ၊၂၊",
+    - "ref_keys": ["သဠာယတနဝဂ္ဂဋီကာ", "သံ၊ဋီ၊၂", "သံယုတ္တနိကာယဋီကာ"],
+    "firstpage": 281,
+    "lastpage": 391,
+    "pagecount": 111
+  },
+  {
+    "id": "tika_sa_05",
+    "basket": "tika",
+    "category": "sa",
+    "name": "မဟာဝဂ္ဂဋီကာ",
+    "short_name": "သံ၊ဋီ၊၂၊",
+    - "ref_keys": ["မဟာဝဂ္ဂဋီကာ", "သံ၊ဋီ၊၂", "သံယုတ္တနိကာယဋီကာ"],
+    "firstpage": 393,
+    "lastpage": 551,
+    "pagecount": 159
+  },
+  {
+    "id": "tika_an_01",
+    "basket": "tika",
+    "category": "an",
+    "name": "ဧကကနိပါတဋီကာ",
+    "short_name": "အံ၊ဋီ၊၁၊",
+    - "ref_keys": ["ဧကကနိပါတဋီကာ", "အံ၊ဋီ၊၁", "အင်္ဂုတ္တရနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 288,
+    "pagecount": 288
+  },
+  {
+    "id": "tika_an_02",
+    "basket": "tika",
+    "category": "an",
+    "name": "ဒုကာဒိနိပါတဋီကာ",
+    "short_name": "အံ၊ဋီ၊၂၊",
+    - "ref_keys": ["ဒုကာဒိနိပါတဋီကာ", "အံ၊ဋီ၊၂", "အင်္ဂုတ္တရနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 396,
+    "pagecount": 396
+  },
+  {
+    "id": "tika_an_03",
+    "basket": "tika",
+    "category": "an",
+    "name": "ပဉ္စကာဒိနိပါတဋီကာ",
+    "short_name": "အံ၊ဋီ၊၃၊",
+    - "ref_keys": ["ပဉ္စကာဒိနိပါတဋီကာ", "အံ၊ဋီ၊၃", "အင်္ဂုတ္တရနိကာယဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 202,
+    "pagecount": 202
+  },
+  {
+    "id": "tika_an_04",
+    "basket": "tika",
+    "category": "an",
+    "name": "အဋ္ဌကာဒိနိပါတဋီကာ",
+    "short_name": "အံ၊ဋီ၊၃၊",
+    - "ref_keys": ["အဋ္ဌကာဒိနိပါတဋီကာ", "အံ၊ဋီ၊၃", "အင်္ဂုတ္တရနိကာယဋီကာ"],
+    "firstpage": 203,
+    "lastpage": 371,
+    "pagecount": 169
+  },
+  {
+    "id": "tika_ku_20_01",
+    "basket": "tika",
+    "category": "ku",
+    "name": "နေတ္တိပ္ပကရဏဋီကာ",
+    "short_name": "နေတ္တိ၊ဋီ၊",
+    - "ref_keys": ["နေတ္တိပ္ပကရဏဋီကာ", "နေတ္တိ၊ဋီ", "နေတ္တိဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 151,
+    "pagecount": 151
+  },
+  {
+    "id": "tika_ku_20_02",
+    "basket": "tika",
+    "category": "ku",
+    "name": "နေတ္တိဝိဘာဝိနီ",
+    "short_name": "နေတ္တိဝိဘာဝိနီ",
+    - "ref_keys": ["နေတ္တိဝိဘာဝိနီ", "နေတ္တိဝိဘာဝိနီဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 356,
+    "pagecount": 356
+  },
+  {
+    "id": "tika_ku_zat_01",
+    "basket": "tika",
+    "category": "ku",
+    "name": "ဇာတကအဘိနဝဋီကာ-ပ",
+    "short_name": "ဇာတ်ဋီသစ်၊၁၊",
+    - "ref_keys": ["ဇာတကအဘိနဝဋီကာ-ပ", "ဇာတ်ဋီသစ်၊၁", "ဇာတကဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 552,
+    "pagecount": 552
+  },
+  {
+    "id": "tika_ku_zat_02",
+    "basket": "tika",
+    "category": "ku",
+    "name": "ဇာတကအဘိနဝဋီကာ-ဒု",
+    "short_name": "ဇာတ်ဋီသစ်၊၂၊",
+    - "ref_keys": ["ဇာတကအဘိနဝဋီကာ-ဒု", "ဇာတ်ဋီသစ်၊၂", "ဇာတကဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 563,
+    "pagecount": 563
+  },
+  {
+    "id": "tika_ku_zat_03",
+    "basket": "tika",
+    "category": "ku",
+    "name": "ဇာတကအဘိနဝဋီကာ-တ",
+    "short_name": "ဇာတ်ဋီသစ်၊၃၊",
+    - "ref_keys": ["ဇာတကအဘိနဝဋီကာ-တ", "ဇာတ်ဋီသစ်၊၃", "ဇာတကဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 336,
+    "pagecount": 336
+  },
+  {
+    "id": "tika_ku_zat_04",
+    "basket": "tika",
+    "category": "ku",
+    "name": "ဇာတကအဘိနဝဋီကာ-စတု",
+    "short_name": "ဇာတ်ဋီသစ်၊၄၊",
+    - "ref_keys": ["ဇာတကအဘိနဝဋီကာ-စတု", "ဇာတ်ဋီသစ်၊၄", "ဇာတကဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 257,
+    "pagecount": 257
+  },
+  {
+    "id": "tika_ku_zat_05",
+    "basket": "tika",
+    "category": "ku",
+    "name": "ဇာတကအဘိနဝဋီကာ-ပဉ္စ",
+    "short_name": "ဇာတ်ဋီသစ်၊၅၊",
+    - "ref_keys": ["ဇာတကအဘိနဝဋီကာ-ပဉ္စ", "ဇာတ်ဋီသစ်၊၅", "ဇာတကဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 352,
+    "pagecount": 352
+  },
+  {
+    "id": "tika_bi_01",
+    "basket": "tika",
+    "category": "bi",
+    "name": "ဓမ္မသင်္ဂဏီမူလဋီကာ",
+    "short_name": "မူလဋီ၊၁၊",
+    - "ref_keys": ["ဓမ္မသင်္ဂဏီမူလဋီကာ", "မူလဋီ၊၁", "အဘိဓမ္မာမူလဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 203,
+    "pagecount": 203
+  },
+  {
+    "id": "tika_bi_02_01",
+    "basket": "tika",
+    "category": "bi",
+    "name": "ဝိဘင်္ဂမူလဋီကာ (ပ)",
+    "short_name": "မူလဋီ၊၂၊",
+    - "ref_keys": ["ဝိဘင်္ဂမူလဋီကာ", "မူလဋီ၊၂", "အဘိဓမ္မာမူလဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 235,
+    "pagecount": 235
+  },
+  {
+    "id": "tika_bi_02_02",
+    "basket": "tika",
+    "category": "bi",
+    "name": "ဝိဘင်္ဂအနုဋီကာ (ဒု)",
+    "short_name": "အနုဋီ၊၂၊",
+    - "ref_keys": ["ဝိဘင်္ဂအနုဋီကာ", "အနုဋီ၊၂", "အဘိဓမ္မာအနုဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 229,
+    "pagecount": 229
+  },
+  {
+    "id": "tika_bi_03",
+    "basket": "tika",
+    "category": "bi",
+    "name": "ပဉ္စပကရဏမူလဋီကာ",
+    "short_name": "မူလဋီ၊၃၊",
+    - "ref_keys": ["ပဉ္စပကရဏမူလဋီကာ", "မူလဋီ၊၃", "အဘိဓမ္မာမူလဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 248,
+    "pagecount": 248
+  },
+  {
+    "id": "tika_bi_04",
+    "basket": "tika",
+    "category": "bi",
+    "name": "ဓမ္မသင်္ဂဏီအနုဋီကာ",
+    "short_name": "အနုဋီ၊၁၊",
+    - "ref_keys": ["ဓမ္မသင်္ဂဏီအနုဋီကာ", "အနုဋီ၊၁", "အဘိဓမ္မာအနုဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 220,
+    "pagecount": 220
+  },
+  {
+    "id": "tika_bi_05",
+    "basket": "tika",
+    "category": "bi",
+    "name": "ပဉ္စပကရဏအနုဋီကာ",
+    "short_name": "အနုဋီ၊၃၊",
+    - "ref_keys": ["ပဉ္စပကရဏအနုဋီကာ", "အနုဋီ၊၃", "အဘိဓမ္မာအနုဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 323,
+    "pagecount": 323
+  },
+  {
+    "id": "annya_vi_01_01",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဒွေမာတိကာ",
+    "short_name": "ဒွေမာတိကာ",
+    - "ref_keys": ["ဒွေမာတိကာ", "ဝိနယဒွေမာတိကာ"],
+    "firstpage": 1,
+    "lastpage": 129,
+    "pagecount": 129
+  },
+  {
+    "id": "annya_vi_01_02",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ",
+    "short_name": "ကင်္ခါ",
+    - "ref_keys": ["ကင်္ခါဝိတရဏီအဋ္ဌကထာ", "ကင်္ခါ", "ဝိနယာဋ္ဌကထာ"],
+    "firstpage": 83,
+    "lastpage": 357,
+    "pagecount": 275
+  },
+  {
+    "id": "annya_vi_01_03",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ကင်္ခါဝိတရဏီပုရာဏဋီကာ",
+    "short_name": "ကင်္ခါဋီဟောင်း",
+    - "ref_keys": ["ကင်္ခါဝိတရဏီပုရာဏဋီကာ", "ကင်္ခါဋီဟောင်း", "ကင်္ခါဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 117,
+    "pagecount": 117
+  },
+  {
+    "id": "annya_vi_01_04",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ကင်္ခါဝိတရဏီအဘိနဝဋီကာ",
+    "short_name": "ကင်္ခါဋီသစ်",
+    - "ref_keys": ["ကင်္ခါဝိတရဏီအဘိနဝဋီကာ", "ကင်္ခါဋီသစ်", "ကင်္ခါဋီကာ"],
+    "firstpage": 119,
+    "lastpage": 489,
+    "pagecount": 371
+  },
+  {
+    "id": "annya_vi_02",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဝိနယသင်္ဂဟအဋ္ဌကထာ",
+    "short_name": "ဝိနယသင်္ဂဟ",
+    - "ref_keys": ["ဝိနယသင်္ဂဟအဋ္ဌကထာ", "ဝိနယသင်္ဂဟ", "ဝိနယကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 468,
+    "pagecount": 468
+  },
+  {
+    "id": "annya_vi_03",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဝိနယဝိနိစ္ဆယော",
+    "short_name": "ဝိနယဝိနိစ္ဆယ",
+    - "ref_keys": ["ဝိနယဝိနိစ္ဆယော", "ဝိနယဝိနိစ္ဆယ", "ဝိနယကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 304,
+    "pagecount": 304
+  },
+  {
+    "id": "annya_vi_04",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဥတ္တရဝိနိစ္ဆယော",
+    "short_name": "ဥတ္တရဝိနိစ္ဆယ",
+    - "ref_keys": ["ဥတ္တရဝိနိစ္ဆယော", "ဥတ္တရဝိနိစ္ဆယ", "ဝိနယကျမ်း"],
+    "firstpage": 305,
+    "lastpage": 395,
+    "pagecount": 91
+  },
+  {
+    "id": "annya_vi_05_01",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ခုဒ္ဒသိက္ခာ",
+    "short_name": "ခုဒ္ဒသိက္ခာ",
+    - "ref_keys": ["ခုဒ္ဒသိက္ခာ", "ခုဒ္ဒသိက္ခာပါဠိ"],
+    "firstpage": 131,
+    "lastpage": 213,
+    "pagecount": 83
+  },
+  {
+    "id": "annya_vi_05_02",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ခုဒ္ဒသိက္ခာပုရာဏဋီကာ",
+    "short_name": "ခုဒ္ဒသိက္ခာဋီဟောင်း",
+    - "ref_keys": ["ခုဒ္ဒသိက္ခာပုရာဏဋီကာ", "ခုဒ္ဒသိက္ခာဋီဟောင်း", "ခုဒ္ဒသိက္ခာဋီကာ"],
+    "firstpage": 59,
+    "lastpage": 235,
+    "pagecount": 177
+  },
+  {
+    "id": "annya_vi_05_03",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ခုဒ္ဒသိက္ခာအဘိနဝဋီကာ",
+    "short_name": "ခုဒ္ဒသိက္ခာဋီသစ်",
+    - "ref_keys": ["ခုဒ္ဒသိက္ခာအဘိနဝဋီကာ", "ခုဒ္ဒသိက္ခာဋီသစ်", "ခုဒ္ဒသိက္ခာဋီကာ"],
+    "firstpage": 237,
+    "lastpage": 441,
+    "pagecount": 205
+  },
+  {
+    "id": "annya_vi_06_01",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "မူလသိက္ခာ",
+    "short_name": "မူလသိက္ခာ",
+    - "ref_keys": ["မူလသိက္ခာ", "မူလသိက္ခာပါဠိ"],
+    "firstpage": 215,
+    "lastpage": 234,
+    "pagecount": 20
+  },
+  {
+    "id": "annya_vi_06_02",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "မူလသိက္ခာဋီကာ",
+    "short_name": "မူလသိက္ခာဋီကာ",
+    - "ref_keys": ["မူလသိက္ခာဋီကာ", "မူလသိက္ခာဋီ"],
+    "firstpage": 457,
+    "lastpage": 498,
+    "pagecount": 42
+  },
+  {
+    "id": "annya_vi_07",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဝိနယာလင်္ကာရဋီကာ (ပ)",
+    "short_name": "ဝိလင်ဋီ၊၁၊",
+    - "ref_keys": ["ဝိနယာလင်္ကာရဋီကာ", "ဝိလင်ဋီ၊၁", "ဝိနယာလင်္ကာရဋီကာ၁"],
+    "firstpage": 1,
+    "lastpage": 424,
+    "pagecount": 424
+  },
+  {
+    "id": "annya_vi_08",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဝိနယာလင်္ကာရဋီကာ (ဒု)",
+    "short_name": "ဝိလင်ဋီ၊၂၊",
+    - "ref_keys": ["ဝိနယာလင်္ကာရဋီကာ", "ဝိလင်ဋီ၊၂", "ဝိနယာလင်္ကာရဋီကာ၂"],
+    "firstpage": 1,
+    "lastpage": 434,
+    "pagecount": 434
+  },
+  {
+    "id": "annya_vi_10",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဝိနယဝိနိစ္ဆယဋီကာ (ပ)",
+    "short_name": "ဝိနယဝိနိစ္ဆယဋီ၊၁၊",
+    - "ref_keys": ["ဝိနယဝိနိစ္ဆယဋီကာ", "ဝိနယဝိနိစ္ဆယဋီ၊၁", "ဝိနယဝိနိစ္ဆယဋီကာ၁"],
+    "firstpage": 1,
+    "lastpage": 571,
+    "pagecount": 571
+  },
+  {
+    "id": "annya_vi_11",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ဝိနယဝိနိစ္ဆယဋီကာ (ဒု)",
+    "short_name": "ဝိနယဝိနိစ္ဆယဋီ၊၂၊",
+    - "ref_keys": ["ဝိနယဝိနိစ္ဆယဋီကာ", "ဝိနယဝိနိစ္ဆယဋီ၊၂", "ဝိနယဝိနိစ္ဆယဋီကာ၂"],
+    "firstpage": 1,
+    "lastpage": 530,
+    "pagecount": 530
+  },
+  {
+    "id": "annya_vi_12",
+    "basket": "annya",
+    "category": "annya_vi",
+    "name": "ပါစိတျာဒိယောဇနာ",
+    "short_name": "ပါစိတျာဒိယောဇနာ",
+    - "ref_keys": ["ပါစိတျာဒိယောဇနာ", "ပါစိတျာဒိ"],
+    "firstpage": 1,
+    "lastpage": 655,
+    "pagecount": 655
+  },
+  {
+    "id": "annya_bi_01",
+    "basket": "annya",
+    "category": "annya_bi",
+    "name": "ဝိသုဒ္ဓိမဂ္ဂေါ (ပ)",
+    "short_name": "ဝိသုဒ္ဓိ၊၁၊",
+    - "ref_keys": ["ဝိသုဒ္ဓိမဂ္ဂေါ", "ဝိသုဒ္ဓိ၊၁", "ဝိသုဒ္ဓိမဂ်၁"],
+    "firstpage": 1,
+    "lastpage": 370,
+    "pagecount": 370
+  },
+  {
+    "id": "annya_bi_02",
+    "basket": "annya",
+    "category": "annya_bi",
+    "name": "ဝိသုဒ္ဓိမဂ္ဂေါ (ဒု)",
+    "short_name": "ဝိသုဒ္ဓိ၊၂၊",
+    - "ref_keys": ["ဝိသုဒ္ဓိမဂ္ဂေါ", "ဝိသုဒ္ဓိ၊၂", "ဝိသုဒ္ဓိမဂ်၂"],
+    "firstpage": 1,
+    "lastpage": 356,
+    "pagecount": 356
+  },
+  {
+    "id": "annya_bi_03",
+    "basket": "annya",
+    "category": "annya_bi",
+    "name": "ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ (ပ)",
+    "short_name": "မဟာဋီ၊၁၊",
+    - "ref_keys": ["ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ", "မဟာဋီ၊၁", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၁"],
+    "firstpage": 1,
+    "lastpage": 461,
+    "pagecount": 461
+  },
+  {
+    "id": "annya_bi_04",
+    "basket": "annya",
+    "category": "annya_bi",
+    "name": "ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ (ဒု)",
+    "short_name": "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂",
+    - "ref_keys": ["ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂", "မဟာဋီ၊၂"],
+    "firstpage": 1,
+    "lastpage": 535,
+    "pagecount": 535
+  },
+  {
+    "id": "annya_bi_05",
+    "basket": "annya",
+    "category": "annya_bi",
+    "name": "အဘိဓမ္မတ္ထသင်္ဂဟော",
+    "short_name": "သင်္ဂြိုဟ်",
+    - "ref_keys": ["အဘိဓမ္မတ္ထသင်္ဂဟော", "သင်္ဂြိုဟ်", "အဘိဓမ္မတ္ထသင်္ဂဟ"],
+    "firstpage": 1,
+    "lastpage": 167,
+    "pagecount": 167
+  },
+  {
+    "id": "annya_bi_06",
+    "basket": "annya",
+    "category": "annya_bi",
+    "name": "အဘိဓမ္မတ္ထဝိဘာဝိနီဋီကာ",
+    "short_name": "ဋီကာကျော်",
+    - "ref_keys": ["အဘိဓမ္မတ္ထဝိဘာဝိနီဋီကာ", "ဋီကာကျော်", "ဝိဘာဝိနီဋီကာ"],
+    "firstpage": 69,
+    "lastpage": 279,
+    "pagecount": 211
+  },
+  {
+    "id": "annya_bi_07",
+    "basket": "annya",
+    "category": "annya_bi",
+    "name": "ပရမတ္ထဒီပနီ",
+    "short_name": "ပရမတ္ထဒီပနီ",
+    - "ref_keys": ["ပရမတ္ထဒီပနီ", "ပရမတ္ထဒီပနီဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 456,
+    "pagecount": 456
+  },
+  {
+    "id": "annya_sadda_01",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "ကစ္စာယနဗျာကရဏံ",
+    "short_name": "ကစ္စည်း",
+    - "ref_keys": ["ကစ္စာယနဗျာကရဏံ", "ကစ္စည်း", "ကစ္စာယနကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 315,
+    "pagecount": 315
+  },
+  {
+    "id": "annya_sadda_02",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "ပဒရူပသိဒ္ဓိ",
+    "short_name": "ရူ",
+    - "ref_keys": ["ပဒရူပသိဒ္ဓိ", "ရူ", "ပဒရူပသိဒ္ဓိကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 422,
+    "pagecount": 422
+  },
+  {
+    "id": "annya_sadda_03",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "မောဂ္ဂလ္လာနသုတ္တပါဌော",
+    "short_name": "မောဂ္ဂလာန်",
+    - "ref_keys": ["မောဂ္ဂလ္လာနသုတ္တပါဌော", "မောဂ္ဂလာန်", "မောဂ္ဂလ္လာနကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 292,
+    "pagecount": 292
+  },
+  {
+    "id": "annya_sadda_05",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "မောဂ္ဂလ္လာနပဉ္စိကာဋီကာ",
+    "short_name": "မောဂ်ပဉ္စိကာ",
+    - "ref_keys": ["မောဂ္ဂလ္လာနပဉ္စိကာဋီကာ", "မောဂ်ပဉ္စိကာ", "မောဂ္ဂလ္လာနဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 286,
+    "pagecount": 286
+  },
+  {
+    "id": "annya_sadda_06",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "ပယောဂသိဒ္ဓိပါဠိ",
+    "short_name": "ပယောဂသိဒ္ဓိ",
+    - "ref_keys": ["ပယောဂသိဒ္ဓိပါဠိ", "ပယောဂသိဒ္ဓိ"],
+    "firstpage": 1,
+    "lastpage": 304,
+    "pagecount": 304
+  },
+  {
+    "id": "annya_sadda_07",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "သဒ္ဒနီတိပ္ပကရဏံ (ပဒမာလာ)",
+    "short_name": "ပဒမာလာ",
+    - "ref_keys": ["သဒ္ဒနီတိပ္ပကရဏံ", "ပဒမာလာ", "သဒ္ဒနီတိပဒမာလာ"],
+    "firstpage": 1,
+    "lastpage": 418,
+    "pagecount": 418
+  },
+  {
+    "id": "annya_sadda_08",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "သဒ္ဒနီတိပ္ပကရဏံ (ဓာတုမာလာ)",
+    "short_name": "ဓာတုမာလာ",
+    - "ref_keys": ["သဒ္ဒနီတိပ္ပကရဏံ", "ဓာတုမာလာ", "သဒ္ဒနီတိဓာတုမာလာ"],
+    "firstpage": 1,
+    "lastpage": 391,
+    "pagecount": 391
+  },
+  {
+    "id": "annya_sadda_09",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "သဒ္ဒနီတိပ္ပကရဏံ (သုတ္တမာလာ)",
+    "short_name": "သုတ္တမာလာ",
+    - "ref_keys": ["သဒ္ဒနီတိပ္ပကရဏံ", "သုတ္တမာလာ", "သဒ္ဒနီတိသုတ္တမာလာ"],
+    "firstpage": 1,
+    "lastpage": 488,
+    "pagecount": 488
+  },
+  {
+    "id": "annya_sadda_10",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "နိရုတ္တိဒီပနီပါဌ",
+    "short_name": "နိရုတ္တိဒီပနီ",
+    - "ref_keys": ["နိရုတ္တိဒီပနီပါဌ", "နိရုတ္တိဒီပနီ"],
+    "firstpage": 1,
+    "lastpage": 564,
+    "pagecount": 564
+  },
+  {
+    "id": "annya_sadda_11",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "အဘိဓာနပ္ပဒီပိကာ",
+    "short_name": "ဓာန်",
+    - "ref_keys": ["အဘိဓာနပ္ပဒီပိကာ", "ဓာန်", "အဘိဓာန်"],
+    "firstpage": 1,
+    "lastpage": 151,
+    "pagecount": 151
+  },
+  {
+    "id": "annya_sadda_12",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "အဘိဓာနပ္ပဒီပိကာဋီကာ",
+    "short_name": "ဓာန်ဋီ",
+    - "ref_keys": ["အဘိဓာနပ္ပဒီပိကာဋီကာ", "ဓာန်ဋီ", "အဘိဓာန်ဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 621,
+    "pagecount": 621
+  },
+  {
+    "id": "annya_sadda_13",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "ဝုတ္တောဒယံ",
+    "short_name": "ဆန်း",
+    - "ref_keys": ["ဝုတ္တောဒယံ", "ဆန်း", "ဝုတ္တောဒယကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 35,
+    "pagecount": 35
+  },
+  {
+    "id": "annya_sadda_14",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "သုဗောဓာလင်္ကာရော",
+    "short_name": "အလင်္ကာ",
+    - "ref_keys": ["သုဗောဓာလင်္ကာရော", "အလင်္ကာ", "သုဗောဓာလင်္ကာရ"],
+    "firstpage": 1,
+    "lastpage": 77,
+    "pagecount": 77
+  },
+  {
+    "id": "annya_sadda_15",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "သုဗောဓာလင်္ကာရဋီကာ",
+    "short_name": "အလင်္ကာဋီ",
+    - "ref_keys": ["သုဗောဓာလင်္ကာရဋီကာ", "အလင်္ကာဋီ", "သုဗောဓာလင်္ကာရဋီ"],
+    "firstpage": 1,
+    "lastpage": 362,
+    "pagecount": 362
+  },
+  {
+    "id": "annya_sadda_16",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "ကစ္စာယနသာရ",
+    "short_name": "ကစ္စာယနသာရ",
+    - "ref_keys": ["ကစ္စာယနသာရ", "ကစ္စာယနသာရကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 15,
+    "pagecount": 15
+  },
+  {
+    "id": "annya_sadda_17",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "သဒ္ဒတ္ထဘေဒစိန္တာ",
+    "short_name": "ဘေဒစိန္တာ",
+    - "ref_keys": ["သဒ္ဒတ္ထဘေဒစိန္တာ", "ဘေဒစိန္တာ", "သဒ္ဒတ္ထဘေဒစိန္တာကျမ်း"],
+    "firstpage": 1,
+    "lastpage": 81,
+    "pagecount": 81
+  },
+  {
+    "id": "annya_sadda_18",
+    "basket": "annya",
+    "category": "annya_sadda",
+    "name": "မုခမတ္တဒီပနီ - နျာသ",
+    "short_name": "နျာသ",
+    - "ref_keys": ["မုခမတ္တဒီပနီ", "နျာသ", "နျာသဋီကာ"],
+    "firstpage": 1,
+    "lastpage": 461,
+    "pagecount": 461
+  }
+]
