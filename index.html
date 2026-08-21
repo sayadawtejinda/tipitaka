@@ -172,7 +172,8 @@ p.gathalast {
   const SUTTA_CENTRAL_FILE = "sutta_central.json"; 
   const BURMESE_MAP_FILE = "burmese_translated_books.json"; 
   const PAGE_MAP_FILE = "pali_mm_page_map.json"; 
-  const BURMESE_TOC_FILE = "tipitaka_myanmar_toc.csv"; 
+  const BURMESE_TOC_FILE = "tipitaka_myanmar_toc.json"; 
+const BURMESE_BOOKS_FILE = "myanmar_books.json"; 
 
   function cdnUrl(path){ return `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}?nocache=${new Date().getTime()}`; }
 
@@ -267,31 +268,33 @@ let isNissayaOpen = false;
   }
 
   async function ensureBurmeseToc(){
-    if(!burmeseTocIndex){
-      burmeseTocIndex = {}; burmeseBookMeta = {};
-      try{
-        const text = await fetchText(cdnUrl(BURMESE_TOC_FILE));
-        const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
-        let currentBook = null;
-        lines.forEach(line=>{
-          const f = parseCsvLine(line);
-          if(f.length < 3) return;
-          const col1 = (f[0] || "").trim();
-          if(!col1.startsWith("<font")){
-            currentBook = (f[1] || "").trim();
-            if(currentBook && !burmeseTocIndex[currentBook]) burmeseTocIndex[currentBook] = [];
-            if(currentBook){ burmeseBookMeta[currentBook] = { title: (f[2] || "").trim(), pagecount: parseInt((f[3] || "").trim(), 10) || null, category: mmCategoryFromId(currentBook) }; }
-          } else if(currentBook){
-            const sizeMatch = col1.match(/size=["']?([\d.]+)/);
-            const level = sizeMatch ? parseFloat(sizeMatch[1]) : 1;
-            const title = (f[1] || "").trim(), page = parseInt((f[2] || "").trim(), 10);
-            if(title && !isNaN(page)) burmeseTocIndex[currentBook].push({ level, title, page });
-          }
-        });
-      } catch(e){}
-    }
-    return burmeseTocIndex;
+  if(!burmeseTocIndex){
+    burmeseTocIndex = {}; burmeseBookMeta = {};
+    try{
+      // ၁။ စာအုပ်အချက်အလက် (Book Meta) များကို ခေါ်ယူခြင်း
+      const booksData = await fetchJson(cdnUrl(BURMESE_BOOKS_FILE));
+      booksData.forEach(book => {
+          burmeseBookMeta[book.id] = {
+              title: book.name,
+              pagecount: book.number_of_pages,
+              category: mmCategoryFromId(book.id)
+          };
+      });
+      
+      // ၂။ မာတိကာ (TOC) များကို ခေါ်ယူခြင်း
+      const tocData = await fetchJson(cdnUrl(BURMESE_TOC_FILE));
+      tocData.forEach(item => {
+          if(!burmeseTocIndex[item.book_id]) burmeseTocIndex[item.book_id] = [];
+          burmeseTocIndex[item.book_id].push({
+              level: 1, 
+              title: item.name,
+              page: item.page_number
+          });
+      });
+    } catch(e){ console.error("Error loading Myanmar TOC/Books", e); }
   }
+  return burmeseTocIndex;
+}
 
   function mmCategoryFromId(mmBookId){ const parts = mmBookId.split("_"); if(parts.length < 3) return "other"; return parts.slice(1, parts.length - 1).join("_"); }
 
@@ -537,6 +540,18 @@ let isNissayaOpen = false;
     setFloatSearchVisible(true);
     const pages = mmPagesCache[mmCurrentBookId] || []; const total = pages.length;
     if(mmCurrentPageIdx < 1) mmCurrentPageIdx = 1; if(mmCurrentPageIdx > total) mmCurrentPageIdx = total;
+    
+    // Breadcrumb တွင် မြန်မာပြန် စာအုပ်အမည် အပြည့်အစုံ ပြသရန် ပေါင်းထည့်ခြင်း
+    if (burmeseBookMeta && burmeseBookMeta[mmCurrentBookId]) {
+       const meta = burmeseBookMeta[mmCurrentBookId];
+       renderBreadcrumb([
+           {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, 
+           {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}}, 
+           {label: MM_CATEGORY_LABELS[meta.category] || meta.category, onclick:(e)=>{e.preventDefault(); showMmBookList(meta.category);}},
+           {label: meta.title || mmCurrentBookId}
+       ]);
+    }
+
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
     const backLabel = "← ပါဠိတော်သို့";
 
