@@ -186,6 +186,7 @@ const BURMESE_BOOKS_FILE = "myanmar_books.json";
   let mmHtmlCache = {}, mmPagesCache = {}, mmBackContext = null, mmCurrentBookId = null, mmCurrentPageIdx = 1;
   let currentRows = [], currentRow = null, currentBookId = "", currentBookMeta = null, bookPagesCache = {};
 let isNissayaOpen = false;
+let isRomanPali = false;
 
   async function fetchJson(url){ const res = await fetch(url); if(!res.ok) throw new Error("Fetch failed: " + url); return res.json(); }
   async function fetchText(url){ const res = await fetch(url); if(!res.ok) throw new Error("Fetch failed: " + url); return res.text(); }
@@ -432,7 +433,92 @@ let isNissayaOpen = false;
       } catch (err) { resultsEl.innerHTML = `<div class='tp-sutta-empty' style="color:red;">အမှားအယွင်းဖြစ်နေပါသည် (${err.message})</div>`; }
     });
   }
+// --- အသစ်ထပ်ထည့်ထားသော Roman ပြောင်းသည့် Function များ ---
+  
+  function romanizeContent() {
+    const content = document.getElementById("tp-content");
+    if (!content) return;
 
+    // HTML Tag များကို မထိခိုက်စေဘဲ Text Node (စာသားသက်သက်) များကိုသာ ရှာဖွေပြီး ပြောင်းလဲရန် TreeWalker ကို အသုံးပြုထားသည်
+    const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    while (node = walker.nextNode()) {
+      if (node.nodeValue.trim() !== "") {
+        node.nodeValue = myanmarToRoman(node.nodeValue);
+      }
+    }
+  }
+
+  function myanmarToRoman(text) {
+    if (!text) return "";
+
+    let str = text;
+
+    // ၁။ သရသီးခြားများ (Independent Vowels)
+    const independentVowels = {
+      'ဣ': 'i', 'ဤ': 'ī', 'ဥ': 'u', 'ဦ': 'ū', 'ဧ': 'e', 'ဩ': 'o', 'ဪ': 'au'
+    };
+    for (let k in independentVowels) {
+      str = str.replace(new RegExp(k, 'g'), independentVowels[k]);
+    }
+
+    // ၂။ ဗျည်း (၃၃) လုံး - ဗျည်းတိုင်းတွင် 'a' သရ အလိုအလျောက် ထည့်သွင်းခြင်း
+    const consonants = {
+      'က': 'ka', 'ခ': 'kha', 'ဂ': 'ga', 'ဃ': 'gha', 'င': 'ṅa',
+      'စ': 'ca', 'ဆ': 'cha', 'ဇ': 'ja', 'ဈ': 'jha', 'ဉ': 'ña', 'ည': 'ñña',
+      'ဋ': 'ṭa', 'ဌ': 'ṭha', 'ဍ': 'ḍa', 'ဎ': 'ḍha', 'ဏ': 'ṇa',
+      'တ': 'ta', 'ထ': 'tha', 'ဒ': 'da', 'ဓ': 'dha', 'န': 'na',
+      'ပ': 'pa', 'ဖ': 'pha', 'ဗ': 'ba', 'ဘ': 'bha', 'မ': 'ma',
+      'ယ': 'ya', 'ရ': 'ra', 'လ': 'la', 'ဝ': 'va', 'သ': 'sa', 'ဿ': 'ssa', 'ဟ': 'ha', 'ဠ': 'ḷa',
+      'အ': 'a'
+    };
+    for (let k in consonants) {
+      str = str.replace(new RegExp(k, 'g'), consonants[k]);
+    }
+
+    // ၃။ ဗျည်းတွဲများ (Medials) - ရှေ့က 'a' ကို ဖယ်ပြီး အသံတွဲပေးခြင်း
+    str = str.replace(/aျ/g, 'ya');
+    str = str.replace(/aြ/g, 'ra');
+    str = str.replace(/aွ/g, 'va');
+    str = str.replace(/aှ/g, 'ha');
+
+    // ၄။ အဓိုဝ်/စင်း (္) နှင့် အသတ် (်) - ရှေ့က 'a' သရကို ဖယ်ရှားခြင်း
+    str = str.replace(/a္/g, '');
+    str = str.replace(/a်/g, '');
+    str = str.replace(/[္်]/g, '');
+
+    // ၅။ တွဲဖက်သရများ (Dependent Vowels) - ရှေ့က 'a' သရကို အစားထိုးခြင်း
+    // အပေါင်းသရများကို မူလ သရများထက် အရင်ပြောင်းရမည်
+    str = str.replace(/aော/g, 'o');
+    str = str.replace(/aော်/g, 'o');
+    str = str.replace(/aေါ/g, 'o');
+    str = str.replace(/aေါ်/g, 'o');
+
+    // သီးခြား သရသင်္ကေတများ
+    str = str.replace(/aာ/g, 'ā');
+    str = str.replace(/aါ/g, 'ā'); // သရရိုက်နည်းနှစ်မျိုးလုံးအတွက်
+    str = str.replace(/aိ/g, 'i');
+    str = str.replace(/aီ/g, 'ī');
+    str = str.replace(/aု/g, 'u');
+    str = str.replace(/aူ/g, 'ū');
+    str = str.replace(/aေ/g, 'e');
+    str = str.replace(/aဲ/g, 'e');
+
+    // ၆။ နိဂ္ဂဟိတ် (ံ)
+    str = str.replace(/ံ/g, 'ṃ');
+
+    // ၇။ ဂဏန်းများနှင့် ပုဒ်ဖြတ်ပုဒ်ရပ်များ
+    const misc = {
+      '၀': '0', '၁': '1', '၂': '2', '၃': '3', '၄': '4',
+      '၅': '5', '၆': '6', '၇': '7', '၈': '8', '၉': '9',
+      '၊': ',', '။': '.'
+    };
+    for (let k in misc) {
+      str = str.replace(new RegExp(k, 'g'), misc[k]);
+    }
+
+    return str;
+  }
   function setFloatSearchVisible(visible){
     const btn = document.getElementById("tp-float-search-toggle"); if(!btn) return;
     btn.style.display = visible ? "block" : "none";
@@ -832,6 +918,7 @@ let isNissayaOpen = false;
             <button id="tp-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ/စာပိုဒ် သွားမည်">📄</button>
             <button id="tp-search-toggle" class="tp-icon-btn" title="သုတ္တန်ရှာရန်">🔍</button>
             <button id="tp-lang-toggle" class="tp-icon-btn" title="ဘာသာပြန်/နိဿယ ဖတ်ရန်">🌐</button>
+            <button id="tp-copy-btn" class="tp-icon-btn" title="လက်ရှိစာမျက်နှာကို Copy ကူးရန်">📋</button>
             
             <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
             <div id="tp-crossref" class="tp-dropdown-box"></div>
@@ -900,14 +987,20 @@ let isNissayaOpen = false;
         const langList = document.getElementById("tp-lang-list"); langList.innerHTML = "<div class='tp-sutta-empty'>ရှာဖွေနေပါသည်...</div>";
         try{
           await ensureSuttas(); const suttaId = getCurrentSuttaId(bookId, pageNum);
-          let allOptions = [];
+          
+          // --- ပြင်ဆင်ချက်: Roman ကို Menu ၏ ထိပ်ဆုံး၌ ထည့်သွင်းခြင်း ---
+          let allOptions = [
+             {label: isRomanPali ? "မြန်မာပါဠိ" : "🔠 Roman Pāli", action: "toggle_roman"} 
+          ];
+          
           if(suttaId) {
               const scData = await ensureSuttaCentral(), matches = scData.filter(s => s.sutta_id === suttaId);
-              allOptions = [...matches.map(s => ({label: `${s.author} (English)`, url: s.url})), {label: "မြန်မာဘာသာပြန် (pmt)", url: `https://suttacentral.net/${suttaId}/my/pmt`}, {label: "ဗီယက်နမ်ဘာသာပြန် (Minh Châu)", url: `https://suttacentral.net/${suttaId}/vi/minh_chau`}];
+              allOptions.push(...matches.map(s => ({label: `${s.author} (English)`, url: s.url})));
+              allOptions.push({label: "မြန်မာဘာသာပြန် (pmt)", url: `https://suttacentral.net/${suttaId}/my/pmt`});
+              allOptions.push({label: "ဗီယက်နမ်ဘာသာပြန် (Minh Châu)", url: `https://suttacentral.net/${suttaId}/vi/minh_chau`});
           } else {
               allOptions.push({label: "(ဒီစာမျက်နှာအတွက် SC သုတ္တန်မတွေ့ပါ)", action: "none"});
           }
-          // နိဿယ ကို သုတ္တန် မရှိလည်း ဖွင့်ကြည့်နိုင်အောင် ထပ်ပေါင်းထည့်သည်
           allOptions.push({label: "📖 နိဿယ (Split View ဖတ်ရန်)", action: "nissaya"});
           
           langList.innerHTML = allOptions.map((o, i) => `<div class="tp-sutta-item" ${o.action !== 'none' ? `data-idx="${i}"` : `style="color:#888;cursor:default;"`}>${o.label}</div>`).join("");
@@ -918,11 +1011,42 @@ let isNissayaOpen = false;
                   const opt = allOptions[item.dataset.idx];
                   if(opt.action === "nissaya") {
                       openNissaya(bookId, pageNum);
+                  } else if(opt.action === "toggle_roman") {
+                      if (!isRomanPali) {
+                          romanizeContent(); // Roman သို့ပြောင်းမည်
+                          isRomanPali = true;
+                      } else {
+                          document.getElementById("tp-content").innerHTML = currentRow.content; // မူလမြန်မာစာသို့ ပြန်ပြောင်းမည်
+                          isRomanPali = false;
+                      }
                   } else if (opt.url) {
                       window.open(opt.url, "_blank"); 
                   }
               }); 
           });
+
+      // --- Copy Icon နှိပ်လျှင် အလုပ်လုပ်မည့် Logic (အမြဲတမ်းအလုပ်လုပ်ရန် ပြင်ဆင်ထားသည်) ---
+      if (!window.isCopyListenerAttached) {
+          document.addEventListener("click", (e) => {
+              const copyBtn = e.target.closest("#tp-copy-btn");
+              if (copyBtn) {
+                  const contentEl = document.getElementById("tp-content");
+                  if (!contentEl) return;
+                  
+                  // innerText ကိုယူပြီး လေးထောင့်ကွင်း [...] အတွင်းရှိစာများကို ဖယ်ရှားမည်
+                  let textToCopy = contentEl.innerText.replace(/\[.*?\]/gs, "").trim();
+                  
+                  navigator.clipboard.writeText(textToCopy).then(() => {
+                      const originalText = copyBtn.innerHTML;
+                      copyBtn.innerHTML = "✅"; // Copy ကူးပြီးကြောင်း ပြသရန်
+                      setTimeout(() => copyBtn.innerHTML = originalText, 1500);
+                  }).catch(err => {
+                      alert("Copy ကူးယူရာတွင် အမှားအယွင်းဖြစ်နေပါသည်။");
+                  });
+              }
+          });
+          window.isCopyListenerAttached = true; // Event ထပ်ခါထပ်ခါ မချိတ်မိစေရန် မှတ်သားထားမည်
+      }
         } catch(err){ langList.innerHTML = `<div class='tp-sutta-empty' style="color:red;">ဖိုင်ရှာမတွေ့ပါ (${err.message})</div>`; }
       });
 
@@ -946,6 +1070,10 @@ let isNissayaOpen = false;
       
       const contentEl = document.getElementById("tp-content");
       if(contentEl) contentEl.scrollTo({top:0, behavior:"smooth"});
+
+      if (isRomanPali) {
+          romanizeContent(); // စာမျက်နှာပြောင်းသော်လည်း Roman အခြေအနေကို ဆက်လက်ထိန်းထားမည်
+      }
 
       if (isNissayaOpen) {
          openNissaya(bookId, pageNum);
