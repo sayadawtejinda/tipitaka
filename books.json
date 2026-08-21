@@ -1350,12 +1350,23 @@
       "pagecount": 405
     },
     {
+      "id": "tika_di_01_02",
+      "basket": "tika",
+      "category": "di",
+      "name": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ပ)",
+      "short_name": "သီဋီသစ်၊၁",
+     "ref_keys": ["သီဋီသစ်၊၁"],
+      "firstpage": 1,
+      "lastpage": 500,
+      "pagecount": 500
+    },
+    {
     "id": "tika_di_01_03",
     "basket": "tika",
     "category": "di",
     "name": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ဒု)",
     "short_name": "သီဋီသစ်၊၂",
-    - "ref_keys": ["သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ", "သီဋီသစ်၊၂"],
+    "ref_keys": ["သီဋီသစ်၊၂"],
     "firstpage": 1,
     "lastpage": 437,
     "pagecount": 437
