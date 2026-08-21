@@ -1,0 +1,482 @@
+[
+    {
+        "category_id": 1,
+        "first_page": 1,
+        "id": "01_vinaya_01",
+        "last_page": 434,
+        "name": "ပါရာဇိကဏ်",
+        "number_of_pages": 434
+    },
+    {
+        "category_id": 1,
+        "first_page": 1,
+        "id": "01_vinaya_02",
+        "last_page": 661,
+        "name": "ပါစိတ်",
+        "number_of_pages": 661
+    },
+    {
+        "category_id": 1,
+        "first_page": 1,
+        "id": "01_vinaya_03",
+        "last_page": 552,
+        "name": "မဟာဝါ",
+        "number_of_pages": 552
+    },
+    {
+        "category_id": 1,
+        "first_page": 1,
+        "id": "01_vinaya_04",
+        "last_page": 547,
+        "name": "စူဠဝါ",
+        "number_of_pages": 547
+    },
+    {
+        "category_id": 1,
+        "first_page": 1,
+        "id": "01_vinaya_05",
+        "last_page": 518,
+        "name": "ပရိဝါ",
+        "number_of_pages": 518
+    },
+    {
+        "category_id": 2,
+        "first_page": 1,
+        "id": "02_digha_01",
+        "last_page": 280,
+        "name": "သီလက္ခန်",
+        "number_of_pages": 280
+    },
+    {
+        "category_id": 2,
+        "first_page": 1,
+        "id": "02_digha_02",
+        "last_page": 323,
+        "name": "သုတ်မဟာဝါ",
+        "number_of_pages": 323
+    },
+    {
+        "category_id": 2,
+        "first_page": 1,
+        "id": "02_digha_03",
+        "last_page": 285,
+        "name": "ပါထိက",
+        "number_of_pages": 285
+    },
+    {
+        "category_id": 3,
+        "first_page": 1,
+        "id": "03_majjhima_01",
+        "last_page": 394,
+        "name": "မူလပဏ္ဏာသ",
+        "number_of_pages": 394
+    },
+    {
+        "category_id": 3,
+        "first_page": 1,
+        "id": "03_majjhima_02",
+        "last_page": 402,
+        "name": "မဇ္ဈိမပဏ္ဏာသ",
+        "number_of_pages": 402
+    },
+    {
+        "category_id": 3,
+        "first_page": 1,
+        "id": "03_majjhima_03",
+        "last_page": 332,
+        "name": "ဥပရိပဏ္ဏာသ",
+        "number_of_pages": 332
+    },
+    {
+        "category_id": 4,
+        "first_page": 1,
+        "id": "04_sanyutta_01",
+        "last_page": 256,
+        "name": "သဂါထာဝဂ္ဂသံယုတ်",
+        "number_of_pages": 256
+    },
+    {
+        "category_id": 4,
+        "first_page": 1,
+        "id": "04_sanyutta_02",
+        "last_page": 263,
+        "name": "နိဒါနဝဂ္ဂသံယုတ်",
+        "number_of_pages": 263
+    },
+    {
+        "category_id": 4,
+        "first_page": 1,
+        "id": "04_sanyutta_03",
+        "last_page": 158,
+        "name": "ခန္ဓဝဂ္ဂသံယုတ်",
+        "number_of_pages": 158
+    },
+    {
+        "category_id": 4,
+        "first_page": 1,
+        "id": "04_sanyutta_04",
+        "last_page": 370,
+        "name": "သဠာယတနဝဂ္ဂသံယုတ်",
+        "number_of_pages": 370
+    },
+    {
+        "category_id": 4,
+        "first_page": 1,
+        "id": "04_sanyutta_05",
+        "last_page": 514,
+        "name": "မဟာဝဂ္ဂသံယုတ်",
+        "number_of_pages": 514
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_01",
+        "last_page": 65,
+        "name": "ဧကကနိပါတ်",
+        "number_of_pages": 65
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_02",
+        "last_page": 54,
+        "name": "ဒုကနိပါတ်",
+        "number_of_pages": 54
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_03",
+        "last_page": 227,
+        "name": "တိကနိပါတ်",
+        "number_of_pages": 227
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_04",
+        "last_page": 302,
+        "name": "စတုက္ကနိပါတ်",
+        "number_of_pages": 302
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_05",
+        "last_page": 345,
+        "name": "ပဉ္စကနိပါတ်",
+        "number_of_pages": 345
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_06",
+        "last_page": 184,
+        "name": "ဆက္ကနိပါတ်",
+        "number_of_pages": 184
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_07",
+        "last_page": 144,
+        "name": "သတ္တကနိပါတ်",
+        "number_of_pages": 144
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_08",
+        "last_page": 153,
+        "name": "အဋ္ဌကနိပါတ်",
+        "number_of_pages": 153
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_09",
+        "last_page": 97,
+        "name": "နဝကနိပါတ်",
+        "number_of_pages": 97
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_10",
+        "last_page": 242,
+        "name": "ဒသကနိပါတ်",
+        "number_of_pages": 242
+    },
+    {
+        "category_id": 5,
+        "first_page": 1,
+        "id": "05_anguttara_11",
+        "last_page": 41,
+        "name": "ဧကာဒသကနိပါတ်",
+        "number_of_pages": 41
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_01",
+        "last_page": 12,
+        "name": "ခုဒ္ဒကပါဌ",
+        "number_of_pages": 12
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_02",
+        "last_page": 84,
+        "name": "ဓမ္မပဒ",
+        "number_of_pages": 84
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_03",
+        "last_page": 111,
+        "name": "ဥဒါန်း",
+        "number_of_pages": 111
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_04",
+        "last_page": 103,
+        "name": "ဣတိဝုတ်",
+        "number_of_pages": 103
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_05",
+        "last_page": 159,
+        "name": "သုတ္တနိပါတ်",
+        "number_of_pages": 159
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_06",
+        "last_page": 138,
+        "name": "ဝိမာနဝတ္ထု",
+        "number_of_pages": 138
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_07",
+        "last_page": 91,
+        "name": "ပေတဝတ္ထု",
+        "number_of_pages": 91
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_08",
+        "last_page": 181,
+        "name": "ထေရဂါထာ",
+        "number_of_pages": 181
+    },
+    {
+        "category_id": 6,
+        "first_page": 183,
+        "id": "06_khuddaka_09",
+        "last_page": 255,
+        "name": "ထေရီဂါထာ",
+        "number_of_pages": 73
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_10",
+        "last_page": 480,
+        "name": "အပဒါန် (ပ) [ထေရ]",
+        "number_of_pages": 662
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_11",
+        "last_page": 290,
+        "name": "အပဒါန် (ဒု) [ထေရ+ထေရီ]",
+        "number_of_pages": 108
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_12",
+        "last_page": 91,
+        "name": "ဗုဒ္ဓဝံသ",
+        "number_of_pages": 91
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_13",
+        "last_page": 38,
+        "name": "စရိယာပိဋက",
+        "number_of_pages": 38
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_18",
+        "last_page": 488,
+        "name": "ပဋိသမ္ဘိဒါမဂ်",
+        "number_of_pages": 488
+    },
+    {
+        "category_id": 6,
+        "first_page": 1,
+        "id": "06_khuddaka_19",
+        "last_page": 434,
+        "name": "မိလိန္ဒပဉှာ",
+        "number_of_pages": 434
+    },
+    {
+        "category_id": 7,
+        "first_page": 1,
+        "id": "07_abhidhamma_01",
+        "last_page": 675,
+        "name": "ဓမ္မသင်္ဂဏီ",
+        "number_of_pages": 675
+    },
+    {
+        "category_id": 7,
+        "first_page": 1,
+        "id": "07_abhidhamma_02",
+        "last_page": 1132,
+        "name": "ဝိဘင်း",
+        "number_of_pages": 1132
+    },
+    {
+        "category_id": 7,
+        "first_page": 1,
+        "id": "07_abhidhamma_03",
+        "last_page": 84,
+        "name": "ပုဂ္ဂလပညတ်",
+        "number_of_pages": 84
+    },
+    {
+        "category_id": 7,
+        "first_page": 1,
+        "id": "07_abhidhamma_05",
+        "last_page": 798,
+        "name": "ကထာဝတ္ထု",
+        "number_of_pages": 798
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_dhammapada_01",
+        "last_page": 822,
+        "name": "ဓမ္မပဒအဋ္ဌကထာ-ပ",
+        "number_of_pages": 822
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_dhammapada_02",
+        "last_page": 824,
+        "name": "ဓမ္မပဒအဋ္ဌကထာ-ဒု",
+        "number_of_pages": 824
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_jataka_01",
+        "last_page": 555,
+        "name": "ဇာတကအဋ္ဌကထာ-ပ",
+        "number_of_pages": 555
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_jataka_02",
+        "last_page": 686,
+        "name": "ဇာတကအဋ္ဌကထာ-ဒု",
+        "number_of_pages": 686
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_jataka_03",
+        "last_page": 853,
+        "name": "ဇာတကအဋ္ဌကထာ-တ",
+        "number_of_pages": 853
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_jataka_04",
+        "last_page": 929,
+        "name": "ဇာတကအဋ္ဌကထာ-စ",
+        "number_of_pages": 929
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_jataka_05",
+        "last_page": 973,
+        "name": "ဇာတကအဋ္ဌကထာ-ပဉ္စ",
+        "number_of_pages": 973
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_jataka_06",
+        "last_page": 230,
+        "name": "ဇာတကအဋ္ဌကထာ-ဆ",
+        "number_of_pages": 230
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_jataka_07",
+        "last_page": 352,
+        "name": "ဇာတကအဋ္ဌကထာ-သတ္တ",
+        "number_of_pages": 352
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_visuddhimagga_00",
+        "last_page": 168,
+        "name": "ဝိသုဒ္ဓိမဂ် နိဒါန်း",
+        "number_of_pages": 168
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_visuddhimagga_01",
+        "last_page": 549,
+        "name": "ဝိသုဒ္ဓိမဂ် မြန်မာပြန်-ပ",
+        "number_of_pages": 549
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_visuddhimagga_02",
+        "last_page": 702,
+        "name": "ဝိသုဒ္ဓိမဂ် မြန်မာပြန်-ဒု",
+        "number_of_pages": 702
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_visuddhimagga_03",
+        "last_page": 472,
+        "name": "ဝိသုဒ္ဓိမဂ် မြန်မာပြန်-တ",
+        "number_of_pages": 472
+    },
+    {
+        "category_id": 8,
+        "first_page": 1,
+        "id": "08_visuddhimagga_04",
+        "last_page": 544,
+        "name": "ဝိသုဒ္ဓိမဂ် မြန်မာပြန်-စ",
+        "number_of_pages": 544
+    }
+]
