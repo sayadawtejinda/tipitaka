@@ -538,7 +538,7 @@ let isNissayaOpen = false;
     const pages = mmPagesCache[mmCurrentBookId] || []; const total = pages.length;
     if(mmCurrentPageIdx < 1) mmCurrentPageIdx = 1; if(mmCurrentPageIdx > total) mmCurrentPageIdx = total;
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
-    const backLabel = (mmBackContext && mmBackContext.kind === "browse") ? "← နောက်သို့" : "← ပါဠိတော်";
+    const backLabel = "← ပါဠိတော်သို့";
 
     // "စာပိုဒ်နံပါတ်ကို-သွားမည်" ဟု ပြင်ဆင်ပြီး
     document.getElementById("tp-view").innerHTML = `
@@ -572,7 +572,45 @@ let isNissayaOpen = false;
     document.getElementById("tp-float-prev").disabled = mmCurrentPageIdx <= 1; document.getElementById("tp-float-next").disabled = mmCurrentPageIdx >= total;
     document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
     document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
-    document.getElementById("tp-mm-back").addEventListener("click", ()=>{
+    document.getElementById("tp-mm-back").addEventListener("click", async ()=>{
+      try {
+        const bMap = await ensureBurmeseMap();
+        // မြန်မာပြန် ID ကို အခြေခံပြီး ပါဠိတော် ကျမ်းအချက်အလက်ကို ရှာရန်
+        const mapEntry = bMap.find(m => m.mm_book_id === mmCurrentBookId);
+        
+        if (mapEntry) {
+          const paliBookId = mapEntry.pali_book_id;
+          const idx = await ensureIndex();
+          const meta = idx.books.find(b => b.id === paliBookId);
+          
+          // လက်ရှိ မြန်မာပြန် စာမျက်နှာပေါ်က ပထမဆုံး စာပိုဒ်နံပါတ်ကို ရှာရန်
+          const pageHtml = mmPagesCache[mmCurrentBookId][mmCurrentPageIdx - 1] || "";
+          const pMatch = pageHtml.match(/class="paragraph">([၀-၉]+)</);
+          let paraNum = null;
+          let paliPage = null;
+          
+          if(pMatch) {
+            paraNum = parseInt(pMatch[1].replace(/[၀-၉]/g, c => "၀၁၂၃၄၅၆၇၈၉".indexOf(c)), 10);
+            paliPage = await findPageForParagraph(paliBookId, paraNum);
+          }
+          
+          // စာပိုဒ်နံပါတ် ရှာမတွေ့ပါက စာမျက်နှာကို အချိုးကျ တွက်ချက်ရန်
+          if(!paliPage) {
+             const pf = parseInt(mapEntry.pali_first_page,10), pl = parseInt(mapEntry.pali_last_page,10);
+             const mf = parseInt(mapEntry.mm_first_page,10), ml = parseInt(mapEntry.mm_last_page,10);
+             const ratio = (ml > mf) ? (mmCurrentPageIdx - mf) / (ml - mf) : 0;
+             paliPage = Math.round(pf + Math.max(0, ratio) * (pl - pf));
+          }
+          
+          if(meta && paliPage) {
+            closeAllDropdowns();
+            loadPage(meta.basket, meta.category, paliBookId, paliPage, meta.firstpage);
+            return;
+          }
+        }
+      } catch(e) { console.error("Error finding related pali page: ", e); }
+
+      // အကယ်၍ ပါဠိတော်ကို ရှာမရခဲ့လျှင် (သို့) Error တက်ခဲ့လျှင် မူလအတိုင်း အလုပ်လုပ်စေရန်
       if(!mmBackContext){ showBaskets(); return; }
       if(mmBackContext.kind === "browse"){ showMmBookList(mmBackContext.categorySlug); } else { loadPage(mmBackContext.basketId, mmBackContext.categoryId, mmBackContext.bookId, mmBackContext.pageNum, mmBackContext.firstpageHint); }
     });
