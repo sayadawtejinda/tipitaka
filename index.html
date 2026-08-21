@@ -130,12 +130,16 @@
   #tp-content .note{font-size:.8em;color:#888;vertical-align:super;}
   #tp-content .bodytext, #tp-nissaya-content .bodytext {text-indent:1.5em;}
   .tp-loading{color:#888;}
+
 p.hangnum {
-  margin-bottom: 0px !important;
-  margin-top: 15px !important; 
+  float: left;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important; 
 }
 
 p.gatha1, p.gatha2, p.gatha3, p.gathalast {
+  margin-left: 3.5em !important; /* ဂါထာစာကြောင်းများအားလုံးကို ဘယ်ဘက်တွင် တစ်တန်းတည်း ညီစေရန် */
+  text-indent: 0px !important;   /* ရှေ့ဆုံးမှ စာသား အနည်းငယ် ဝင်နေခြင်းကို တားရန် */
   margin-top: 0px !important;
   margin-bottom: 0px !important;
   line-height: 1.8;
@@ -369,10 +373,23 @@ let isNissayaOpen = false;
         // Output HTML တည်ဆောက်ခြင်း
         matchedBooksWithPage.forEach(match => {
            if (match.page !== null) {
-               bookHtml += `<div class="tp-sutta-item" data-action="book" data-book="${match.book.id}" data-page="${match.page}"><span style="color:#a00">📖</span> ${match.book.name} - စာမျက်နှာ ${toMyanmarDigits(match.page)} သို့ သွားမည်</div>`;
+               bookHtml += `<div class="tp-sutta-item" data-action="book" data-book="${match.book.id}" data-page="${match.page}"><span style="color:#a00">📖</span> ${match.book.name} - စာမျက်နှာ( ${toMyanmarDigits(match.page)}) သို့ သွားမည်</div>`;
            } else {
                const fillText = match.book.short_name || match.book.name;
-               bookHtml += `<div class="tp-sutta-item" data-fill="${fillText}"><span style="color:#a00">📖</span> ${match.book.name} (${fillText}) (စာမျက်နှာနံပါတ် ဆက်ရိုက်ပါ)</div>`;
+               const minP = match.book.firstpage || 1;
+               const maxP = match.book.lastpage || match.book.pagecount || "";
+               const pageHint = maxP ? `${toMyanmarDigits(minP)}-${toMyanmarDigits(maxP)}` : `${toMyanmarDigits(minP)} မှစ၍`;
+               bookHtml += `<div class="tp-sutta-item" data-fill="${fillText}"><span style="color:#a00">📖</span> ${match.book.name} (${fillText}) စာမျက်နှာ နံပါတ် (${pageHint}) ရိုက်ထည့်ပါ</div>`;
+           }
+        });
+        
+        suggestedBooks.slice(0, 15).forEach(b => {
+           if (!matchedBooksWithPage.some(m => m.book.id === b.id)) {
+               const fillText = b.short_name || b.name;
+               const minP = b.firstpage || 1;
+               const maxP = b.lastpage || b.pagecount || "";
+               const pageHint = maxP ? `${toMyanmarDigits(minP)}-${toMyanmarDigits(maxP)}` : `${toMyanmarDigits(minP)} မှစ၍`;
+               bookHtml += `<div class="tp-sutta-item" data-fill="${fillText}"><span style="color:#a00">📖</span> ${b.name} (${fillText}) စာမျက်နှာ နံပါတ် (${pageHint})  ရိုက်ထည့်ပါ</div>`;
            }
         });
         
@@ -839,8 +856,7 @@ let isNissayaOpen = false;
         <div id="tp-split-wrapper">
           <div id="tp-content" class="tp-split-pane">${row.content}</div>
           <div id="tp-nissaya-container" class="tp-split-pane">
-             <div id="tp-nissaya-header">
-                <span>📖 နိဿယ (စာမျက်နှာ - ${toMyanmarDigits(pageNum)})</span>
+             <div id="tp-nissaya-header" style="justify-content: flex-end; border-bottom: none; background: transparent; padding-bottom: 0;">
                 <button id="tp-nissaya-close" class="tp-icon-btn" style="padding: 2px 8px; font-size: 0.8em;">❌</button>
              </div>
              <div id="tp-nissaya-content"></div>
