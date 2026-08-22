@@ -815,11 +815,111 @@ let isRomanPali = false;
   // ref_keys နှင့်တိုက်ဆိုင်ရန် ဗလာနေရာ/ပုဒ်ဖြတ်သင်္ကေတများကို ရှင်းထုတ်ခြင်း
   function normalizeRefKey(s){ return String(s || "").replace(/[\s၊။.,]/g, ""); }
 
-  // ကျမ်းညွန်း ရှေ့ဆက်စာသား (ဥပမာ "သု။ နိ") ကို books.json ထဲက ref_keys နှင့် တိုက်ဆိုင်ရှာဖွေရန်
-  function findBookByRefKey(idx, prefixRaw){
-    const norm = normalizeRefKey(prefixRaw);
-    if(!norm || !idx || !Array.isArray(idx.books)) return null;
-    return idx.books.find(b => Array.isArray(b.ref_keys) && b.ref_keys.some(k => normalizeRefKey(k) === norm)) || null;
+  // ==========================================================================================
+  // ကျမ်းညွန်းစာကြောင်းတစ်ခုတည်းထဲမှာ စာအုပ်တစ်အုပ်တည်းမှ စာပိုဒ်များစွာ (ဥပမာ "ပါရာ။ ၃၉, ၄၂, ...")၊
+  // စာအုပ်များစွာ ရောပြီးဖော်ပြထားခြင်း (ဥပမာ "မ။ နိ။ ၂။၁၈၄၊ သံ။ နိ။ ၂။၂၂, ၂၃၇")၊ တစ်အုပ်တည်းထဲမှာ
+  // volume အမျိုးမျိုးပြောင်းခြင်း (ဥပမာ "အ။ နိ။ ၂။၅၊ ၈။၁၃")၊ နှင့် "စာပိုဒ်-N မှ N" range (ဥပမာ "၆၅-၆၇")
+  // စတာတွေအားလုံးကို ခွဲခြမ်းစိတ်ဖြာပြီး "(စာအုပ်, စာပိုဒ်, offset)" list တစ်ခုအဖြစ် ပြန်ပေးသည်။
+  //
+  // မြန်မာစာကျမ်းညွန်း သင်္ကေတသုံးနည်း -
+  //   "" (U+104B, ။)  = အတိုကောက်စာလုံးအပိုင်းများကြား / volume နှင့် စာပိုဒ်ကြား ပုဒ်ဖြတ်
+  //   "" (U+104A, ၊)  = (က) ဂဏန်းပြီးနောက် စာလုံးလာလျှင် - စာအုပ်အသစ်စတင်ခြင်း
+  //                        (ခ) ဂဏန်းပြီးနောက် ဂဏန်းလာလျှင် - စာအုပ်တူ volume အသစ်ပြောင်းခြင်း
+  //   ","  (ASCII)      = volume/စာအုပ်တူတည်းထဲက စာပိုဒ်များစွာကို ခွဲခြားသည်
+  //   "-"  (ASCII)      = "N-N" ဆိုတဲ့ စာပိုဒ် အစ-အဆုံး range
+  // ==========================================================================================
+  function parseCitationSpans(idx, inner){
+    const spans = []; // { start, end, bookId, paraNum } - offset သည် inner string အတွင်း absolute
+    if(!idx || !Array.isArray(idx.books)) return spans;
+
+    // ၁) "" ပြီးနောက် မြန်မာစာလုံးလာလျှင် "စာအုပ်အသစ်" ဟု သတ်မှတ်ပြီး block များအဖြစ်ခွဲမည်
+    const blockRanges = [];
+    let cursor = 0;
+    {
+      const re = /\u104A/g; let m;
+      while((m = re.exec(inner)) !== null){
+        let after = m.index + 1;
+        while(after < inner.length && /\s/.test(inner[after])) after++;
+        if(inner[after] && /[\u1000-\u1021]/.test(inner[after])){
+          blockRanges.push({start: cursor, end: m.index});
+          cursor = m.index + 1;
+        }
+      }
+      blockRanges.push({start: cursor, end: inner.length});
+    }
+
+    blockRanges.forEach(br => {
+      const block = inner.slice(br.start, br.end);
+      const digitMatch = block.match(/[\u1040-\u1049]/);
+      if(!digitMatch) return; // ဂဏန်းလုံးဝမပါရင် ကျမ်းညွန်းမဟုတ်ဟု ယူဆ၍ ကျော်မည်
+      const prefixEndRel = digitMatch.index;
+      const prefixRaw = block.slice(0, prefixEndRel);
+      const numbersRegion = block.slice(prefixEndRel);
+      const numbersRegionAbsStart = br.start + prefixEndRel;
+
+      // ၂) numbersRegion ထဲမှာ "" ပြီးနောက် ဂဏန်းလာလျှင် "volume အသစ်" ဟု သတ်မှတ်ပြီး ပြန်ခွဲမည်
+      const volGroupRanges = [];
+      let vCursor = 0;
+      {
+        const re = /\u104A/g; let m;
+        while((m = re.exec(numbersRegion)) !== null){
+          let after = m.index + 1;
+          while(after < numbersRegion.length && /\s/.test(numbersRegion[after])) after++;
+          if(numbersRegion[after] && /[\u1040-\u1049]/.test(numbersRegion[after])){
+            volGroupRanges.push({start: vCursor, end: m.index});
+            vCursor = m.index + 1;
+          }
+        }
+        volGroupRanges.push({start: vCursor, end: numbersRegion.length});
+      }
+
+      volGroupRanges.forEach(vr => {
+        const group = numbersRegion.slice(vr.start, vr.end);
+        const groupAbsStart = numbersRegionAbsStart + vr.start;
+
+        // ၃) group ထဲမှာ "" ရှိရင် volume + စာပိုဒ်စာရင်းအဖြစ်ခွဲမည်; မရှိရင် စာပိုဒ်စာရင်းချည်းသာ
+        const sepIdx = group.indexOf("\u104B");
+        let volDigits = "", paraListStr, paraListAbsStart;
+        if(sepIdx !== -1){
+          volDigits = group.slice(0, sepIdx).trim();
+          paraListStr = group.slice(sepIdx + 1);
+          paraListAbsStart = groupAbsStart + sepIdx + 1;
+        } else {
+          paraListStr = group;
+          paraListAbsStart = groupAbsStart;
+        }
+
+        const fullKey = normalizeRefKey(prefixRaw) + normalizeRefKey(volDigits);
+        if(!fullKey) return;
+        const bookMeta = idx.books.find(b => Array.isArray(b.ref_keys) && b.ref_keys.some(k => normalizeRefKey(k) === fullKey));
+        if(!bookMeta) return;
+
+        // ၄) paraListStr ကို "," ဖြင့်ခွဲပြီး တစ်ခုချင်းစီအတွက် ဂဏန်း (သို့) range ကို ရှာမည်
+        let tCursor = 0;
+        paraListStr.split(",").forEach(tokenRaw => {
+          const tokenAbsStart = paraListAbsStart + tCursor;
+          tCursor += tokenRaw.length + 1;
+
+          const rangeMatch = tokenRaw.match(/([\u1040-\u1049]+)\s*-\s*([\u1040-\u1049]+)/);
+          if(rangeMatch){
+            const n1 = rangeMatch[1], n2 = rangeMatch[2];
+            const n1Start = tokenAbsStart + tokenRaw.indexOf(n1);
+            const n2Start = tokenAbsStart + tokenRaw.lastIndexOf(n2);
+            spans.push({start: n1Start, end: n1Start + n1.length, bookId: bookMeta.id, paraNum: parseInt(fromMyanmarDigits(n1),10)});
+            spans.push({start: n2Start, end: n2Start + n2.length, bookId: bookMeta.id, paraNum: parseInt(fromMyanmarDigits(n2),10)});
+          } else {
+            const numMatch = tokenRaw.match(/[\u1040-\u1049]+/);
+            if(numMatch){
+              const nStart = tokenAbsStart + numMatch.index;
+              spans.push({start: nStart, end: nStart + numMatch[0].length, bookId: bookMeta.id, paraNum: parseInt(fromMyanmarDigits(numMatch[0]),10)});
+            }
+          }
+        });
+      });
+    });
+
+    spans.sort((a,b)=> a.start - b.start);
+    return spans;
   }
 
   // #tp-content ထဲက (သု။ နိ။ ၈၈၁) စတဲ့ ကျမ်းညွန်းစာသားများကို ရှာပြီး နှိပ်နိုင်သော Link များအဖြစ် ပြောင်းလဲခြင်း
@@ -828,7 +928,7 @@ let isRomanPali = false;
     let idx;
     try{ idx = await ensureIndex(); }catch(e){ return; }
 
-    const citationRegex = /\(([\u1000-\u109F][\u1000-\u109F\s.,]{1,40})\)/g;
+    const citationRegex = /\(([\u1000-\u109F][\u1000-\u109F\s,.\-]{1,300})\)/g;
     const walker = document.createTreeWalker(containerEl, NodeFilter.SHOW_TEXT, null);
     const textNodes = [];
     let node;
@@ -840,31 +940,30 @@ let isRomanPali = false;
     textNodes.forEach(textNode => {
       const text = textNode.nodeValue;
       citationRegex.lastIndex = 0;
-      let match, lastIndex = 0, found = false;
-      const frag = document.createDocumentFragment();
+      let match;
+      const allSpans = [];
       while((match = citationRegex.exec(text)) !== null){
-        const full = match[0], inner = match[1];
-        const numMatch = inner.match(/([၀-၉]+)\s*[။၊.]?\s*$/);
-        if(!numMatch) continue;
-        const paraNum = parseInt(fromMyanmarDigits(numMatch[1]), 10);
-        const prefix = inner.slice(0, numMatch.index);
-        const bookMeta = findBookByRefKey(idx, prefix);
-        if(!bookMeta || isNaN(paraNum)) continue;
+        const inner = match[1];
+        const innerAbsStart = match.index + 1; // "(" ကို ကျော်၍
+        const spans = parseCitationSpans(idx, inner);
+        spans.forEach(sp => allSpans.push({ start: innerAbsStart + sp.start, end: innerAbsStart + sp.end, bookId: sp.bookId, paraNum: sp.paraNum }));
+      }
+      if(allSpans.length === 0) return;
 
-        found = true;
-        frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+      const frag = document.createDocumentFragment();
+      let cursor = 0;
+      allSpans.forEach(sp => {
+        frag.appendChild(document.createTextNode(text.slice(cursor, sp.start)));
         const linkSpan = document.createElement("span");
         linkSpan.className = "tp-citation-link";
-        linkSpan.textContent = full;
-        linkSpan.dataset.book = bookMeta.id;
-        linkSpan.dataset.para = paraNum;
+        linkSpan.textContent = text.slice(sp.start, sp.end);
+        linkSpan.dataset.book = sp.bookId;
+        linkSpan.dataset.para = sp.paraNum;
         frag.appendChild(linkSpan);
-        lastIndex = match.index + full.length;
-      }
-      if(found){
-        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
-        textNode.parentNode.replaceChild(frag, textNode);
-      }
+        cursor = sp.end;
+      });
+      frag.appendChild(document.createTextNode(text.slice(cursor)));
+      textNode.parentNode.replaceChild(frag, textNode);
     });
 
     containerEl.querySelectorAll(".tp-citation-link").forEach(el => {
@@ -885,13 +984,32 @@ let isRomanPali = false;
     container.style.display = "block";
     contentEl.innerHTML = "<p class='tp-loading'>ကိုးကားချက် ဆွဲယူနေပါသည်...</p>";
     try{
+      const idx = await ensureIndex();
+      const bookMeta = findBookMetaByPageRange(idx, bookId, pageNum) || {};
       if(!bookPagesCache[bookId]) bookPagesCache[bookId] = await fetchBookPages(bookId);
       const rows = bookPagesCache[bookId];
       const row = rows.find(r => parseInt(r.page, 10) === pageNum);
       if(row){
-        contentEl.innerHTML = row.content;
+        // ဘေးတခြမ်းစာမျက်နှာ ထိပ်ဆုံးမှာ ဒီစာမျက်နှာရဲ့ ကိုးကားချက် (ဥပမာ "(ဒီ၊၁၊၁။)") ကို ပြပြီး
+        // နှိပ်လိုက်ရင် main page ဘက်တွင် ခါတိုင်းအတိုင်း သွားပြီး split view ကို ပိတ်မည်
+        const citeLabel = document.createElement("div");
+        citeLabel.className = "tp-citation-link";
+        citeLabel.style.marginBottom = "10px";
+        citeLabel.style.fontWeight = "bold";
+        citeLabel.textContent = citationText(bookMeta, pageNum);
+        citeLabel.addEventListener("click", () => {
+          container.style.display = "none";
+          loadPage(bookMeta.basket, bookMeta.category, bookId, pageNum, bookMeta.firstpage);
+        });
+
+        contentEl.innerHTML = "";
+        contentEl.appendChild(citeLabel);
+        const bodyWrap = document.createElement("div");
+        bodyWrap.innerHTML = row.content;
+        contentEl.appendChild(bodyWrap);
+
         if(highlightPara != null){
-          contentEl.querySelectorAll(".paranum").forEach(pEl => {
+          bodyWrap.querySelectorAll(".paranum").forEach(pEl => {
             if(parseParanums(pEl.textContent).includes(highlightPara)){
               const wrap = pEl.closest("p,div") || pEl;
               wrap.classList.add("tp-mm-highlight");
