@@ -84,6 +84,10 @@
   .tp-mm-highlight{background:#fff3b0;border-radius:2px;padding:2px 4px;font-weight:bold;color:#a00;}
   .tp-xref-empty{font-size:.85em;color:#888;text-align:center;padding:10px;}
 
+  /* စာသားထဲက ပါဠိတော်ကျမ်းညွန်း (ဥပမာ - သု၊နိ၊၈၈၁) ကို နှိပ်နိုင်သော Link အဖြစ်ပြသရန် */
+  .tp-citation-link{color:#0645ad;cursor:pointer;border-bottom:1px dashed #0645ad;}
+  .tp-citation-link:hover{background:#eef3ea;}
+
   #tp-sutta-input, #tp-float-search-input {
     width: 100%; padding: 8px; border: 1px solid #cbd5e1;
     border-radius: 4px; box-sizing: border-box; margin-bottom: 8px; font-family: inherit; font-size: 0.95em;
@@ -805,6 +809,108 @@ let isRomanPali = false;
   function toMyanmarDigits(n){ const map = {"0":"၀","1":"၁","2":"၂","3":"၃","4":"၄","5":"၅","6":"၆","7":"၇","8":"၈","9":"၉"}; return String(n).split("").map(c => map[c] !== undefined ? map[c] : c).join(""); }
   function citationText(bookMeta, pageNum){ const shortName = bookMeta.short_name || bookMeta.name || ""; const mmPage = toMyanmarDigits(pageNum); return `(${shortName}${mmPage}။)`; }
 
+  // မြန်မာဂဏန်းကို အင်္ဂလိပ်ဂဏန်းအဖြစ် ပြန်ပြောင်းရန်
+  function fromMyanmarDigits(str){ const map = {"၀":"0","၁":"1","၂":"2","၃":"3","၄":"4","၅":"5","၆":"6","၇":"7","၈":"8","၉":"9"}; return String(str).split("").map(c => map[c] !== undefined ? map[c] : c).join(""); }
+
+  // ref_keys နှင့်တိုက်ဆိုင်ရန် ဗလာနေရာ/ပုဒ်ဖြတ်သင်္ကေတများကို ရှင်းထုတ်ခြင်း
+  function normalizeRefKey(s){ return String(s || "").replace(/[\s၊။.,]/g, ""); }
+
+  // ကျမ်းညွန်း ရှေ့ဆက်စာသား (ဥပမာ "သု။ နိ") ကို books.json ထဲက ref_keys နှင့် တိုက်ဆိုင်ရှာဖွေရန်
+  function findBookByRefKey(idx, prefixRaw){
+    const norm = normalizeRefKey(prefixRaw);
+    if(!norm || !idx || !Array.isArray(idx.books)) return null;
+    return idx.books.find(b => Array.isArray(b.ref_keys) && b.ref_keys.some(k => normalizeRefKey(k) === norm)) || null;
+  }
+
+  // #tp-content ထဲက (သု။ နိ။ ၈၈၁) စတဲ့ ကျမ်းညွန်းစာသားများကို ရှာပြီး နှိပ်နိုင်သော Link များအဖြစ် ပြောင်းလဲခြင်း
+  async function linkifyCitations(containerEl){
+    if(!containerEl) return;
+    let idx;
+    try{ idx = await ensureIndex(); }catch(e){ return; }
+
+    const citationRegex = /\(([\u1000-\u109F][\u1000-\u109F\s.,]{1,40})\)/g;
+    const walker = document.createTreeWalker(containerEl, NodeFilter.SHOW_TEXT, null);
+    const textNodes = [];
+    let node;
+    while(node = walker.nextNode()){
+      citationRegex.lastIndex = 0;
+      if(citationRegex.test(node.nodeValue)) textNodes.push(node);
+    }
+
+    textNodes.forEach(textNode => {
+      const text = textNode.nodeValue;
+      citationRegex.lastIndex = 0;
+      let match, lastIndex = 0, found = false;
+      const frag = document.createDocumentFragment();
+      while((match = citationRegex.exec(text)) !== null){
+        const full = match[0], inner = match[1];
+        const numMatch = inner.match(/([၀-၉]+)\s*[။၊.]?\s*$/);
+        if(!numMatch) continue;
+        const paraNum = parseInt(fromMyanmarDigits(numMatch[1]), 10);
+        const prefix = inner.slice(0, numMatch.index);
+        const bookMeta = findBookByRefKey(idx, prefix);
+        if(!bookMeta || isNaN(paraNum)) continue;
+
+        found = true;
+        frag.appendChild(document.createTextNode(text.slice(lastIndex, match.index)));
+        const linkSpan = document.createElement("span");
+        linkSpan.className = "tp-citation-link";
+        linkSpan.textContent = full;
+        linkSpan.dataset.book = bookMeta.id;
+        linkSpan.dataset.para = paraNum;
+        frag.appendChild(linkSpan);
+        lastIndex = match.index + full.length;
+      }
+      if(found){
+        frag.appendChild(document.createTextNode(text.slice(lastIndex)));
+        textNode.parentNode.replaceChild(frag, textNode);
+      }
+    });
+
+    containerEl.querySelectorAll(".tp-citation-link").forEach(el => {
+      el.addEventListener("click", async () => {
+        const bookId = el.dataset.book, paraNum = parseInt(el.dataset.para, 10);
+        const targetPage = await findPageForParagraph(bookId, paraNum);
+        if(targetPage == null){ alert("ကိုးကားထားသော စာပိုဒ်ကို မတွေ့ပါ။"); return; }
+        openXrefSplit(bookId, targetPage, paraNum);
+      });
+    });
+  }
+
+  // ကျမ်းညွန်းကို နှိပ်လိုက်သောအခါ Split View ဘေးတခြမ်းတွင် သက်ဆိုင်ရာစာမျက်နှာကို ဖွင့်ပြရန်
+  async function openXrefSplit(bookId, pageNum, highlightPara){
+    isNissayaOpen = false;
+    const container = document.getElementById("tp-nissaya-container");
+    const contentEl = document.getElementById("tp-nissaya-content");
+    container.style.display = "block";
+    contentEl.innerHTML = "<p class='tp-loading'>ကိုးကားချက် ဆွဲယူနေပါသည်...</p>";
+    try{
+      if(!bookPagesCache[bookId]) bookPagesCache[bookId] = await fetchBookPages(bookId);
+      const rows = bookPagesCache[bookId];
+      const row = rows.find(r => parseInt(r.page, 10) === pageNum);
+      if(row){
+        contentEl.innerHTML = row.content;
+        if(highlightPara != null){
+          contentEl.querySelectorAll(".paranum").forEach(pEl => {
+            if(parseParanums(pEl.textContent).includes(highlightPara)){
+              const wrap = pEl.closest("p,div") || pEl;
+              wrap.classList.add("tp-mm-highlight");
+              setTimeout(() => wrap.scrollIntoView({behavior:"smooth", block:"center"}), 50);
+            }
+          });
+        }
+      } else {
+        contentEl.innerHTML = `<p style='color:red'>စာမျက်နှာ ${toMyanmarDigits(pageNum)} ကို မတွေ့ပါ။</p>`;
+      }
+    } catch(e){
+      contentEl.innerHTML = `<p style='color:red'>ကိုးကားချက် ဖိုင်မရရှိနိုင်သေးပါ (${e.message})</p>`;
+    }
+
+    document.getElementById("tp-nissaya-close").addEventListener("click", () => {
+      container.style.display = "none";
+    });
+  }
+
   function getParams(){ const p = new URLSearchParams(window.location.search); return { basket: p.get("basket") || "", category: p.get("category") || "", book: p.get("book") || "", firstpage: p.get("firstpage") ? parseInt(p.get("firstpage"),10) : null, page: p.get("page") ? parseInt(p.get("page"),10) : null }; }
   function setParams(obj){ const p = new URLSearchParams(); if(obj.basket) p.set("basket", obj.basket); if(obj.category) p.set("category", obj.category); if(obj.book) p.set("book", obj.book); if(obj.firstpage) p.set("firstpage", obj.firstpage); if(obj.page) p.set("page", obj.page); history.pushState({}, "", "?" + p.toString()); }
 
@@ -964,6 +1070,8 @@ let isRomanPali = false;
         </div>
       `;
       
+      linkifyCitations(document.getElementById("tp-content"));
+
       document.getElementById("tp-float-prev").disabled = pageNum <= minPage; document.getElementById("tp-float-next").disabled = pageNum >= maxPage;
       document.getElementById("tp-float-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1, firstpageHint));
       document.getElementById("tp-float-next").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum+1, firstpageHint));
