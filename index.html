@@ -374,7 +374,20 @@ let isRomanPali = false;
         // Output HTML တည်ဆောက်ခြင်း
         matchedBooksWithPage.forEach(match => {
            if (match.page !== null) {
-               bookHtml += `<div class="tp-sutta-item" data-action="book" data-book="${match.book.id}" data-page="${match.page}"><span style="color:#a00">📖</span> ${match.book.name} - စာမျက်နှာ( ${toMyanmarDigits(match.page)}) သို့ သွားမည်</div>`;
+               // ကျမ်းစာ၏ အစစာမျက်နှာ နှင့် အဆုံးစာမျက်နှာကို ယူမည်
+               const minP = match.book.firstpage || 1;
+               const maxP = match.book.lastpage || match.book.pagecount || 9999;
+               
+               // ရိုက်ထည့်လိုက်သော စာမျက်နှာသည် ထိုကျမ်းစာ၏ စာမျက်နှာဘောင်အတွင်း ရှိ/မရှိ စစ်ဆေးမည်
+               if (match.page >= minP && match.page <= maxP) {
+                   // ဘောင်အတွင်းရှိပါက သွားလို့ရမည့် ပုံမှန်ပုံစံ ပြမည်
+                   bookHtml += `<div class="tp-sutta-item" data-action="book" data-book="${match.book.id}" data-page="${match.page}"><span style="color:#a00">📖</span> ${match.book.name} - စာမျက်နှာ( ${toMyanmarDigits(match.page)}) သို့ သွားမည်</div>`;
+               } else {
+                   // ဘောင်အတွင်းမရှိပါက (ဥပမာ- ၂၄၃ မရောက်သေးချိန် သို့မဟုတ် ကျော်လွန်သွားချိန်) သွားလို့မရအောင် အနီရောင်ပြမည်
+                   bookHtml += `<div class="tp-sutta-item" style="color:#d9534f; cursor:not-allowed; background:#fdf2f2;" title="ဤကျမ်းသည် စာမျက်နှာ ${toMyanmarDigits(minP)} မှ ${maxP===9999?'':toMyanmarDigits(maxP)} အထိသာဖြစ်ပါသည်">
+                       <span style="color:red">📖</span> ${match.book.name} - စာမျက်နှာ( ${toMyanmarDigits(match.page)}) မရှိပါ
+                   </div>`;
+               }
            } else {
                const fillText = match.book.short_name || match.book.name;
                const minP = match.book.firstpage || 1;
@@ -1036,13 +1049,52 @@ let isRomanPali = false;
                   // innerText ကိုယူပြီး လေးထောင့်ကွင်း [...] အတွင်းရှိစာများကို ဖယ်ရှားမည်
                   let textToCopy = contentEl.innerText.replace(/\[.*?\]/gs, "").trim();
                   
-                  navigator.clipboard.writeText(textToCopy).then(() => {
-                      const originalText = copyBtn.innerHTML;
-                      copyBtn.innerHTML = "✅"; // Copy ကူးပြီးကြောင်း ပြသရန်
-                      setTimeout(() => copyBtn.innerHTML = originalText, 1500);
-                  }).catch(err => {
-                      alert("Copy ကူးယူရာတွင် အမှားအယွင်းဖြစ်နေပါသည်။");
-                  });
+                  // Copy ကူးတာ အောင်မြင်သွားရင် UI ပြောင်းမည့် Function
+                  const showSuccess = () => {
+                      // အစကတည်းက ✅ ဖြစ်နေပြီးသားဆိုရင် Original Text (ဥပမာ- Icon) ကို မပျောက်သွားအောင် ကာကွယ်ခြင်း
+                      if(copyBtn.innerHTML !== "✅") {
+                          const originalText = copyBtn.innerHTML;
+                          copyBtn.innerHTML = "✅"; 
+                          setTimeout(() => copyBtn.innerHTML = originalText, 1500);
+                      }
+                  };
+
+                  // Fallback Function (Clipboard API အလုပ်မလုပ်သောအခါ အသုံးပြုရန်)
+                  const fallbackCopy = (text) => {
+                      const textArea = document.createElement("textarea");
+                      textArea.value = text;
+                      textArea.style.position = "fixed";
+                      textArea.style.top = "0";
+                      textArea.style.left = "0";
+                      textArea.style.opacity = "0";
+                      document.body.appendChild(textArea);
+                      textArea.focus();
+                      textArea.select();
+                      try {
+                          const successful = document.execCommand('copy');
+                          if (successful) {
+                              showSuccess();
+                          } else {
+                              alert("Copy ကူးယူရာတွင် အမှားအယွင်းဖြစ်နေပါသည်။");
+                          }
+                      } catch (err) {
+                          alert("Copy ကူးယူရာတွင် အမှားအယွင်းဖြစ်နေပါသည်။");
+                      }
+                      document.body.removeChild(textArea);
+                  };
+
+                  // ပထမနည်းလမ်း (Modern API) ဖြင့် စမ်းမည်
+                  if (navigator.clipboard && window.isSecureContext) {
+                      navigator.clipboard.writeText(textToCopy).then(() => {
+                          showSuccess();
+                      }).catch(err => {
+                          // Modern API ပျက်ကွက်ပါက (Error တက်ပါက) Fallback သို့ ပြောင်းမည်
+                          fallbackCopy(textToCopy);
+                      });
+                  } else {
+                      // Modern API မရနိုင်ပါက (ဥပမာ - Localhost သို့မဟုတ် HTTP ဖြစ်နေလျှင်) Fallback ကို တိုက်ရိုက်သုံးမည်
+                      fallbackCopy(textToCopy);
+                  }
               }
           });
           window.isCopyListenerAttached = true; // Event ထပ်ခါထပ်ခါ မချိတ်မိစေရန် မှတ်သားထားမည်
@@ -1103,6 +1155,7 @@ let isRomanPali = false;
           }
       });
   }
+
 </script>
 
 </body>
