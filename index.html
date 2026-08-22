@@ -816,20 +816,119 @@ let isRomanPali = false;
   function normalizeRefKey(s){ return String(s || "").replace(/[\s၊။.,]/g, ""); }
 
   // ==========================================================================================
-  // ကျမ်းညွန်းစာကြောင်းတစ်ခုတည်းထဲမှာ စာအုပ်တစ်အုပ်တည်းမှ စာပိုဒ်များစွာ (ဥပမာ "ပါရာ။ ၃၉, ၄၂, ...")၊
-  // စာအုပ်များစွာ ရောပြီးဖော်ပြထားခြင်း (ဥပမာ "မ။ နိ။ ၂။၁၈၄၊ သံ။ နိ။ ၂။၂၂, ၂၃၇")၊ တစ်အုပ်တည်းထဲမှာ
-  // volume အမျိုးမျိုးပြောင်းခြင်း (ဥပမာ "အ။ နိ။ ၂။၅၊ ၈။၁၃")၊ နှင့် "စာပိုဒ်-N မှ N" range (ဥပမာ "၆၅-၆၇")
-  // စတာတွေအားလုံးကို ခွဲခြမ်းစိတ်ဖြာပြီး "(စာအုပ်, စာပိုဒ်, offset)" list တစ်ခုအဖြစ် ပြန်ပေးသည်။
+  // ကျမ်းညွန်းစာကြောင်းတစ်ခုတည်းထဲမှာ -
+  //  - စာအုပ်တစ်အုပ်တည်းမှ စာပိုဒ်များစွာ (ဥပမာ "ပါရာ။ ၃၉, ၄၂, ...")
+  //  - စာအုပ်များစွာ ရောပြီးဖော်ပြထားခြင်း (ဥပမာ "မ။ နိ။ ၂။၁၈၄၊ သံ။ နိ။ ၂။၂၂, ၂၃၇")
+  //  - တစ်အုပ်တည်းထဲမှာ volume အမျိုးမျိုးပြောင်းခြင်း (ဥပမာ "အ။ နိ။ ၂။၅၊ ၈။၁၃")
+  //  - "စာပိုဒ်-N မှ N" range (ဥပမာ "၆၅-၆၇")
+  //  - စာပိုဒ်နံပါတ်အစား ခေါင်းစဉ်/သုတ်/ဝတ္ထုအမည် ပါခြင်း (ဥပမာ "သု။ နိ။ အာဠဝကသုတ္တ") - toc.json ဖြင့်ရှာရန်
+  //  - ကျမ်းညွန်းရှေ့မှာ ရှင်းလင်းချက်စကားစု ပါခြင်း (ဥပမာ "နိဗ္ဗတ္တိတတ္တာ မ။ နိ။ ဋီ။ ၁။၁")
+  //  - နိပါတ်/ဂဏန်းများစွာ ဆက်တိုက်ပါပြီး အနောက်ဆုံးနံပါတ်သာ စာပိုဒ်ဖြစ်ခြင်း (ဥပမာ "အပ။ ၁။၁။၄၈")
+  // စတာတွေအားလုံးကို ခွဲခြမ်းစိတ်ဖြာပြီး link span list တစ်ခုအဖြစ် ပြန်ပေးသည်။
   //
-  // မြန်မာစာကျမ်းညွန်း သင်္ကေတသုံးနည်း -
-  //   "" (U+104B, ။)  = အတိုကောက်စာလုံးအပိုင်းများကြား / volume နှင့် စာပိုဒ်ကြား ပုဒ်ဖြတ်
-  //   "" (U+104A, ၊)  = (က) ဂဏန်းပြီးနောက် စာလုံးလာလျှင် - စာအုပ်အသစ်စတင်ခြင်း
-  //                        (ခ) ဂဏန်းပြီးနောက် ဂဏန်းလာလျှင် - စာအုပ်တူ volume အသစ်ပြောင်းခြင်း
-  //   ","  (ASCII)      = volume/စာအုပ်တူတည်းထဲက စာပိုဒ်များစွာကို ခွဲခြားသည်
-  //   "-"  (ASCII)      = "N-N" ဆိုတဲ့ စာပိုဒ် အစ-အဆုံး range
+  // ချဉ်းကပ်ပုံ - block တစ်ခုစီအတွက် (booksep-comma ဖြင့်ခွဲထားပြီးသား) "" (period) ခွဲထားသော token
+  // များကို ရှေ့ဆုံးမှစပြီး တစ်ခုချင်း စုပေါင်းကာ books.json ရဲ့ ref_keys နှင့် အကောင်းဆုံး (အရှည်ဆုံး)
+  // တိုက်ဆိုင်သည့်နေရာအထိ ရှာသည် (greedy longest match)။ ရှေ့ဆုံး token မှာ စတင်ရှာ၍ မတွေ့လျှင် နောက်
+  // token တစ်ခုချင်းစီမှ ပြန်စရှာသည် (ရှေ့က ရှင်းလင်းချက်စကားစုများကို ကျော်ရန်)။ ကျန်အပိုင်းက စာပိုဒ်
+  // နံပါတ် (သို့) ခေါင်းစဉ် ဖြစ်သည်။
   // ==========================================================================================
+
+  function tp_normKeyOf(idx, key){
+    return idx.books.find(b => Array.isArray(b.ref_keys) && b.ref_keys.some(k => normalizeRefKey(k) === key)) || null;
+  }
+
+  // "" period / "" comma / ASCII "," / space တို့ဖြင့် token များအဖြစ် ခွဲခြင်း (hyphen ကိုတော့ token ထဲမှာ ထားမည်)
+  function tp_tokenize(text){
+    const tokens = [];
+    const re = /[^\s,\u104A\u104B]+/g;
+    let m;
+    while((m = re.exec(text)) !== null) tokens.push({text: m[0], start: m.index, end: m.index + m[0].length});
+    return tokens;
+  }
+
+  function tp_greedyMatch(idx, tokens, startIdx){
+    let acc = "", bestUpTo = -1, bestBook = null;
+    for(let i = startIdx; i < tokens.length; i++){
+      acc += tokens[i].text;
+      const book = tp_normKeyOf(idx, normalizeRefKey(acc));
+      if(book){ bestUpTo = i; bestBook = book; }
+    }
+    return bestUpTo === -1 ? null : { startIdx, upTo: bestUpTo, book: bestBook };
+  }
+
+  // ရှေ့မှာ ရှင်းလင်းချက်စကားစုပါနိုင်တာမို့ token တစ်ခုချင်းစီမှ စတင်ကာ ref_keys တိုက်ဆိုင်မှု ရှာသည်
+  function tp_findBlockPrefix(idx, tokens){
+    for(let s = 0; s < tokens.length; s++){ const r = tp_greedyMatch(idx, tokens, s); if(r) return r; }
+    return null;
+  }
+
+  // ကျန်အပိုင်း (prefix ပြီးနောက်ပိုင်း) ကို "" volGroup + "," item များအဖြစ် ခွဲပြီး စာပိုဒ်/ခေါင်းစဉ် spans ထုတ်သည်
+  function tp_processRemainder(idx, remainderText, remainderAbsOffset, bestBook, baseLetterPrefixNorm, hasVolumeToken){
+    const spans = [];
+    const groupRanges = [];
+    let cursor = 0;
+    {
+      const re = /\u104A/g; let m;
+      while((m = re.exec(remainderText)) !== null){
+        let after = m.index + 1;
+        while(after < remainderText.length && /\s/.test(remainderText[after])) after++;
+        if(remainderText[after] && /[\u1040-\u1049]/.test(remainderText[after])){
+          groupRanges.push({start: cursor, end: m.index}); cursor = m.index + 1;
+        }
+      }
+      groupRanges.push({start: cursor, end: remainderText.length});
+    }
+
+    groupRanges.forEach((gr, gi) => {
+      const group = remainderText.slice(gr.start, gr.end);
+      const groupAbsStart = remainderAbsOffset + gr.start;
+      let groupBook = bestBook;
+      // ပထမဆုံး group မှလွဲ၍ ကျန်တာတွေက volume အသစ်ဖြစ်နိုင်တာမို့ prefix+volume ဖြင့် ပြန်ရှာကြည့်မည်
+      if(gi > 0 && hasVolumeToken){
+        const fd = group.match(/[\u1040-\u1049]+/);
+        if(fd){
+          const altBook = tp_normKeyOf(idx, baseLetterPrefixNorm + normalizeRefKey(fd[0]));
+          if(altBook) groupBook = altBook;
+        }
+      }
+
+      let tCursor = 0;
+      group.split(",").forEach(itemRaw => {
+        const itemAbsStart = groupAbsStart + tCursor;
+        tCursor += itemRaw.length + 1;
+
+        const rangeMatch = itemRaw.match(/([\u1040-\u1049]+)\s*-\s*([\u1040-\u1049]+)/);
+        if(rangeMatch){
+          const n1 = rangeMatch[1], n2 = rangeMatch[2];
+          const n1Start = itemAbsStart + itemRaw.indexOf(n1);
+          const n2Start = itemAbsStart + itemRaw.lastIndexOf(n2);
+          spans.push({start:n1Start, end:n1Start+n1.length, bookId:groupBook.id, paraNum:parseInt(fromMyanmarDigits(n1),10)});
+          spans.push({start:n2Start, end:n2Start+n2.length, bookId:groupBook.id, paraNum:parseInt(fromMyanmarDigits(n2),10)});
+          return;
+        }
+
+        const digitMatches = [...itemRaw.matchAll(/[\u1040-\u1049]+/g)];
+        if(digitMatches.length > 0){
+          // ဂဏန်းများစွာဆက်တိုက်ပါလျှင် (ဥပမာ "၅၅။၂၄၄") "အနောက်ဆုံး" ဂဏန်းသည် စာပိုဒ်ဖြစ်သည်
+          const last = digitMatches[digitMatches.length-1];
+          const nStart = itemAbsStart + last.index;
+          spans.push({start:nStart, end:nStart+last[0].length, bookId:groupBook.id, paraNum:parseInt(fromMyanmarDigits(last[0]),10)});
+        } else {
+          // ဂဏန်းလုံးဝမပါ - toc.json ဖြင့်ရှာရမည့် ခေါင်းစဉ်/သုတ်/ဝတ္ထုအမည်
+          const titleText = itemRaw.replace(/^[\s\u104B]+/, "").replace(/[\s\u104B]+$/, "");
+          if(titleText){
+            const idxInItem = itemRaw.indexOf(titleText);
+            spans.push({start: itemAbsStart + idxInItem, end: itemAbsStart + idxInItem + titleText.length, bookId: groupBook.id, title: titleText});
+          }
+        }
+      });
+    });
+
+    return spans;
+  }
+
   function parseCitationSpans(idx, inner){
-    const spans = []; // { start, end, bookId, paraNum } - offset သည် inner string အတွင်း absolute
+    const spans = []; // { start, end, bookId, paraNum } (သို့) { start, end, bookId, title } - offset သည် inner string အတွင်း absolute
     if(!idx || !Array.isArray(idx.books)) return spans;
 
     // ၁) "" ပြီးနောက် မြန်မာစာလုံးလာလျှင် "စာအုပ်အသစ်" ဟု သတ်မှတ်ပြီး block များအဖြစ်ခွဲမည်
@@ -850,76 +949,42 @@ let isRomanPali = false;
 
     blockRanges.forEach(br => {
       const block = inner.slice(br.start, br.end);
-      const digitMatch = block.match(/[\u1040-\u1049]/);
-      if(!digitMatch) return; // ဂဏန်းလုံးဝမပါရင် ကျမ်းညွန်းမဟုတ်ဟု ယူဆ၍ ကျော်မည်
-      const prefixEndRel = digitMatch.index;
-      const prefixRaw = block.slice(0, prefixEndRel);
-      const numbersRegion = block.slice(prefixEndRel);
-      const numbersRegionAbsStart = br.start + prefixEndRel;
+      const tokens = tp_tokenize(block);
+      if(tokens.length === 0) return;
 
-      // ၂) numbersRegion ထဲမှာ "" ပြီးနောက် ဂဏန်းလာလျှင် "volume အသစ်" ဟု သတ်မှတ်ပြီး ပြန်ခွဲမည်
-      const volGroupRanges = [];
-      let vCursor = 0;
-      {
-        const re = /\u104A/g; let m;
-        while((m = re.exec(numbersRegion)) !== null){
-          let after = m.index + 1;
-          while(after < numbersRegion.length && /\s/.test(numbersRegion[after])) after++;
-          if(numbersRegion[after] && /[\u1040-\u1049]/.test(numbersRegion[after])){
-            volGroupRanges.push({start: vCursor, end: m.index});
-            vCursor = m.index + 1;
-          }
-        }
-        volGroupRanges.push({start: vCursor, end: numbersRegion.length});
+      const res = tp_findBlockPrefix(idx, tokens);
+      if(!res) return; // books.json ref_keys နှင့် လုံးဝမတိုက်ဆိုင်ရင် ဒီ block ကို ကျော်မည်
+
+      const lastTok = tokens[res.upTo];
+      const hasVolumeToken = /[\u1040-\u1049]/.test(lastTok.text);
+      let baseLetterPrefixNorm = "";
+      if(hasVolumeToken){
+        for(let i = res.startIdx; i < res.upTo; i++) baseLetterPrefixNorm += normalizeRefKey(tokens[i].text);
+      } else {
+        for(let i = res.startIdx; i <= res.upTo; i++) baseLetterPrefixNorm += normalizeRefKey(tokens[i].text);
       }
 
-      volGroupRanges.forEach(vr => {
-        const group = numbersRegion.slice(vr.start, vr.end);
-        const groupAbsStart = numbersRegionAbsStart + vr.start;
+      const remainderAbsOffset = br.start + lastTok.end;
+      const remainderText = block.slice(lastTok.end);
+      if(!remainderText.trim()) return;
 
-        // ၃) group ထဲမှာ "" ရှိရင် volume + စာပိုဒ်စာရင်းအဖြစ်ခွဲမည်; မရှိရင် စာပိုဒ်စာရင်းချည်းသာ
-        const sepIdx = group.indexOf("\u104B");
-        let volDigits = "", paraListStr, paraListAbsStart;
-        if(sepIdx !== -1){
-          volDigits = group.slice(0, sepIdx).trim();
-          paraListStr = group.slice(sepIdx + 1);
-          paraListAbsStart = groupAbsStart + sepIdx + 1;
-        } else {
-          paraListStr = group;
-          paraListAbsStart = groupAbsStart;
-        }
-
-        const fullKey = normalizeRefKey(prefixRaw) + normalizeRefKey(volDigits);
-        if(!fullKey) return;
-        const bookMeta = idx.books.find(b => Array.isArray(b.ref_keys) && b.ref_keys.some(k => normalizeRefKey(k) === fullKey));
-        if(!bookMeta) return;
-
-        // ၄) paraListStr ကို "," ဖြင့်ခွဲပြီး တစ်ခုချင်းစီအတွက် ဂဏန်း (သို့) range ကို ရှာမည်
-        let tCursor = 0;
-        paraListStr.split(",").forEach(tokenRaw => {
-          const tokenAbsStart = paraListAbsStart + tCursor;
-          tCursor += tokenRaw.length + 1;
-
-          const rangeMatch = tokenRaw.match(/([\u1040-\u1049]+)\s*-\s*([\u1040-\u1049]+)/);
-          if(rangeMatch){
-            const n1 = rangeMatch[1], n2 = rangeMatch[2];
-            const n1Start = tokenAbsStart + tokenRaw.indexOf(n1);
-            const n2Start = tokenAbsStart + tokenRaw.lastIndexOf(n2);
-            spans.push({start: n1Start, end: n1Start + n1.length, bookId: bookMeta.id, paraNum: parseInt(fromMyanmarDigits(n1),10)});
-            spans.push({start: n2Start, end: n2Start + n2.length, bookId: bookMeta.id, paraNum: parseInt(fromMyanmarDigits(n2),10)});
-          } else {
-            const numMatch = tokenRaw.match(/[\u1040-\u1049]+/);
-            if(numMatch){
-              const nStart = tokenAbsStart + numMatch.index;
-              spans.push({start: nStart, end: nStart + numMatch[0].length, bookId: bookMeta.id, paraNum: parseInt(fromMyanmarDigits(numMatch[0]),10)});
-            }
-          }
-        });
-      });
+      const groupSpans = tp_processRemainder(idx, remainderText, remainderAbsOffset, res.book, baseLetterPrefixNorm, hasVolumeToken);
+      spans.push(...groupSpans);
     });
 
     spans.sort((a,b)=> a.start - b.start);
     return spans;
+  }
+
+  // toc.json ထဲမှာ ခေါင်းစဉ် (သုတ်/ဝတ္ထု/ကထာအမည်) ဖြင့် စာမျက်နှာရှာရန်
+  async function findPageByTitle(bookId, titleText){
+    const toc = await ensureToc();
+    const target = normalizeRefKey(titleText);
+    if(!target) return null;
+    const items = toc.filter(t => t.book_id === bookId);
+    let found = items.find(it => normalizeRefKey(it.name) === target);
+    if(!found) found = items.find(it => normalizeRefKey(it.name).includes(target) || target.includes(normalizeRefKey(it.name)));
+    return found ? found.page_number : null;
   }
 
   // #tp-content ထဲက (သု။ နိ။ ၈၈၁) စတဲ့ ကျမ်းညွန်းစာသားများကို ရှာပြီး နှိပ်နိုင်သော Link များအဖြစ် ပြောင်းလဲခြင်း
@@ -946,7 +1011,7 @@ let isRomanPali = false;
         const inner = match[1];
         const innerAbsStart = match.index + 1; // "(" ကို ကျော်၍
         const spans = parseCitationSpans(idx, inner);
-        spans.forEach(sp => allSpans.push({ start: innerAbsStart + sp.start, end: innerAbsStart + sp.end, bookId: sp.bookId, paraNum: sp.paraNum }));
+        spans.forEach(sp => allSpans.push({ start: innerAbsStart + sp.start, end: innerAbsStart + sp.end, bookId: sp.bookId, paraNum: sp.paraNum, title: sp.title }));
       }
       if(allSpans.length === 0) return;
 
@@ -958,7 +1023,8 @@ let isRomanPali = false;
         linkSpan.className = "tp-citation-link";
         linkSpan.textContent = text.slice(sp.start, sp.end);
         linkSpan.dataset.book = sp.bookId;
-        linkSpan.dataset.para = sp.paraNum;
+        if(sp.title != null) linkSpan.dataset.title = sp.title;
+        else linkSpan.dataset.para = sp.paraNum;
         frag.appendChild(linkSpan);
         cursor = sp.end;
       });
@@ -968,10 +1034,17 @@ let isRomanPali = false;
 
     containerEl.querySelectorAll(".tp-citation-link").forEach(el => {
       el.addEventListener("click", async () => {
-        const bookId = el.dataset.book, paraNum = parseInt(el.dataset.para, 10);
-        const targetPage = await findPageForParagraph(bookId, paraNum);
-        if(targetPage == null){ alert("ကိုးကားထားသော စာပိုဒ်ကို မတွေ့ပါ။"); return; }
-        openXrefSplit(bookId, targetPage, paraNum);
+        const bookId = el.dataset.book;
+        let targetPage, highlightPara = null;
+        if(el.dataset.title != null){
+          targetPage = await findPageByTitle(bookId, el.dataset.title);
+        } else {
+          const paraNum = parseInt(el.dataset.para, 10);
+          highlightPara = paraNum;
+          targetPage = await findPageForParagraph(bookId, paraNum);
+        }
+        if(targetPage == null){ alert("ကိုးကားထားသော အပိုင်းကို မတွေ့ပါ။"); return; }
+        openXrefSplit(bookId, targetPage, highlightPara);
       });
     });
   }
