@@ -1278,7 +1278,7 @@
       "category": "vi",
       "name": "သာရတ္ထဒီပနီဋီကာ (ပ)",
       "short_name": "သာရတ္ထ၊၁၊",
-      "ref_keys": ["သာရတ္ထ၊၁"],
+      "ref_keys": ["သာရတ္ထ။ ဋီ။ ၁", "သာရတ္ထ၊၁"],
       "firstpage": 1,
       "lastpage": 460,
       "pagecount": 460
@@ -1289,7 +1289,7 @@
       "category": "vi",
       "name": "သာရတ္ထဒီပနီဋီကာ (ဒု)",
       "short_name": "သာရတ္ထ၊၂၊",
-      "ref_keys": ["သာရတ္ထ၊၂"],
+      "ref_keys": ["သာရတ္ထ။ ဋီ။ ၂", "သာရတ္ထ၊၂"],
       "firstpage": 1,
       "lastpage": 448,
       "pagecount": 448
@@ -1300,7 +1300,7 @@
       "category": "vi",
       "name": "သာရတ္ထဒီပနီဋီကာ (တ)",
       "short_name": "သာရတ္ထ၊၃၊",
-      "ref_keys": ["သာရတ္ထ၊၃"],
+      "ref_keys": ["သာရတ္ထ။ ဋီ။ ၃", "သာရတ္ထ၊၃"],
       "firstpage": 1,
       "lastpage": 496,
       "pagecount": 496
@@ -1696,7 +1696,7 @@
     "category": "annya_vi",
     "name": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ",
     "short_name": "ကင်္ခါ",
-    "ref_keys": ["ကင်္ခါဝိတရဏီအဋ္ဌကထာ", "ကင်္ခါ", "ဝိနယာဋ္ဌကထာ"],
+    "ref_keys": ["ကင်္ခါ။ အဋ္ဌ", "ကင်္ခါ"],
     "firstpage": 83,
     "lastpage": 357,
     "pagecount": 275
