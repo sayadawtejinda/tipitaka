@@ -100,6 +100,21 @@
   .tp-sutta-empty { color: #888; font-size: 0.9em; text-align: center; padding: 8px 0; }
 
   #tp-meta{color:#666;font-size:.9em;margin-bottom:12px;}
+
+  /* Double-click အဘိဓာန် Floating Box */
+  #tp-dict-float{
+    display:none; position:fixed; top:90px; right:20px; width:320px; max-width:88vw; max-height:65vh;
+    overflow-y:auto; background:#fffefb; border:1px solid #d9d0b8; border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,.18); padding:16px; z-index:9999;
+  }
+  #tp-dict-float .tp-dict-close{ position:absolute; top:8px; right:12px; cursor:pointer; font-size:16px; color:#888; }
+  #tp-dict-float .tp-dict-close:hover{ color:#a00; }
+  #tp-dict-float .tp-dict-word{ font-weight:bold; font-size:1.15em; color:#0645ad; margin:0 26px 10px 0; }
+  #tp-dict-float .tp-dict-def{ font-size:.95em; line-height:1.6; }
+  #tp-dict-float .tp-dict-empty{ color:#888; font-size:.9em; }
+  @media (max-width: 768px){
+    #tp-dict-float{ left:12px; right:12px; width:auto; top:auto; bottom:12px; max-height:50vh; }
+  }
   
   /* Split View Layout */
   #tp-split-wrapper { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
@@ -217,6 +232,117 @@ let isRomanPali = false;
 
   async function ensureIndex(){ if(!bookIndex) bookIndex = await fetchJson(cdnUrl(INDEX_FILE)); return bookIndex; }
   async function ensureToc(){ if(!tocIndex){ try{ tocIndex = await fetchJson(cdnUrl(TOC_FILE)); }catch(e){ tocIndex = []; } } return tocIndex; }
+
+  // ==========================================================================================
+  // Double-click အဘိဓာန် (Dictionary) - Firebase Realtime Database ကနေ word list ကို တစ်ကြိမ်တည်း ဆွဲယူပြီး cache လုပ်ထားမည်
+  // ==========================================================================================
+  let tp_dictListCache = null, tp_dictListPromise = null;
+
+  function tp_findDictWordArray(node){
+    if(Array.isArray(node) && node.length && node[0] && node[0].word) return node.filter(item => item);
+    if(typeof node === "object" && node !== null){
+      for(const key in node){ const result = tp_findDictWordArray(node[key]); if(result.length) return result; }
+    }
+    return [];
+  }
+
+  async function ensureDictList(){
+    if(tp_dictListCache) return tp_dictListCache;
+    if(tp_dictListPromise) return tp_dictListPromise;
+    tp_dictListPromise = (async () => {
+      try{
+        const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js");
+        const { getDatabase, ref, get } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js");
+        const firebaseConfig = {
+          apiKey: "AIzaSyANHBnQWsCmXONDIO-05drbrtNY_2JBW8E",
+          authDomain: "tipitakaditionary.firebaseapp.com",
+          databaseURL: "https://tipitakaditionary-default-rtdb.firebaseio.com",
+          projectId: "tipitakaditionary",
+          storageBucket: "tipitakaditionary.firebasestorage.app",
+          messagingSenderId: "1074784131260",
+          appId: "1:1074784131260:web:b7430a936b9f24887f58b9"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const snapshot = await get(ref(db));
+        tp_dictListCache = snapshot.exists() ? tp_findDictWordArray(snapshot.val()) : [];
+      }catch(e){
+        tp_dictListCache = [];
+      }
+      return tp_dictListCache;
+    })();
+    return tp_dictListPromise;
+  }
+
+  // click လုပ်လိုက်တဲ့ (x,y) coordinate မှ "space နှစ်ခုကြား" စာလုံးကို ရှာထုတ်ရန်
+  function tp_getWordAtPoint(x, y){
+    let range = null;
+    if(document.caretRangeFromPoint){
+      range = document.caretRangeFromPoint(x, y);
+    } else if(document.caretPositionFromPoint){
+      const pos = document.caretPositionFromPoint(x, y);
+      if(pos){ range = document.createRange(); range.setStart(pos.offsetNode, pos.offset); }
+    }
+    if(!range || !range.startContainer || range.startContainer.nodeType !== Node.TEXT_NODE) return null;
+    const textNode = range.startContainer, text = textNode.nodeValue;
+    let start = range.startOffset, end = range.startOffset;
+    while(start > 0 && !/\s/.test(text[start-1])) start--;
+    while(end < text.length && !/\s/.test(text[end])) end++;
+    const word = text.slice(start, end).trim();
+    return word || null;
+  }
+
+  // dictList ထဲမှာ ရိုက်ထည့်လိုက်သောစကားလုံးနှင့် "အနီးစပ်ဆုံး" ဝင်ရောက်မှုများကို ရှာသည်
+  function tp_findClosestDictEntries(dictList, word){
+    if(!word || !Array.isArray(dictList)) return [];
+    const exact = dictList.filter(item => item.word === word);
+    if(exact.length) return exact;
+    const partial = dictList.filter(item => item.word && (item.word.includes(word) || word.includes(item.word)));
+    if(partial.length){
+      partial.sort((a,b) => Math.abs(a.word.length - word.length) - Math.abs(b.word.length - word.length));
+      const bestWord = partial[0].word;
+      return dictList.filter(item => item.word === bestWord);
+    }
+    return [];
+  }
+
+  function tp_hideDictFloat(){
+    const box = document.getElementById("tp-dict-float");
+    if(box) box.style.display = "none";
+  }
+
+  function tp_showDictFloat(word, defs){
+    const box = document.getElementById("tp-dict-float");
+    if(!box) return;
+    if(!defs || defs.length === 0){
+      box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><div class="tp-dict-word">${word}</div><div class="tp-dict-empty">အဘိဓာန်တွင် မတွေ့ပါ။</div>`;
+    } else {
+      const defsHtml = defs.map(d => `<div class="tp-dict-def">${d.definition}</div>`).join("<hr style='margin:10px 0;border:none;border-top:1px solid #eee;'>");
+      box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><div class="tp-dict-word">${defs[0].word}</div>${defsHtml}`;
+    }
+    box.style.display = "block";
+    document.getElementById("tp-dict-close-btn").addEventListener("click", tp_hideDictFloat);
+  }
+
+  // #tp-content ပေါ်က စာလုံးတစ်ခုကို double-click နှိပ်လိုက်ရင် အဘိဓာန်ကို ညာဘက်တွင် floating box အနေနှင့် ပြရန်
+  function attachDictDblClick(containerEl){
+    if(!containerEl) return;
+    containerEl.addEventListener("dblclick", async (e) => {
+      const word = tp_getWordAtPoint(e.clientX, e.clientY);
+      if(!word) return;
+      const dictList = await ensureDictList();
+      const defs = tp_findClosestDictEntries(dictList, word);
+      tp_showDictFloat(word, defs);
+    });
+  }
+
+  // Floating box အပြင်ဘက် တစ်နေရာရာကို click လုပ်လိုက်ရင် ပြန်ပိတ်ရန်
+  document.addEventListener("click", (e) => {
+    const box = document.getElementById("tp-dict-float");
+    if(!box || box.style.display !== "block") return;
+    if(box.contains(e.target)) return;
+    tp_hideDictFloat();
+  });
   async function ensureMatch(){ if(!matchIndex){ try{ matchIndex = await fetchJson(cdnUrl(MATCH_FILE)); }catch(e){ matchIndex = []; } } return matchIndex; }
   async function ensureParagraphMap(){ if(!paragraphMapIndex){ try{ paragraphMapIndex = await fetchJson(cdnUrl(PARAGRAPH_MAP_FILE)); }catch(e){ paragraphMapIndex = []; } } return paragraphMapIndex; }
   async function ensureSuttas(){
@@ -1259,9 +1385,11 @@ let isRomanPali = false;
              <div id="tp-nissaya-content"></div>
           </div>
         </div>
+        <div id="tp-dict-float"></div>
       `;
       
       linkifyCitations(document.getElementById("tp-content"));
+      attachDictDblClick(document.getElementById("tp-content"));
 
       document.getElementById("tp-float-prev").disabled = pageNum <= minPage; document.getElementById("tp-float-next").disabled = pageNum >= maxPage;
       document.getElementById("tp-float-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1, firstpageHint));
