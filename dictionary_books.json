@@ -1,0 +1,50 @@
+[
+    {
+        "id": 1,
+        "name": "တိပိဋက ပါဠိ-မြန်မာ အဘိဓာန်",
+        "user_choice": 1,
+        "user_order": 1
+    },
+    {
+        "id": 2,
+        "name": "ဦးဟုတ်စိန် ပါဠိ-မြန်မာအဘိဓာန်",
+        "user_choice": 1,
+        "user_order": 2
+    },
+    {
+        "id": 3,
+        "name": "ဓာတွတ္ထပန်းကုံး",
+        "user_choice": 1,
+        "user_order": 3
+    },
+    {
+        "id": 4,
+        "name": "ပါဠိဓာတ်အဘိဓာန်",
+        "user_choice": 1,
+        "user_order": 4
+    },
+    {
+        "id": 5,
+        "name": "PTS Pali-English Dictionary",
+        "user_choice": 1,
+        "user_order": 5
+    },
+    {
+        "id": 6,
+        "name": "Concise Pali-English Dictionary",
+        "user_choice": 1,
+        "user_order": 6
+    },
+    {
+        "id": 7,
+        "name": "Pali-English Dictionary",
+        "user_choice": 1,
+        "user_order": 7
+    },
+    {
+        "id": 8,
+        "name": "ဦးဟုတ်စိန် အများသုံး အဘိဓာန်",
+        "user_choice": 1,
+        "user_order": 8
+    }
+]
