@@ -552,7 +552,7 @@
       "category": "bi",
       "name": "ဓမ္မသင်္ဂဏီပါဠိ",
       "short_name": "အဘိ၊ဓ၊",
-      "ref_keys": ["ဓ။ သ", "ဓ။ ပ", "အဘိ၊ဓ"],
+      "ref_keys": ["ဓ။ သ", "အဘိ၊ဓ", "အဘိ၊၁"],
       "firstpage": 1,
       "lastpage": 298,
       "pagecount": 298
@@ -563,7 +563,7 @@
       "category": "bi",
       "name": "ဝိဘင်္ဂပါဠိ",
       "short_name": "အဘိ၊ဝိ၊",
-      "ref_keys": ["ဝိဘ", "အဘိ၊ဝိ"],
+      "ref_keys": ["ဝိဘ", "အဘိ၊ဝိ", "အဘိ၊၂"],
       "firstpage": 1,
       "lastpage": 453,
       "pagecount": 453
@@ -574,7 +574,7 @@
       "category": "bi",
       "name": "ဓာတုကထာပါဠိ",
       "short_name": "အဘိ၊ဓာ၊",
-      "ref_keys": ["အဘိ၊ဓာ"],
+      "ref_keys": ["အဘိ၊ဓာ", "အဘိ၊၃"],
       "firstpage": 1,
       "lastpage": 100,
       "pagecount": 100
@@ -585,7 +585,7 @@
       "category": "bi",
       "name": "ပုဂ္ဂလပညတ္တိပါဠိ",
       "short_name": "အဘိ၊ပု၊",
-      "ref_keys": ["အဘိ၊ပု"],
+      "ref_keys": ["အဘိ၊ပု", "အဘိ၊၄"],
       "firstpage": 101,
       "lastpage": 185,
       "pagecount": 85
@@ -596,7 +596,7 @@
       "category": "bi",
       "name": "ကထာဝတ္ထုပါဠိ",
       "short_name": "အဘိ၊က၊",
-      "ref_keys": ["ကထာ", "အဘိ၊က"],
+      "ref_keys": ["ကထာ", "အဘိ၊က", "အဘိ၊၅"],
       "firstpage": 1,
       "lastpage": 454,
       "pagecount": 454
@@ -695,7 +695,7 @@
       "category": "vi",
       "name": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ)",
       "short_name": "ဝိ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["ဝိ၊ဋ္ဌ၊၁"],
+      "ref_keys": ["ပါရာ။ အဋ္ဌ။ ၁", "ဝိ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 345,
       "pagecount": 345
@@ -706,7 +706,7 @@
       "category": "vi",
       "name": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု)",
       "short_name": "ဝိ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["ဝိ၊ဋ္ဌ၊၂"],
+      "ref_keys": ["ပါရာ။ အဋ္ဌ။ ၂", "ဝိ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 312,
       "pagecount": 312
@@ -717,7 +717,7 @@
       "category": "vi",
       "name": "ပါစိတ္တိယအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["ဝိ၊ဋ္ဌ၊၃"],
+      "ref_keys": ["ပါစိ။ အဋ္ဌ", "ဝိ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 231,
       "pagecount": 231
@@ -728,7 +728,7 @@
       "category": "vi",
       "name": "မဟာဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["ဝိ၊ဋ္ဌ၊၃"],
+      "ref_keys": ["မဟာဝ။ အဋ္ဌ", "ဝိ၊ဋ္ဌ၊၃"],
       "firstpage": 233,
       "lastpage": 437,
       "pagecount": 205
@@ -739,7 +739,7 @@
       "category": "vi",
       "name": "စူဠဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၄၊",
-      "ref_keys": ["ဝိ၊ဋ္ဌ၊၄"],
+      "ref_keys": ["စူဠဝ။ အဋ္ဌ", "ဝိ၊ဋ္ဌ၊၄"],
       "firstpage": 1,
       "lastpage": 136,
       "pagecount": 136
@@ -750,7 +750,7 @@
       "category": "vi",
       "name": "ပရိဝါရအဋ္ဌကထာ",
       "short_name": "ဝိ၊ဋ္ဌ၊၄၊",
-      "ref_keys": ["ဝိ၊ဋ္ဌ၊၄"],
+      "ref_keys": ["ပရိ။ အဋ္ဌ", "ဝိ၊ဋ္ဌ၊၄"],
       "firstpage": 137,
       "lastpage": 265,
       "pagecount": 129
@@ -761,7 +761,7 @@
       "category": "di",
       "name": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ",
       "short_name": "ဒီ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["ဒီ၊ဋ္ဌ၊၁", "ဒီ။ နိ။ အဋ္ဌ။ ၁"],
+      "ref_keys": ["ဒီ။ နိ။ အဋ္ဌ။ ၁", "ဒီ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 338,
       "pagecount": 338
@@ -772,7 +772,7 @@
       "category": "di",
       "name": "မဟာဝဂ္ဂဋ္ဌကထာ",
       "short_name": "ဒီ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["ဒီ၊ဋ္ဌ၊၂", "ဒီ။ နိ။ အဋ္ဌ။ ၂"],
+      "ref_keys": ["ဒီ။ နိ။ အဋ္ဌ။ ၂", "ဒီ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 403,
       "pagecount": 403
@@ -783,7 +783,7 @@
       "category": "di",
       "name": "ပါထိကဝဂ္ဂဋ္ဌကထာ",
       "short_name": "ဒီ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["ဒီ၊ဋ္ဌ၊၃", "ဒီ။ နိ။ အဋ္ဌ။ ၃"],
+      "ref_keys": ["ဒီ။ နိ။ အဋ္ဌ။ ၃", "ဒီ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 251,
       "pagecount": 251
@@ -794,7 +794,7 @@
       "category": "ma",
       "name": "မူလပဏ္ဏာသအဋ္ဌကထာ (ပ)",
       "short_name": "မ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["မ၊ဋ္ဌ၊၁", "မ။ နိ။ အဋ္ဌ။ ၁"],
+      "ref_keys": ["မ။ နိ။ အဋ္ဌ။ ၁", "မ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 398,
       "pagecount": 398
@@ -805,7 +805,7 @@
       "category": "ma",
       "name": "မူလပဏ္ဏာသအဋ္ဌကထာ (ဒု)",
       "short_name": "မ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["မ၊ဋ္ဌ၊၂", "မ။ နိ။ အဋ္ဌ။ ၂"],
+      "ref_keys": ["မ။ နိ။ အဋ္ဌ။ ၂", "မ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 320,
       "pagecount": 320
@@ -816,7 +816,7 @@
       "category": "ma",
       "name": "မဇ္ဈိမပဏ္ဏာသအဋ္ဌကထာ",
       "short_name": "မ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["မ၊ဋ္ဌ၊၃", "မ။ နိ။ အဋ္ဌ။ ၃"],
+      "ref_keys": ["မ။ နိ။ အဋ္ဌ။ ၃", "မ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 309,
       "pagecount": 309
@@ -827,7 +827,7 @@
       "category": "ma",
       "name": "ဥပရိပဏ္ဏာသအဋ္ဌကထာ",
       "short_name": "မ၊ဋ္ဌ၊၄၊",
-      "ref_keys": ["မ၊ဋ္ဌ၊၄", "မ။ နိ။ အဋ္ဌ။ ၄"],
+      "ref_keys": ["မ။ နိ။ အဋ္ဌ။ ၄", "မ၊ဋ္ဌ၊၄"],
       "firstpage": 1,
       "lastpage": 254,
       "pagecount": 254
@@ -838,7 +838,7 @@
       "category": "sa",
       "name": "သဂါထာဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["သံ၊ဋ္ဌ၊၁", "သံ။ နိ။ အဋ္ဌ။ ၁"],
+      "ref_keys": ["သံ။ နိ။ အဋ္ဌ။ ၁", "သံ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 325,
       "pagecount": 325
@@ -849,7 +849,7 @@
       "category": "sa",
       "name": "နိဒါနဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["သံ၊ဋ္ဌ၊၂", "သံ။ နိ။ အဋ္ဌ။ ၂"],
+      "ref_keys": ["သံ။ နိ။ အဋ္ဌ။ ၂", "သံ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 227,
       "pagecount": 227
@@ -860,7 +860,7 @@
       "category": "sa",
       "name": "ခန္ဓဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["သံ၊ဋ္ဌ၊၂", "သံ။ နိ။ အဋ္ဌ။ ၂"],
+      "ref_keys": ["သံ။ နိ။ အဋ္ဌ။ ၂", "သံ၊ဋ္ဌ၊၂"],
       "firstpage": 229,
       "lastpage": 324,
       "pagecount": 96
@@ -871,7 +871,7 @@
       "category": "sa",
       "name": "သဠာယတနဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["သံ၊ဋ္ဌ၊၃", "သံ။ နိ။ အဋ္ဌ။ ၃"],
+      "ref_keys": ["သံ။ နိ။ အဋ္ဌ။ ၃", "သံ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 152,
       "pagecount": 152
@@ -882,7 +882,7 @@
       "category": "sa",
       "name": "မဟာဝဂ္ဂအဋ္ဌကထာ",
       "short_name": "သံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["သံ၊ဋ္ဌ၊၃", "သံ။ နိ။ အဋ္ဌ။ ၃"],
+      "ref_keys": ["သံ။ နိ။ အဋ္ဌ။ ၃", "သံ၊ဋ္ဌ၊၃"],
       "firstpage": 153,
       "lastpage": 341,
       "pagecount": 189
@@ -893,7 +893,7 @@
       "category": "an",
       "name": "ဧကကနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["အံ၊ဋ္ဌ၊၁", "အ။ နိ။ အဋ္ဌ။ ၁"],
+      "ref_keys": ["အ။ နိ။ အဋ္ဌ။ ၁", "အံ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 416,
       "pagecount": 416
@@ -904,7 +904,7 @@
       "category": "an",
       "name": "ဒုကာဒိနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["အံ၊ဋ္ဌ၊၂", "အ။ နိ။ အဋ္ဌ။ ၂"],
+      "ref_keys": ["အ။ နိ။ အဋ္ဌ။ ၂", "အံ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 397,
       "pagecount": 397
@@ -915,7 +915,7 @@
       "category": "an",
       "name": "ပဉ္စကာဒိနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["အံ၊ဋ္ဌ၊၃", "အ။ နိ။ အဋ္ဌ။ ၃"],
+      "ref_keys": ["အ။ နိ။ အဋ္ဌ။ ၃", "အံ၊ဋ္ဌ၊၃"],
       "firstpage": 1,
       "lastpage": 191,
       "pagecount": 191
@@ -926,7 +926,7 @@
       "category": "an",
       "name": "အဋ္ဌကာဒိနိပါတအဋ္ဌကထာ",
       "short_name": "အံ၊ဋ္ဌ၊၃၊",
-      "ref_keys": ["အံ၊ဋ္ဌ၊၃", "အ။ နိ။ အဋ္ဌ။ ၃"],
+      "ref_keys": ["အ။ နိ။ အဋ္ဌ။ ၃", "အံ၊ဋ္ဌ၊၃"],
       "firstpage": 193,
       "lastpage": 357,
       "pagecount": 165
@@ -948,7 +948,7 @@
       "category": "ku",
       "name": "ဓမ္မပဒအဋ္ဌကထာ (ပ)",
       "short_name": "ဓမ္မပဒ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["ဓမ္မပဒ၊ဋ္ဌ၊၁"],
+      "ref_keys": ["ဓ။ ပ", "ဓမ္မပဒ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 447,
       "pagecount": 447
@@ -1036,7 +1036,7 @@
       "category": "ku",
       "name": "ထေရဂါထာအဋ္ဌကထာ (ပ)",
       "short_name": "ထေရ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["ထေရ၊ဋ္ဌ၊၁"],
+      "ref_keys": ["ထေရဂါ။ အဋ္ဌ။ ၁", "ထေရ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 485,
       "pagecount": 485
@@ -1047,7 +1047,7 @@
       "category": "ku",
       "name": "ထေရဂါထာအဋ္ဌကထာ (ဒု)",
       "short_name": "ထေရ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["ထေရ၊ဋ္ဌ၊၂"],
+      "ref_keys": ["ထေရဂါ။ အဋ္ဌ။ ၂", "ထေရ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 546,
       "pagecount": 546
@@ -1058,7 +1058,7 @@
       "category": "ku",
       "name": "ထေရီဂါထာအဋ္ဌကထာ",
       "short_name": "ထေရီ၊ဋ္ဌ၊",
-      "ref_keys": ["ထေရီ၊ဋ္ဌ"],
+      "ref_keys": ["ထေရီဂါ။ အဋ္ဌ", "ထေရီ၊ဋ္ဌ"],
       "firstpage": 1,
       "lastpage": 305,
       "pagecount": 305
