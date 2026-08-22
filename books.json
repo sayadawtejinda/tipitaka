@@ -508,7 +508,7 @@
       "category": "ku",
       "name": "ပဋိသမ္ဘိဒါမဂ္ဂပါဠိ",
       "short_name": "ပဋိသံ၊",
-      "ref_keys": ["ပဋိ။ မ။ ၁","ပဋိသံ"],
+      "ref_keys": ["ပဋိ။ မ","ပဋိသံ"],
       "firstpage": 1,
       "lastpage": 419,
       "pagecount": 419
@@ -574,7 +574,7 @@
       "category": "bi",
       "name": "ဓာတုကထာပါဠိ",
       "short_name": "အဘိ၊ဓာ၊",
-      "ref_keys": ["အဘိ၊ဓာ", "အဘိ၊၃"],
+      "ref_keys": ["ဓာတု", "အဘိ၊ဓာ", "အဘိ၊၃"],
       "firstpage": 1,
       "lastpage": 100,
       "pagecount": 100
@@ -607,7 +607,7 @@
       "category": "bi",
       "name": "ယမကပါဠိ (ပ)",
       "short_name": "ယမက၊၁၊",
-      "ref_keys": ["ယမက၊၁"],
+      "ref_keys": ["ယမ။ ၁", "ယမက၊၁"],
       "firstpage": 1,
       "lastpage": 265,
       "pagecount": 265
@@ -618,7 +618,7 @@
       "category": "bi",
       "name": "ယမကပါဠိ (ဒု)",
       "short_name": "ယမက၊၂၊",
-      "ref_keys": ["ယမက၊၂"],
+      "ref_keys": ["ယမ။ ၂", "ယမက၊၂"],
       "firstpage": 1,
       "lastpage": 316,
       "pagecount": 316
@@ -629,7 +629,7 @@
       "category": "bi",
       "name": "ယမကပါဠိ (တ)",
       "short_name": "ယမက၊၃၊",
-      "ref_keys": ["ယမက၊၃"],
+      "ref_keys": ["ယမ။ ၃", "ယမက၊၃"],
       "firstpage": 1,
       "lastpage": 330,
       "pagecount": 330
@@ -1135,7 +1135,7 @@
       "category": "ku",
       "name": "ပဋိသမ္ဘိဒါမဂ္ဂအဋ္ဌကထာ (ပ)",
       "short_name": "ပဋိသံ၊ဋ္ဌ၊၁၊",
-      "ref_keys": ["ပဋိသံ၊ဋ္ဌ၊၁"],
+      "ref_keys": ["ပဋိ။ မ။ ၁", "ပဋိသံ၊ဋ္ဌ၊၁"],
       "firstpage": 1,
       "lastpage": 345,
       "pagecount": 345
@@ -1146,7 +1146,7 @@
       "category": "ku",
       "name": "ပဋိသမ္ဘိဒါမဂ္ဂအဋ္ဌကထာ (ဒု)",
       "short_name": "ပဋိသံ၊ဋ္ဌ၊၂၊",
-      "ref_keys": ["ပဋိသံ၊ဋ္ဌ၊၂"],
+      "ref_keys": ["ပဋိ။ မ။ ၂", "ပဋိသံ၊ဋ္ဌ၊၂"],
       "firstpage": 1,
       "lastpage": 323,
       "pagecount": 323
@@ -1619,7 +1619,7 @@
     "category": "bi",
     "name": "ဓမ္မသင်္ဂဏီမူလဋီကာ",
     "short_name": "မူလဋီ၊၁၊",
-    "ref_keys": ["ဓမ္မသင်္ဂဏီမူလဋီကာ", "မူလဋီ၊၁"],
+    "ref_keys": ["ဓ။ သ။ ဋီ","မူလဋီ၊၁"],
     "firstpage": 1,
     "lastpage": 203,
     "pagecount": 203
@@ -1630,7 +1630,7 @@
     "category": "bi",
     "name": "ဝိဘင်္ဂမူလဋီကာ (ပ)",
     "short_name": "မူလဋီ၊၂၊",
-    "ref_keys": ["ဝိဘင်္ဂမူလဋီကာ", "မူလဋီ၊၂"],
+    "ref_keys": ["ဝိဘ။ ဋီ", "မူလဋီ၊၂"],
     "firstpage": 1,
     "lastpage": 235,
     "pagecount": 235
