@@ -107,11 +107,14 @@
     overflow-y:auto; background:#fffefb; border:1px solid #d9d0b8; border-radius:10px;
     box-shadow:0 6px 24px rgba(0,0,0,.18); padding:16px; z-index:9999;
   }
-  #tp-dict-float .tp-dict-close{ position:absolute; top:8px; right:12px; cursor:pointer; font-size:16px; color:#888; }
+  #tp-dict-float .tp-dict-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  #tp-dict-float .tp-dict-drag{ cursor:grab; color:#999; font-size:15px; user-select:none; padding:2px 8px; touch-action:none; }
+  #tp-dict-float .tp-dict-drag:active{ cursor:grabbing; }
+  #tp-dict-float .tp-dict-close{ cursor:pointer; font-size:16px; color:#888; padding:2px 6px; }
   #tp-dict-float .tp-dict-close:hover{ color:#a00; }
   #tp-dict-float .tp-dict-word{ font-weight:bold; font-size:1.15em; color:#0645ad; margin:0 26px 10px 0; }
   #tp-dict-float .tp-dict-search-input{
-    width:100%; box-sizing:border-box; padding:8px 30px 8px 10px; font-size:1.05em; font-weight:bold;
+    width:100%; box-sizing:border-box; padding:8px 10px; font-size:1.05em; font-weight:bold;
     color:#0645ad; border:1px solid #cbd5e1; border-radius:6px; margin:0 0 10px 0; font-family:inherit;
   }
   #tp-dict-float .tp-dict-suggest-item{ padding:8px 4px; border-bottom:1px solid #eee; cursor:pointer; color:#0645ad; font-size:.95em; }
@@ -346,22 +349,22 @@ let isRomanPali = false;
     if(!box) return;
 
     const safeWord = String(word).replace(/"/g, "&quot;");
-    box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><input type="text" id="tp-dict-search-input" class="tp-dict-search-input" value="${safeWord}"><div id="tp-dict-body"></div>`;
+    box.innerHTML = `<div class="tp-dict-toolbar"><span class="tp-dict-drag" id="tp-dict-drag-handle" title="ဆွဲ၍ရွှေ့ရန်">⠿⠿</span><span class="tp-dict-close" id="tp-dict-close-btn">✕</span></div><input type="text" id="tp-dict-search-input" class="tp-dict-search-input" value="${safeWord}"><div id="tp-dict-body"></div>`;
 
     tp_renderDictDefsInto(document.getElementById("tp-dict-body"), defs);
 
     box.style.display = "block";
     tp_positionDictBox(box, x, y);
 
-    document.getElementById("tp-dict-close-btn").addEventListener("click", tp_hideDictFloat);
+    document.getElementById("tp-dict-close-btn").addEventListener("click", (e) => { e.stopPropagation(); tp_hideDictFloat(); });
+    tp_makeDictBoxDraggable(box, document.getElementById("tp-dict-drag-handle"));
 
-    // ဘောက်စ်ထဲက search input မှာ ရိုက်ထည့်လိုက်တာနဲ့ တခြားစာလုံးကို ရှာနိုင်ရန်
     const searchInput = document.getElementById("tp-dict-search-input");
+    const bodyEl = document.getElementById("tp-dict-body");
+
     searchInput.addEventListener("click", (e) => e.stopPropagation());
     searchInput.addEventListener("input", async () => {
       const keyword = searchInput.value.trim();
-      const bodyEl = document.getElementById("tp-dict-body");
-      if(!bodyEl) return;
       if(!keyword){ bodyEl.innerHTML = ""; return; }
 
       const dictList = await ensureDictList();
@@ -373,16 +376,48 @@ let isRomanPali = false;
         return;
       }
 
-      bodyEl.innerHTML = uniqueWords.map(w => `<div class="tp-dict-suggest-item">${w}</div>`).join("");
-      bodyEl.querySelectorAll(".tp-dict-suggest-item").forEach(el => {
-        el.addEventListener("click", async () => {
-          const w = el.textContent;
-          const dl = await ensureDictList();
-          const d = dl.filter(item => item.word === w);
-          tp_renderDictDefsInto(bodyEl, d);
-        });
-      });
+      bodyEl.innerHTML = uniqueWords.map(w => `<div class="tp-dict-suggest-item" data-word="${w.replace(/"/g, "&quot;")}">${w}</div>`).join("");
     });
+
+    // word list (suggestion) area ကို click နှိပ်ချိန် box မပိတ်သွားအောင် stopPropagation ခေါ်ပြီး၊
+    // e.target.closest ဖြင့် ဘယ် suggestion item ကို နှိပ်လိုက်လဲ ရှာသည် (event delegation)
+    bodyEl.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      const item = e.target.closest(".tp-dict-suggest-item");
+      if(!item) return;
+      const w = item.dataset.word;
+      const dl = await ensureDictList();
+      const d = dl.filter(entry => entry.word === w);
+      tp_renderDictDefsInto(bodyEl, d);
+    });
+  }
+
+  // ဘောက်စ်ကို "⠿⠿" handle အနီးက ဆွဲ၍ လိုရာနေရာ ရွှေ့နိုင်ရန်
+  function tp_makeDictBoxDraggable(box, handle){
+    if(!handle) return;
+    let dragging = false, offsetX = 0, offsetY = 0;
+
+    handle.addEventListener("pointerdown", (e) => {
+      dragging = true;
+      const rect = box.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      handle.setPointerCapture(e.pointerId);
+      e.preventDefault();
+      e.stopPropagation();
+    });
+    handle.addEventListener("pointermove", (e) => {
+      if(!dragging) return;
+      const margin = 4;
+      let left = e.clientX - offsetX + window.scrollX;
+      let top = e.clientY - offsetY + window.scrollY;
+      left = Math.min(Math.max(left, window.scrollX + margin), window.scrollX + window.innerWidth - box.offsetWidth - margin);
+      top = Math.min(Math.max(top, window.scrollY + margin), window.scrollY + window.innerHeight - box.offsetHeight - margin);
+      box.style.left = left + "px";
+      box.style.top = top + "px";
+    });
+    handle.addEventListener("pointerup", (e) => { dragging = false; });
+    handle.addEventListener("pointercancel", () => { dragging = false; });
   }
 
   // #tp-content ပေါ်က စာလုံးတစ်ခုကို double-click နှိပ်လိုက်ရင် အဘိဓာန်ကို floating box အနေနှင့် (နှိပ်လိုက်တဲ့ နေရာအနီးတွင်) ပြရန်
