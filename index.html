@@ -103,17 +103,23 @@
 
   /* Double-click အဘိဓာန် Floating Box */
   #tp-dict-float{
-    display:none; position:fixed; top:90px; right:20px; width:320px; max-width:88vw; max-height:65vh;
+    display:none; position:absolute; width:320px; max-width:88vw; max-height:320px;
     overflow-y:auto; background:#fffefb; border:1px solid #d9d0b8; border-radius:10px;
     box-shadow:0 6px 24px rgba(0,0,0,.18); padding:16px; z-index:9999;
   }
   #tp-dict-float .tp-dict-close{ position:absolute; top:8px; right:12px; cursor:pointer; font-size:16px; color:#888; }
   #tp-dict-float .tp-dict-close:hover{ color:#a00; }
   #tp-dict-float .tp-dict-word{ font-weight:bold; font-size:1.15em; color:#0645ad; margin:0 26px 10px 0; }
+  #tp-dict-float .tp-dict-search-input{
+    width:100%; box-sizing:border-box; padding:8px 30px 8px 10px; font-size:1.05em; font-weight:bold;
+    color:#0645ad; border:1px solid #cbd5e1; border-radius:6px; margin:0 0 10px 0; font-family:inherit;
+  }
+  #tp-dict-float .tp-dict-suggest-item{ padding:8px 4px; border-bottom:1px solid #eee; cursor:pointer; color:#0645ad; font-size:.95em; }
+  #tp-dict-float .tp-dict-suggest-item:hover{ background:#f1f5f9; }
   #tp-dict-float .tp-dict-def{ font-size:.95em; line-height:1.6; }
   #tp-dict-float .tp-dict-empty{ color:#888; font-size:.9em; }
   @media (max-width: 768px){
-    #tp-dict-float{ left:12px; right:12px; width:auto; top:auto; bottom:12px; max-height:50vh; }
+    #tp-dict-float{ width:90vw; max-width:340px; max-height:280px; }
   }
   
   /* Split View Layout */
@@ -311,20 +317,75 @@ let isRomanPali = false;
     if(box) box.style.display = "none";
   }
 
-  function tp_showDictFloat(word, defs){
-    const box = document.getElementById("tp-dict-float");
-    if(!box) return;
+  // အဘိဓာန်ဘောက်စ်ထဲ definition အပိုင်းကို ရေးဆွဲပေးမည့် helper
+  function tp_renderDictDefsInto(bodyEl, defs){
+    if(!bodyEl) return;
     if(!defs || defs.length === 0){
-      box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><div class="tp-dict-word">${word}</div><div class="tp-dict-empty">အဘိဓာန်တွင် မတွေ့ပါ။</div>`;
+      bodyEl.innerHTML = `<div class="tp-dict-empty">အဘိဓာန်တွင် မတွေ့ပါ။</div>`;
     } else {
-      const defsHtml = defs.map(d => `<div class="tp-dict-def">${d.definition}</div>`).join("<hr style='margin:10px 0;border:none;border-top:1px solid #eee;'>");
-      box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><div class="tp-dict-word">${defs[0].word}</div>${defsHtml}`;
+      bodyEl.innerHTML = defs.map(d => `<div class="tp-dict-def">${d.definition}</div>`).join("<hr style='margin:10px 0;border:none;border-top:1px solid #eee;'>");
     }
-    box.style.display = "block";
-    document.getElementById("tp-dict-close-btn").addEventListener("click", tp_hideDictFloat);
   }
 
-  // #tp-content ပေါ်က စာလုံးတစ်ခုကို double-click နှိပ်လိုက်ရင် အဘိဓာန်ကို ညာဘက်တွင် floating box အနေနှင့် ပြရန်
+  // ဘောက်စ်ကို double-click လုပ်လိုက်တဲ့ စာလုံးအနီးမှာ (viewport ပြင်ပ မထွက်အောင် clamp လုပ်ပြီး) နေရာချပေးမည်
+  function tp_positionDictBox(box, x, y){
+    const margin = 10;
+    const boxW = box.offsetWidth, boxH = box.offsetHeight;
+    const viewLeft = window.scrollX, viewTop = window.scrollY;
+    const viewRight = viewLeft + window.innerWidth, viewBottom = viewTop + window.innerHeight;
+    let left = x + 12;
+    if(left + boxW > viewRight - margin) left = Math.max(viewLeft + margin, x - boxW - 12);
+    let top = y + 12;
+    if(top + boxH > viewBottom - margin) top = Math.max(viewTop + margin, y - boxH - 12);
+    box.style.left = left + "px";
+    box.style.top = top + "px";
+  }
+
+  function tp_showDictFloat(word, defs, x, y){
+    const box = document.getElementById("tp-dict-float");
+    if(!box) return;
+
+    const safeWord = String(word).replace(/"/g, "&quot;");
+    box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><input type="text" id="tp-dict-search-input" class="tp-dict-search-input" value="${safeWord}"><div id="tp-dict-body"></div>`;
+
+    tp_renderDictDefsInto(document.getElementById("tp-dict-body"), defs);
+
+    box.style.display = "block";
+    tp_positionDictBox(box, x, y);
+
+    document.getElementById("tp-dict-close-btn").addEventListener("click", tp_hideDictFloat);
+
+    // ဘောက်စ်ထဲက search input မှာ ရိုက်ထည့်လိုက်တာနဲ့ တခြားစာလုံးကို ရှာနိုင်ရန်
+    const searchInput = document.getElementById("tp-dict-search-input");
+    searchInput.addEventListener("click", (e) => e.stopPropagation());
+    searchInput.addEventListener("input", async () => {
+      const keyword = searchInput.value.trim();
+      const bodyEl = document.getElementById("tp-dict-body");
+      if(!bodyEl) return;
+      if(!keyword){ bodyEl.innerHTML = ""; return; }
+
+      const dictList = await ensureDictList();
+      const matches = dictList.filter(item => item.word && item.word.includes(keyword));
+      const uniqueWords = [...new Set(matches.map(item => item.word))].slice(0, 100);
+
+      if(uniqueWords.length === 0){
+        bodyEl.innerHTML = `<div class="tp-dict-empty">အဘိဓာန်တွင် မတွေ့ပါ။</div>`;
+        return;
+      }
+
+      bodyEl.innerHTML = uniqueWords.map(w => `<div class="tp-dict-suggest-item">${w}</div>`).join("");
+      bodyEl.querySelectorAll(".tp-dict-suggest-item").forEach(el => {
+        el.addEventListener("click", async () => {
+          const w = el.textContent;
+          const dl = await ensureDictList();
+          const d = dl.filter(item => item.word === w);
+          tp_renderDictDefsInto(bodyEl, d);
+        });
+      });
+    });
+  }
+
+  // #tp-content ပေါ်က စာလုံးတစ်ခုကို double-click နှိပ်လိုက်ရင် အဘိဓာန်ကို floating box အနေနှင့် (နှိပ်လိုက်တဲ့ နေရာအနီးတွင်) ပြရန်
   function attachDictDblClick(containerEl){
     if(!containerEl) return;
     containerEl.addEventListener("dblclick", async (e) => {
@@ -332,7 +393,7 @@ let isRomanPali = false;
       if(!word) return;
       const dictList = await ensureDictList();
       const defs = tp_findClosestDictEntries(dictList, word);
-      tp_showDictFloat(word, defs);
+      tp_showDictFloat(word, defs, e.pageX, e.pageY);
     });
   }
 
