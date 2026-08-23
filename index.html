@@ -101,29 +101,19 @@
 
   #tp-meta{color:#666;font-size:.9em;margin-bottom:12px;}
 
-  /* Double-click အဘိဓာန် Floating Box - document.body ရဲ့ တိုက်ရိုက် child အဖြစ်ချိတ်ထား၍ Blogspot ကဲ့သို့
-     transform ပါတဲ့ wrapper ထဲမှာ ထည့်ထားလျှင်ပါ position:fixed အမှန်အလုပ်လုပ်စေရန် */
+  /* Double-click အဘိဓာန် Floating Box */
   #tp-dict-float{
-    display:none !important; position:fixed !important; top:80px !important; right:20px !important;
-    width:33vw !important; min-width:280px !important; max-width:420px !important;
-    max-height:70vh !important; overflow-y:auto !important; box-sizing:border-box !important;
-    background:#fffefb !important; border:1px solid #d9d0b8 !important; border-radius:10px !important;
-    box-shadow:0 6px 24px rgba(0,0,0,.18) !important; padding:16px !important; z-index:2147483647 !important;
-    margin:0 !important; font-family:inherit !important; text-align:left !important;
+    display:none; position:fixed; top:90px; right:20px; width:320px; max-width:88vw; max-height:65vh;
+    overflow-y:auto; background:#fffefb; border:1px solid #d9d0b8; border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,.18); padding:16px; z-index:9999;
   }
   #tp-dict-float .tp-dict-close{ position:absolute; top:8px; right:12px; cursor:pointer; font-size:16px; color:#888; }
   #tp-dict-float .tp-dict-close:hover{ color:#a00; }
-  #tp-dict-float .tp-dict-search-input{ width:100%; box-sizing:border-box; padding:8px 10px; font-size:15px; border:1px solid #ccc; border-radius:6px; margin:22px 0 8px 0; }
-  #tp-dict-float .tp-dict-list-item{ padding:8px 4px; border-bottom:1px solid #eee; cursor:pointer; font-size:16px; color:#0645ad; }
-  #tp-dict-float .tp-dict-list-item:hover{ background:#f5f2e8; }
-  #tp-dict-float .tp-dict-back{ padding:4px 4px 8px 4px; cursor:pointer; color:#0645ad; font-size:14px; }
-  #tp-dict-float .tp-dict-back:hover{ text-decoration:underline; }
-  #tp-dict-float .tp-dict-note{ color:#888; font-size:.8em; padding:6px 4px; }
-  #tp-dict-float .tp-dict-word{ font-weight:bold; font-size:1.15em; color:#0645ad; margin:0 0 10px 0; }
-  #tp-dict-float .tp-dict-def{ font-size:.95em; line-height:1.6; padding:6px 4px 10px 4px; border-bottom:1px solid #f2ede0; }
-  #tp-dict-float .tp-dict-empty{ color:#888; font-size:.9em; padding:4px; }
+  #tp-dict-float .tp-dict-word{ font-weight:bold; font-size:1.15em; color:#0645ad; margin:0 26px 10px 0; }
+  #tp-dict-float .tp-dict-def{ font-size:.95em; line-height:1.6; }
+  #tp-dict-float .tp-dict-empty{ color:#888; font-size:.9em; }
   @media (max-width: 768px){
-    #tp-dict-float{ left:12px !important; right:12px !important; width:auto !important; max-width:none !important; top:auto !important; bottom:12px !important; max-height:55vh !important; }
+    #tp-dict-float{ left:12px; right:12px; width:auto; top:auto; bottom:12px; max-height:50vh; }
   }
   
   /* Split View Layout */
@@ -316,106 +306,33 @@ let isRomanPali = false;
     return [];
   }
 
-  // #tp-dict-float ကို document.body ရဲ့ တိုက်ရိုက် child အဖြစ် ဖန်တီး/ရှာဖွေရန် (Blogspot ကဲ့သို့
-  // transform ပါတဲ့ wrapper ထဲမှာ ညှပ်ထားလျှင်ပါ position:fixed အမှန်အလုပ်လုပ်စေရန်)
-  function tp_ensureDictFloatEl(){
-    let box = document.getElementById("tp-dict-float");
-    if(!box){
-      box = document.createElement("div");
-      box.id = "tp-dict-float";
-      document.body.appendChild(box);
-    } else if(box.parentElement !== document.body){
-      document.body.appendChild(box);
-    }
-    return box;
-  }
-
   function tp_hideDictFloat(){
     const box = document.getElementById("tp-dict-float");
     if(box) box.style.display = "none";
   }
 
-  // အဘိဓာန် Floating Box ကို "ရှာဖွေရေးအကွက် + ရလာဒ်စာရင်း/အနက်ဖွင့်ချက်" ပါအောင် ပြသရန်
-  function tp_renderDictSearchBox(prefillWord){
-    const box = tp_ensureDictFloatEl();
-    box.innerHTML = `
-      <span class="tp-dict-close" id="tp-dict-close-btn">✕</span>
-      <input type="text" id="tp-dict-search-input" class="tp-dict-search-input" placeholder="ရှာလိုသော စကားလုံးရိုက်ပါ..." autocomplete="off">
-      <div id="tp-dict-body"></div>
-    `;
+  function tp_showDictFloat(word, defs){
+    const box = document.getElementById("tp-dict-float");
+    if(!box) return;
+    if(!defs || defs.length === 0){
+      box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><div class="tp-dict-word">${word}</div><div class="tp-dict-empty">အဘိဓာန်တွင် မတွေ့ပါ။</div>`;
+    } else {
+      const defsHtml = defs.map(d => `<div class="tp-dict-def">${d.definition}</div>`).join("<hr style='margin:10px 0;border:none;border-top:1px solid #eee;'>");
+      box.innerHTML = `<span class="tp-dict-close" id="tp-dict-close-btn">✕</span><div class="tp-dict-word">${defs[0].word}</div>${defsHtml}`;
+    }
     box.style.display = "block";
-
     document.getElementById("tp-dict-close-btn").addEventListener("click", tp_hideDictFloat);
-    const input = document.getElementById("tp-dict-search-input");
-    const bodyEl = document.getElementById("tp-dict-body");
-
-    async function renderList(keyword){
-      if(!keyword){ bodyEl.innerHTML = ""; return; }
-      bodyEl.innerHTML = "<p class='tp-dict-empty'>ရှာနေပါသည်...</p>";
-      const dictList = await ensureDictList();
-      // ဒီအလိုက် ရလာဒ်က ရှေ့ကမှားနေရင် ပြန်မကိုက်တော့မို့ လက်ရှိ input value ကို ထပ်စစ်ဆေးမည်
-      if(input.value.trim() !== keyword) return;
-      const matches = dictList.filter(item => item.word && item.word.includes(keyword));
-      const uniqueWords = [...new Set(matches.map(item => item.word))];
-      if(uniqueWords.length === 0){ bodyEl.innerHTML = "<p class='tp-dict-empty'>ရလာဒ် မတွေ့ပါ။</p>"; return; }
-      const limitedWords = uniqueWords.slice(0, 100);
-      bodyEl.innerHTML = "";
-      limitedWords.forEach(w => {
-        const item = document.createElement("div");
-        item.className = "tp-dict-list-item";
-        item.textContent = w;
-        item.addEventListener("click", () => renderDetail(w));
-        bodyEl.appendChild(item);
-      });
-      if(uniqueWords.length > 100){
-        const note = document.createElement("p");
-        note.className = "tp-dict-note";
-        note.textContent = `ရလာဒ် စုစုပေါင်း ${uniqueWords.length} ခု ရှိပါသည်။ ဆက်ရိုက်ပါက ရလာဒ်ကျဉ်းသွားပါလိမ့်မည်။`;
-        bodyEl.appendChild(note);
-      }
-    }
-
-    async function renderDetail(word){
-      bodyEl.innerHTML = "<p class='tp-dict-empty'>ရှာနေပါသည်...</p>";
-      const dictList = await ensureDictList();
-      const defs = tp_findClosestDictEntries(dictList, word);
-      bodyEl.innerHTML = "";
-
-      const backBtn = document.createElement("div");
-      backBtn.className = "tp-dict-back";
-      backBtn.textContent = "← ရလာဒ်စာရင်းသို့";
-      backBtn.addEventListener("click", () => renderList(input.value.trim()));
-      bodyEl.appendChild(backBtn);
-
-      if(defs.length === 0){
-        bodyEl.insertAdjacentHTML("beforeend", `<div class="tp-dict-word">${word}</div><div class="tp-dict-empty">အဘိဓာန်တွင် မတွေ့ပါ။</div>`);
-        return;
-      }
-      const titleEl = document.createElement("div");
-      titleEl.className = "tp-dict-word";
-      titleEl.textContent = defs[0].word;
-      bodyEl.appendChild(titleEl);
-      defs.forEach(item => {
-        const wrapper = document.createElement("div");
-        wrapper.className = "tp-dict-def";
-        wrapper.innerHTML = item.definition;
-        bodyEl.appendChild(wrapper);
-      });
-    }
-
-    input.addEventListener("input", () => renderList(input.value.trim()));
-
-    input.value = prefillWord || "";
-    if(prefillWord) renderDetail(prefillWord); else renderList("");
   }
 
   // #tp-content ပေါ်က စာလုံးတစ်ခုကို double-click နှိပ်လိုက်ရင် အဘိဓာန်ကို ညာဘက်တွင် floating box အနေနှင့် ပြရန်
   function attachDictDblClick(containerEl){
     if(!containerEl) return;
-    containerEl.addEventListener("dblclick", (e) => {
+    containerEl.addEventListener("dblclick", async (e) => {
       const word = tp_getWordAtPoint(e.clientX, e.clientY);
       if(!word) return;
-      tp_renderDictSearchBox(word);
+      const dictList = await ensureDictList();
+      const defs = tp_findClosestDictEntries(dictList, word);
+      tp_showDictFloat(word, defs);
     });
   }
 
@@ -1468,6 +1385,7 @@ let isRomanPali = false;
              <div id="tp-nissaya-content"></div>
           </div>
         </div>
+        <div id="tp-dict-float"></div>
       `;
       
       linkifyCitations(document.getElementById("tp-content"));
