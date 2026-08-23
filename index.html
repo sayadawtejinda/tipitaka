@@ -107,14 +107,14 @@
     overflow-y:auto; background:#fffefb; border:1px solid #d9d0b8; border-radius:10px;
     box-shadow:0 6px 24px rgba(0,0,0,.18); padding:16px; z-index:9999;
   }
-  #tp-dict-float .tp-dict-toolbar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  #tp-dict-float .tp-dict-drag{ cursor:grab; color:#999; font-size:15px; user-select:none; padding:2px 8px; touch-action:none; }
+  #tp-dict-float .tp-dict-corner-icons{ position:absolute; top:20px; right:22px; display:flex; align-items:center; gap:8px; z-index:2; }
+  #tp-dict-float .tp-dict-drag{ cursor:grab; color:#999; font-size:14px; user-select:none; touch-action:none; line-height:1; }
   #tp-dict-float .tp-dict-drag:active{ cursor:grabbing; }
-  #tp-dict-float .tp-dict-close{ cursor:pointer; font-size:16px; color:#888; padding:2px 6px; }
+  #tp-dict-float .tp-dict-close{ cursor:pointer; font-size:15px; color:#888; line-height:1; }
   #tp-dict-float .tp-dict-close:hover{ color:#a00; }
   #tp-dict-float .tp-dict-word{ font-weight:bold; font-size:1.15em; color:#0645ad; margin:0 26px 10px 0; }
   #tp-dict-float .tp-dict-search-input{
-    width:100%; box-sizing:border-box; padding:8px 10px; font-size:1.05em; font-weight:bold;
+    width:100%; box-sizing:border-box; padding:8px 64px 8px 10px; font-size:1.05em; font-weight:bold;
     color:#0645ad; border:1px solid #cbd5e1; border-radius:6px; margin:0 0 10px 0; font-family:inherit;
   }
   #tp-dict-float .tp-dict-suggest-item{ padding:8px 4px; border-bottom:1px solid #eee; cursor:pointer; color:#0645ad; font-size:.95em; }
@@ -349,7 +349,7 @@ let isRomanPali = false;
     if(!box) return;
 
     const safeWord = String(word).replace(/"/g, "&quot;");
-    box.innerHTML = `<div class="tp-dict-toolbar"><span class="tp-dict-drag" id="tp-dict-drag-handle" title="ဆွဲ၍ရွှေ့ရန်">⠿⠿</span><span class="tp-dict-close" id="tp-dict-close-btn">✕</span></div><input type="text" id="tp-dict-search-input" class="tp-dict-search-input" value="${safeWord}"><div id="tp-dict-body"></div>`;
+    box.innerHTML = `<span class="tp-dict-corner-icons"><span class="tp-dict-drag" id="tp-dict-drag-handle" title="ဆွဲ၍ရွှေ့ရန်">⠿⠿</span><span class="tp-dict-close" id="tp-dict-close-btn">✕</span></span><input type="text" id="tp-dict-search-input" class="tp-dict-search-input" value="${safeWord}"><div id="tp-dict-body"></div>`;
 
     tp_renderDictDefsInto(document.getElementById("tp-dict-body"), defs);
 
@@ -386,6 +386,7 @@ let isRomanPali = false;
       const item = e.target.closest(".tp-dict-suggest-item");
       if(!item) return;
       const w = item.dataset.word;
+      searchInput.value = w;
       const dl = await ensureDictList();
       const d = dl.filter(entry => entry.word === w);
       tp_renderDictDefsInto(bodyEl, d);
@@ -1606,18 +1607,10 @@ let isRomanPali = false;
                       document.body.removeChild(textArea);
                   };
 
-                  // ပထမနည်းလမ်း (Modern API) ဖြင့် စမ်းမည်
-                  if (navigator.clipboard && window.isSecureContext) {
-                      navigator.clipboard.writeText(textToCopy).then(() => {
-                          showSuccess();
-                      }).catch(err => {
-                          // Modern API ပျက်ကွက်ပါက (Error တက်ပါက) Fallback သို့ ပြောင်းမည်
-                          fallbackCopy(textToCopy);
-                      });
-                  } else {
-                      // Modern API မရနိုင်ပါက (ဥပမာ - Localhost သို့မဟုတ် HTTP ဖြစ်နေလျှင်) Fallback ကို တိုက်ရိုက်သုံးမည်
-                      fallbackCopy(textToCopy);
-                  }
+                  // Blogspot ပေါ်မှာ iframe ထဲက ဖွင့်တဲ့အခါ browser ရဲ့ security rule (Permissions Policy)
+                  // က navigator.clipboard.writeText ကို ပိတ်ဆို့လေ့ရှိသည် (local file ဖွင့်ရင်တော့ ပိတ်မခံရ)။
+                  // ဒါကြောင့် iframe ထဲမှာလည်း ယုံကြည်စိတ်ချစွာ အလုပ်လုပ်တဲ့ execCommand နည်းလမ်းကိုသာ တိုက်ရိုက်သုံးမည်
+                  fallbackCopy(textToCopy);
               }
           });
           window.isCopyListenerAttached = true; // Event ထပ်ခါထပ်ခါ မချိတ်မိစေရန် မှတ်သားထားမည်
