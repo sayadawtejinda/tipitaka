@@ -149,6 +149,7 @@
   .tp-fts-result-card:hover{ border-color:#8b0000; background:#fff8f8; }
   .tp-fts-book-title{ font-weight:bold; color:#8b0000; margin-bottom:4px; font-size:14px; }
   .tp-fts-content-snippet{ color:#555; font-size:13px; }
+  .tp-fts-highlight{ color:#0645ad; font-weight:bold; }
   @media (max-width:768px){
     #tp-fts-panel{ width:90vw; min-width:0; right:5vw; top:60px; max-height:calc(100vh - 80px); }
   }
@@ -557,7 +558,6 @@ let isRomanPali = false;
   function closeAllDropdowns(exceptId) {
     const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown', 'tp-float-search-box'];
     dropdowns.forEach(id => { if(id !== exceptId) { const el = document.getElementById(id); if(el) el.classList.remove('tp-open'); } });
-    if(exceptId !== 'tp-fts-panel'){ const ftsPanel = document.getElementById('tp-fts-panel'); if(ftsPanel) ftsPanel.classList.remove('tp-open'); }
   }
 
   function findBookMetaByPageRange(idx, bookId, pageNum){
@@ -1537,11 +1537,10 @@ let isRomanPali = false;
       const searchBox = document.getElementById("tp-sutta-search"), searchInput = document.getElementById("tp-sutta-input");
       document.getElementById("tp-search-toggle").addEventListener("click", ()=>{ const willOpen = !searchBox.classList.contains("tp-open"); closeAllDropdowns("tp-sutta-search"); searchBox.classList.toggle("tp-open", willOpen); if(willOpen){ searchInput.focus(); ensureSuttas(); } });
 
-      // --- ပိဋကတ်တော် အနှံ့ ရှာဖွေရေး Icon နှိပ်လျှင် panel ဖွင့်မည့် Logic ---
+      // --- ပိဋကတ်တော် အနှံ့ ရှာဖွေရေး Icon နှိပ်လျှင် panel ဖွင့်/ပိတ်မည့် Logic (Icon ကနေသာ ထိန်းချုပ်မည်) ---
       document.getElementById("tp-fulltext-search-btn").addEventListener("click", ()=>{
         const panel = tp_ensureFtsPanel();
         const willOpen = !panel.classList.contains("tp-open");
-        closeAllDropdowns("tp-fts-panel");
         panel.classList.toggle("tp-open", willOpen);
         if(willOpen){ const inp = panel.querySelector("#tp-fts-input"); if(inp) inp.focus(); }
       });
@@ -1724,19 +1723,99 @@ let isRomanPali = false;
     }
     return `စာအုပ် ID: ${bookId} (စာမျက်နှာ: ${burmesePageNo})`;
   }
-  function tp_ftsStripHtmlAndTruncate(html, maxLength){
+  function tp_ftsPlainTextFromHtml(html){
     const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
-    const plainText = tempDiv.textContent || tempDiv.innerText || "";
-    if(plainText.length <= maxLength) return plainText;
-    return plainText.substring(0, maxLength) + "...";
+    tempDiv.innerHTML = html || "";
+    let plainText = tempDiv.textContent || tempDiv.innerText || "";
+    plainText = plainText.replace(/\[[^\]]*\]/g, " "); // [...] ကွင်းစကားများကို ရေတွက်မှုမှ ဖယ်ရှားမည်
+    return plainText;
+  }
+
+  // ရလဒ်စာရင်းထဲက snippet ကို "စာမျက်နှာအစ" အစား "ရှာဖွေထားသော စာသား ပါဝင်ရာ ဝန်းကျင်" ကို ပြပြီး
+  // ရှာဖွေထားသော စကားလုံး/စကားစုကို အပြာရောင်ဖြင့် highlight ပြုလုပ်ပေးမည်
+  function tp_ftsExtractSnippet(html, words){
+    const plainText = tp_ftsPlainTextFromHtml(html);
+    const normalized = tp_ftsStripPunctuation(plainText); // ',' '.' '၊' '။' '-' '?' စသည်တို့ကို ရေတွက်မှုမှ ဖယ်ရှားမည်
+    const phrase = words.join(" ");
+
+    let idx = normalized.indexOf(phrase);
+    let matchLen = phrase.length;
+    if(idx === -1){
+      for(const w of words){
+        idx = normalized.indexOf(w);
+        if(idx !== -1){ matchLen = w.length; break; }
+      }
+    }
+
+    if(idx === -1){
+      const fallback = normalized.trim();
+      return fallback.length > 130 ? tp_ftsEscapeHtml(fallback.slice(0, 130)) + "..." : tp_ftsEscapeHtml(fallback);
+    }
+
+    const start = Math.max(0, idx - 50);
+    const end = Math.min(normalized.length, idx + matchLen + 70);
+    const before = normalized.slice(start, idx);
+    const match = normalized.slice(idx, idx + matchLen);
+    const after = normalized.slice(idx + matchLen, end);
+    return (start > 0 ? "..." : "") + tp_ftsEscapeHtml(before) +
+           `<span class="tp-fts-highlight">${tp_ftsEscapeHtml(match)}</span>` +
+           tp_ftsEscapeHtml(after) + (end < normalized.length ? "..." : "");
+  }
+
+  function tp_ftsEscapeHtml(s){
+    const d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  // စာမျက်နှာ ဖွင့်လိုက်ပြီးနောက် ရှာဖွေထားသော စကားလုံးများကို content ထဲမှာ အပြာရောင် highlight လုပ်ပေးမည်
+  // (HTML structure မပျက်အောင် TreeWalker ဖြင့် စာသား node များကိုသာ ရှာပြီး လုပ်ဆောင်သည်)
+  function tp_ftsHighlightWordsInElement(containerEl, words){
+    if(!containerEl || !words || words.length === 0) return;
+    const uniqueWords = [...new Set(words.filter(Boolean))].sort((a, b) => b.length - a.length);
+    if(uniqueWords.length === 0) return;
+
+    const walker = document.createTreeWalker(containerEl, NodeFilter.SHOW_TEXT, null);
+    const textNodes = [];
+    let node;
+    while((node = walker.nextNode())) textNodes.push(node);
+
+    for(const textNode of textNodes){
+      const text = textNode.nodeValue;
+      let hasMatch = false;
+      for(const w of uniqueWords){ if(text.includes(w)){ hasMatch = true; break; } }
+      if(!hasMatch) continue;
+
+      const frag = document.createDocumentFragment();
+      let i = 0;
+      while(i < text.length){
+        let matchedWord = null;
+        for(const w of uniqueWords){ if(text.startsWith(w, i)){ matchedWord = w; break; } }
+        if(matchedWord){
+          const span = document.createElement("span");
+          span.className = "tp-fts-highlight";
+          span.textContent = matchedWord;
+          frag.appendChild(span);
+          i += matchedWord.length;
+        } else {
+          let j = i + 1;
+          outer: while(j < text.length){
+            for(const w of uniqueWords){ if(text.startsWith(w, j)) break outer; }
+            j++;
+          }
+          frag.appendChild(document.createTextNode(text.slice(i, j)));
+          i = j;
+        }
+      }
+      textNode.parentNode.replaceChild(frag, textNode);
+    }
   }
 
   // စာမျက်နှာ ဖွင့်ရေး Card ကို click လုပ်လိုက်ရင် App ရဲ့ ပုံမှန် navigation (loadPage) အတိုင်းပဲ ဖွင့်ပေးမည်
   // ဒါမှ TOC breadcrumb, Dictionary, နိဿယ, ဘာသာပြန် စတဲ့ features အားလုံး ဆက်လက် အလုပ်လုပ်နိုင်မည်
   // Panel ကို GitHub idx.books နဲ့ မတိုက်ဘဲ Firebase ရဲ့ part3 (tp_ftsBooksMap) ကိုသာ တိုက်သည် -
   // ဒါမှ part2/part3 ရဲ့ book_id ပုံစံ အတူတူဖြစ်ပြီး ကိုက်ညီမှု သေချာမည်
-  async function tp_ftsOpenResult(pageInfo, statusDiv){
+  async function tp_ftsOpenResult(pageInfo, statusDiv, words){
     const bookId = String(pageInfo.book_id || "").trim();
     const pageNum = Number(pageInfo.page);
     const meta = tp_ftsBooksMap[bookId];
@@ -1745,6 +1824,8 @@ let isRomanPali = false;
     await loadPage(meta.basket, meta.category, bookId, pageNum, meta.firstpage);
     const panel = document.getElementById("tp-fts-panel");
     if(panel) panel.classList.remove("tp-open");
+    const contentEl = document.getElementById("tp-content");
+    if(contentEl && words && words.length) tp_ftsHighlightWordsInElement(contentEl, words);
   }
 
   // ပိဋကတ်တော် ရှာဖွေရေး panel ကို တစ်ခါတည်း ဆောက်ပြီး document.body အောက်မှာ ခန့်ထားမည်
@@ -1922,12 +2003,12 @@ let isRomanPali = false;
       statusDiv.innerHTML = `စကားစု <strong style='color:#8b0000;'>"${words.join(' ')}"</strong> ပါဝင်သော စာမျက်နှာပေါင်း <strong>${burmeseCount}</strong> မျက်နှာ တွေ့ရှိရပါသည်။`;
 
       for(const pageInfo of pageInfos){
-        const cleanedText = tp_ftsStripHtmlAndTruncate(pageInfo.content || "", 120);
+        const cleanedText = tp_ftsExtractSnippet(pageInfo.content || "", words);
         const formattedTitle = tp_ftsFormattedBookTitle(pageInfo.book_id, pageInfo.page);
         const card = document.createElement("div");
         card.className = "tp-fts-result-card";
         card.innerHTML = `<div class="tp-fts-book-title">${formattedTitle}</div><div class="tp-fts-content-snippet">${cleanedText}</div>`;
-        card.addEventListener("click", () => tp_ftsOpenResult(pageInfo, statusDiv));
+        card.addEventListener("click", () => tp_ftsOpenResult(pageInfo, statusDiv, words));
         resultsDiv.appendChild(card);
       }
     }catch(err){
