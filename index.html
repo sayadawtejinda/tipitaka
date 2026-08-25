@@ -1635,18 +1635,6 @@ let isRomanPali = false;
       else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
-})();
-// Refresh ခလုတ် နှိပ်လျှင် Cache များကို ရှင်းထုတ်ပြီး Page ကို Reload လုပ်ရန်
-  const mainRefreshBtn = document.getElementById("tp-float-refresh-btn");
-  if(mainRefreshBtn) {
-      mainRefreshBtn.addEventListener("click", () => {
-          if(confirm("စာမျက်နှာနှင့် ဒေတာအသစ်များကို ပြန်လည်ရယူမည်မှာ သေချာပါသလား?")) {
-              const currentUrl = new URL(window.location.href);
-              currentUrl.searchParams.set('nocache', Date.now());
-              window.location.href = currentUrl.toString();
-          }
-      });
-  }
 
   // ==========================================================================================
   // ပိဋကတ်တော် အနှံ့ ရှာဖွေရေး (Full-text Search) - ကျမ်းစာအားလုံးထဲက စာသားကို ရှာဖွေခြင်း
@@ -1945,6 +1933,19 @@ let isRomanPali = false;
     }catch(err){
       statusDiv.innerHTML = `<span style='color:red;'>ရှာဖွေရာတွင် အမှားတစ်ခု ဖြစ်ပေါ်ခဲ့ပါသည်: ${(err && err.message) ? err.message : err}</span>`;
     }
+  }
+
+})();
+// Refresh ခလုတ် နှိပ်လျှင် Cache များကို ရှင်းထုတ်ပြီး Page ကို Reload လုပ်ရန်
+  const mainRefreshBtn = document.getElementById("tp-float-refresh-btn");
+  if(mainRefreshBtn) {
+      mainRefreshBtn.addEventListener("click", () => {
+          if(confirm("စာမျက်နှာနှင့် ဒေတာအသစ်များကို ပြန်လည်ရယူမည်မှာ သေချာပါသလား?")) {
+              const currentUrl = new URL(window.location.href);
+              currentUrl.searchParams.set('nocache', Date.now());
+              window.location.href = currentUrl.toString();
+          }
+      });
   }
 
 </script>
