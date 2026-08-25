@@ -131,7 +131,7 @@
   #tp-fts-panel{
     display:none; flex-direction:column;
     position:fixed; top:64px; right:16px; z-index:2000;
-    width:26vw; min-width:300px; max-width:92vw; max-height:calc(100vh - 90px);
+    width:26vw; min-width:300px; max-width:380px; max-height:calc(100vh - 90px);
     background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px;
     padding:12px; box-shadow:0 4px 12px rgba(0,0,0,.15); box-sizing:border-box;
   }
@@ -150,8 +150,8 @@
   .tp-fts-book-title{ font-weight:bold; color:#8b0000; margin-bottom:4px; font-size:14px; }
   .tp-fts-content-snippet{ color:#555; font-size:13px; }
   .tp-fts-highlight{ color:#0645ad; font-weight:bold; }
-  @media (max-width:768px){
-    #tp-fts-panel{ width:90vw; min-width:0; right:5vw; top:60px; max-height:calc(100vh - 80px); }
+  @media (max-width:480px){
+    #tp-fts-panel{ width:90vw; min-width:0; max-width:340px; right:5vw; top:60px; max-height:calc(100vh - 80px); }
   }
 
   /* Split View Layout */
@@ -1723,6 +1723,8 @@ let isRomanPali = false;
     }
     return `စာအုပ် ID: ${bookId} (စာမျက်နှာ: ${burmesePageNo})`;
   }
+  const TP_FTS_ALLOWED_TAGS = new Set(["B","STRONG","I","EM","U","H1","H2","H3","H4","H5","H6","SUP","SUB"]);
+
   function tp_ftsPlainTextFromHtml(html){
     const tempDiv = document.createElement("div");
     tempDiv.innerHTML = html || "";
@@ -1731,35 +1733,88 @@ let isRomanPali = false;
     return plainText;
   }
 
-  // ရလဒ်စာရင်းထဲက snippet ကို "စာမျက်နှာအစ" အစား "ရှာဖွေထားသော စာသား ပါဝင်ရာ ဝန်းကျင်" ကို ပြပြီး
-  // ရှာဖွေထားသော စကားလုံး/စကားစုကို အပြာရောင်ဖြင့် highlight ပြုလုပ်ပေးမည်
+  // Content HTML ကို စာသား node များ (text nodes) အတိုင်း လိုက်လျှောက်ပြီး၊
+  // "text" = မူရင်းစာသား အတိအကျ (ပုံဖော်ရန် သုံးမည်)၊ "matchText" = အလားတူ length ရှိပေမယ့် ',' '.' '၊' '။' '-' '?'
+  // နှင့် [...] ကွင်းစာများကို space ဖြင့် blank ထားသော string (ရှာဖွေတိုက်ဆိုင်ရန် သုံးမည်) ကို ပြန်ပေးမည်
+  function tp_ftsBuildPlainProjection(container){
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null);
+    let text = "", matchText = "";
+    const nodeMap = [];
+    let node;
+    while((node = walker.nextNode())){
+      const val = node.nodeValue;
+      if(!val) continue;
+      const start = text.length;
+      text += val;
+      let mv = val.replace(/\[[^\]]*\]/g, m => " ".repeat(m.length));
+      mv = tp_ftsStripPunctuation(mv);
+      matchText += mv;
+      nodeMap.push({ node, start, end: text.length });
+    }
+    return { text, matchText, nodeMap };
+  }
+
+  function tp_ftsFindAncestorFormatTag(node){
+    let el = node.parentElement;
+    while(el){
+      if(TP_FTS_ALLOWED_TAGS.has(el.tagName)) return el.tagName;
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  // text[start,end) ကို HTML အနေနှင့် ပြန်တည်ဆောက်မည် - <b>/<h2>/... စသော format tag များကို ထိန်းသိမ်းထားပြီး
+  // [highlightStart,highlightEnd) ကို အပြာရောင် highlight လုပ်ပေးမည်
+  function tp_ftsSliceToHtml(text, nodeMap, start, end, highlightStart, highlightEnd){
+    let html = "";
+    for(const entry of nodeMap){
+      const segStart = Math.max(start, entry.start);
+      const segEnd = Math.min(end, entry.end);
+      if(segStart >= segEnd) continue;
+      const tag = tp_ftsFindAncestorFormatTag(entry.node);
+      const hs = Math.max(segStart, highlightStart), he = Math.min(segEnd, highlightEnd);
+      let inner;
+      if(hs < he){
+        const pre = tp_ftsEscapeHtml(text.slice(segStart, hs));
+        const mid = tp_ftsEscapeHtml(text.slice(hs, he));
+        const post = tp_ftsEscapeHtml(text.slice(he, segEnd));
+        inner = pre + `<span class="tp-fts-highlight">${mid}</span>` + post;
+      } else {
+        inner = tp_ftsEscapeHtml(text.slice(segStart, segEnd));
+      }
+      html += tag ? `<${tag.toLowerCase()}>${inner}</${tag.toLowerCase()}>` : inner;
+    }
+    return html;
+  }
+
+  // ရလဒ်စာရင်းထဲက snippet ကို "စာမျက်နှာအစ" အစား "ရှာဖွေထားသော စာသား ပါဝင်ရာ ဝန်းကျင်" ကို ပြပြီး၊
+  // ရှာဖွေထားသော စကားလုံး/စကားစုကို အပြာရောင်ဖြင့် highlight ပြုလုပ်ပြီး၊ <b>/<h2> စသော format ကိုလည်း ထိန်းသိမ်းမည်
   function tp_ftsExtractSnippet(html, words){
-    const plainText = tp_ftsPlainTextFromHtml(html);
-    const normalized = tp_ftsStripPunctuation(plainText); // ',' '.' '၊' '။' '-' '?' စသည်တို့ကို ရေတွက်မှုမှ ဖယ်ရှားမည်
+    const container = document.createElement("div");
+    container.innerHTML = html || "";
+    container.querySelectorAll("script,style").forEach(el => el.remove());
+
+    const { text, matchText, nodeMap } = tp_ftsBuildPlainProjection(container);
     const phrase = words.join(" ");
 
-    let idx = normalized.indexOf(phrase);
+    let idx = matchText.indexOf(phrase);
     let matchLen = phrase.length;
     if(idx === -1){
       for(const w of words){
-        idx = normalized.indexOf(w);
+        idx = matchText.indexOf(w);
         if(idx !== -1){ matchLen = w.length; break; }
       }
     }
 
     if(idx === -1){
-      const fallback = normalized.trim();
-      return fallback.length > 130 ? tp_ftsEscapeHtml(fallback.slice(0, 130)) + "..." : tp_ftsEscapeHtml(fallback);
+      const trimmed = text.trim();
+      return trimmed.length > 130 ? tp_ftsEscapeHtml(trimmed.slice(0, 130)) + "..." : tp_ftsEscapeHtml(trimmed);
     }
 
     const start = Math.max(0, idx - 50);
-    const end = Math.min(normalized.length, idx + matchLen + 70);
-    const before = normalized.slice(start, idx);
-    const match = normalized.slice(idx, idx + matchLen);
-    const after = normalized.slice(idx + matchLen, end);
-    return (start > 0 ? "..." : "") + tp_ftsEscapeHtml(before) +
-           `<span class="tp-fts-highlight">${tp_ftsEscapeHtml(match)}</span>` +
-           tp_ftsEscapeHtml(after) + (end < normalized.length ? "..." : "");
+    const end = Math.min(text.length, idx + matchLen + 70);
+    const bodyHtml = tp_ftsSliceToHtml(text, nodeMap, start, end, idx, idx + matchLen);
+    return (start > 0 ? "..." : "") + bodyHtml + (end < text.length ? "..." : "");
   }
 
   function tp_ftsEscapeHtml(s){
@@ -1822,10 +1877,9 @@ let isRomanPali = false;
     if(!meta){ if(statusDiv) statusDiv.innerHTML = `<span style='color:red;'>ဒီစာမျက်နှာအတွက် စာအုပ်အချက်အလက် မတွေ့ပါ (book_id: ${bookId})။</span>`; return; }
     if(statusDiv) statusDiv.innerText = "စာမျက်နှာ ဖွင့်နေပါသည်...";
     await loadPage(meta.basket, meta.category, bookId, pageNum, meta.firstpage);
-    const panel = document.getElementById("tp-fts-panel");
-    if(panel) panel.classList.remove("tp-open");
     const contentEl = document.getElementById("tp-content");
     if(contentEl && words && words.length) tp_ftsHighlightWordsInElement(contentEl, words);
+    if(statusDiv) statusDiv.innerText = "";
   }
 
   // ပိဋကတ်တော် ရှာဖွေရေး panel ကို တစ်ခါတည်း ဆောက်ပြီး document.body အောက်မှာ ခန့်ထားမည်
@@ -1844,10 +1898,10 @@ let isRomanPali = false;
     panel.innerHTML = `
       <div class="tp-fts-scope-row">
         <label><input type="checkbox" class="tp-fts-scope" value="current" checked> လက်ရှိကျမ်းစာ</label>
-        <label><input type="checkbox" class="tp-fts-scope" value="vinaya"> ဝိနည်း</label>
-        <label><input type="checkbox" class="tp-fts-scope" value="sutta"> သုတ္တန်</label>
-        <label><input type="checkbox" class="tp-fts-scope" value="abhidhamma"> အဘိဓမ္မာ</label>
-        <label><input type="checkbox" class="tp-fts-scope" value="other"> အခြား</label>
+        <label><input type="checkbox" class="tp-fts-scope" value="vinaya" checked> ဝိနည်း</label>
+        <label><input type="checkbox" class="tp-fts-scope" value="sutta" checked> သုတ္တန်</label>
+        <label><input type="checkbox" class="tp-fts-scope" value="abhidhamma" checked> အဘိဓမ္မာ</label>
+        <label><input type="checkbox" class="tp-fts-scope" value="other" checked> အခြား</label>
       </div>
       <div class="tp-fts-search-container">
         <input type="text" id="tp-fts-input" placeholder="စကားလုံး သို့မဟုတ် စကားစု ရိုက်ထည့်ပါ..." autocomplete="off">
@@ -1868,8 +1922,11 @@ let isRomanPali = false;
     input.addEventListener("input", () => {
       clearTimeout(debounceTimer);
       const text = input.value;
-      if(!text.trim() || text.endsWith(" ")){ autocompleteList.innerHTML = ""; return; }
-      debounceTimer = setTimeout(() => tp_ftsFetchSuggestions(text, ui), 300);
+      if(!text.trim()){ autocompleteList.innerHTML = ""; return; }
+      debounceTimer = setTimeout(() => {
+        if(/\s$/.test(text)) tp_ftsSuggestNextWords(text, ui);
+        else tp_ftsFetchSuggestions(text, ui);
+      }, 300);
     });
     input.addEventListener("click", (e) => e.stopPropagation());
     input.addEventListener("keypress", (e) => {
@@ -1938,6 +1995,64 @@ let isRomanPali = false;
         }
       }
     }catch(e){ /* autocomplete ဆိုတာ non-critical ဖြစ်လို့ error ကို ဆက်လက် လျစ်လျူရှုသည် */ }
+  }
+
+  // Space ရိုက်ပြီးနောက် "ဒီစကားစုနောက်ကို ဘယ်စာလုံးများ ဆက်လာလေ့ရှိလဲ" ဆိုတာကို
+  // Firebase part1 မှာ position-index (ဘယ်စာလုံးက ဘယ်နေရာ) သီးခြား မရှိသေးလို့၊
+  // ရှိပြီးသား rowids (pageId_position) ကို သုံးပြီး ပါဝင်ရာ စာမျက်နှာအချို့ (part2) ရဲ့ စာသားထဲက
+  // ဒီစကားစုနောက် အမှန်တကယ် ဆက်ပါလာသော စာလုံးများကို တိုက်ရိုက် ရှာဖတ်ပြီး အကြံပြုပေးမည်
+  async function tp_ftsSuggestNextWords(inputText, ui){
+    try{
+      const db = await tp_ensureFtsDb();
+      const { ref, query, orderByChild, equalTo, get } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js");
+
+      const cleaned = tp_ftsStripPunctuation(inputText);
+      const words = cleaned.trim().split(/\s+/).filter(Boolean);
+      if(words.length === 0){ ui.autocompleteList.innerHTML = ""; return; }
+
+      const phrase = words.join(" ");
+      const lastWord = words[words.length - 1];
+      const snap = await get(query(ref(db, "part1"), orderByChild("word"), equalTo(lastWord)));
+      ui.autocompleteList.innerHTML = "";
+      if(!snap.exists()) return;
+
+      const wordData = Object.values(snap.val())[0];
+      const pageIds = String(wordData.rowids || "").split(",").map(r => r.split("_")[0]).filter(Boolean);
+      const uniquePageIds = [...new Set(pageIds)].slice(0, 6); // နမူနာ စာမျက်နှာ ၆ မျက်နှာအထိ ကြည့်မည်
+      if(uniquePageIds.length === 0) return;
+
+      const pageSnaps = await Promise.all(uniquePageIds.map(pid => get(query(ref(db, "part2"), orderByChild("id"), equalTo(Number(pid))))));
+      const suggestionCounts = new Map();
+
+      for(const pageSnap of pageSnaps){
+        if(!pageSnap.exists()) continue;
+        const pageInfo = Object.values(pageSnap.val())[0];
+        const plain = tp_ftsPlainTextFromHtml(pageInfo.content || "");
+        const normalized = tp_ftsStripPunctuation(plain);
+        let from = 0;
+        while(true){
+          const idx = normalized.indexOf(phrase, from);
+          if(idx === -1) break;
+          const after = normalized.slice(idx + phrase.length).trimStart();
+          const m = after.match(/^([\u1000-\u109F]+)/); // ဆက်လက်ပါဝင်သော မြန်မာစာလုံးအုပ်စုကို ယူမည်
+          if(m && m[1]) suggestionCounts.set(m[1], (suggestionCounts.get(m[1]) || 0) + 1);
+          from = idx + phrase.length;
+        }
+      }
+
+      const ranked = [...suggestionCounts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 15);
+      for(const [nextWord] of ranked){
+        const suggestedFullPhrase = `${phrase} ${nextWord}`;
+        const div = document.createElement("div");
+        div.innerText = suggestedFullPhrase;
+        div.addEventListener("click", () => {
+          ui.input.value = suggestedFullPhrase;
+          ui.autocompleteList.innerHTML = "";
+          tp_ftsSearchPhrase(ui);
+        });
+        ui.autocompleteList.appendChild(div);
+      }
+    }catch(e){ /* non-critical */ }
   }
 
   async function tp_ftsSearchPhrase(ui){
