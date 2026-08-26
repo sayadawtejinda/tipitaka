@@ -19,7 +19,25 @@
     background-color: #cbd5e1;
     border-radius: 4px;
   }
-  body{font-family:"Myanmar Text","Padauk",sans-serif;max-width:960px;margin:0 auto;padding:20px;line-height:1.9;background:#f4f1e8;color:#3a3229;}
+  body{font-family:"Pyidaungsu","Myanmar3","Myanmar Text","Padauk",sans-serif;max-width:960px;margin:0 auto;padding:20px;line-height:1.9;background:#f4f1e8;color:#3a3229;}
+
+  /* .bld class ဖြင့် bold လုပ်ထားသော စာလုံးများအတွက် */
+  #tp-content .bld, #tp-content b, #tp-content strong,
+  #tp-nissaya-content .bld, #tp-nissaya-content b, #tp-nissaya-content strong{
+    font-weight:700;
+  }
+
+  #tp-recent-books{display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto;gap:6px;margin:-4px 0 14px;font-size:.85em;scrollbar-width:thin;}
+  #tp-recent-books::-webkit-scrollbar{height:5px;}
+  #tp-recent-books::-webkit-scrollbar-thumb{background-color:#cbd5e1;border-radius:4px;}
+  #tp-recent-books .tp-recent-chip{display:flex;align-items:center;gap:4px;flex:0 0 auto;max-width:150px;min-width:0;background:#fffdf7;border:1px solid #d9d0b8;border-radius:14px;padding:4px 6px 4px 12px;cursor:pointer;color:#3a3229;transition:.15s;}
+  #tp-recent-books .tp-recent-chip:hover{background:#eef3ea;border-color:#9fb8a8;}
+  #tp-recent-books .tp-recent-chip.tp-recent-active{background:#eef3ea;border-color:#5a8f6c;border-width:2px;padding:3px 5px 3px 11px;}
+  #tp-recent-books .tp-recent-chip.tp-recent-active .tp-recent-name{font-weight:bold;color:#2d5c3d;}
+  #tp-recent-books .tp-recent-name{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  #tp-recent-books .tp-recent-close{flex:0 0 auto;color:#9a8f7d;cursor:pointer;font-size:.95em;line-height:1;padding:2px 3px;border-radius:50%;}
+  #tp-recent-books .tp-recent-close:hover{color:#a00;background:#fdf2f2;}
+
   #tp-breadcrumb{font-size:.9em;color:#666;margin-bottom:12px;}
   #tp-breadcrumb a{color:#0645ad;cursor:pointer;text-decoration:none;}
   #tp-breadcrumb a:hover{text-decoration:underline;}
@@ -150,6 +168,8 @@
   .tp-fts-result-card:hover{ border-color:#8b0000; background:#fff8f8; }
   .tp-fts-book-title{ font-weight:bold; color:#8b0000; margin-bottom:4px; font-size:14px; }
   .tp-fts-content-snippet{ color:#555; font-size:13px; }
+  .tp-fts-next-link{ text-align:center; color:#0645ad; cursor:pointer; padding:10px; font-size:13.5px; border-top:1px dashed #e0e0e0; margin-top:4px; }
+  .tp-fts-next-link:hover{ text-decoration:underline; background:#f8fafc; }
   .tp-fts-highlight{ color:#0645ad; font-weight:bold; }
   @media (max-width:480px){
     #tp-fts-panel{ width:90vw; min-width:0; max-width:340px; right:5vw; top:60px; max-height:calc(100vh - 80px); }
@@ -188,6 +208,8 @@
   #tp-content .note{font-size:.8em;color:#888;vertical-align:super;}
   #tp-content .bodytext, #tp-nissaya-content .bodytext {text-indent:1.5em;}
   .tp-loading{color:#888;}
+  .tp-page-divider{display:flex;align-items:center;gap:10px;color:#9a8f7d;font-size:.8em;margin:18px 0;text-align:center;}
+  .tp-page-divider::before, .tp-page-divider::after{content:"";flex:1;border-top:1px dashed #d9d0b8;}
 
 p.hangnum {
   float: left;
@@ -211,6 +233,7 @@ p.gathalast {
 <body>
 
 <div id="tp-breadcrumb"></div>
+<div id="tp-recent-books"></div>
 <div id="tp-view"><p class="tp-loading">Loading...</p></div>
 
 <button id="tp-float-search-toggle" class="tp-float-nav" title="ရှာရန်">🔍</button>
@@ -245,6 +268,81 @@ const BURMESE_BOOKS_FILE = "myanmar_books.json";
   let currentRows = [], currentRow = null, currentBookId = "", currentBookMeta = null, bookPagesCache = {};
 let isNissayaOpen = false;
 let isRomanPali = false;
+
+  // ==========================================================================================
+  // "ဖတ်နေဆဲ စာအုပ်များ" (Recently opened books) - session အတွင်း အများဆုံး ၇ အုပ် မှတ်ထားရန်
+  // ရှေ့ဆုံးဖွင့်သော စာအုပ်က နေရာ ၁, ဒုတိယဖွင့်သည်က နေရာ ၂ ... စသည်ဖြင့် Fixed position ဖြစ်ပြီး
+  // ပြန်ဖွင့်သည့်အခါတွင်လည်း မူလနေရာမှာပင် ဆက်ရှိနေမည် (မျက်စိမရှုပ်စေရန်၊ နေရာ ပြောင်းလှားခြင်း မလုပ်)
+  // ==========================================================================================
+  const RECENT_BOOKS_KEY = "tp_recent_books";
+  const RECENT_BOOKS_MAX = 7;
+  let currentActiveBook = null; // { type, bookId } - ယခုဖတ်နေဆဲ စာအုပ်
+
+  function getRecentBooks(){
+    try{ return JSON.parse(sessionStorage.getItem(RECENT_BOOKS_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveRecentBooks(list){
+    try{ sessionStorage.setItem(RECENT_BOOKS_KEY, JSON.stringify(list)); }catch(e){}
+  }
+  function pushRecentBook(entry){
+    currentActiveBook = { type: entry.type, bookId: entry.bookId };
+    const list = getRecentBooks();
+    const existingIdx = list.findIndex(x => x.type === entry.type && x.bookId === entry.bookId);
+    if(existingIdx !== -1){
+      list[existingIdx] = { ...list[existingIdx], ...entry }; // မူလနေရာအတိုင်းပဲ ထားပြီး data (page နံပါတ်စသည်) ကိုသာ update
+      saveRecentBooks(list);
+    } else if(list.length < RECENT_BOOKS_MAX){
+      list.push(entry); // အသစ် ဖွင့်ချိန်ရှိသော နေရာ (နောက်ဆုံးနေရာ) တွင် ထည့်မည်
+      saveRecentBooks(list);
+    }
+    // နေရာ ၇ ခု ပြည့်နေပြီး ဒီစာအုပ်က အသစ်ဖြစ်နေလျှင် list ထဲ ထည့်မည် မဟုတ်ပါ (ရှိပြီးသားနေရာများကို မရွှေ့ရန်)
+    // ဒါပေမဲ့ highlight ပြသမှုကိုတော့ ချက်ချင်း update လုပ်ရန် render ကို အမြဲခေါ်မည်
+    renderRecentBooks();
+  }
+  function removeRecentBook(entry){
+    const list = getRecentBooks().filter(x => !(x.type === entry.type && x.bookId === entry.bookId));
+    saveRecentBooks(list);
+    renderRecentBooks();
+  }
+  function renderRecentBooks(){
+    const el = document.getElementById("tp-recent-books");
+    if(!el) return;
+    const list = getRecentBooks();
+    if(!list.length){ el.innerHTML = ""; return; }
+    el.innerHTML = list.map((b,i)=>{
+      const isActive = !!(currentActiveBook && b.type === currentActiveBook.type && b.bookId === currentActiveBook.bookId);
+      return `<span class="tp-recent-chip${isActive ? " tp-recent-active" : ""}" data-idx="${i}" title="${b.name}">
+        <span class="tp-recent-name" data-idx="${i}">${b.name}</span>
+        <span class="tp-recent-close" data-idx="${i}" title="ဖျက်မည်">✕</span>
+      </span>`;
+    }).join("");
+    el.querySelectorAll(".tp-recent-name").forEach(nameEl=>{
+      nameEl.addEventListener("click", ()=> openRecentBook(list[parseInt(nameEl.dataset.idx,10)]));
+    });
+    el.querySelectorAll(".tp-recent-close").forEach(closeEl=>{
+      closeEl.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        removeRecentBook(list[parseInt(closeEl.dataset.idx,10)]);
+      });
+    });
+  }
+  async function openRecentBook(b){
+    if(!b) return;
+    closeAllDropdowns();
+    if(b.type === "mm"){
+      document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
+      try{
+        await ensureBurmeseToc();
+        await ensureMmPages(b.bookId);
+        mmCurrentBookId = b.bookId; mmCurrentPageIdx = b.pageIdx || 1;
+        mmBackContext = { kind: "browse", categorySlug: b.categorySlug };
+        renderMmPage(null, false);
+      }catch(e){ document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`; }
+    } else {
+      loadPage(b.basketId, b.categoryId, b.bookId, b.pageNum, b.firstpageHint);
+    }
+  }
 
   async function fetchJson(url){ const res = await fetch(url); if(!res.ok) throw new Error("Fetch failed: " + url); return res.json(); }
   async function fetchText(url){ const res = await fetch(url); if(!res.ok) throw new Error("Fetch failed: " + url); return res.text(); }
@@ -942,6 +1040,7 @@ let isRomanPali = false;
            {label: MM_CATEGORY_LABELS[meta.category] || meta.category, onclick:(e)=>{e.preventDefault(); showMmBookList(meta.category);}},
            {label: meta.title || mmCurrentBookId}
        ]);
+       pushRecentBook({type:"mm", bookId: mmCurrentBookId, pageIdx: mmCurrentPageIdx, categorySlug: meta.category, name: meta.title || mmCurrentBookId});
     }
 
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
@@ -1266,7 +1365,11 @@ let isRomanPali = false;
     try{ idx = await ensureIndex(); }catch(e){ return; }
 
     const citationRegex = /\(([\u1000-\u109F][\u1000-\u109F\s,.\-]{1,300})\)/g;
-    const walker = document.createTreeWalker(containerEl, NodeFilter.SHOW_TEXT, null);
+    const walker = document.createTreeWalker(containerEl, NodeFilter.SHOW_TEXT, {
+      acceptNode(node){
+        return (node.parentElement && node.parentElement.closest(".tp-page-divider")) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
     const textNodes = [];
     let node;
     while(node = walker.nextNode()){
@@ -1480,6 +1583,32 @@ let isRomanPali = false;
       });
   }
 
+  // စာမျက်နှာ တစ်ခုတည်း မဟုတ်ဘဲ၊ ရှေ့တစ်မျက်နှာ + လက်ရှိစာမျက်နှာ + နောက်တစ်မျက်နှာကို တွဲပြီး
+  // Scroll ဖတ်နိုင်ရန် တည်ဆောက်ပေးသည့် Helper function
+  function buildStitchedPageHtml(rows, row, pageNum, bookMeta){
+    const prevRow = rows.find(r => parseInt(r.page,10) === pageNum - 1);
+    const nextRow = rows.find(r => parseInt(r.page,10) === pageNum + 1);
+    let html = "";
+    if(prevRow){
+      html += `<div class="tp-adjacent-page tp-prev-page">${prevRow.content}</div>`;
+      html += `<div class="tp-page-divider">${citationText(bookMeta, pageNum)}</div>`;
+    }
+    html += `<div id="tp-current-page">${row.content}</div>`;
+    if(nextRow){
+      html += `<div class="tp-page-divider">${citationText(bookMeta, nextRow.page)}</div>`;
+      html += `<div class="tp-adjacent-page tp-next-page">${nextRow.content}</div>`;
+    }
+    return html;
+  }
+  // #tp-content ကို Scroll လုပ်ပြီး "လက်ရှိစာမျက်နှာ" ကို ထိပ်ဆုံးသို့ ရောက်အောင် ချိန်ညှိပေးသည်
+  // (ရှေ့စာမျက်နှာက အထက်ဘက်တွင် ပါနေသော်လည်း၊ ပထမဆုံး မြင်ရမည်မှာ လက်ရှိစာမျက်နှာ ဖြစ်စေရန်)
+  function scrollToCurrentPage(){
+    const contentEl = document.getElementById("tp-content"), curEl = document.getElementById("tp-current-page");
+    if(!contentEl || !curEl) return;
+    const contentRect = contentEl.getBoundingClientRect(), curRect = curEl.getBoundingClientRect();
+    contentEl.scrollTop += (curRect.top - contentRect.top);
+  }
+
   async function loadPage(basketId, categoryId, bookId, pageNum, firstpageHint){
     setFloatSearchVisible(false); document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
@@ -1523,7 +1652,7 @@ let isRomanPali = false;
         <div id="tp-meta">${citationText(bookMeta, row.page)}</div>
         
         <div id="tp-split-wrapper">
-          <div id="tp-content" class="tp-split-pane">${row.content}</div>
+          <div id="tp-content" class="tp-split-pane">${buildStitchedPageHtml(currentRows, row, pageNum, bookMeta)}</div>
           <div id="tp-nissaya-container" class="tp-split-pane">
              <div id="tp-nissaya-header" style="justify-content: flex-end; border-bottom: none; background: transparent; padding-bottom: 0;">
                 <button id="tp-nissaya-close" class="tp-icon-btn" style="padding: 2px 8px; font-size: 0.8em;">❌</button>
@@ -1610,7 +1739,8 @@ let isRomanPali = false;
                           romanizeContent(); // Roman သို့ပြောင်းမည်
                           isRomanPali = true;
                       } else {
-                          document.getElementById("tp-content").innerHTML = currentRow.content; // မူလမြန်မာစာသို့ ပြန်ပြောင်းမည်
+                          document.getElementById("tp-content").innerHTML = buildStitchedPageHtml(currentRows, currentRow, pageNum, bookMeta); // မူလမြန်မာစာသို့ ပြန်ပြောင်းမည်
+                          scrollToCurrentPage();
                           isRomanPali = false;
                       }
                   } else if (opt.url) {
@@ -1637,11 +1767,12 @@ let isRomanPali = false;
       document.addEventListener("click", (e) => { if (!e.target.closest('#tp-nav-left') && !e.target.closest('#tp-float-search-toggle') && !e.target.closest('#tp-float-search-box') && !e.target.closest('#tp-fts-panel')) { closeAllDropdowns(); } });
 
       setParams({basket: basketId, category: categoryId, book: bookId, firstpage: firstpageHint, page: pageNum});
+      pushRecentBook({type:"pali", basketId, categoryId, bookId, pageNum, firstpageHint, name: bookMeta.name || bookId});
       renderCrossRef(basketId, categoryId, bookId, pageNum); 
       window.scrollTo({top:0, behavior:"smooth"});
       
       const contentEl = document.getElementById("tp-content");
-      if(contentEl) contentEl.scrollTo({top:0, behavior:"smooth"});
+      if(contentEl) scrollToCurrentPage();
 
       if (isRomanPali) {
           romanizeContent(); // စာမျက်နှာပြောင်းသော်လည်း Roman အခြေအနေကို ဆက်လက်ထိန်းထားမည်
@@ -1657,6 +1788,7 @@ let isRomanPali = false;
   }
 
   (async function init(){
+    renderRecentBooks();
     const {basket, category, book, page, firstpage} = getParams();
     try{
       if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
@@ -1724,15 +1856,24 @@ let isRomanPali = false;
       tp_ftsScopeMap[b.id] = TP_FTS_CATEGORY_TO_SCOPE[b.category] || "other";
     }
     return tp_ftsScopeMap;
-  }
+  } // ယခု အသုံးမပြုတော့ပါ (tp_ftsBookMatchesScope က tp_ftsBooksMap ကို တိုက်ရိုက်သုံးသည်) - backward-compat အတွက်သာ ချန်ထားသည်
 
   function tp_ftsGetSelectedScopes(scopeBoxes){
     return Array.from(scopeBoxes).filter(b => b.checked).map(b => b.value);
   }
-  function tp_ftsBookMatchesScope(bookId, scopes, scopeMap){
+  // ပြဿနာရှာတွေ့ချက်: ယခင်က GitHub books.json (idx.books) ကို အခြေခံ၍ scopeMap (book_id -> scope)
+  // ကို သီးခြား ဆောက်ခဲ့ရာ၊ GitHub ရဲ့ book id ပုံစံသည် Firebase part2 ရဲ့ book_id ပုံစံနှင့်
+  // အမြဲတမ်း အတိအကျ ကိုက်ညီမည်ဟု အာမမခံနိုင်ပါ (data source နှစ်ခု သီးခြားစီ ထိန်းသိမ်းထားသည်)။
+  // ဒါကြောင့် scope အများစု (ဥပမာ "အဘိဓမ္မာ" တစ်ခုတည်း ရွေးလိုက်ရင်) က ရလဒ်တွေ ရှိရဲ့သားနဲ့
+  // လုံးဝ မတွေ့ဘဲ ဖြစ်နေခဲ့ပါသည်။ ပြင်ဆင်ချက်: Firebase ကိုယ်တိုင် part3 (tp_ftsBooksMap) ထဲမှာ
+  // .category/.basket field ပါပြီးသားဖြစ်ပြီး ၎င်းသည် part2.book_id အတိုင်းပင် key ချထားသည်
+  // (tp_ftsOpenResult တွင်လည်း ဤနည်းအတိုင်း အားကိုးအသုံးပြုနေပြီးသား) ဒီနေရာမှာလည်း
+  // tp_ftsBooksMap ကိုပဲ တိုက်ရိုက် သုံးလိုက်ခြင်းဖြင့် ကိုက်ညီမှု အမြဲ သေချာစေသည်
+  function tp_ftsBookMatchesScope(bookId, scopes){
     if(scopes.length === 0) return false; // ဘာမှ မရွေးထားရင် ဘာမှ မရှာရ
     if(scopes.includes("current") && bookId === String(currentBookId || "").trim()) return true;
-    const cat = scopeMap[bookId] || "other";
+    const book = tp_ftsBooksMap[bookId];
+    const cat = book ? (TP_FTS_CATEGORY_TO_SCOPE[book.category] || "other") : "other";
     return scopes.includes(cat);
   }
 
@@ -1910,9 +2051,35 @@ let isRomanPali = false;
     if(!meta){ if(statusDiv) statusDiv.innerHTML = `<span style='color:red;'>ဒီစာမျက်နှာအတွက် စာအုပ်အချက်အလက် မတွေ့ပါ (book_id: ${bookId})။</span>`; return; }
     if(statusDiv) statusDiv.innerText = "စာမျက်နှာ ဖွင့်နေပါသည်...";
     await loadPage(meta.basket, meta.category, bookId, pageNum, meta.firstpage);
-    const contentEl = document.getElementById("tp-content");
+    const contentEl = document.getElementById("tp-current-page");
     if(contentEl && words && words.length) tp_ftsHighlightWordsInElement(contentEl, words);
     if(statusDiv) statusDiv.innerText = "";
+  }
+
+  const TP_FTS_PAGE_SIZE = 20;
+  // FTS ရလဒ်များကို ၂၀ ခုတစ်တွဲစီ ခွဲပြသည်။ "နောက်ရလာဒ်" နှိပ်တိုင်း နောက်တွဲကို ဆက်ပြမည်၊
+  // နောက်ဆုံးတွဲပြီးလျှင် အစက ၂၀ ခုသို့ ပြန်ရောက်စေမည်
+  function tp_ftsRenderResultsPage(list, words, resultsDiv, statusDiv, offset){
+    resultsDiv.innerHTML = "";
+    list.slice(offset, offset + TP_FTS_PAGE_SIZE).forEach(pageInfo => {
+      const cleanedText = tp_ftsExtractSnippet(pageInfo.content || "", words);
+      const formattedTitle = tp_ftsFormattedBookTitle(pageInfo.book_id, pageInfo.page);
+      const card = document.createElement("div");
+      card.className = "tp-fts-result-card";
+      card.innerHTML = `<div class="tp-fts-book-title">${formattedTitle}</div><div class="tp-fts-content-snippet">${cleanedText}</div>`;
+      card.addEventListener("click", () => tp_ftsOpenResult(pageInfo, statusDiv, words));
+      resultsDiv.appendChild(card);
+    });
+    if(list.length > TP_FTS_PAGE_SIZE){
+      const nextLink = document.createElement("div");
+      nextLink.className = "tp-fts-next-link";
+      nextLink.textContent = "နောက်ရလာဒ်";
+      nextLink.addEventListener("click", () => {
+        const nextOffset = (offset + TP_FTS_PAGE_SIZE >= list.length) ? 0 : offset + TP_FTS_PAGE_SIZE;
+        tp_ftsRenderResultsPage(list, words, resultsDiv, statusDiv, nextOffset);
+      });
+      resultsDiv.appendChild(nextLink);
+    }
   }
 
   // ပိဋကတ်တော် ရှာဖွေရေး panel ကို တစ်ခါတည်း ဆောက်ပြီး document.body အောက်မှာ ခန့်ထားမည်
@@ -1967,6 +2134,14 @@ let isRomanPali = false;
     });
     panel.addEventListener("click", (e) => {
       if(e.target !== input && !e.target.closest("#tp-fts-autocomplete")) autocompleteList.innerHTML = "";
+    });
+
+    // အပိုင်း (scope) checkbox တစ်ခုခု ဖြုတ်/တပ် လုပ်လိုက်တိုင်း၊ ရှာဖွေထားပြီးသား စကားစု ရှိပါက
+    // အလိုအလျောက် ပြန်တွက်ချက်ပြီး တွေ့ရှိချက်အရေအတွက်ကို update လုပ်ပေးမည်
+    scopeBoxes.forEach(box => {
+      box.addEventListener("change", () => {
+        if(input.value.trim()) tp_ftsSearchPhrase(ui);
+      });
     });
 
     tp_ftsPanelBuilt = true;
@@ -2105,8 +2280,6 @@ let isRomanPali = false;
       const db = await tp_ensureFtsDb();
       const { ref, query, orderByChild, equalTo, get } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js");
       await tp_ftsLoadBooksMap(db, ref, get);
-      let scopeMap = {};
-      try{ scopeMap = await tp_ftsEnsureScopeMap(); }catch(e){ scopeMap = {}; } // scope map မယူနိုင်လျှင်လည်း ရှာဖွေမှု ဆက်လုပ်စေရန်
       const selectedScopes = tp_ftsGetSelectedScopes(scopeBoxes);
 
       const wordPromises = words.map(w => get(query(ref(db, "part1"), orderByChild("word"), equalTo(w))));
@@ -2128,40 +2301,41 @@ let isRomanPali = false;
 
       if(commonPageIds.length === 0){ statusDiv.innerHTML = `<span style='color:red;'>စကားလုံးများ ("${words.join(', ')}") အားလုံး တစ်ပြိုင်နက်တည်း ပါဝင်သော စာမျက်နှာ မတွေ့ရှိပါ။</span>`; return; }
 
-      // Scope (ဝိနည်း/သုတ္တန်/...) ဖြင့် စစ်ထုတ်ရန် book_id ကို သိဖို့ candidate အနည်းငယ် ပိုယူပြီး filter လုပ်မည်
-      // Firebase ကို တစ်ခါတည်း request အများကြီး ပို့ရင် (80) ပျက်ကွက်နိုင်လို့ အစုငယ်ခွဲပြီး တစ်ဆင့်ချင်း ယူမည်
-      const candidateIds = commonPageIds.slice(0, 80);
+      // Scope (ဝိနည်း/သုတ္တန်/...) ဖြင့် စစ်ထုတ်ရန် book_id ကို သိဖို့ candidate များကို ယူပြီး filter လုပ်မည်
+      // Firebase ကို request အများကြီး တစ်ပြိုင်နက်တည်း မပို့ဘဲ (15 ခုစီ) အစုငယ်ခွဲပြီး တစ်ဆင့်ချင်း ယူမည်
+      // မှတ်ချက်: commonPageIds ထဲက id များသည် Firebase သိမ်းထားသည့် အစီအစဉ်အတိုင်း (book/basket
+      // process လုပ်ခဲ့သည့်အစဉ်နှင့် ဆက်စပ်နိုင်သည်) ဖြစ်နေတတ်သဖြင့်၊ cap ကို နည်းနည်းချင်း (၈၀) ထားလျှင်
+      // scope တစ်ခုလုံး (ဥပမာ အဘိဓမ္မာ) လုံးဝ sample ထဲ မပါဘဲ ကျန်ခဲ့နိုင်သည် (ဒီ bug ကြောင့် "အဘိဓမ္မာ"
+      // ရလဒ်များ လုံးဝ ပျောက်ဆုံးခဲ့ရခြင်း ဖြစ်သည်)။ ဒါကြောင့် cap ကို တင်ကြိုက် တိုးထားသည်
+      const CANDIDATE_CAP = 400;
+      const candidateIds = commonPageIds.slice(0, CANDIDATE_CAP);
       const CHUNK_SIZE = 15;
-      const pageInfos = [];
-      for(let i = 0; i < candidateIds.length && pageInfos.length < 20; i += CHUNK_SIZE){
+      const allPageInfos = [];
+      for(let i = 0; i < candidateIds.length; i += CHUNK_SIZE){
         const chunk = candidateIds.slice(i, i + CHUNK_SIZE);
         const chunkSnaps = await Promise.all(chunk.map(pageId => get(query(ref(db, "part2"), orderByChild("id"), equalTo(Number(pageId))))));
         for(const pageSnap of chunkSnaps){
           if(!pageSnap.exists()) continue;
-          const pageInfo = Object.values(pageSnap.val())[0];
-          if(tp_ftsBookMatchesScope(String(pageInfo.book_id || "").trim(), selectedScopes, scopeMap)){
-            pageInfos.push(pageInfo);
-            if(pageInfos.length >= 20) break;
-          }
+          allPageInfos.push(Object.values(pageSnap.val())[0]);
         }
       }
+      const inScopeInfos = allPageInfos.filter(p => tp_ftsBookMatchesScope(String(p.book_id || "").trim(), selectedScopes));
 
-      const burmeseCount = tp_ftsToBurmeseNumerals(commonPageIds.length);
-      if(pageInfos.length === 0){
-        statusDiv.innerHTML = `<span style='color:red;'>ရွေးချယ်ထားသော အပိုင်းများတွင် မတွေ့ပါ (ကျမ်းစာအားလုံးထဲတွင် စုစုပေါင်း ${burmeseCount} မျက်နှာ ရှိပါသည်)။</span>`;
+      // အပိုင်း အားလုံး ရွေးထားလျှင် (filter မလုပ်သည်နှင့်အတူတူ) sample ၈၀ ပေါ်တွင်မူတည်နေခြင်း မရှိစေဘဲ
+      // တိကျသော စုစုပေါင်း (commonPageIds.length) ကိုသာ ပြမည်။ အပိုင်း တစ်ခုခု ဖြုတ်ထားမှသာ
+      // ဖတ်ရသော candidate များထဲမှ ရွေးချယ်ထားသော အပိုင်းနှင့် ကိုက်ညီသည့်အရေအတွက်ကို ပြသမည်
+      const allScopesSelected = selectedScopes.length >= scopeBoxes.length;
+      const sampled = commonPageIds.length > candidateIds.length;
+      const displayCount = allScopesSelected ? commonPageIds.length : inScopeInfos.length;
+      const burmeseCount = tp_ftsToBurmeseNumerals(displayCount);
+      if(inScopeInfos.length === 0){
+        statusDiv.innerHTML = `<span style='color:red;'>ရွေးချယ်ထားသော အပိုင်းများတွင် မတွေ့ပါ (ကျမ်းစာအားလုံးထဲတွင် စုစုပေါင်း ${tp_ftsToBurmeseNumerals(commonPageIds.length)} မျက်နှာ ရှိပါသည်)။</span>`;
         return;
       }
-      statusDiv.innerHTML = `စကားစု <strong style='color:#8b0000;'>"${words.join(' ')}"</strong> ပါဝင်သော စာမျက်နှာပေါင်း <strong>${burmeseCount}</strong> မျက်နှာ တွေ့ရှိရပါသည်။`;
+      const sampleNote = (sampled && !allScopesSelected) ? ` <span style="color:#9a8f7d;font-size:.85em;">(စုစုပေါင်း စာမျက်နှာ ${tp_ftsToBurmeseNumerals(candidateIds.length)} အနက်မှ)</span>` : "";
+      statusDiv.innerHTML = `<strong style='color:#8b0000;'>"${words.join(' ')}"</strong> ပါဝင်သော စာမျက်နှာပေါင်း <strong>${burmeseCount}</strong> မျက်နှာ တွေ့ရှိရပါသည်။${sampleNote}`;
 
-      for(const pageInfo of pageInfos){
-        const cleanedText = tp_ftsExtractSnippet(pageInfo.content || "", words);
-        const formattedTitle = tp_ftsFormattedBookTitle(pageInfo.book_id, pageInfo.page);
-        const card = document.createElement("div");
-        card.className = "tp-fts-result-card";
-        card.innerHTML = `<div class="tp-fts-book-title">${formattedTitle}</div><div class="tp-fts-content-snippet">${cleanedText}</div>`;
-        card.addEventListener("click", () => tp_ftsOpenResult(pageInfo, statusDiv, words));
-        resultsDiv.appendChild(card);
-      }
+      tp_ftsRenderResultsPage(inScopeInfos, words, resultsDiv, statusDiv, 0);
     }catch(err){
       statusDiv.innerHTML = `<span style='color:red;'>ရှာဖွေရာတွင် အမှားတစ်ခု ဖြစ်ပေါ်ခဲ့ပါသည်: ${(err && err.message) ? err.message : err}</span>`;
     }
