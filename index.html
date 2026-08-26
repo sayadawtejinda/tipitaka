@@ -31,7 +31,7 @@
   #tp-nav button{padding:8px 16px;cursor:pointer;}
   #tp-nav button:disabled{opacity:.4;cursor:default;}
   
-  #tp-nav-left{display:flex;gap:6px;position:relative;}
+  #tp-nav-left{display:flex;gap:6px;position:relative;z-index:2001;}
   
   #tp-nav button.tp-icon-btn{padding:6px 10px;font-size:1.25em;line-height:1;}
   .tp-fts-icon-wrap{ position:relative; display:inline-block; }
@@ -122,6 +122,7 @@
   #tp-dict-float .tp-dict-suggest-item{ padding:8px 4px; border-bottom:1px solid #eee; cursor:pointer; color:#0645ad; font-size:.95em; }
   #tp-dict-float .tp-dict-suggest-item:hover{ background:#f1f5f9; }
   #tp-dict-float .tp-dict-def{ font-size:.95em; line-height:1.6; }
+  #tp-dict-float .tp-dict-source-badge{ display:inline-block; background:#0645ad; color:#fff; font-size:.75em; font-weight:bold; padding:2px 8px; border-radius:4px; margin-bottom:6px; }
   #tp-dict-float .tp-dict-empty{ color:#888; font-size:.9em; }
   @media (max-width: 768px){
     #tp-dict-float{ width:90vw; max-width:340px; max-height:280px; }
@@ -275,6 +276,7 @@ let isRomanPali = false;
   // Double-click အဘိဓာန် (Dictionary) - Firebase Realtime Database ကနေ word list ကို တစ်ကြိမ်တည်း ဆွဲယူပြီး cache လုပ်ထားမည်
   // ==========================================================================================
   let tp_dictListCache = null, tp_dictListPromise = null;
+  let tp_dictBooksMap = null, tp_dictBooksPromise = null;
 
   function tp_findDictWordArray(node){
     if(Array.isArray(node) && node.length && node[0] && node[0].word) return node.filter(item => item);
@@ -282,6 +284,27 @@ let isRomanPali = false;
       for(const key in node){ const result = tp_findDictWordArray(node[key]); if(result.length) return result; }
     }
     return [];
+  }
+
+  // အဘိဓာန် အမည်စာရင်း (part5) ကို id -> name lookup map အဖြစ် ဆွဲယူမည်
+  async function tp_ensureDictBooksMap(){
+    if(tp_dictBooksMap) return tp_dictBooksMap;
+    if(tp_dictBooksPromise) return tp_dictBooksPromise;
+    tp_dictBooksPromise = (async () => {
+      tp_dictBooksMap = {};
+      try{
+        const db = await tp_ensureFtsDb();
+        const { ref, get } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js");
+        const snapshot = await get(ref(db, "part5"));
+        if(snapshot.exists()){
+          const raw = snapshot.val();
+          const arr = Array.isArray(raw) ? raw : Object.values(raw);
+          for(const item of arr){ if(item && item.id != null) tp_dictBooksMap[String(item.id).trim()] = item.name; }
+        }
+      }catch(e){ /* dictionary name lookup မရရင်လည်း definition ကိုတော့ ပြရမည် */ }
+      return tp_dictBooksMap;
+    })();
+    return tp_dictBooksPromise;
   }
 
   async function ensureDictList(){
@@ -341,13 +364,19 @@ let isRomanPali = false;
   }
 
   // အဘိဓာန်ဘောက်စ်ထဲ definition အပိုင်းကို ရေးဆွဲပေးမည့် helper
-  function tp_renderDictDefsInto(bodyEl, defs){
+  // (definition တစ်ခုချင်းစီ အပေါ်မှာ ဘယ်အဘိဓာန်ကလဲဆိုတာကို အပြာနောက်ခံ/အဖြူစာလုံးဖြင့် ပြပေးမည်)
+  async function tp_renderDictDefsInto(bodyEl, defs){
     if(!bodyEl) return;
     if(!defs || defs.length === 0){
       bodyEl.innerHTML = `<div class="tp-dict-empty">အဘိဓာန်တွင် မတွေ့ပါ။</div>`;
-    } else {
-      bodyEl.innerHTML = defs.map(d => `<div class="tp-dict-def">${d.definition}</div>`).join("<hr style='margin:10px 0;border:none;border-top:1px solid #eee;'>");
+      return;
     }
+    const booksMap = await tp_ensureDictBooksMap();
+    bodyEl.innerHTML = defs.map(d => {
+      const dictName = booksMap[String(d.book_id).trim()];
+      const banner = dictName ? `<div class="tp-dict-source-badge">${dictName}</div>` : "";
+      return `<div class="tp-dict-def">${banner}${d.definition}</div>`;
+    }).join("<hr style='margin:10px 0;border:none;border-top:1px solid #eee;'>");
   }
 
   // ဘောက်စ်ကို double-click လုပ်လိုက်တဲ့ စာလုံးအနီးမှာ (viewport ပြင်ပ မထွက်အောင် clamp လုပ်ပြီး) နေရာချပေးမည်
@@ -1678,17 +1707,21 @@ let isRomanPali = false;
   }
 
   // GitHub ကရရှိသော idx.books/idx.basket_labels မှတဆင့် စာအုပ် တစ်အုပ်စီက ဝိနည်း/သုတ္တန်/အဘိဓမ္မာ/အခြား ဘယ်အပိုင်းလဲ သိရန်
+  // book.category ရဲ့ တိကျသော short code (vi/di/ma/sa/an/ku/bi/annya_*) ကို
+  // ဝိနည်း/သုတ္တန်/အဘိဓမ္မာ/အခြား scope လေးခုအဖြစ် တိုက်ရိုက် ခွဲခြားမည်
+  const TP_FTS_CATEGORY_TO_SCOPE = {
+    vi: "vinaya",
+    di: "sutta", ma: "sutta", sa: "sutta", an: "sutta", ku: "sutta",
+    bi: "abhidhamma",
+    annya_vi: "other", annya_bi: "other", annya_sadda: "other"
+  };
+
   async function tp_ftsEnsureScopeMap(){
     if(tp_ftsScopeMap) return tp_ftsScopeMap;
     const idx = await ensureIndex();
     tp_ftsScopeMap = {};
     for(const b of (idx.books || [])){
-      const label = (idx.basket_labels && idx.basket_labels[b.basket]) || b.basket || "";
-      let cat = "other";
-      if(label.includes("ဝိနည်း")) cat = "vinaya";
-      else if(label.includes("သုတ္တန်")) cat = "sutta";
-      else if(label.includes("အဘိဓမ္မာ")) cat = "abhidhamma";
-      tp_ftsScopeMap[b.id] = cat;
+      tp_ftsScopeMap[b.id] = TP_FTS_CATEGORY_TO_SCOPE[b.category] || "other";
     }
     return tp_ftsScopeMap;
   }
@@ -1697,7 +1730,7 @@ let isRomanPali = false;
     return Array.from(scopeBoxes).filter(b => b.checked).map(b => b.value);
   }
   function tp_ftsBookMatchesScope(bookId, scopes, scopeMap){
-    if(scopes.length === 0) return true; // ဘာမှ မရွေးထားရင် နေရာအားလုံးမှာ ရှာမည်
+    if(scopes.length === 0) return false; // ဘာမှ မရွေးထားရင် ဘာမှ မရှာရ
     if(scopes.includes("current") && bookId === String(currentBookId || "").trim()) return true;
     const cat = scopeMap[bookId] || "other";
     return scopes.includes(cat);
@@ -2062,6 +2095,9 @@ let isRomanPali = false;
     const words = cleanedInput.split(/\s+/).filter(Boolean);
 
     if(words.length === 0){ statusDiv.innerText = "ကျေးဇူးပြု၍ စကားလုံး သို့မဟုတ် စကားစု ရိုက်ထည့်ပါ။"; return; }
+
+    const selectedScopesUpfront = tp_ftsGetSelectedScopes(scopeBoxes);
+    if(selectedScopesUpfront.length === 0){ statusDiv.innerHTML = `<span style='color:red;'>ရှာဖွေရန် အနည်းဆုံး တစ်ခု ရွေးချယ်ပါ။</span>`; return; }
 
     statusDiv.innerText = "ရှာဖွေနေပါသည်... ခဏစောင့်ပါ။";
 
