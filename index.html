@@ -229,22 +229,28 @@ p.gathalast {
   margin-bottom: 15px !important; 
 }
 
-  /* ==== Sayokeson ရှာဖွေရေး panel (လက်ဝဲဘက်) ==== */
-  #tp-search-choice{ display:none; position:fixed; z-index:2100; background:#fff; border:1px solid #cbd5e1; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.2); padding:6px; min-width:200px; }
+  /* ==== Sayokeson / PitakaVatthu / Sayokepya ရှာဖွေရေး panel (လက်ဝဲဘေးထောင့်မှာ ကပ်ထားသည်) ==== */
+  #tp-search-choice{ display:none; position:fixed; z-index:2100; background:#fff; border:1px solid #cbd5e1; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.2); padding:6px; min-width:210px; }
   #tp-search-choice.tp-open{ display:block; }
   #tp-search-choice button{ display:block; width:100%; text-align:left; padding:10px 12px; margin:2px 0; border:none; background:#f8fafc; border-radius:6px; cursor:pointer; font-size:14px; font-family:inherit; }
   #tp-search-choice button:hover{ background:#f9f0f0; color:#8b0000; }
-  #tp-say-panel{ display:none; flex-direction:column; position:fixed; top:64px; left:16px; z-index:2000; width:26vw; min-width:300px; max-width:380px; max-height:calc(100vh - 90px); background:#f8fafc; border:1px solid #cbd5e1; border-radius:8px; padding:12px; box-shadow:0 4px 12px rgba(0,0,0,.15); box-sizing:border-box; }
+  #tp-say-panel{ display:none; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:2000; width:340px; background:#f8fafc; border-right:1px solid #cbd5e1; padding:12px; box-shadow:2px 0 8px rgba(0,0,0,.12); box-sizing:border-box; }
   #tp-say-panel.tp-open{ display:flex; }
+  /* panel ဖွင့်ထားရင် စာအုပ်ကို ညာဘက်ကို ရွှေ့ပေးထားသဖြင့် panel က စာအုပ်ကို မဖုံးပါ */
+  body.tp-say-docked{ margin-left:352px !important; margin-right:0 !important; max-width:none !important; }
+  body.tp-say-docked #tp-float-prev{ left:358px; }
   #tp-say-panel .tp-say-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-weight:bold; color:#8b0000; }
   #tp-say-panel .tp-say-close{ cursor:pointer; color:#888; padding:0 6px; }
   #tp-say-panel input{ width:100%; padding:9px 10px; font-size:15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; font-family:inherit; margin-bottom:8px; }
   #tp-say-panel .tp-say-body{ overflow-y:auto; flex:1; }
+  #tp-say-panel .tp-say-item{ padding:8px 10px; border-bottom:1px solid #e6e6e6; cursor:pointer; font-size:14px; color:#333; }
+  #tp-say-panel .tp-say-item:hover{ background:#fff8f8; color:#8b0000; }
+  #tp-say-panel .tp-say-note{ font-size:11.5px; color:#999; margin-left:6px; }
   #tp-say-panel .tp-say-detail-title{ font-weight:bold; color:#8b0000; font-size:16px; margin-bottom:8px; }
   #tp-say-panel .tp-say-detail-text{ font-size:14.5px; line-height:1.9; color:#333; }
   #tp-say-panel .tp-say-back{ color:#0645ad; cursor:pointer; margin-bottom:8px; font-size:13.5px; }
-  @media (max-width:480px){ #tp-say-panel{ width:90vw; min-width:0; max-width:340px; left:5vw; top:60px; max-height:calc(100vh - 80px); } }
   .tp-say-ref{ color:#0645ad; cursor:pointer; text-decoration:underline; }
+  @media (max-width:900px){ #tp-say-panel{ width:88vw; max-width:360px; } body.tp-say-docked{ margin-left:auto !important; margin-right:auto !important; max-width:960px !important; } body.tp-say-docked #tp-float-prev{ left:6px; } }
 </style>
 </head>
 <body>
@@ -702,32 +708,37 @@ let isRomanPali = false;
   };
 
 
-  // ================= Sayokeson ရှာဖွေရေး =================
-  // 🔍 icon ကိုနှိပ်ရင် "သုတ္တန်ရှာရန်" (ရှိပြီးသား) နဲ့ "Sayokeson ရှာရန်" ကို ရွေးခိုင်းမည်။
-  // Sayokeson ကို ရွေးရင် လက်ဝဲဘက်မှာ box ပေါ်ပြီး ခေါင်းစဉ်/စာသားအားလုံးထဲ ရိုက်ရှာနိုင်သည်။
-  let tp_sayData = null, tp_sayPromise = null;
+  // ================= Sayokeson / PitakaVatthu / Sayokepya ရှာဖွေရေး =================
+  // 🔍 icon ကိုနှိပ်ရင် ရွေးစရာ ၄ ခု ပေါ်မည်: သုတ္တန်ရှာရန် (ရှိပြီးသား) + ဒေတာစာအုပ် ၃ အုပ်။
+  // ဒေတာစာအုပ်ကို ရွေးရင် လက်ဝဲဘေးထောင့်မှာ box ကပ်ပေါ်ပြီး ခေါင်းစဉ်တွေကို အရင်ပြမည်၊ ခေါင်းစဉ်ကိုနှိပ်မှ စာသားပြမည်။
+  const TP_DATASETS = {
+    say: { file: "sayokeson.json",    label: "Sayokeson" },
+    vat: { file: "pitakavatthu.json", label: "PitakaVatthu" },
+    pya: { file: "sayokepya.json",    label: "Sayokepya" }
+  };
+  const tp_dsCache = {};
+  let tp_dsCur = "say";
   function tp_sayNorm(s){
     let t = String(s || "").replace(/<[^>]+>/g, "").replace(/[0-9]/g, d => "၀၁၂၃၄၅၆၇၈၉"[d]);
     t = t.replace(/[\s,.\-–()\[\]၊။"“”'‘’]/g, "");
     return t.replace(/(.)္\1/g, "$1်");   // သုတ္တ ⟷ သုတ်
   }
-  function tp_sayLoad(){
-    if(tp_sayPromise) return tp_sayPromise;
-    tp_sayPromise = (async () => {
+  function tp_dsLoad(key){
+    if(tp_dsCache[key]) return tp_dsCache[key];
+    const file = TP_DATASETS[key].file;
+    const p = (async () => {
       let list;
-      try{ list = await fetchJson(cdnUrl(SAYOKESON_FILE)); }
-      catch(e){ list = await fetchJson(SAYOKESON_FILE); }   // GitHub မှာ မတင်ရသေးရင် ဒီ folder ထဲကဖိုင်ကို ဖတ်မည်
+      try{ list = await fetchJson(cdnUrl(file)); }
+      catch(e){ list = await fetchJson(file); }   // GitHub မှာ မတင်ရသေးရင် ဒီ folder ထဲကဖိုင်ကို ဖတ်မည်
       list.forEach(r => { r.nt = tp_sayNorm(r.t); r.nb = tp_sayNorm(r.c); });
-      tp_sayData = list;
       return list;
     })();
-    tp_sayPromise.catch(() => { tp_sayPromise = null; });
-    return tp_sayPromise;
+    tp_dsCache[key] = p;
+    p.catch(() => { delete tp_dsCache[key]; });
+    return p;
   }
   function tp_sayEsc(s){ const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
-  // same clean-up as tp_sayNorm, but remembers where every kept character came from so
-  // matches can be highlighted / located in the ORIGINAL text (stacked letters like တ္တ
-  // count as one "တ်", exactly as they do when searching)
+  // မူရင်းစာသားထဲက စာလုံးတစ်ခုချင်း ဘယ်ကလာလဲ မှတ်ထားပြီး (တ္တ = တ် လို ရှာတဲ့အတိုင်း ရေတွက်) highlight/ရှာတွေ့ရာနေရာ ရှာမည်
   function tp_sayMap(text){
     const skip = /[\s,.\-–()\[\]၊။"“”'‘’]/;
     let plain = "", start = [], end = [];
@@ -740,124 +751,9 @@ let isRomanPali = false;
     }
     return { plain, start, end };
   }
-  function tp_sayHighlight(text, terms){
-    const m = tp_sayMap(text);
-    const marks = new Array(text.length).fill(false);
-    terms.forEach(term => {
-      if(!term) return;
-      let from = 0, at;
-      while((at = m.plain.indexOf(term, from)) !== -1){
-        for(let k = m.start[at]; k <= m.end[at + term.length - 1]; k++) marks[k] = true;
-        from = at + term.length;
-      }
-    });
-    let out = "", open = false;
-    for(let i = 0; i < text.length; i++){
-      if(marks[i] && !open){ out += '<span class="tp-fts-highlight">'; open = true; }
-      if(!marks[i] && open){ out += "</span>"; open = false; }
-      out += tp_sayEsc(text[i]);
-    }
-    return out + (open ? "</span>" : "");
-  }
-  function tp_saySearch(q){
-    const terms = String(q || "").trim().split(/\s+/).map(tp_sayNorm).filter(Boolean);
-    if(!terms.length) return { terms, hits: [] };
-    const hits = [];
-    tp_sayData.forEach(r => {
-      let score = 0;
-      for(const t of terms){
-        const inT = r.nt.indexOf(t);
-        if(inT === -1 && r.nb.indexOf(t) === -1){ score = -1; break; }
-        score += inT === 0 ? 100 : inT > 0 ? 50 : 1;
-      }
-      if(score > 0) hits.push({ r, score });
-    });
-    hits.sort((a, b) => b.score - a.score || a.r.nt.length - b.r.nt.length);
-    return { terms, hits };
-  }
-  function tp_sayPlainBody(c){ return String(c).replace(/<br\s*\/?>/gi, " ").replace(/<[^>]+>/g, ""); }
-  function tp_sayEnsurePanel(){
-    let panel = document.getElementById("tp-say-panel");
-    if(panel) return panel;
-    panel = document.createElement("div");
-    panel.id = "tp-say-panel";
-    panel.innerHTML = `<div class="tp-say-head"><span>Sayokeson ရှာဖွေရန်</span><span class="tp-say-close" title="ပိတ်မည်">✕</span></div>
-      <input type="text" id="tp-say-input" placeholder="စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)" autocomplete="off">
-      <div class="tp-fts-status" id="tp-say-status"></div>
-      <div class="tp-say-body" id="tp-say-body"></div>`;
-    document.body.appendChild(panel);
-    panel.querySelector(".tp-say-close").addEventListener("click", () => panel.classList.remove("tp-open"));
-    const input = panel.querySelector("#tp-say-input");
-    let timer = null;
-    input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => tp_sayRun(input.value), 220); });
-    return panel;
-  }
-  const TP_SAY_PAGE = 20;
-  async function tp_sayRun(q, offset){
-    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
-    if(!String(q).trim()){ status.textContent = ""; body.innerHTML = ""; return; }
-    status.textContent = "ရှာဖွေနေပါသည်...";
-    try{ await tp_sayLoad(); }catch(e){ status.innerHTML = "<span style='color:red;'>Sayokeson ဒေတာ ဖတ်မရပါ</span>"; return; }
-    const { terms, hits } = tp_saySearch(q);
-    offset = offset || 0;
-    status.textContent = hits.length ? `တွေ့ရှိမှု ${hits.length} ခု` : "မတွေ့ပါ";
-    body.innerHTML = "";
-    hits.slice(offset, offset + TP_SAY_PAGE).forEach(h => {
-      const plain = tp_sayPlainBody(h.r.c);
-      let snippet = plain.slice(0, 120);
-      const inTitle = terms.every(t => h.r.nt.indexOf(t) !== -1);
-      if(!inTitle){
-        const first = terms.find(t => h.r.nb.indexOf(t) !== -1) || terms[0];
-        const m = tp_sayMap(plain), at = m.plain.indexOf(first);
-        const st = Math.max(0, (at >= 0 ? m.start[at] : 0) - 50);
-        snippet = (st > 0 ? "..." : "") + plain.slice(st, st + 150) + "...";
-      }
-      const card = document.createElement("div");
-      card.className = "tp-fts-result-card";
-      card.innerHTML = `<div class="tp-fts-book-title">${tp_sayHighlight(h.r.t, terms)}</div><div class="tp-fts-content-snippet">${tp_sayHighlight(snippet, terms)}</div>`;
-      card.addEventListener("click", () => tp_sayDetail(h.r, terms, () => tp_sayRun(q, offset)));
-      body.appendChild(card);
-    });
-    if(hits.length > TP_SAY_PAGE){
-      const next = document.createElement("div");
-      next.className = "tp-fts-next-link";
-      next.textContent = "နောက်ရလာဒ်";
-      next.addEventListener("click", () => tp_sayRun(q, offset + TP_SAY_PAGE >= hits.length ? 0 : offset + TP_SAY_PAGE));
-      body.appendChild(next);
-    }
-  }
-  // ---- ကိုးကားချက် (ဥပမာ အံ၊ဋ္ဌ၊၂၊၁၀၄) ကို နှိပ်ရင် ခါတိုင်းဖတ်နေကျ reader မှာပဲ စာမျက်နှာဖွင့်ပေးမည် ----
-  // Sayokeson မှာသုံးတဲ့ အတိုကောက်တချို့ဟာ books.json ရဲ့ short_name နဲ့ မတူလို့ ဒီနေရာမှာ ချိတ်ပေးထားသည်
-  const TP_SAY_ALIAS = [["သာရတ္ထ၊ဋီ၊", "သာရတ္ထ၊"], ["အပ၊ဋ္ဌ၊", "အပဒါန၊ဋ္ဌ၊"], ["အပ၊", "အပဒါန၊"], ["ဇာ၊ဋ္ဌ၊", "ဇာတက၊ဋ္ဌ၊"],
-    ["ဓမ္မ၊ဋ္ဌ၊", "ဓမ္မပဒ၊ဋ္ဌ၊"], ["စူဠနိ၊ဋ္ဌ၊", "စူဋ္ဌနိ၊ဋ္ဌ၊"], ["သီ၊ဋီ၊သစ်၊", "သီဋီသစ်၊"], ["ပေဋကော၊", "ပေဋက၊"]];
-  let tp_sayRefSrc = null, tp_sayRefBooks = null;
-  async function tp_sayEnsureRefs(){
-    if(tp_sayRefSrc) return;
-    const idx = await ensureIndex();
-    const byName = {};
-    idx.books.forEach(b => { const k = String(b.short_name || "").replace(/၊$/, ""); if(k) (byName[k] = byName[k] || []).push(b); });
-    const aliases = {};
-    TP_SAY_ALIAS.forEach(([x, y]) => { const ky = y.replace(/၊$/, ""); if(byName[ky]) aliases[x.replace(/၊$/, "")] = ky; });
-    const all = Object.keys(byName).concat(Object.keys(aliases)).sort((p, q) => q.length - p.length);
-    const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    tp_sayRefSrc = "(?<=^|[\\s(,;\\[])(" + all.map(esc).join("|") + ")၊\\s*([၀-၉]+)(?:[-–]([၀-၉]+))?";
-    tp_sayRefBooks = { byName, aliases };
-  }
-  function tp_sayToInt(str){ return parseInt(String(str).replace(/[၀-၉]/g, d => "၀၁၂၃၄၅၆၇၈၉".indexOf(d)), 10); }
-  function tp_sayFindRefs(text){
-    if(!tp_sayRefSrc) return [];
-    const re = new RegExp(tp_sayRefSrc, "g"), out = [];
-    let m;
-    while((m = re.exec(text)) !== null){
-      const key = tp_sayRefBooks.aliases[m[1]] || m[1];
-      const page = tp_sayToInt(m[2]);
-      const book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
-      if(book) out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page });
-    }
-    return out;
-  }
-  // ရှာတဲ့စာလုံး highlight + ကိုးကားချက် link ကို တစ်ပြိုင်နက် ထုတ်ပေးမည်
+  // ရှာတဲ့စာလုံး highlight + (ရှိရင်) ကိုးကားချက် link
   function tp_sayRender(text, terms, refs){
+    refs = refs || [];
     const m = tp_sayMap(text);
     const marks = new Array(text.length).fill(false), refAt = new Array(text.length).fill(-1);
     terms.forEach(term => {
@@ -885,6 +781,104 @@ let isRomanPali = false;
     if(openRef >= 0) out += "</a>";
     return out;
   }
+  function tp_saySearch(q, data){
+    const terms = String(q || "").trim().split(/\s+/).map(tp_sayNorm).filter(Boolean);
+    if(!terms.length) return { terms, hits: [] };
+    const hits = [];
+    data.forEach(r => {
+      let score = 0, inTitleAll = true;
+      for(const t of terms){
+        const inT = r.nt.indexOf(t);
+        if(inT === -1){ inTitleAll = false; if(r.nb.indexOf(t) === -1){ score = -1; break; } score += 1; }
+        else score += inT === 0 ? 100 : 50;
+      }
+      if(score > 0) hits.push({ r, score, inTitleAll });
+    });
+    hits.sort((a, b) => b.score - a.score || a.r.nt.length - b.r.nt.length);
+    return { terms, hits };
+  }
+  function tp_sayEnsurePanel(){
+    let panel = document.getElementById("tp-say-panel");
+    if(panel) return panel;
+    panel = document.createElement("div");
+    panel.id = "tp-say-panel";
+    panel.innerHTML = `<div class="tp-say-head"><span id="tp-say-title"></span><span class="tp-say-close" title="ပိတ်မည်">✕</span></div>
+      <input type="text" id="tp-say-input" placeholder="စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)" autocomplete="off">
+      <div class="tp-fts-status" id="tp-say-status"></div>
+      <div class="tp-say-body" id="tp-say-body"></div>`;
+    document.body.appendChild(panel);
+    panel.querySelector(".tp-say-close").addEventListener("click", tp_closeSayPanel);
+    const input = panel.querySelector("#tp-say-input");
+    let timer = null;
+    input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => tp_sayRun(input.value), 220); });
+    return panel;
+  }
+  function tp_closeSayPanel(){
+    const panel = document.getElementById("tp-say-panel");
+    if(panel) panel.classList.remove("tp-open");
+    document.body.classList.remove("tp-say-docked");
+  }
+  const TP_SAY_PAGE = 30;
+  // ရလဒ်ကို ခေါင်းစဉ်ချည်းပဲ ပြမည် (စာသားထဲမှာပဲ တွေ့တာဆိုရင် အမှတ်အသားလေးပါမည်)
+  async function tp_sayRun(q, offset){
+    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
+    if(!String(q).trim()){ status.textContent = ""; body.innerHTML = ""; return; }
+    status.textContent = "ရှာဖွေနေပါသည်...";
+    let data;
+    try{ data = await tp_dsLoad(tp_dsCur); }catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
+    const { terms, hits } = tp_saySearch(q, data);
+    offset = offset || 0;
+    status.textContent = hits.length ? `တွေ့ရှိမှု ${hits.length} ခု` : "မတွေ့ပါ";
+    body.innerHTML = "";
+    hits.slice(offset, offset + TP_SAY_PAGE).forEach(h => {
+      const item = document.createElement("div");
+      item.className = "tp-say-item";
+      item.innerHTML = tp_sayRender(h.r.t, terms, []) + (h.inTitleAll ? "" : `<span class="tp-say-note">(စာသားထဲမှာ တွေ့)</span>`);
+      item.addEventListener("click", () => tp_sayDetail(h.r, terms, () => tp_sayRun(q, offset)));
+      body.appendChild(item);
+    });
+    if(hits.length > TP_SAY_PAGE){
+      const next = document.createElement("div");
+      next.className = "tp-fts-next-link";
+      next.textContent = "နောက်ရလာဒ်";
+      next.addEventListener("click", () => tp_sayRun(q, offset + TP_SAY_PAGE >= hits.length ? 0 : offset + TP_SAY_PAGE));
+      body.appendChild(next);
+    }
+  }
+  // ---- ကိုးကားချက် (ဥပမာ အံ၊ဋ္ဌ၊၂၊၁၀၄) ကို နှိပ်ရင် ခါတိုင်းဖတ်နေကျ reader မှာပဲ စာမျက်နှာဖွင့်ပေးမည် ----
+  // ဒေတာထဲက အတိုကောက်တချို့ဟာ books.json ရဲ့ short_name နဲ့ မတူလို့ ဒီနေရာမှာ ချိတ်ပေးထားသည်
+  // ("မြန်" မြန်မာပြန်ကိုးကားတွေကတော့ စာမျက်နှာ မကိုက်သေးလို့ link မလုပ်ပါ)
+  const TP_SAY_ALIAS = [["အပ", "အပဒါန"], ["ဇာ", "ဇာတက"], ["ဓမ္မ", "ဓမ္မပဒ"], ["စူဠနိ", "စူဋ္ဌနိ"], ["သာရတ္ထ၊ဋီ", "သာရတ္ထ"], ["သီ၊ဋီ၊သစ်", "သီဋီသစ်"], ["ပေဋကော", "ပေဋက"]];
+  let tp_sayRefSrc = null, tp_sayRefBooks = null;
+  async function tp_sayEnsureRefs(){
+    if(tp_sayRefSrc) return;
+    const idx = await ensureIndex();
+    const byName = {};
+    idx.books.forEach(b => { const k = String(b.short_name || "").replace(/၊$/, ""); if(k) (byName[k] = byName[k] || []).push(b); });
+    const aliases = {};
+    Object.keys(byName).forEach(K => {
+      TP_SAY_ALIAS.forEach(([A, B]) => { if(K === B || K.startsWith(B + "၊")) aliases[A + K.slice(B.length)] = K; });
+      const m = /^(.+)၊([၀-၉])$/.exec(K);          // ဒီ၊၁ ကို ဒီ၁ လို ရေးတာလည်း လက်ခံမည်
+      if(m) aliases[m[1] + m[2]] = K;
+    });
+    const all = Object.keys(byName).concat(Object.keys(aliases)).sort((p, q) => q.length - p.length);
+    const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    tp_sayRefSrc = "(?<=^|[\\s(,;\\[])(" + all.map(esc).join("|") + ")၊\\s*([၀-၉]+)(?:[-–]([၀-၉]+))?";
+    tp_sayRefBooks = { byName, aliases };
+  }
+  function tp_sayToInt(str){ return parseInt(String(str).replace(/[၀-၉]/g, d => "၀၁၂၃၄၅၆၇၈၉".indexOf(d)), 10); }
+  function tp_sayFindRefs(text){
+    if(!tp_sayRefSrc) return [];
+    const re = new RegExp(tp_sayRefSrc, "g"), out = [];
+    let m;
+    while((m = re.exec(text)) !== null){
+      const key = tp_sayRefBooks.aliases[m[1]] || m[1];
+      const page = tp_sayToInt(m[2]);
+      const book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
+      if(book) out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page });
+    }
+    return out;
+  }
   async function tp_sayOpenRef(bookId, page){
     const idx = await ensureIndex();
     const meta = idx.books.find(b => b.id === bookId);
@@ -895,37 +889,42 @@ let isRomanPali = false;
     const body = document.getElementById("tp-say-body");
     try{ await tp_sayEnsureRefs(); }catch(e){}
     const html = String(r.c).split(/<br\s*\/?>/i).map(part => tp_sayRender(part, terms, tp_sayFindRefs(part))).join("<br>");
-    body.innerHTML = `<div class="tp-say-back">← ရလဒ်များသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div><div class="tp-say-detail-text">${html}</div>`;
+    body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div><div class="tp-say-detail-text">${html}</div>`;
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => tp_sayOpenRef(a.dataset.book, +a.dataset.page)));
     body.scrollTop = 0;
   }
-  function tp_openSayokeson(){
+  function tp_openDataset(key){
+    tp_dsCur = key;
     const panel = tp_sayEnsurePanel();
-    panel.classList.add("tp-open");
+    panel.querySelector("#tp-say-title").textContent = TP_DATASETS[key].label + " ရှာဖွေရန်";
     const input = panel.querySelector("#tp-say-input");
+    input.value = "";
+    panel.querySelector("#tp-say-status").textContent = "";
+    panel.querySelector("#tp-say-body").innerHTML = "";
+    panel.classList.add("tp-open");
+    document.body.classList.add("tp-say-docked");
     input.focus();
-    tp_sayLoad().catch(() => {});
+    tp_dsLoad(key).catch(() => {});
   }
   function tp_openSearchChoice(anchor, openSutta){
     let menu = document.getElementById("tp-search-choice");
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="say">📒 Sayokeson ရှာရန်</button>`;
+      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="say">📒 Sayokeson ရှာရန်</button><button data-c="vat">📗 PitakaVatthu ရှာရန်</button><button data-c="pya">📘 Sayokepya ရှာရန်</button>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
-    menu.querySelectorAll("button").forEach(b => { b.onclick = () => { menu.classList.remove("tp-open"); if(b.dataset.c === "sutta") menu._openSutta(); else tp_openSayokeson(); }; });
+    menu.querySelectorAll("button").forEach(b => { b.onclick = () => { menu.classList.remove("tp-open"); if(b.dataset.c === "sutta") menu._openSutta(); else tp_openDataset(b.dataset.c); }; });
     menu._openSutta = openSutta;
     if(menu.classList.contains("tp-open") && menu._anchor === anchor){ menu.classList.remove("tp-open"); return; }
     menu._anchor = anchor;
     const rect = anchor.getBoundingClientRect();
-    menu.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 220)) + "px";
-    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 110) + "px";
+    menu.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 230)) + "px";
+    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 190) + "px";
     menu.classList.add("tp-open");
   }
-
 
   function closeAllDropdowns(exceptId) {
     const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown', 'tp-float-search-box'];
