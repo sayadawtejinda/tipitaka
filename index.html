@@ -319,14 +319,15 @@ let isRomanPali = false;
   let currentActiveBook = null; // { type, bookId } - ယခုဖတ်နေဆဲ စာအုပ်
 
   function getRecentBooks(){
-    try{ return JSON.parse(sessionStorage.getItem(RECENT_BOOKS_KEY)) || []; }
+    try{ return JSON.parse(localStorage.getItem(RECENT_BOOKS_KEY)) || []; }   // နောက်တစ်ခါ ပြန်လာလည်း မှတ်ထားနိုင်ရန် localStorage
     catch(e){ return []; }
   }
   function saveRecentBooks(list){
-    try{ sessionStorage.setItem(RECENT_BOOKS_KEY, JSON.stringify(list)); }catch(e){}
+    try{ localStorage.setItem(RECENT_BOOKS_KEY, JSON.stringify(list)); }catch(e){}
   }
   function pushRecentBook(entry){
     currentActiveBook = { type: entry.type, bookId: entry.bookId };
+    try{ localStorage.setItem("tp_last_read", JSON.stringify(entry)); }catch(e){}   // နောက်ဆုံးဖတ်ခဲ့တဲ့နေရာ — "ဆက်ဖတ်ရန်"
     const list = getRecentBooks();
     const existingIdx = list.findIndex(x => x.type === entry.type && x.bookId === entry.bookId);
     if(existingIdx !== -1){
@@ -1997,7 +1998,10 @@ let isRomanPali = false;
   async function showBaskets(){
     setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက"}]);
     const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="myanmar">မြန်မာပြန်</div>`;
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    let last = null; try{ last = JSON.parse(localStorage.getItem("tp_last_read")); }catch(e){}
+    const resume = last && last.name ? `<div class="tp-resume" style="margin:0 0 14px;padding:10px 14px;border:2px solid #5a8f6c;border-radius:10px;background:#eef3ea;cursor:pointer;color:#2d5c3d;font-weight:bold;">📌 ဆက်ဖတ်ရန် — ${last.name}<span style="font-weight:normal;color:#666;"> (${last.type === "mm" ? "စာမျက်နှာ " + toMyanmarDigits(last.pageIdx || 1) : "စာမျက်နှာ " + toMyanmarDigits(last.pageNum || 1)})</span></div>` : "";
+    document.getElementById("tp-view").innerHTML = resume + `<div class="tp-grid">${html}</div>`;
+    const rs = document.querySelector("#tp-view .tp-resume"); if(rs) rs.addEventListener("click", () => openRecentBook(last));
     document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{ if(el.dataset.basket === "myanmar") showMmCategories(); else showCategories(el.dataset.basket); }));
     setParams({});
   }
