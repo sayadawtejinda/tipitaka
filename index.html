@@ -738,6 +738,7 @@ let isRomanPali = false;
   const TP_DATASETS = {
     say: { file: "sayokeson.json",    label: "သရုပ်စုံအဘိဓာန်" },
     vat: { file: "pitakavatthu.json", label: "ပိဋကဝတ္ထု" },
+    bt:  { file: "bhasatika_index.txt", label: "ဘာသာဋီကာအဘိဓာန်" },
     pya: { file: "sayokepya.json",    label: "သုတေသနသရုပ်ပြ" }
   };
   const tp_dsCache = {};
@@ -845,6 +846,7 @@ let isRomanPali = false;
   const TP_SAY_PAGE = 30;
   // ရလဒ်ကို ခေါင်းစဉ်ချည်းပဲ ပြမည် (စာသားထဲမှာပဲ တွေ့တာဆိုရင် အမှတ်အသားလေးပါမည်)
   async function tp_sayRun(q, offset){
+    if(tp_dsCur === "bt") return tp_btRun(q);
     const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
     if(!String(q).trim()){ status.textContent = ""; body.innerHTML = ""; return; }
     status.textContent = "ရှာဖွေနေပါသည်...";
@@ -929,14 +931,14 @@ let isRomanPali = false;
     panel.classList.add("tp-open");
     document.body.classList.add("tp-say-docked");
     input.focus();
-    tp_dsLoad(key).catch(() => {});
+    if(key === "bt"){ tp_btLoad().catch(() => {}); tp_btAvail(); } else tp_dsLoad(key).catch(() => {});
   }
   function tp_openSearchChoice(anchor, openSutta){
     let menu = document.getElementById("tp-search-choice");
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button><button data-c="vat">📗 ပိဋကဝတ္ထု</button><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button>`;
+      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button><button data-c="vat">📗 ပိဋကဝတ္ထု</button><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
@@ -946,8 +948,124 @@ let isRomanPali = false;
     menu._anchor = anchor;
     const rect = anchor.getBoundingClientRect();
     menu.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 230)) + "px";
-    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 190) + "px";
+    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 235) + "px";
     menu.classList.add("tp-open");
+  }
+
+  // ================= ဘာသာဋီကာအဘိဓာန် (ဝေါဟာရ → ကျမ်း/စာမျက်နှာ → PDF) =================
+  // ဝေါဟာရစာရင်းက bhasatika_index.txt မှာ၊ PDF တွေက ကိုယ်ပိုင် GitHub repo (dictionary) ထဲက PDF ကို GitHub Pages ကနေ ဖွင့်မည်
+  const TP_BT_BASE = "https://sayadawtejinda.github.io/dictionary/pali_nissay/BT_PDF%27S/";
+  const TP_BT_BOOKS = [{"key": "KS_BT_01", "name": "ကစ္စည်းဘာသာဋီကာ (ပတွဲ)", "index_key": "ကစ္စည်း-ဘာသာဋီကာ၊ ၁", "file": "KS_BT_01.pdf", "page_offset": 7}, {"key": "KS_BT_02", "name": "ကစ္စည်းဘာသာဋီကာ (ဒုတွဲ)", "index_key": "ကစ္စည်း-ဘာသာဋီကာ၊ ၂", "file": "KS_BT_02.pdf", "page_offset": 0}, {"key": "RPSD_BT_01", "name": "ရူပသိဒ္ဓိဘာသာဋီကာ (ပတွဲ)", "index_key": "ရူပသိဒ္ဓိ-ဘာသာဋီကာ၊ ၁", "file": "RPSD_BT_01.pdf", "page_offset": 1}, {"key": "RPSD_BT_02", "name": "ရူပသိဒ္ဓိဘာသာဋီကာ (ဒုတွဲ)", "index_key": "ရူပသိဒ္ဓိ-ဘာသာဋီကာ၊ ၂", "file": "RPSD_BT_02.pdf", "page_offset": 20}, {"key": "BDCT_BT", "name": "ဘေဒစိန္တာဋီကာ", "index_key": "ဘေဒစိန္တာ-ဘာသာဋီကာ", "file": "BDCT_BT.pdf", "page_offset": 12}, {"key": "KCYN_BT", "name": "ကစ္စာယန ဘာသာဋီကာ", "index_key": "ကစ္စာယနသာရ-ဘာသာဋီကာ", "file": "KCYN_BT.pdf", "page_offset": 1}, {"key": "ATAP", "name": "အဋ္ဌကထာအခြေပြု", "index_key": "အဋ္ဌကထာ-အခြေပြု", "file": "ATAP.pdf", "page_offset": 28}, {"key": "SGH_BT", "name": "အခြေပြုသဂြိုလ်", "index_key": "သင်္ဂြိုဟ်-ဘာသာဋီကာ", "file": "SGH_BT.pdf", "page_offset": 16}, {"key": "TKK_PN", "name": "ဋီကာကျော် နိဿယ", "index_key": "ဋီကာကျော်-နိဿယ", "file": "TKK_PN.pdf", "page_offset": 10}, {"key": "VT_TCS_BT", "name": "ဝီထိနှင့် သုံးချက်စုဘာသာဋီကာ", "index_key": "ဝီထိနှင့် သုံးချက်စု-ဘာသာဋီကာ", "file": "VT_TCS_BT.pdf", "page_offset": 8}, {"key": "SI_BT_01", "name": "သီလက္ခန်ဘာသာဋီကာ (ပ တွဲ)", "index_key": "သီလက္ခန်-ဘာသာဋီကာ၊ ၁", "file": "SI_BT_01.pdf", "page_offset": 13}, {"key": "SI_BT_02", "name": "သီလက္ခန်ဘာသာဋီကာ (ဒု တွဲ)", "index_key": "သီလက္ခန်-ဘာသာဋီကာ၊ ၂", "file": "SI_BT_02.pdf", "page_offset": 13}, {"key": "SI_BT_03", "name": "သီလက္ခန်ဘာသာဋီကာ (တ တွဲ)", "index_key": "သီလက္ခန်-ဘာသာဋီကာ၊ ၃", "file": "SI_BT_03.pdf", "page_offset": 1}, {"key": "SI_BT_04", "name": "သီလက္ခန်ဘာသာဋီကာ (စ တွဲ)", "index_key": "သီလက္ခန်-ဘာသာဋီကာ၊ ၄", "file": "SI_BT_04.pdf", "page_offset": 7}, {"key": "S_MV_AT_BT_01", "name": "သုတ်မဟာဝါဘာသာဋီကာ (ပ တွဲ)", "index_key": "သုတ်မဟာဝါ-ဘာသာဋီကာ၊ ၁", "file": "S_MV_AT_BT_01.pdf", "page_offset": 21}, {"key": "S_MV_AT_BT_02", "name": "သုတ်မဟာဝါဘာသာဋီကာ (ဒု တွဲ)", "index_key": "သုတ်မဟာဝါ-ဘာသာဋီကာ၊ ၂", "file": "S_MV_AT_BT_02.pdf", "page_offset": 9}, {"key": "S_MV_AT_BT_03", "name": "သုတ်မဟာဝါဘာသာဋီကာ (တ တွဲ)", "index_key": "သုတ်မဟာဝါ-ဘာသာဋီကာ၊ ၃", "file": "S_MV_AT_BT_03.pdf", "page_offset": 28}, {"key": "ATSLN_BT_01", "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (ပ တွဲ)", "index_key": "အဋ္ဌသာလိနီ-ဘာသာဋီကာ၊ ၁", "file": "ATSLN_BT_01.pdf", "page_offset": 1}, {"key": "ATSLN_BT_02", "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (ဒု တွဲ)", "index_key": "အဋ္ဌသာလိနီ-ဘာသာဋီကာ၊ ၂", "file": "ATSLN_BT_02.pdf", "page_offset": 0}, {"key": "ATSLN_BT_03", "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (တ တွဲ)", "index_key": "အဋ္ဌသာလိနီ-ဘာသာဋီကာ၊ ၃", "file": "ATSLN_BT_03.pdf", "page_offset": 10}, {"key": "ATSLN_BT_04", "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (စ တွဲ)", "index_key": "အဋ္ဌသာလိနီ-ဘာသာဋီကာ၊ ၄", "file": "ATSLN_BT_04.pdf", "page_offset": 10}, {"key": "DTKT_AT_BT", "name": "ဓာတုကထာ/ပုဂ္ဂလပညတ္တိအဋ္ဌကထာဘာသာဋီကာ", "index_key": "ဓာတုကထာ-ဘာသာဋီကာ", "file": "DTKT_AT_BT.pdf", "page_offset": 1}, {"key": "KTVT_AT_BT_01", "name": "ကထာဝတ္ထုအဋ္ဌကထာ ဘာသာဋီကာ (ပ တွဲ)", "index_key": "ကထာဝတ္ထုအဋ္ဌကထာ-ဘာသာဋီကာ၊ ၁", "file": "KTVT_AT_BT_01.pdf", "page_offset": 70}, {"key": "KTVT_AT_BT_02", "name": "ကထာဝတ္ထုအဋ္ဌကထာ ဘာသာဋီကာ (ဒု တွဲ)", "index_key": "ကထာဝတ္ထုအဋ္ဌကထာ-ဘာသာဋီကာ၊ ၂", "file": "KTVT_AT_BT_02.pdf", "page_offset": 64}, {"key": "PHT_AT_BT", "name": "ပဋ္ဌာနအဋ္ဌကထာဘာသာဋီကာ", "index_key": "ပဋ္ဌာနအဋ္ဌကထာ-ဘာသာဋီကာ", "file": "PHT_AT_BT.pdf", "page_offset": 88}, {"key": "SMH_AT_BT_01", "name": "သမ္မောဟဝိနောဒနီ ဘာသာဋီကာ (ပ တွဲ)", "index_key": "သမ္မောဟဝိနောဒနီ-ဘာသာဋီကာ၊ ၁", "file": "SMH_AT_BT_01.pdf", "page_offset": 26}, {"key": "SMH_AT_BT_02", "name": "သမ္မောဟဝိနောဒနီ ဘာသာဋီကာ (ဒု တွဲ)", "index_key": "သမ္မောဟဝိနောဒနီ-ဘာသာဋီကာ၊ ၂", "file": "SMH_AT_BT_02.pdf", "page_offset": 14}, {"key": "SMH_AT_BT_03", "name": "သမ္မောဟဝိနောဒနီ ဘာသာဋီကာ (တ တွဲ)", "index_key": "သမ္မောဟဝိနောဒနီ-ဘာသာဋီကာ၊ ၃", "file": "SMH_AT_BT_03.pdf", "page_offset": 15}, {"key": "YMK_AT_BT", "name": "ယမကအဋ္ဌကထာဘာသာဋီကာ", "index_key": "ယမကအဋ္ဌကထာ-ဘာသာဋီကာ", "file": "YMK_AT_BT.pdf", "page_offset": 9}, {"key": "PJ_BT_01", "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (ပ တွဲ)", "index_key": "ပါရာဇိကဏ်-ဘာသာဋီကာ၊ ၁", "file": "PJ_BT_01.pdf", "page_offset": 16}, {"key": "PJ_BT_02", "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (ဒု တွဲ)", "index_key": "ပါရာဇိကဏ်-ဘာသာဋီကာ၊ ၂", "file": "PJ_BT_02.pdf", "page_offset": 1}, {"key": "PJ_BT_03", "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (တ တွဲ)", "index_key": "ပါရာဇိကဏ်-ဘာသာဋီကာ၊ ၃", "file": "PJ_BT_03.pdf", "page_offset": 1}, {"key": "PJ_BT_04", "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (စ တွဲ)", "index_key": "ပါရာဇိကဏ်-ဘာသာဋီကာ၊ ၄", "file": "PJ_BT_04.pdf", "page_offset": 1}, {"key": "PC_BT_01", "name": "ပါစိတ်ဘာသာဋီကာ (ပ တွဲ)", "index_key": "ပါစိတ်-ဘာသာဋီကာ၊ ၁", "file": "PC_BT_01.pdf", "page_offset": 1}, {"key": "PC_BT_02", "name": "ပါစိတ်ဘာသာဋီကာ (ဒု တွဲ)", "index_key": "ပါစိတ်-ဘာသာဋီကာ၊ ၂", "file": "PC_BT_02.pdf", "page_offset": 1}, {"key": "MV_BT_01", "name": "မဟာဝါဘာသာဋီကာ (ပ တွဲ)", "index_key": "မဟာဝါ-ဘာသာဋီကာ၊ ၁", "file": "MV_BT_01.pdf", "page_offset": 1}, {"key": "MV_BT_02", "name": "မဟာဝါဘာသာဋီကာ (ဒု တွဲ)", "index_key": "မဟာဝါ-ဘာသာဋီကာ၊ ၂", "file": "MV_BT_02.pdf", "page_offset": 1}, {"key": "CV_AT_BT", "name": "စူဠဝဂ္ဂဘာသာဋီကာ", "index_key": "စူဠဝဂ္ဂ-ဘာသာဋီကာ", "file": "CV_AT_BT.pdf", "page_offset": 0}, {"key": "PV_BT", "name": "ပရိဝါဘာသာဋီကာ", "index_key": "ပရိဝါရ-ဘာသာဋီကာ", "file": "PV_BT.pdf", "page_offset": 1}, {"key": "KK_AT_BT_01", "name": "ကင်္ခါဘာသာဋီကာ (ပတွဲ)", "index_key": "ကင်္ခါဝိတရဏီ-ဘာသာဋီကာ၊ ၁", "file": "KK_AT_BT_01.pdf", "page_offset": 0}, {"key": "KK_AT_BT_02", "name": "ကင်္ခါဘာသာဋီကာ (ဒု တွဲ)", "index_key": "ကင်္ခါဝိတရဏီ-ဘာသာဋီကာ၊ ၂", "file": "KK_AT_BT_02.pdf", "page_offset": 1}, {"key": "KHUDDA_BT", "name": "ခုဒ္ဒသိက္ခာ-ဘာသာဋီကာ", "index_key": "ခုဒ္ဒသိက္ခာ-ဘာသာဋီကာ", "file": "KSK_BT.pdf", "page_offset": 1}, {"key": "PATMOK_BT", "name": "ပါတိမောက်-ဘာသာဋီကာ", "index_key": "ပါတိမောက်-ဘာသာဋီကာ", "file": "PTM_BT.pdf", "page_offset": 1}, {"key": "THOUT_PATH", "name": "သုတ်ပါထေယျ-ဘာသာဋီကာ", "index_key": "သုတ်ပါထေယျ-ဘာသာဋီကာ၊ ၁", "file": "S_PTY_AT_BT.pdf", "page_offset": 8}];
+  let tp_btPromise = null, tp_btAvailPromise = null;
+  function tp_btToArabic(s){ return String(s).replace(/[၀-၉]/g, d => "၀၁၂၃၄၅၆၇၈၉".indexOf(d)); }
+  function tp_btParse(raw){
+    const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const bookMap = {};
+    TP_BT_BOOKS.forEach(b => {
+      const parts = b.index_key.split(/၊\s*|,\s*/).map(p => p.trim());
+      bookMap[parts[0].replace(/ /g, "") + (parts[1] || "")] = { name: b.name, url: TP_BT_BASE + b.file, file: b.file, base_title: parts[0], volume: parts[1] || "", page_offset: b.page_offset || 0 };
+    });
+    const patterns = TP_BT_BOOKS.map(b => {
+      const flexible = b.index_key.split("").map(ch => (ch === " " || ch === "။" || ch === "၊" || ch === "-") ? "\\s*" + esc(ch) + "\\s*" : esc(ch)).join("");
+      const parts = b.index_key.split(/၊\s*|,\s*/).map(p => p.trim());
+      return { re: new RegExp("^" + flexible + "\\s*"), book: bookMap[parts[0].replace(/ /g, "") + (parts[1] || "")] };
+    });
+    const map = {}, heads = [];
+    raw.trim().split("\n").filter(l => l.trim()).forEach(line => {
+      const parts = line.split("\t").map(p => p.trim());
+      if(parts.length < 2) return;
+      const keyword = parts[0];
+      if(!map[keyword]){ map[keyword] = { keyword, refs: [] }; heads.push(keyword); }
+      parts[1].split("။").forEach(ref => {
+        const clean = ref.trim().replace(/^\*\s*/, "");
+        if(!clean) return;
+        let matched = null, len = 0;
+        patterns.forEach(bp => { const m = clean.match(bp.re); if(m && m[0].length > len){ len = m[0].length; matched = bp.book; } });
+        let pagePart = "", refText = clean;
+        if(matched){ pagePart = clean.substring(len).trim(); refText = matched.base_title + (matched.volume ? "၊ " + matched.volume : ""); }
+        else { const pm = clean.match(/([\d၀-၉က-အ\s၊,\-]+)$/); if(pm){ pagePart = pm[1].trim(); refText = clean.substring(0, pm.index).trim(); } }
+        const pages = pagePart.split(/[,၊]/).map(p => p.trim()).filter(p => p);
+        if(!pages.length){ map[keyword].refs.push({ book: refText, page: "N/A", url: matched ? matched.url : "#", file: matched && matched.file, ref_text: ref.trim() }); return; }
+        pages.forEach(pageStr => {
+          const nm = tp_btToArabic(pageStr).match(/\d+/);
+          let url = "#";
+          if(matched && nm) url = matched.url + "#page=" + (parseInt(nm[0], 10) + matched.page_offset);
+          else if(matched) url = matched.url;
+          map[keyword].refs.push({ book: refText, page: pageStr, url, file: matched && matched.file, ref_text: ref.trim() });
+        });
+      });
+    });
+    heads.sort((a, b) => a.localeCompare(b, "my"));
+    return { map, heads };
+  }
+  function tp_btLoad(){
+    if(tp_btPromise) return tp_btPromise;
+    tp_btPromise = (async () => {
+      let raw;
+      try{ raw = await fetchText(cdnUrl("bhasatika_index.txt")); }
+      catch(e){ raw = await fetchText("bhasatika_index.txt"); }
+      return tp_btParse(raw);
+    })();
+    tp_btPromise.catch(() => { tp_btPromise = null; });
+    return tp_btPromise;
+  }
+  // ဘယ် PDF တွေ GitHub မှာ တင်ပြီးသားလဲ (မတင်ရသေးတာကို ခလုပ်ပိတ်ပြထားမည်)
+  function tp_btAvail(){
+    if(tp_btAvailPromise) return tp_btAvailPromise;
+    tp_btAvailPromise = (async () => {
+      const ok = new Set();
+      await Promise.all([...new Set(TP_BT_BOOKS.map(b => b.file))].map(async f => {
+        try{ const r = await fetch(TP_BT_BASE + f, { method: "HEAD" }); if(r.ok) ok.add(f); }catch(e){}
+      }));
+      return ok;
+    })();
+    return tp_btAvailPromise;
+  }
+  function tp_btOpenPdf(url){
+    // စာအုပ်ဖွင့်တဲ့ window တစ်ခုတည်းကိုပဲ ပြန်သုံးပြီး (ညာဘက်တစ်ဝက်မှာ) စာမျက်နှာပြောင်းမည်
+    const m = /#page=(\d+)/.exec(url);
+    const target = m ? url.split("#")[0] + "?p=" + m[1] + "#page=" + m[1] : url;   // query ကွဲမှ PDF viewer က စာမျက်နှာအသစ်ကို ခုန်ပေးသည်
+    const w = Math.floor((screen.availWidth || screen.width) / 2), h = screen.availHeight || screen.height;
+    const win = window.open(target, "pitakaBookViewer", `popup=yes,width=${w},height=${h},left=${(screen.availWidth || screen.width) - w},top=0`);
+    if(win) win.focus();
+  }
+  async function tp_btRun(q){
+    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
+    if(!String(q).trim()){ status.textContent = ""; body.innerHTML = ""; return; }
+    status.textContent = "ရှာဖွေနေပါသည်...";
+    let data;
+    try{ data = await tp_btLoad(); }catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
+    const terms = String(q).toLowerCase().split(/\s+/).filter(Boolean);
+    const hits = data.heads.filter(w => { const l = w.toLowerCase(); return terms.every(t => l.includes(t)); });
+    status.textContent = hits.length ? `တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
+    body.innerHTML = "";
+    hits.slice(0, 100).forEach(w => {
+      const item = document.createElement("div");
+      item.className = "tp-say-item";
+      item.textContent = w;
+      item.addEventListener("click", () => tp_btShow(data.map[w], () => tp_btRun(q)));
+      body.appendChild(item);
+    });
+  }
+  async function tp_btShow(entry, back){
+    const body = document.getElementById("tp-say-body");
+    body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div><div class="tp-fts-status">ဖတ်နေသည်...</div>`;
+    body.querySelector(".tp-say-back").addEventListener("click", back);
+    const avail = await tp_btAvail();
+    const cards = entry.refs.map((r, i) => {
+      const can = r.url !== "#" && (!r.file || avail.has(r.file));
+      const note = r.url === "#" ? "[မှတ်တမ်း မပြည့်စုံ]" : (can ? "" : "[PDF မတင်ရသေးပါ]");
+      return `<div class="tp-say-item" data-i="${i}" style="${can ? "" : "opacity:.55;cursor:not-allowed;"}">
+        <b>${tp_sayEsc(r.book)}</b> ${note ? `<span class="tp-say-note">${note}</span>` : ""}
+        <div style="font-size:12.5px;color:#666;">စာမျက်နှာ: ${tp_sayEsc(r.page)} ${can ? "· 📖 ဖွင့်ရန်နှိပ်ပါ" : ""}</div></div>`;
+    }).join("");
+    body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div>${cards}`;
+    body.querySelector(".tp-say-back").addEventListener("click", back);
+    body.querySelectorAll(".tp-say-item").forEach(el => el.addEventListener("click", () => {
+      const r = entry.refs[+el.dataset.i];
+      if(r.url === "#" || (r.file && !avail.has(r.file))) return;
+      tp_btOpenPdf(r.url);
+    }));
   }
 
   function closeAllDropdowns(exceptId) {
