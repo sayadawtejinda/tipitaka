@@ -1042,7 +1042,21 @@ let isRomanPali = false;
       const key = tp_sayRefBooks.aliases[m[1]] || m[1];
       const page = tp_sayToInt(m[2]);
       const book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
-      if(book) out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page, key });
+      if(book){
+        out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page, key });
+        // အပ၊ဋ္ဌ၊၂၊၄၇၊ ၄၉ — နောက်ကလိုက်လာတဲ့ စာမျက်နှာနံပါတ်တွေ (ရှေ့နံပါတ်နဲ့ ဂဏန်းအရေအတွက် မလျော့တာ) ကိုလည်း အဲဒီစာအုပ်ကိုပဲ လင့်ချိတ်မည်
+        const tailM = /^(?:၊[ 	]*[၀-၉]+)+/.exec(text.slice(m.index + m[0].length));
+        if(tailM){
+          const reNum = /၊[ 	]*([၀-၉]+)/g; let t2;
+          const base = m.index + m[0].length;
+          while((t2 = reNum.exec(tailM[0])) !== null){
+            const pg = tp_sayToInt(t2[1]);
+            if(t2[1].length < m[2].length || pg < book.firstpage || pg > book.lastpage) continue;
+            const st = base + t2.index + t2[0].length - t2[1].length;
+            out.push({ start: st, end: st + t2[1].length, book: book.id, page: pg, key });
+          }
+        }
+      }
     }
     // မြန်မာပြန်ကိုးကား (ဥပမာ အံ၊မြန်၊၁။၁၃၆) — မူရင်းပါဠိကိုးကား (အံ၊၁၊၁၁၈) နဲ့ တွဲပြီး ပါဠိစာမျက်နှာကနေတဆင့် ဖွင့်မည်
     const pali = out.slice(), mre = /(?<=^|[\s(,;\[])([^\s()၊။]+(?:၊\s*[^\s()၊။]+)?)၊\s*မြန်(?:၊([၀-၉]+))?[။၊]\s*([၀-၉]+)(?:[-–၊]\s*([၀-၉]+))?/g;
