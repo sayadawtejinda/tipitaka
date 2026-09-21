@@ -210,6 +210,8 @@
   #tp-content .note{font-size:.8em;color:#888;vertical-align:super;}
   #tp-content .bodytext, #tp-nissaya-content .bodytext {text-indent:1.5em;}
   .tp-loading{color:#888;}
+  .tp-adjacent-page{background:#e9e4d3;color:#4a443a;padding:10px 16px;border-radius:6px;}
+  #tp-current-page{background:#fffef9;padding:12px 16px;border-radius:6px;border-left:4px solid #5a8f6c;box-shadow:0 1px 6px rgba(60,50,20,.12);}
   .tp-page-divider{display:flex;align-items:center;gap:10px;color:#9a8f7d;font-size:.8em;margin:18px 0;text-align:center;}
   .tp-page-divider::before, .tp-page-divider::after{content:"";flex:1;border-top:1px dashed #d9d0b8;}
 
@@ -1044,14 +1046,14 @@ let isRomanPali = false;
       const book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
       if(book){
         out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page, key });
-        // အပ၊ဋ္ဌ၊၂၊၄၇၊ ၄၉ — နောက်ကလိုက်လာတဲ့ စာမျက်နှာနံပါတ်တွေ (ရှေ့နံပါတ်နဲ့ ဂဏန်းအရေအတွက် မလျော့တာ) ကိုလည်း အဲဒီစာအုပ်ကိုပဲ လင့်ချိတ်မည်
+        // အပ၊ဋ္ဌ၊၂၊၄၇၊ ၄၉ — နောက်ကလိုက်လာတဲ့ စာမျက်နှာနံပါတ်တွေ ကိုလည်း အဲဒီစာအုပ်ကိုပဲ လင့်ချိတ်မည်
         const tailM = /^(?:၊[ 	]*[၀-၉]+)+/.exec(text.slice(m.index + m[0].length));
         if(tailM){
           const reNum = /၊[ 	]*([၀-၉]+)/g; let t2;
           const base = m.index + m[0].length;
           while((t2 = reNum.exec(tailM[0])) !== null){
             const pg = tp_sayToInt(t2[1]);
-            if(t2[1].length < m[2].length || pg < book.firstpage || pg > book.lastpage) continue;
+            if(pg < book.firstpage || pg > book.lastpage) continue;
             const st = base + t2.index + t2[0].length - t2[1].length;
             out.push({ start: st, end: st + t2[1].length, book: book.id, page: pg, key });
           }
