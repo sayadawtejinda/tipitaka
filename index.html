@@ -416,6 +416,11 @@ let isRomanPali = false;
     tp_dictBooksPromise = (async () => {
       tp_dictBooksMap = {};
       try{
+        const arr0 = await tp_dictFetch("dictionary_books.json");
+        for(const item of arr0){ if(item && item.id != null) tp_dictBooksMap[String(item.id).trim()] = item.name; }
+        return tp_dictBooksMap;
+      }catch(e){ /* GitHub ဖိုင်မရရင် Firebase (အောက်က) ကို သုံးမည် */ }
+      try{
         const db = await tp_ensureFtsDb();
         const { ref, get } = await import("https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js");
         const snapshot = await get(ref(db, "part5"));
@@ -430,7 +435,27 @@ let isRomanPali = false;
     return tp_dictBooksPromise;
   }
 
-  async function ensureDictList(){
+  // ---- အဘိဓာန်ကို GitHub ပေါ်က dict/ ဖိုင်လေးတွေ (စာလုံးအစအလိုက် ခွဲထားသည်) ကနေ ဖတ်မည် ----
+  // စကားလုံးတစ်လုံးရှာရင် သူ့ရဲ့ ဖိုင်လေးတစ်ခုတည်းကို ဆွဲမည် (အရင်က Firebase က ၁၄၆ MB အကုန်ဆွဲခဲ့သည်)
+  let tp_dictIndex = null;
+  const tp_dictShardCache = {};
+  async function tp_dictFetch(path){ try{ return await fetchJson(cdnUrl(path)); }catch(e){ return await fetchJson(path); } }
+  async function ensureDictList(word){
+    try{
+      if(!tp_dictIndex) tp_dictIndex = await tp_dictFetch("dict/index.json");
+      const chars = [...String(word || "").trim()];
+      if(!chars.length) return [];
+      const c1 = chars[0].codePointAt(0).toString(16);
+      let key = c1;
+      if(tp_dictIndex.n[c1]) key = c1 + "-" + (chars[1] ? chars[1].codePointAt(0).toString(16) : "0");
+      if(!tp_dictIndex.keys.includes(key)) return [];
+      if(!tp_dictShardCache[key]) tp_dictShardCache[key] = tp_dictFetch("dict/" + key + ".json").catch(e => { delete tp_dictShardCache[key]; throw e; });
+      return await tp_dictShardCache[key];
+    }catch(e){
+      return await ensureDictListFirebase();   // ဖိုင်ဖတ်မရရင် အရင်အတိုင်း Firebase ကနေ ဖတ်မည်
+    }
+  }
+  async function ensureDictListFirebase(){
     if(tp_dictListCache) return tp_dictListCache;
     if(tp_dictListPromise) return tp_dictListPromise;
     tp_dictListPromise = (async () => {
@@ -539,7 +564,7 @@ let isRomanPali = false;
       const keyword = searchInput.value.trim();
       if(!keyword){ bodyEl.innerHTML = ""; return; }
 
-      const dictList = await ensureDictList();
+      const dictList = await ensureDictList(keyword);
       const matches = dictList.filter(item => item.word && item.word.includes(keyword));
       const uniqueWords = [...new Set(matches.map(item => item.word))].slice(0, 100);
 
@@ -559,7 +584,7 @@ let isRomanPali = false;
       if(!item) return;
       const w = item.dataset.word;
       searchInput.value = w;
-      const dl = await ensureDictList();
+      const dl = await ensureDictList(w);
       const d = dl.filter(entry => entry.word === w);
       tp_renderDictDefsInto(bodyEl, d);
     });
@@ -599,7 +624,7 @@ let isRomanPali = false;
     containerEl.addEventListener("dblclick", async (e) => {
       const word = tp_getWordAtPoint(e.clientX, e.clientY);
       if(!word) return;
-      const dictList = await ensureDictList();
+      const dictList = await ensureDictList(word);
       const defs = tp_findClosestDictEntries(dictList, word);
       tp_showDictFloat(word, defs, e.pageX, e.pageY);
     });
