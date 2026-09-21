@@ -250,6 +250,7 @@ p.gathalast {
   #tp-say-panel .tp-say-detail-text{ font-size:14.5px; line-height:1.9; color:#333; }
   #tp-say-panel .tp-say-back{ color:#0645ad; cursor:pointer; margin-bottom:8px; font-size:13.5px; }
   .tp-say-ref{ color:#0645ad; cursor:pointer; text-decoration:underline; }
+  .tp-say-ref[data-mm]{ color:#1b7a3a; }
   @media (max-width:900px){ #tp-say-panel{ width:88vw; max-width:360px; } body.tp-say-docked{ margin-left:auto !important; margin-right:auto !important; max-width:960px !important; } body.tp-say-docked #tp-float-prev{ left:6px; } }
   #tp-say-panel .tp-say-nav{ display:flex; align-items:center; justify-content:space-between; gap:6px; margin:4px 0 10px; }
   #tp-say-panel .tp-say-nav button{ padding:6px 12px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; cursor:pointer; font-size:13.5px; font-family:inherit; }
@@ -812,7 +813,7 @@ let isRomanPali = false;
         if(openMark){ out += "</span>"; openMark = false; }
         if(openRef >= 0) out += "</a>";
         openRef = refAt[i];
-        if(openRef >= 0) out += `<a class="tp-say-ref" data-book="${refs[openRef].book}" data-page="${refs[openRef].page}" title="စာအုပ်ကို ဖွင့်မည်">`;
+        if(openRef >= 0) out += `<a class="tp-say-ref" data-book="${refs[openRef].book}" data-page="${refs[openRef].page}"${refs[openRef].mm ? ' data-mm="1"' : ""} title="${refs[openRef].mm ? "မြန်မာပြန်ကို ဖွင့်မည် (ပါဠိတော်ကနေတဆင့်)" : "စာအုပ်ကို ဖွင့်မည်"}">`;
       }
       if(marks[i] && !openMark){ out += '<span class="tp-fts-highlight">'; openMark = true; }
       out += tp_sayEsc(text[i]);
@@ -916,15 +917,39 @@ let isRomanPali = false;
       const key = tp_sayRefBooks.aliases[m[1]] || m[1];
       const page = tp_sayToInt(m[2]);
       const book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
-      if(book) out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page });
+      if(book) out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page, key });
     }
+    // မြန်မာပြန်ကိုးကား (ဥပမာ အံ၊မြန်၊၁။၁၃၆) — မူရင်းပါဠိကိုးကား (အံ၊၁၊၁၁၈) နဲ့ တွဲပြီး ပါဠိစာမျက်နှာကနေတဆင့် ဖွင့်မည်
+    const pali = out.slice(), mre = /(?<=^|[\s(,;\[])([^\s()၊။]+(?:၊[^\s()၊။]+)?)၊မြန်၊([၀-၉]+)။\s*([၀-၉]+)(?:[-–၊]\s*([၀-၉]+))?/g;
+    while((m = mre.exec(text)) !== null){
+      const g = m[1] + "၊" + m[2], key = tp_sayRefBooks.aliases[g] || g;
+      const same = pali.filter(r => r.key === key);
+      if(!same.length) continue;
+      const before = same.filter(r => r.end <= m.index), sib = before.length ? before[before.length - 1] : same[0];
+      out.push({ start: m.index, end: m.index + m[0].length, book: sib.book, page: sib.page, mm: true });
+    }
+    out.sort((a, b) => a.start - b.start);
     return out;
   }
-  async function tp_sayOpenRef(bookId, page){
+  async function tp_sayOpenRef(bookId, page, wantMm){
     const idx = await ensureIndex();
     const meta = idx.books.find(b => b.id === bookId);
     if(!meta) return;
     await loadPage(meta.basket, meta.category, meta.id, page, meta.firstpage);
+    if(!wantMm) return;
+    // ပါဠိစာမျက်နှာက "📖 မြန်မာပြန် ဖတ်ရန်" ခလုပ်တွေ ပေါ်လာသည်အထိ စောင့်မည်
+    let btns = [];
+    for(let i = 0; i < 40 && !btns.length; i++){
+      await new Promise(r => setTimeout(r, 150));
+      const t = document.getElementById("tp-xref-toggle");
+      if(t && !t.disabled) btns = [...document.querySelectorAll("#tp-crossref .tp-xref-mm-btn")];
+    }
+    if(!btns.length) return;                        // မြန်မာပြန်မရှိရင် ပါဠိစာမျက်နှာပဲ ကျန်ခဲ့မည်
+    if(btns.length === 1){ btns[0].click(); return; }
+    const t = document.getElementById("tp-xref-toggle");   // နှစ်ခု၊သုံးခုရှိရင် ပြထားပေးမည် — နှစ်သက်ရာကို နှိပ်ရန်
+    const box = document.getElementById("tp-crossref");
+    if(box && !box.classList.contains("tp-open")) t.click();
+    btns.forEach(b => { b.style.outline = "2px solid #1b7a3a"; });
   }
   // ရှေ့/နောက် ခလုပ် + ဘယ်ညာပွတ်ဆွဲ (swipe) — ရလဒ်တစ်ခုကနေ ကျန်တာကို ဆက်ဖွင့်ရန်
   function tp_navBar(idx, total){
@@ -948,7 +973,7 @@ let isRomanPali = false;
     const nav = hits && hits.length > 1 ? tp_navBar(idx, hits.length) : "";
     body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div><div class="tp-say-detail-text">${html}</div>`;
     body.querySelector(".tp-say-back").addEventListener("click", back);
-    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => tp_sayOpenRef(a.dataset.book, +a.dataset.page)));
+    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm)));
     if(hits && hits.length > 1) tp_navWire(body, idx, hits.length, j => tp_sayDetail(hits[j].r, terms, back, hits, j));
     body.scrollTop = 0;
   }
