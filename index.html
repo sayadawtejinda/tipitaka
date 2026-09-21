@@ -957,6 +957,7 @@ let isRomanPali = false;
   }
   // ရှာတွေ့တဲ့ စာမျက်နှာကို reader မှာ ဖွင့်မည် (reader ရဲ့ စာမျက်နှာခွဲပုံနဲ့ အနည်းငယ်ကွဲနိုင်လို့ စာသားအပိုင်းအစနဲ့ ပြန်ရှာပြီး အတည်ပြုမည်)
   async function tp_mmOpen(id, i, frag){
+    tp_sayHideForPhone();
     let idx = i;
     try{
       const pages = await ensureMmPages(id);
@@ -1066,6 +1067,7 @@ let isRomanPali = false;
     return out;
   }
   async function tp_sayOpenRef(bookId, page, wantMm){
+    tp_sayHideForPhone();
     const idx = await ensureIndex();
     const meta = idx.books.find(b => b.id === bookId);
     if(!meta) return;
@@ -1110,7 +1112,7 @@ let isRomanPali = false;
     const pdfBtn = body.querySelector(".tp-say-pdf");
     if(pdfBtn) pdfBtn.addEventListener("click", () => tp_btOpenPdf(TP_FTS_BASE + "books/" + r.v + ".pdf#page=" + tp_guidePdfPage(r.v, r.p), "ပိဋကလမ်းညွန် အတွဲ " + toMyanmarDigits(r.v) + " — စာမျက်နှာ " + toMyanmarDigits(r.p)));
     body.querySelector(".tp-say-back").addEventListener("click", back);
-    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => { if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm); }));
+    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => { if(a.dataset.mmbook){ tp_sayHideForPhone(); closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm); }));
     if(hits && hits.length > 1) tp_navWire(body, idx, hits.length, j => tp_sayDetail(hits[j].r, terms, back, hits, j));
     body.scrollTop = 0;
   }
@@ -1121,18 +1123,36 @@ let isRomanPali = false;
     if(+v === 3){ if(p === 269) return 268; if(p >= 270 && p <= 298) return p - 1; }
     return p;
   }
+  // ဖုန်း (မျက်နှာပြင်ကျဉ်း) မှာ ကျမ်းညွှန်း/PDF ဖွင့်တဲ့အခါ ရှာတဲ့ box ကို ခဏပိတ်ထားမည် — ရလဒ်တွေ မပျက်ဘဲ ပြန်ဖွင့်ရင် အရင်အတိုင်းရှိနေမည်
+  let tp_sayHidden = false, tp_saySig = "";
+  function tp_sayHideForPhone(){
+    if(window.innerWidth > 900) return;
+    const panel = document.getElementById("tp-say-panel");
+    if(panel && panel.classList.contains("tp-open")){ panel.classList.remove("tp-open"); document.body.classList.remove("tp-say-docked"); tp_sayHidden = true; }
+    const fts = document.getElementById("tp-fts-panel");
+    if(fts) fts.classList.remove("tp-open");
+  }
+  function tp_sayResume(){
+    const panel = tp_sayEnsurePanel();
+    panel.classList.add("tp-open"); tp_sayHidden = false;
+    if(window.innerWidth > 900) document.body.classList.add("tp-say-docked");
+  }
   function tp_openDataset(key){
     tp_dsCur = key === "mm" ? "mm" : "multi";
     if(key !== "mm" && !tp_dsSel.includes(key)) tp_dsSel = [key];
     const panel = tp_sayEnsurePanel();
     tp_sayUpdateSel();
     const input = panel.querySelector("#tp-say-input");
-    input.value = "";
-    panel.querySelector("#tp-say-status").textContent = "";
-    panel.querySelector("#tp-say-body").innerHTML = "";
-    panel.classList.add("tp-open");
+    const sig = tp_dsCur + "|" + tp_dsSel.join(",");
+    if(sig !== tp_saySig){                      // ရွေးထားတာ ပြောင်းမှ ပြန်ရှာမည်၊ မပြောင်းရင် ခုနက ရလဒ်အတိုင်း ထားမည်
+      tp_saySig = sig;
+      panel.querySelector("#tp-say-status").textContent = "";
+      panel.querySelector("#tp-say-body").innerHTML = "";
+      if(input.value.trim()) tp_sayRun(input.value);
+    }
+    panel.classList.add("tp-open"); tp_sayHidden = false;
     document.body.classList.add("tp-say-docked");
-    input.focus();
+    if(window.innerWidth > 900) input.focus();
     if(key === "mm"){ tp_mmFillScope(); } else { tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {})); if(tp_dsSel.includes("bt")) tp_btAvail(); }
   }
   function tp_toggleFts(){
@@ -1149,7 +1169,7 @@ let isRomanPali = false;
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="fts">📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်</button><button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="guide" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="guide">📑 ပိဋကလမ်းညွန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="bt" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button></div>`;
+      menu.innerHTML = `<button data-c="resume" style="display:none;background:#eef3ea;">↩ ခုနက ရှာထားတာ ပြန်ကြည့်ရန်</button><button data-c="fts">📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်</button><button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="guide" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="guide">📑 ပိဋကလမ်းညွန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="bt" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button></div>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
@@ -1169,10 +1189,12 @@ let isRomanPali = false;
       const c = b.dataset.c;
       if(c === "sutta"){ menu.classList.remove("tp-open"); menu._openSutta(); return; }
       if(c === "fts"){ menu.classList.remove("tp-open"); tp_toggleFts(); return; }
+      if(c === "resume"){ menu.classList.remove("tp-open"); tp_sayResume(); return; }
       if(c !== "bt"){ const cb = checks.find(x => x.dataset.k === c); if(cb){ cb.checked = true; tp_dsSel = checks.filter(x => x.checked).map(x => x.dataset.k); } }
       menu.classList.remove("tp-open"); tp_openDataset(c);
     }; });
     menu._openSutta = openSutta;
+    const rb = menu.querySelector('[data-c="resume"]'); if(rb) rb.style.display = tp_sayHidden ? "block" : "none";
     if(menu.classList.contains("tp-open") && menu._anchor === anchor){ menu.classList.remove("tp-open"); return; }
     menu._anchor = anchor;
     const rect = anchor.getBoundingClientRect();
@@ -1282,6 +1304,7 @@ let isRomanPali = false;
     return box;
   }
   function tp_btOpenPdf(url, title){
+    tp_sayHideForPhone();
     const box = tp_pdfBox();
     const m = /#page=(\d+)/.exec(url);
     const target = m ? url.split("#")[0] + "?p=" + m[1] + "#page=" + m[1] : url;   // query ကွဲမှ PDF viewer က စာမျက်နှာအသစ်ကို ခုန်ပေးသည်
@@ -2691,6 +2714,7 @@ let isRomanPali = false;
   // Panel ကို GitHub idx.books နဲ့ မတိုက်ဘဲ Firebase ရဲ့ part3 (tp_ftsBooksMap) ကိုသာ တိုက်သည် -
   // ဒါမှ part2/part3 ရဲ့ book_id ပုံစံ အတူတူဖြစ်ပြီး ကိုက်ညီမှု သေချာမည်
   async function tp_ftsOpenResult(pageInfo, statusDiv, words){
+    if(window.innerWidth <= 900){ const fp = document.getElementById("tp-fts-panel"); if(fp) fp.classList.remove("tp-open"); }   // ဖုန်း — ရလဒ်တွေ မပျက်ဘဲ box ခဏပိတ်ထားမည်
     const bookId = String(pageInfo.book_id || "").trim();
     const pageNum = Number(pageInfo.page);
     const meta = tp_ftsBooksMap[bookId];
