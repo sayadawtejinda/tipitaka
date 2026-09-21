@@ -155,6 +155,14 @@
     padding:12px; box-shadow:0 4px 12px rgba(0,0,0,.15); box-sizing:border-box;
   }
   #tp-fts-panel.tp-open{ display:flex; }
+  /* ပိဋကတ်စာ ရှာဖွေရေး box ကို အဘိဓာန်ရှာတဲ့ box နဲ့ တစ်နေရာတည်း (လက်ဝဲဘေး) မှာ ကပ်ထားပြီး tab နဲ့ ပြောင်းသုံးသည် */
+  #tp-fts-panel{ top:0 !important; left:0 !important; right:auto !important; bottom:0 !important; width:340px !important; min-width:0 !important; max-width:none !important; max-height:none !important; border-radius:0 !important; border:0 !important; border-right:1px solid #cbd5e1 !important; box-shadow:2px 0 8px rgba(0,0,0,.12) !important; padding:12px !important; box-sizing:border-box; }
+  @media (max-width:900px){ #tp-fts-panel{ width:88vw !important; max-width:360px !important; } }
+  #tp-fts-panel .tp-fts-results{ flex:1; overflow-y:auto; max-height:none !important; }
+  .tp-tabs{ display:flex; gap:4px; margin:0 0 8px; }
+  .tp-tabs button{ flex:1; padding:6px 4px; border:1px solid #cbd5e1; background:#fff; border-radius:6px; font-size:13px; cursor:pointer; font-family:inherit; }
+  .tp-tabs button.on{ background:#2d5c3d; color:#fff; border-color:#2d5c3d; }
+  #tp-fts-panel .tp-tabs{ margin-right:52px; }
   #tp-fts-panel .tp-fts-close{ position:absolute; top:3px; right:6px; z-index:3; cursor:pointer; font-size:13px; line-height:1; color:#d00; font-weight:bold; padding:2px 4px; }
   #tp-fts-panel .tp-fts-close:hover{ color:#fff; background:#d00; border-radius:3px; }
   .tp-fts-scope-row{ display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0; font-size:13.5px; }
@@ -860,7 +868,7 @@ let isRomanPali = false;
     if(panel) return panel;
     panel = document.createElement("div");
     panel.id = "tp-say-panel";
-    panel.innerHTML = `<div class="tp-say-head"><span id="tp-say-title"></span><span><span class="tp-say-menu" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်" style="cursor:pointer;color:#555;padding:0 8px;">☰</span><span class="tp-say-close" title="ပိတ်မည်">✕</span></span></div>
+    panel.innerHTML = `<div class="tp-say-head"><span id="tp-say-title"></span><span><span class="tp-say-menu" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်" style="cursor:pointer;color:#555;padding:0 8px;">☰</span><span class="tp-say-close" title="ပိတ်မည်">✕</span></span></div><div class="tp-tabs"><button data-t="data" class="on">📚 အဘိဓာန်/ကျမ်းညွှန်း</button><button data-t="fts">📖 ပိဋကတ်စာ</button></div>
       <div id="tp-say-sel" style="display:none;font-size:13px;margin-bottom:6px;line-height:1.9;"></div>
       <select id="tp-mm-scope" style="display:none;width:100%;padding:6px;margin-bottom:6px;font-family:inherit;font-size:13.5px;border:1px solid #cbd5e1;border-radius:6px;"></select>
       <input type="text" id="tp-say-input" placeholder="စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)" autocomplete="off">
@@ -868,6 +876,7 @@ let isRomanPali = false;
       <div class="tp-say-body" id="tp-say-body"></div>`;
     document.body.appendChild(panel);
     panel.querySelector(".tp-say-close").addEventListener("click", tp_closeSayPanel);
+    panel.querySelectorAll(".tp-tabs button").forEach(b => b.addEventListener("click", () => tp_tabTo(b.dataset.t)));
     panel.querySelector(".tp-say-menu").addEventListener("click", e => { e.stopPropagation(); tp_openSearchChoice(e.currentTarget, null, true); });
     const input = panel.querySelector("#tp-say-input");
     let timer = null;
@@ -1168,9 +1177,14 @@ let isRomanPali = false;
       if(input.value.trim()) tp_sayRun(input.value);
     }
     panel.classList.add("tp-open"); tp_sayHidden = false;
+    { const fp_ = document.getElementById("tp-fts-panel"); if(fp_) fp_.classList.remove("tp-open"); }
     document.body.classList.add("tp-say-docked");
     if(window.innerWidth > 900) { input.focus(); input.select(); }
     if(key === "mm"){ tp_mmFillScope(); } else { tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {})); if(tp_dsSel.includes("bt")) tp_btAvail(); }
+  }
+  function tp_tabTo(which){
+    if(which === "fts"){ tp_toggleFts(true); return; }
+    tp_openDataset(tp_dsCur === "mm" ? "mm" : tp_dsSel[0]);
   }
   function tp_toggleFts(forceOpen){
     const panel = tp_ensureFtsPanel();
@@ -1179,6 +1193,9 @@ let isRomanPali = false;
     if(cur){ const lab = cur.closest("label"); lab.style.display = bookOpen ? "" : "none"; cur.checked = bookOpen; }   // "လက်ရှိကျမ်းစာ" ကို စာအုပ်ဖွင့်ထားမှသာ ပြမည်
     const willOpen = forceOpen ? true : !panel.classList.contains("tp-open");
     panel.classList.toggle("tp-open", willOpen);
+    const sp_ = document.getElementById("tp-say-panel");
+    if(willOpen){ if(sp_) sp_.classList.remove("tp-open"); document.body.classList.add("tp-say-docked"); }
+    else document.body.classList.remove("tp-say-docked");
     if(willOpen){ tp_lastKind = "fts"; const inp = panel.querySelector("#tp-fts-input"); if(inp){ inp.focus(); inp.select(); } }
   }
   // 🔍 ကို နှိပ်တိုင်း menu အသစ်မပြဘဲ နောက်ဆုံးသုံးခဲ့တဲ့ ရှာဖွေရေး box ကို တန်းပြမည် (ရလဒ်တွေ မပျက်၊ ရိုက်ထားတာကို select လုပ်ပေးထားလို့ ရိုက်လိုက်ရင် အစားထိုးမည်)
@@ -2802,6 +2819,7 @@ let isRomanPali = false;
     panel.innerHTML = `
       <span class="tp-fts-menu" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်" style="position:absolute;top:2px;right:26px;z-index:3;cursor:pointer;font-size:14px;color:#555;padding:0 4px;">☰</span>
       <span class="tp-fts-close" title="ပိတ်မည်">✕</span>
+      <div class="tp-tabs"><button data-t="data">📚 အဘိဓာန်/ကျမ်းညွှန်း</button><button data-t="fts" class="on">📖 ပိဋကတ်စာ</button></div>
       <div class="tp-fts-scope-row">
         <label><input type="checkbox" class="tp-fts-scope" value="current" checked> လက်ရှိကျမ်းစာ</label>
         <label><input type="checkbox" class="tp-fts-scope" value="vinaya" checked> ဝိနည်း</label>
@@ -2817,7 +2835,8 @@ let isRomanPali = false;
       <div id="tp-fts-results" class="tp-fts-results"></div>
     `;
 
-    panel.querySelector(".tp-fts-close").addEventListener("click", () => panel.classList.remove("tp-open"));
+    panel.querySelector(".tp-fts-close").addEventListener("click", () => { panel.classList.remove("tp-open"); document.body.classList.remove("tp-say-docked"); });
+    panel.querySelectorAll(".tp-tabs button").forEach(b => b.addEventListener("click", () => tp_tabTo(b.dataset.t)));
     panel.querySelector(".tp-fts-menu").addEventListener("click", e => { e.stopPropagation(); tp_openSearchChoice(e.currentTarget, null, true); });
     const input = panel.querySelector("#tp-fts-input");
     const autocompleteList = panel.querySelector("#tp-fts-autocomplete");
