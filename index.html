@@ -261,7 +261,6 @@ p.gathalast {
 
 <button id="tp-float-search-toggle" class="tp-float-nav" title="ရှာရန်">🔍</button>
 <div id="tp-float-search-box" class="tp-dropdown-box">
-<button id="tp-float-refresh-btn" class="tp-float-nav" title="စာမျက်နှာကို အသစ်ပြန်ခေါ်မည် (Refresh)" style="top: calc(50% + 60px);">🔄</button>
   <input type="text" id="tp-float-search-input" placeholder="စာအုပ် (သို့) သုတ္တန်အမည် ရိုက်ရှာပါ..." autocomplete="off">
   <div id="tp-float-search-results"></div>
 </div>
@@ -737,9 +736,9 @@ let isRomanPali = false;
   // 🔍 icon ကိုနှိပ်ရင် ရွေးစရာ ၄ ခု ပေါ်မည်: သုတ္တန်ရှာရန် (ရှိပြီးသား) + ဒေတာစာအုပ် ၃ အုပ်။
   // ဒေတာစာအုပ်ကို ရွေးရင် လက်ဝဲဘေးထောင့်မှာ box ကပ်ပေါ်ပြီး ခေါင်းစဉ်တွေကို အရင်ပြမည်၊ ခေါင်းစဉ်ကိုနှိပ်မှ စာသားပြမည်။
   const TP_DATASETS = {
-    say: { file: "sayokeson.json",    label: "Sayokeson" },
-    vat: { file: "pitakavatthu.json", label: "PitakaVatthu" },
-    pya: { file: "sayokepya.json",    label: "Sayokepya" }
+    say: { file: "sayokeson.json",    label: "သရုပ်စုံအဘိဓာန်" },
+    vat: { file: "pitakavatthu.json", label: "ပိဋကဝတ္ထု" },
+    pya: { file: "sayokepya.json",    label: "သုတေသနသရုပ်ပြ" }
   };
   const tp_dsCache = {};
   let tp_dsCur = "say";
@@ -937,7 +936,7 @@ let isRomanPali = false;
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="say">📒 Sayokeson ရှာရန်</button><button data-c="vat">📗 PitakaVatthu ရှာရန်</button><button data-c="pya">📘 Sayokepya ရှာရန်</button>`;
+      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button><button data-c="vat">📗 ပိဋကဝတ္ထု</button><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
@@ -2611,17 +2610,22 @@ let isRomanPali = false;
   }
 
 })();
-// Refresh ခလုတ် နှိပ်လျှင် Cache များကို ရှင်းထုတ်ပြီး Page ကို Reload လုပ်ရန်
-  const mainRefreshBtn = document.getElementById("tp-float-refresh-btn");
-  if(mainRefreshBtn) {
-      mainRefreshBtn.addEventListener("click", () => {
-          if(confirm("စာမျက်နှာနှင့် ဒေတာအသစ်များကို ပြန်လည်ရယူမည်မှာ သေချာပါသလား?")) {
-              const currentUrl = new URL(window.location.href);
-              currentUrl.searchParams.set('nocache', Date.now());
-              window.location.href = currentUrl.toString();
-          }
-      });
-  }
+// Blogspot ရဲ့ iframe ထဲမှာ ဖွင့်ထားရင် မူရင်း Blogspot ကို ပြန်သွားနိုင်တဲ့ ခလုပ်ကို ညာအောက်ထောင့်မှာ ပြမည်
+  (function(){
+    if(window.top === window.self) return;   // ကိုယ်တိုင် ဖွင့်ထားရင် (iframe မဟုတ်ရင်) မပြပါ
+    let blog = "";
+    try{ if(location.ancestorOrigins && location.ancestorOrigins.length) blog = location.ancestorOrigins[location.ancestorOrigins.length - 1]; }catch(e){}
+    if(!blog && document.referrer){ try{ blog = new URL(document.referrer).origin; }catch(e){} }
+    if(!blog) return;
+    const link = document.createElement("a");
+    link.id = "tp-back-to-blog";
+    link.textContent = "🏠 Blog သို့";
+    link.href = blog + "/";
+    link.target = "_top";
+    link.title = "မူရင်း Blogspot သို့ ပြန်သွားရန်";
+    link.style.cssText = "position:fixed;right:12px;bottom:12px;z-index:2200;padding:7px 12px;border:1px solid #9fb8a8;border-radius:18px;background:rgba(255,253,247,.94);color:#3a3229;font-size:13px;text-decoration:none;box-shadow:0 1px 6px rgba(0,0,0,.25)";
+    document.body.appendChild(link);
+  })();
 
 </script>
 
