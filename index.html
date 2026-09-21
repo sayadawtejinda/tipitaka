@@ -155,6 +155,8 @@
     padding:12px; box-shadow:0 4px 12px rgba(0,0,0,.15); box-sizing:border-box;
   }
   #tp-fts-panel.tp-open{ display:flex; }
+  #tp-fts-panel .tp-fts-close{ position:absolute; top:3px; right:6px; z-index:3; cursor:pointer; font-size:13px; line-height:1; color:#d00; font-weight:bold; padding:2px 4px; }
+  #tp-fts-panel .tp-fts-close:hover{ color:#fff; background:#d00; border-radius:3px; }
   .tp-fts-scope-row{ display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0; font-size:13.5px; }
   .tp-fts-scope-row label{ display:flex; align-items:center; gap:4px; cursor:pointer; white-space:nowrap; }
   .tp-fts-search-container{ position:relative; margin-bottom:8px; }
@@ -555,7 +557,8 @@ let isRomanPali = false;
     let left = x + 12;
     if(left + boxW > viewRight - margin) left = Math.max(viewLeft + margin, x - boxW - 12);
     let top = y + 12;
-    if(top + boxH > viewBottom - margin) top = Math.max(viewTop + margin, y - boxH - 12);
+    // စာက မျက်နှာပြင်ရဲ့ အောက်ဝက်မှာဆိုရင် အဘိဓာန်ကို screen အပေါ်ဘက်မှာ ပြမည် (အောက်ခြေရောက်ပြီး မမြင်ရတာမျိုး မဖြစ်စေရန်)
+    if(y - viewTop > window.innerHeight * 0.5 || top + boxH > viewBottom - margin) top = viewTop + margin;
     box.style.left = left + "px";
     box.style.top = top + "px";
   }
@@ -2741,6 +2744,7 @@ let isRomanPali = false;
       document.body.appendChild(panel);
     }
     panel.innerHTML = `
+      <span class="tp-fts-close" title="ပိတ်မည်">✕</span>
       <div class="tp-fts-scope-row">
         <label><input type="checkbox" class="tp-fts-scope" value="current" checked> လက်ရှိကျမ်းစာ</label>
         <label><input type="checkbox" class="tp-fts-scope" value="vinaya" checked> ဝိနည်း</label>
@@ -2756,6 +2760,7 @@ let isRomanPali = false;
       <div id="tp-fts-results" class="tp-fts-results"></div>
     `;
 
+    panel.querySelector(".tp-fts-close").addEventListener("click", () => panel.classList.remove("tp-open"));
     const input = panel.querySelector("#tp-fts-input");
     const autocompleteList = panel.querySelector("#tp-fts-autocomplete");
     const statusDiv = panel.querySelector("#tp-fts-status");
