@@ -160,9 +160,18 @@
   @media (max-width:900px){ #tp-fts-panel{ width:88vw !important; max-width:360px !important; } }
   #tp-fts-panel .tp-fts-results{ flex:1; overflow-y:auto; max-height:none !important; }
   .tp-tabs{ display:flex; gap:4px; margin:0 0 8px; }
-  .tp-tabs button{ flex:1; padding:6px 4px; border:1px solid #cbd5e1; background:#fff; border-radius:6px; font-size:13px; cursor:pointer; font-family:inherit; }
+  .tp-tabs button{ flex:1 1 0; min-width:0; height:34px; box-sizing:border-box; padding:0 4px; border:1px solid #cbd5e1; background:#fff; border-radius:6px; font-size:13px; line-height:1; font-weight:normal; cursor:pointer; font-family:inherit; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .tp-tabs button.on{ background:#2d5c3d; color:#fff; border-color:#2d5c3d; }
-  #tp-fts-panel .tp-tabs{ margin-right:52px; }
+  .tp-topbar{ display:flex; align-items:center; gap:6px; margin:0 0 8px; height:34px; flex:0 0 auto; }
+  .tp-topbar .tp-tabs{ flex:1; margin:0; min-width:0; }
+  .tp-tb-btn{ flex:0 0 26px; width:26px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; color:#555; user-select:none; }
+  #tp-fts-panel .tp-fts-close, #tp-say-panel .tp-say-close{ position:static !important; color:#d00; font-weight:bold; padding:0; font-size:15px; }
+  .tp-sel-btn{ width:100%; text-align:left; padding:7px 10px; margin:0 0 6px; border:1px solid #cbd5e1; background:#fff; border-radius:6px; font-size:13px; font-family:inherit; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .tp-sel-list{ display:none; background:#fff; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; margin:0 0 8px; font-size:13.5px; }
+  .tp-sel-list.tp-open{ display:block; }
+  .tp-sel-list label{ display:flex; align-items:center; gap:8px; padding:4px 0; cursor:pointer; }
+  .tp-sel-list label input{ width:17px; height:17px; accent-color:#2d7a46; flex:0 0 auto; }
+  .tp-sel-list hr{ border:0; border-top:1px solid #e2e8f0; margin:4px 0; }
   #tp-fts-panel .tp-fts-close{ position:absolute; top:3px; right:6px; z-index:3; cursor:pointer; font-size:13px; line-height:1; color:#d00; font-weight:bold; padding:2px 4px; }
   #tp-fts-panel .tp-fts-close:hover{ color:#fff; background:#d00; border-radius:3px; }
   .tp-fts-scope-row{ display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0; font-size:13.5px; }
@@ -868,14 +877,17 @@ let isRomanPali = false;
     if(panel) return panel;
     panel = document.createElement("div");
     panel.id = "tp-say-panel";
-    panel.innerHTML = `<div class="tp-say-head"><span id="tp-say-title"></span><span><span class="tp-say-menu" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်" style="cursor:pointer;color:#555;padding:0 8px;">☰</span><span class="tp-say-close" title="ပိတ်မည်">✕</span></span></div><div class="tp-tabs"><button data-t="data" class="on">📚 အဘိဓာန်/ကျမ်းညွှန်း</button><button data-t="fts">📖 ပိဋကတ်စာ</button></div>
-      <div id="tp-say-sel" style="display:none;font-size:13px;margin-bottom:6px;line-height:1.9;"></div>
+    panel.innerHTML = `<div class="tp-topbar"><div class="tp-tabs"><button data-t="data" class="on">📚 အဘိဓာန်/ကျမ်းညွှန်း</button><button data-t="fts">📖 ပိဋကတ်စာ</button></div><span class="tp-say-menu tp-tb-btn" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်">☰</span><span class="tp-say-close tp-tb-btn" title="ပိတ်မည်">✕</span></div><div class="tp-say-head"><span id="tp-say-title"></span></div>
+      <button id="tp-sel-toggle" class="tp-sel-btn" type="button"></button>
+      <div id="tp-sel-list" class="tp-sel-list"></div>
+      <div id="tp-say-sel" style="display:none"></div>
       <select id="tp-mm-scope" style="display:none;width:100%;padding:6px;margin-bottom:6px;font-family:inherit;font-size:13.5px;border:1px solid #cbd5e1;border-radius:6px;"></select>
       <input type="text" id="tp-say-input" placeholder="စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)" autocomplete="off">
       <div class="tp-fts-status" id="tp-say-status"></div>
       <div class="tp-say-body" id="tp-say-body"></div>`;
     document.body.appendChild(panel);
     panel.querySelector(".tp-say-close").addEventListener("click", tp_closeSayPanel);
+    tp_selWire(panel);
     panel.querySelectorAll(".tp-tabs button").forEach(b => b.addEventListener("click", () => tp_tabTo(b.dataset.t)));
     panel.querySelector(".tp-say-menu").addEventListener("click", e => { e.stopPropagation(); tp_openSearchChoice(e.currentTarget, null, true); });
     const input = panel.querySelector("#tp-say-input");
@@ -886,11 +898,32 @@ let isRomanPali = false;
   }
   function tp_sayUpdateSel(){
     const panel = document.getElementById("tp-say-panel"); if(!panel) return;
-    const box = panel.querySelector("#tp-say-sel");
-    box.style.display = "none"; box.innerHTML = "";
     const sc = panel.querySelector("#tp-mm-scope"); sc.style.display = tp_dsCur === "mm" ? "block" : "none";
-    if(tp_dsCur === "mm"){ panel.querySelector("#tp-say-title").textContent = "မြန်မာပြန်စာအုပ်များ ရှာဖွေရန်"; return; }
-    panel.querySelector("#tp-say-title").textContent = tp_dsCur === "bt" ? TP_DATASETS.bt.label + " ရှာဖွေရန်" : (tp_dsSel.length > 1 ? "ပေါင်းရှာရန် (" + tp_dsSel.map(k => TP_DATASETS[k].label).join(" + ") + ")" : TP_DATASETS[tp_dsSel[0]].label + " ရှာဖွေရန်");
+    // ရှာမည့်နေရာ ရွေးတဲ့ dropdown ဇယား (✅ တစ်ခုထက်ပိုရွေးလို့ရ၊ မြန်မာပြန်စာအုပ်က သီးသန့်)
+    const list = panel.querySelector("#tp-sel-list"), btn = panel.querySelector("#tp-sel-toggle");
+    list.innerHTML = TP_MULTI.map(k => `<label><input type="checkbox" data-k="${k}" ${tp_dsCur !== "mm" && tp_dsSel.includes(k) ? "checked" : ""}> ${TP_DATASETS[k].label}</label>`).join("") + `<hr><label><input type="checkbox" data-k="mm" ${tp_dsCur === "mm" ? "checked" : ""}> 📖 မြန်မာပြန်စာအုပ်များ</label>`;
+    const names = tp_dsCur === "mm" ? ["မြန်မာပြန်စာအုပ်များ"] : tp_dsSel.map(k => TP_DATASETS[k].label);
+    btn.textContent = "ရှာမည့်နေရာ: " + names.join(" + ") + " ▾";
+    panel.querySelector("#tp-say-title").textContent = tp_dsCur === "mm" ? "မြန်မာပြန်စာအုပ်များ ရှာဖွေရန်" : (tp_dsSel.length > 1 ? "ပေါင်းရှာရန် (" + tp_dsSel.length + " ခု)" : TP_DATASETS[tp_dsSel[0]].label + " ရှာဖွေရန်");
+  }
+  function tp_selWire(panel){
+    const list = panel.querySelector("#tp-sel-list"), btn = panel.querySelector("#tp-sel-toggle"), input = panel.querySelector("#tp-say-input");
+    btn.addEventListener("click", () => list.classList.toggle("tp-open"));
+    input.addEventListener("focus", () => list.classList.remove("tp-open"));
+    list.addEventListener("change", e => {
+      const cb = e.target; if(!cb || !cb.dataset || !cb.dataset.k) return;
+      const k = cb.dataset.k;
+      if(k === "mm"){ if(cb.checked){ tp_dsCur = "mm"; } else { tp_dsCur = "multi"; } }
+      else if(tp_dsCur === "mm"){ tp_dsCur = "multi"; tp_dsSel = [k]; }
+      else {
+        const on = [...list.querySelectorAll("input[data-k]:checked")].map(x => x.dataset.k).filter(x => x !== "mm");
+        tp_dsSel = on.length ? on : [k];
+      }
+      tp_lastKind = "data"; tp_saySig = tp_dsCur + "|" + tp_dsSel.join(",");
+      tp_sayUpdateSel(); list.classList.add("tp-open");
+      if(tp_dsCur === "mm") tp_mmFillScope(); else { tp_dsSel.forEach(x => tp_dsLoad(x).catch(() => {})); if(tp_dsSel.includes("bt")) tp_btAvail(); }
+      tp_sayRun(input.value);
+    });
   }
 
   // ================= မြန်မာပြန်စာအုပ်များ စာသားရှာဖွေရေး =================
@@ -1185,6 +1218,7 @@ let isRomanPali = false;
   function tp_tabTo(which){
     if(which === "fts"){ tp_toggleFts(true); return; }
     tp_openDataset(tp_dsCur === "mm" ? "mm" : tp_dsSel[0]);
+    const l_ = document.querySelector("#tp-sel-list"); if(l_) l_.classList.add("tp-open");      // "အဘိဓာန်/ကျမ်းညွှန်း" ကိုရွေးတာနဲ့ ရှာမည့်နေရာစာရင်းကို ပြမည်
   }
   function tp_toggleFts(forceOpen){
     const panel = tp_ensureFtsPanel();
@@ -2817,9 +2851,7 @@ let isRomanPali = false;
       document.body.appendChild(panel);
     }
     panel.innerHTML = `
-      <span class="tp-fts-menu" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်" style="position:absolute;top:2px;right:26px;z-index:3;cursor:pointer;font-size:14px;color:#555;padding:0 4px;">☰</span>
-      <span class="tp-fts-close" title="ပိတ်မည်">✕</span>
-      <div class="tp-tabs"><button data-t="data">📚 အဘိဓာန်/ကျမ်းညွှန်း</button><button data-t="fts" class="on">📖 ပိဋကတ်စာ</button></div>
+      <div class="tp-topbar"><div class="tp-tabs"><button data-t="data">📚 အဘိဓာန်/ကျမ်းညွှန်း</button><button data-t="fts" class="on">📖 ပိဋကတ်စာ</button></div><span class="tp-fts-menu tp-tb-btn" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်">☰</span><span class="tp-fts-close tp-tb-btn" title="ပိတ်မည်">✕</span></div>
       <div class="tp-fts-scope-row">
         <label><input type="checkbox" class="tp-fts-scope" value="current" checked> လက်ရှိကျမ်းစာ</label>
         <label><input type="checkbox" class="tp-fts-scope" value="vinaya" checked> ဝိနည်း</label>
