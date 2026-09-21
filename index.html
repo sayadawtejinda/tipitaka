@@ -766,19 +766,23 @@ let isRomanPali = false;
     sut: { file: "sutta_vibhavini.json", label: "သုတ္တသူစီ ဝိဘာဝိနီ" },
     guide: { file: "pitaka_guide.json", label: "ပိဋကလမ်းညွန်" }
   };
-  const TP_MULTI = ["guide", "say", "vat", "pya", "sut"];   // ပေါင်းရှာလို့ရတဲ့ ဒေတာ ၄ ခု
+  const TP_MULTI = ["guide", "say", "vat", "pya", "sut", "bt"];   // ပေါင်းရှာလို့ရတဲ့ ဒေတာ ၄ ခု
   let tp_dsSel = ["say"];
   const tp_dsCache = {};
   let tp_dsCur = "say";
   function tp_sayNorm(s){
     let t = String(s || "").replace(/<[^>]+>/g, "").replace(/[0-9]/g, d => "၀၁၂၃၄၅၆၇၈၉"[d]);
     t = t.replace(/[\s,.\-–()\[\]၊။"“”'‘’]/g, "");
-    return t.replace(/(.)္\1/g, "$1်");   // သုတ္တ ⟷ သုတ်
+    return t.replace(/(.)္\1/g, "$1်").toLowerCase();   // သုတ္တ ⟷ သုတ်
   }
   function tp_dsLoad(key){
     if(tp_dsCache[key]) return tp_dsCache[key];
     const file = TP_DATASETS[key].file;
     const p = (async () => {
+      if(key === "bt"){          // ဘာသာဋီကာအဘိဓာန် — ဝေါဟာရတစ်ခုချင်းကို ရှာလို့ရတဲ့ စာရင်းအဖြစ် ပြောင်းသည်
+        const d = await tp_btLoad();
+        return d.heads.map(w => ({ t: w, c: "", nt: tp_sayNorm(w), nb: "", ds: "bt", bt: d.map[w] }));
+      }
       let list;
       try{ list = await fetchJson(cdnUrl(file)); }
       catch(e){ list = await fetchJson(file); }   // GitHub မှာ မတင်ရသေးရင် ဒီ folder ထဲကဖိုင်ကို ဖတ်မည်
@@ -1098,6 +1102,7 @@ let isRomanPali = false;
   }
   async function tp_sayDetail(r, terms, back, hits, idx){
     const body = document.getElementById("tp-say-body");
+    if(r.ds === "bt") return tp_btShow(r.bt, back, hits, idx, hits && hits.length > 1 ? (j => tp_sayDetail(hits[j].r, terms, back, hits, j)) : null);
     try{ await tp_sayEnsureRefs(); }catch(e){}
     const html = String(r.c).split(/<br\s*\/?>/i).map(part => tp_sayRender(part, terms, tp_sayFindRefs(part))).join("<br>");
     const nav = hits && hits.length > 1 ? tp_navBar(idx, hits.length) : "";
@@ -1117,8 +1122,8 @@ let isRomanPali = false;
     return p;
   }
   function tp_openDataset(key){
-    tp_dsCur = (key === "bt" || key === "mm") ? key : "multi";
-    if(key !== "bt" && key !== "mm" && !tp_dsSel.includes(key)) tp_dsSel = [key];
+    tp_dsCur = key === "mm" ? "mm" : "multi";
+    if(key !== "mm" && !tp_dsSel.includes(key)) tp_dsSel = [key];
     const panel = tp_sayEnsurePanel();
     tp_sayUpdateSel();
     const input = panel.querySelector("#tp-say-input");
@@ -1128,7 +1133,7 @@ let isRomanPali = false;
     panel.classList.add("tp-open");
     document.body.classList.add("tp-say-docked");
     input.focus();
-    if(key === "bt"){ tp_btLoad().catch(() => {}); tp_btAvail(); } else if(key === "mm"){ tp_mmFillScope(); } else tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {}));
+    if(key === "mm"){ tp_mmFillScope(); } else { tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {})); if(tp_dsSel.includes("bt")) tp_btAvail(); }
   }
   function tp_toggleFts(){
     const panel = tp_ensureFtsPanel();
@@ -1144,7 +1149,7 @@ let isRomanPali = false;
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="fts">📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်</button><button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="guide" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="guide">📑 ပိဋကလမ်းညွန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
+      menu.innerHTML = `<button data-c="fts">📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်</button><button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="guide" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="guide">📑 ပိဋကလမ်းညွန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="bt" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button></div>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
@@ -1304,7 +1309,7 @@ let isRomanPali = false;
       body.appendChild(item);
     });
   }
-  async function tp_btShow(entry, back, list, idx){
+  async function tp_btShow(entry, back, list, idx, go){
     const body = document.getElementById("tp-say-body");
     body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div><div class="tp-fts-status">ဖတ်နေသည်...</div>`;
     body.querySelector(".tp-say-back").addEventListener("click", back);
@@ -1318,7 +1323,7 @@ let isRomanPali = false;
     }).join("");
     const nav = list && list.length > 1 ? tp_navBar(idx, list.length) : "";
     body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div>${cards}`;
-    if(list && list.length > 1) tp_navWire(body, idx, list.length, j => tp_btShow(list[j], back, list, j));
+    if(list && list.length > 1) tp_navWire(body, idx, list.length, go || (j => tp_btShow(list[j], back, list, j)));
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-item").forEach(el => el.addEventListener("click", () => {
       const r = entry.refs[+el.dataset.i];
