@@ -760,9 +760,10 @@ let isRomanPali = false;
     vat: { file: "pitakavatthu.json", label: "ပိဋကဝတ္ထု" },
     bt:  { file: "bhasatika_index.txt", label: "ဘာသာဋီကာအဘိဓာန်" },
     pya: { file: "sayokepya.json",    label: "သုတေသနသရုပ်ပြ" },
-    sut: { file: "sutta_vibhavini.json", label: "သုတ္တသူစီ ဝိဘာဝိနီ" }
+    sut: { file: "sutta_vibhavini.json", label: "သုတ္တသူစီ ဝိဘာဝိနီ" },
+    guide: { file: "pitaka_guide.json", label: "ပိဋကလမ်းညွန်" }
   };
-  const TP_MULTI = ["say", "vat", "pya", "sut"];   // ပေါင်းရှာလို့ရတဲ့ ဒေတာ ၄ ခု
+  const TP_MULTI = ["guide", "say", "vat", "pya", "sut"];   // ပေါင်းရှာလို့ရတဲ့ ဒေတာ ၄ ခု
   let tp_dsSel = ["say"];
   const tp_dsCache = {};
   let tp_dsCur = "say";
@@ -1097,7 +1098,9 @@ let isRomanPali = false;
     try{ await tp_sayEnsureRefs(); }catch(e){}
     const html = String(r.c).split(/<br\s*\/?>/i).map(part => tp_sayRender(part, terms, tp_sayFindRefs(part))).join("<br>");
     const nav = hits && hits.length > 1 ? tp_navBar(idx, hits.length) : "";
-    body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div><div class="tp-say-detail-text">${html}</div>`;
+    body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div>${r.v && r.p ? `<div class="tp-say-pdf" style="margin:4px 0 8px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;cursor:pointer;color:#0645ad;font-size:13.5px;">📕 PDF ဖွင့်ရန် — အတွဲ ${toMyanmarDigits(r.v)}၊ စာမျက်နှာ ${toMyanmarDigits(r.p)}</div>` : ""}<div class="tp-say-detail-text">${html}</div>`;
+    const pdfBtn = body.querySelector(".tp-say-pdf");
+    if(pdfBtn) pdfBtn.addEventListener("click", () => tp_btOpenPdf(TP_FTS_BASE + "books/" + r.v + ".pdf#page=" + r.p, "ပိဋကလမ်းညွန် အတွဲ " + toMyanmarDigits(r.v) + " — စာမျက်နှာ " + toMyanmarDigits(r.p)));
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => { if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm); }));
     if(hits && hits.length > 1) tp_navWire(body, idx, hits.length, j => tp_sayDetail(hits[j].r, terms, back, hits, j));
@@ -1117,12 +1120,21 @@ let isRomanPali = false;
     input.focus();
     if(key === "bt"){ tp_btLoad().catch(() => {}); tp_btAvail(); } else if(key === "mm"){ tp_mmFillScope(); } else tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {}));
   }
+  function tp_toggleFts(){
+    const panel = tp_ensureFtsPanel();
+    const bookOpen = !!document.getElementById("tp-current-page");
+    const cur = panel.querySelector('.tp-fts-scope[value="current"]');
+    if(cur){ const lab = cur.closest("label"); lab.style.display = bookOpen ? "" : "none"; cur.checked = bookOpen; }   // "လက်ရှိကျမ်းစာ" ကို စာအုပ်ဖွင့်ထားမှသာ ပြမည်
+    const willOpen = !panel.classList.contains("tp-open");
+    panel.classList.toggle("tp-open", willOpen);
+    if(willOpen){ const inp = panel.querySelector("#tp-fts-input"); if(inp) inp.focus(); }
+  }
   function tp_openSearchChoice(anchor, openSutta){
     let menu = document.getElementById("tp-search-choice");
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
+      menu.innerHTML = `<button data-c="fts">📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်</button><button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="guide" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="guide">📑 ပိဋကလမ်းညွန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
@@ -1141,6 +1153,7 @@ let isRomanPali = false;
     menu.querySelectorAll("button").forEach(b => { b.onclick = () => {
       const c = b.dataset.c;
       if(c === "sutta"){ menu.classList.remove("tp-open"); menu._openSutta(); return; }
+      if(c === "fts"){ menu.classList.remove("tp-open"); tp_toggleFts(); return; }
       if(c !== "bt"){ const cb = checks.find(x => x.dataset.k === c); if(cb){ cb.checked = true; tp_dsSel = checks.filter(x => x.checked).map(x => x.dataset.k); } }
       menu.classList.remove("tp-open"); tp_openDataset(c);
     }; });
@@ -1149,7 +1162,7 @@ let isRomanPali = false;
     menu._anchor = anchor;
     const rect = anchor.getBoundingClientRect();
     menu.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 230)) + "px";
-    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 370) + "px";
+    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 430) + "px";
     menu.classList.add("tp-open");
   }
 
@@ -2256,7 +2269,6 @@ let isRomanPali = false;
             <button id="tp-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ/စာပိုဒ် သွားမည်">📄</button>
             <button id="tp-search-toggle" class="tp-icon-btn" title="သုတ္တန်ရှာရန်">🔍</button>
             <button id="tp-lang-toggle" class="tp-icon-btn" title="ဘာသာပြန်/နိဿယ ဖတ်ရန်">🌐</button>
-            <button id="tp-fulltext-search-btn" class="tp-icon-btn" title="ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်"><span class="tp-fts-icon-wrap">📖<span class="tp-fts-icon-badge">🔍</span></span></button>
             
             <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
             <div id="tp-crossref" class="tp-dropdown-box"></div>
@@ -2321,14 +2333,6 @@ let isRomanPali = false;
       
       const searchBox = document.getElementById("tp-sutta-search"), searchInput = document.getElementById("tp-sutta-input");
       document.getElementById("tp-search-toggle").addEventListener("click", ()=>{ if(searchBox.classList.contains("tp-open")){ searchBox.classList.remove("tp-open"); return; } tp_openSearchChoice(document.getElementById("tp-search-toggle"), ()=>{ closeAllDropdowns("tp-sutta-search"); searchBox.classList.add("tp-open"); searchInput.focus(); ensureSuttas(); }); });
-
-      // --- ပိဋကတ်တော် အနှံ့ ရှာဖွေရေး Icon နှိပ်လျှင် panel ဖွင့်/ပိတ်မည့် Logic (Icon ကနေသာ ထိန်းချုပ်မည်) ---
-      document.getElementById("tp-fulltext-search-btn").addEventListener("click", ()=>{
-        const panel = tp_ensureFtsPanel();
-        const willOpen = !panel.classList.contains("tp-open");
-        panel.classList.toggle("tp-open", willOpen);
-        if(willOpen){ const inp = panel.querySelector("#tp-fts-input"); if(inp) inp.focus(); }
-      });
 
       const langBox = document.getElementById("tp-lang-dropdown");
       // 🌐 ဘာသာပြန် နှင့် နိဿယ ရွေးချယ်စရာ
