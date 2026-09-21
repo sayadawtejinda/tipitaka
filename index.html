@@ -1100,11 +1100,18 @@ let isRomanPali = false;
     const nav = hits && hits.length > 1 ? tp_navBar(idx, hits.length) : "";
     body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div>${r.v && r.p ? `<div class="tp-say-pdf" style="margin:4px 0 8px;padding:6px 10px;border:1px solid #cbd5e1;border-radius:6px;background:#f8fafc;cursor:pointer;color:#0645ad;font-size:13.5px;">📕 PDF ဖွင့်ရန် — အတွဲ ${toMyanmarDigits(r.v)}၊ စာမျက်နှာ ${toMyanmarDigits(r.p)}</div>` : ""}<div class="tp-say-detail-text">${html}</div>`;
     const pdfBtn = body.querySelector(".tp-say-pdf");
-    if(pdfBtn) pdfBtn.addEventListener("click", () => tp_btOpenPdf(TP_FTS_BASE + "books/" + r.v + ".pdf#page=" + r.p, "ပိဋကလမ်းညွန် အတွဲ " + toMyanmarDigits(r.v) + " — စာမျက်နှာ " + toMyanmarDigits(r.p)));
+    if(pdfBtn) pdfBtn.addEventListener("click", () => tp_btOpenPdf(TP_FTS_BASE + "books/" + r.v + ".pdf#page=" + tp_guidePdfPage(r.v, r.p), "ပိဋကလမ်းညွန် အတွဲ " + toMyanmarDigits(r.v) + " — စာမျက်နှာ " + toMyanmarDigits(r.p)));
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => { if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm); }));
     if(hits && hits.length > 1) tp_navWire(body, idx, hits.length, j => tp_sayDetail(hits[j].r, terms, back, hits, j));
     body.scrollTop = 0;
+  }
+  // ပိဋကလမ်းညွန် PDF ရဲ့ စာမျက်နှာပုံနှိပ်နံပါတ် ↔ PDF စာမျက်နှာ အစဉ် ကွာနေတာတွေကို ညှိပေးသည်
+  // အတွဲ ၃ — PDF မှာ စာမျက်နှာ ၂၆၉ မပါ၊ ၂၉၈ က နှစ်မျက်နှာ ထပ်နေသည် (PDF ၂၉၇ နဲ့ ၂၉၈ တူညီသည်)
+  function tp_guidePdfPage(v, p){
+    p = +p;
+    if(+v === 3){ if(p >= 270 && p <= 298) return p - 1; }
+    return p;
   }
   function tp_openDataset(key){
     tp_dsCur = (key === "bt" || key === "mm") ? key : "multi";
