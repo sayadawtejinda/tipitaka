@@ -852,6 +852,7 @@ let isRomanPali = false;
     panel.id = "tp-say-panel";
     panel.innerHTML = `<div class="tp-say-head"><span id="tp-say-title"></span><span class="tp-say-close" title="ပိတ်မည်">✕</span></div>
       <div id="tp-say-sel" style="display:none;font-size:13px;margin-bottom:6px;line-height:1.9;"></div>
+      <select id="tp-mm-scope" style="display:none;width:100%;padding:6px;margin-bottom:6px;font-family:inherit;font-size:13.5px;border:1px solid #cbd5e1;border-radius:6px;"></select>
       <input type="text" id="tp-say-input" placeholder="စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)" autocomplete="off">
       <div class="tp-fts-status" id="tp-say-status"></div>
       <div class="tp-say-body" id="tp-say-body"></div>`;
@@ -860,14 +861,108 @@ let isRomanPali = false;
     const input = panel.querySelector("#tp-say-input");
     let timer = null;
     input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => tp_sayRun(input.value), 220); });
+    panel.querySelector("#tp-mm-scope").addEventListener("change", () => tp_sayRun(input.value));
     return panel;
   }
   function tp_sayUpdateSel(){
     const panel = document.getElementById("tp-say-panel"); if(!panel) return;
     const box = panel.querySelector("#tp-say-sel");
     box.style.display = "none"; box.innerHTML = "";
+    const sc = panel.querySelector("#tp-mm-scope"); sc.style.display = tp_dsCur === "mm" ? "block" : "none";
+    if(tp_dsCur === "mm"){ panel.querySelector("#tp-say-title").textContent = "မြန်မာပြန်စာအုပ်များ ရှာဖွေရန်"; return; }
     panel.querySelector("#tp-say-title").textContent = tp_dsCur === "bt" ? TP_DATASETS.bt.label + " ရှာဖွေရန်" : (tp_dsSel.length > 1 ? "ပေါင်းရှာရန် (" + tp_dsSel.map(k => TP_DATASETS[k].label).join(" + ") + ")" : TP_DATASETS[tp_dsSel[0]].label + " ရှာဖွေရန်");
   }
+
+  // ================= မြန်မာပြန်စာအုပ်များ စာသားရှာဖွေရေး =================
+  // tipitaka-fts repo ရဲ့ mm/<စာအုပ်id>.json (စာမျက်နှာအလိုက် စာသား) ကို လိုသလောက်ပဲ ဖတ်ပြီး browser ထဲမှာ ရှာသည်
+  // (မြန်မာစာက စာလုံးခြားမပါလို့ စာလုံးအပိုင်းအစ (substring) အနေနဲ့ ရှာသည်)
+  const tp_mmTextCache = {};
+  let tp_mmRunId = 0;
+  function tp_mmText(id){
+    if(!tp_mmTextCache[id]) tp_mmTextCache[id] = fetchJson(TP_FTS_BASE + "mm/" + id + ".json").catch(e => { delete tp_mmTextCache[id]; throw e; });
+    return tp_mmTextCache[id];
+  }
+  async function tp_mmFillScope(){
+    const sel = document.getElementById("tp-mm-scope");
+    if(!sel || sel.options.length) return;
+    try{ await ensureBurmeseToc(); }catch(e){}
+    const cats = [...new Set(Object.values(burmeseBookMeta || {}).map(m => m.category))];
+    sel.innerHTML = `<option value="all">မြန်မာပြန်စာအုပ် အားလုံး</option>` + cats.map(c => `<option value="${c}">${MM_CATEGORY_LABELS[c] || c}</option>`).join("");
+  }
+  function tp_mmRender(hits, terms, offset, q, more){
+    const body = document.getElementById("tp-say-body");
+    body.innerHTML = ""; body.ontouchstart = body.ontouchend = null;
+    hits.slice(offset, offset + TP_SAY_PAGE).forEach(h => {
+      const item = document.createElement("div");
+      item.className = "tp-say-item";
+      item.innerHTML = `<b>${tp_sayEsc((burmeseBookMeta[h.id] || {}).title || h.id)}</b> <span class="tp-say-note">စာမျက်နှာ ${toMyanmarDigits(h.i + 1)}</span><div style="font-size:13px;color:#444;margin-top:2px;">${h.snip}</div>`;
+      item.addEventListener("click", () => tp_mmOpen(h.id, h.i, h.frag));
+      body.appendChild(item);
+    });
+    if(hits.length > TP_SAY_PAGE){
+      const next = document.createElement("div");
+      next.className = "tp-fts-next-link";
+      next.textContent = "နောက်ရလာဒ်";
+      next.addEventListener("click", () => tp_mmRender(hits, terms, offset + TP_SAY_PAGE >= hits.length ? 0 : offset + TP_SAY_PAGE, q, more));
+      body.appendChild(next);
+    }
+  }
+  async function tp_mmRun(q){
+    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
+    const run = ++tp_mmRunId;
+    const terms = String(q || "").trim().split(/\s+/).map(tp_sayNorm).filter(Boolean);
+    if(!terms.length){ status.textContent = ""; body.innerHTML = ""; return; }
+    status.textContent = "ရှာဖွေနေပါသည်...";
+    try{ await ensureBurmeseToc(); await tp_mmFillScope(); }catch(e){}
+    const scope = (document.getElementById("tp-mm-scope") || {}).value || "all";
+    const ids = Object.keys(burmeseBookMeta || {}).filter(id => scope === "all" || burmeseBookMeta[id].category === scope).sort();
+    const hits = [], CAP = 400; let done = 0, capped = false;
+    for(const id of ids){
+      if(run !== tp_mmRunId) return;                                   // ရှာစာလုံးအသစ်ရိုက်ပြီဆိုရင် အရင်ရှာတာကို ရပ်မည်
+      status.textContent = `ရှာဖွေနေပါသည်... (စာအုပ် ${done}/${ids.length}) — တွေ့ရှိမှု ${hits.length}`;
+      let pages; try{ pages = await tp_mmText(id); }catch(e){ done++; continue; }
+      if(run !== tp_mmRunId) return;
+      const before = hits.length;
+      for(let i = 0; i < pages.length && hits.length < CAP; i++){
+        const txt = pages[i]; if(!txt) continue;
+        const n = tp_sayNorm(txt);
+        if(!terms.every(t => n.indexOf(t) !== -1)) continue;
+        const m = tp_sayMap(txt), pos = m.plain.indexOf(terms[0]);
+        let snip, frag = terms[0];
+        if(pos === -1){ snip = tp_sayEsc(txt.slice(0, 90)); }
+        else {
+          const a = m.start[Math.max(0, pos - 30)], b = m.end[Math.min(m.plain.length - 1, pos + terms[0].length + 50)];
+          snip = (a > 0 ? "..." : "") + tp_sayRender(txt.slice(a, b + 1), terms, []) + "...";
+          frag = m.plain.slice(Math.max(0, pos - 4), pos + 24);
+        }
+        hits.push({ id, i, snip, frag });
+      }
+      done++;
+      if(hits.length >= CAP) capped = true;
+      if(hits.length !== before || done === ids.length) tp_mmRender(hits, terms, 0, q);
+      if(capped) break;
+      await new Promise(r => setTimeout(r, 0));                        // UI မခဲအောင် အခွင့်ပေးမည်
+    }
+    if(run !== tp_mmRunId) return;
+    status.textContent = hits.length ? `တွေ့ရှိမှု ${hits.length}${capped ? "+" : ""} ခု` : "မတွေ့ပါ";
+    if(!hits.length) body.innerHTML = "";
+  }
+  // ရှာတွေ့တဲ့ စာမျက်နှာကို reader မှာ ဖွင့်မည် (reader ရဲ့ စာမျက်နှာခွဲပုံနဲ့ အနည်းငယ်ကွဲနိုင်လို့ စာသားအပိုင်းအစနဲ့ ပြန်ရှာပြီး အတည်ပြုမည်)
+  async function tp_mmOpen(id, i, frag){
+    let idx = i;
+    try{
+      const pages = await ensureMmPages(id);
+      idx = Math.min(i, pages.length - 1);
+      const has = k => k >= 0 && k < pages.length && tp_sayNorm(pages[k]).indexOf(frag) !== -1;
+      let found = -1;
+      for(const d of [0, 1, -1, 2, -2, 3, -3]) if(has(idx + d)){ found = idx + d; break; }
+      if(found < 0) for(let k = 0; k < pages.length; k++) if(has(k)){ found = k; break; }
+      if(found >= 0) idx = found;
+    }catch(e){}
+    mmBackContext = null;
+    openBurmeseTranslation(id, null, idx + 1);
+  }
+
   function tp_closeSayPanel(){
     const panel = document.getElementById("tp-say-panel");
     if(panel) panel.classList.remove("tp-open");
@@ -877,6 +972,7 @@ let isRomanPali = false;
   // ရလဒ်ကို ခေါင်းစဉ်ချည်းပဲ ပြမည် (စာသားထဲမှာပဲ တွေ့တာဆိုရင် အမှတ်အသားလေးပါမည်)
   async function tp_sayRun(q, offset){
     if(tp_dsCur === "bt") return tp_btRun(q);
+    if(tp_dsCur === "mm") return tp_mmRun(q);
     const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
     if(!String(q).trim()){ status.textContent = ""; body.innerHTML = ""; return; }
     status.textContent = "ရှာဖွေနေပါသည်...";
@@ -1008,8 +1104,8 @@ let isRomanPali = false;
     body.scrollTop = 0;
   }
   function tp_openDataset(key){
-    tp_dsCur = key === "bt" ? "bt" : "multi";
-    if(key !== "bt" && !tp_dsSel.includes(key)) tp_dsSel = [key];
+    tp_dsCur = (key === "bt" || key === "mm") ? key : "multi";
+    if(key !== "bt" && key !== "mm" && !tp_dsSel.includes(key)) tp_dsSel = [key];
     const panel = tp_sayEnsurePanel();
     tp_sayUpdateSel();
     const input = panel.querySelector("#tp-say-input");
@@ -1019,14 +1115,14 @@ let isRomanPali = false;
     panel.classList.add("tp-open");
     document.body.classList.add("tp-say-docked");
     input.focus();
-    if(key === "bt"){ tp_btLoad().catch(() => {}); tp_btAvail(); } else tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {}));
+    if(key === "bt"){ tp_btLoad().catch(() => {}); tp_btAvail(); } else if(key === "mm"){ tp_mmFillScope(); } else tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {}));
   }
   function tp_openSearchChoice(anchor, openSutta){
     let menu = document.getElementById("tp-search-choice");
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
+      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
@@ -1037,7 +1133,7 @@ let isRomanPali = false;
       if(!on.length){ c.checked = true; return; }
       tp_dsSel = on;
       const panel = document.getElementById("tp-say-panel");
-      if(panel && panel.classList.contains("tp-open") && tp_dsCur !== "bt"){
+      if(panel && panel.classList.contains("tp-open") && tp_dsCur !== "bt" && tp_dsCur !== "mm"){
         tp_sayUpdateSel(); tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {}));
         tp_sayRun(panel.querySelector("#tp-say-input").value);
       }
@@ -1053,7 +1149,7 @@ let isRomanPali = false;
     menu._anchor = anchor;
     const rect = anchor.getBoundingClientRect();
     menu.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 230)) + "px";
-    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 320) + "px";
+    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 370) + "px";
     menu.classList.add("tp-open");
   }
 
