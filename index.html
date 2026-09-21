@@ -233,6 +233,9 @@ p.gathalast {
   #tp-search-choice{ display:none; position:fixed; z-index:2100; background:#fff; border:1px solid #cbd5e1; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.2); padding:6px; min-width:210px; }
   #tp-search-choice.tp-open{ display:block; }
   #tp-search-choice button{ display:block; width:100%; text-align:left; padding:10px 12px; margin:2px 0; border:none; background:#f8fafc; border-radius:6px; cursor:pointer; font-size:14px; font-family:inherit; }
+  #tp-search-choice .tp-sc-row{ display:flex; align-items:center; gap:4px; }
+  #tp-search-choice .tp-sc-row input{ width:18px; height:18px; flex:0 0 auto; cursor:pointer; accent-color:#2d7a46; }
+  #tp-search-choice .tp-sc-row button{ flex:1; width:auto; }
   #tp-search-choice button:hover{ background:#f9f0f0; color:#8b0000; }
   #tp-say-panel{ display:none; flex-direction:column; position:fixed; top:0; left:0; bottom:0; z-index:2000; width:340px; background:#f8fafc; border-right:1px solid #cbd5e1; padding:12px; box-shadow:2px 0 8px rgba(0,0,0,.12); box-sizing:border-box; }
   #tp-say-panel.tp-open{ display:flex; }
@@ -817,7 +820,7 @@ let isRomanPali = false;
         if(openMark){ out += "</span>"; openMark = false; }
         if(openRef >= 0) out += "</a>";
         openRef = refAt[i];
-        if(openRef >= 0) out += `<a class="tp-say-ref" data-book="${refs[openRef].book}" data-page="${refs[openRef].page}"${refs[openRef].mm ? ' data-mm="1"' : ""} title="${refs[openRef].mm ? "မြန်မာပြန်ကို ဖွင့်မည် (ပါဠိတော်ကနေတဆင့်)" : "စာအုပ်ကို ဖွင့်မည်"}">`;
+        if(openRef >= 0) out += `<a class="tp-say-ref" data-book="${refs[openRef].book || ""}" data-page="${refs[openRef].page || ""}"${refs[openRef].mmBook ? ` data-mmbook="${refs[openRef].mmBook}" data-mmpage="${refs[openRef].mmPage}"` : ""}${refs[openRef].mm ? ' data-mm="1"' : ""} title="${refs[openRef].mm ? "မြန်မာပြန်ကို ဖွင့်မည် (ပါဠိတော်ကနေတဆင့်)" : "စာအုပ်ကို ဖွင့်မည်"}">`;
       }
       if(marks[i] && !openMark){ out += '<span class="tp-fts-highlight">'; openMark = true; }
       out += tp_sayEsc(text[i]);
@@ -857,20 +860,13 @@ let isRomanPali = false;
     const input = panel.querySelector("#tp-say-input");
     let timer = null;
     input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => tp_sayRun(input.value), 220); });
-    panel.querySelector("#tp-say-sel").addEventListener("change", () => {
-      const on = [...panel.querySelectorAll("#tp-say-sel input:checked")].map(x => x.value);
-      tp_dsSel = on.length ? on : [tp_dsSel[0] || "say"];
-      tp_sayUpdateSel(); tp_sayRun(input.value);
-      tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {}));
-    });
     return panel;
   }
   function tp_sayUpdateSel(){
     const panel = document.getElementById("tp-say-panel"); if(!panel) return;
     const box = panel.querySelector("#tp-say-sel");
-    box.style.display = tp_dsCur === "bt" ? "none" : "block";
-    box.innerHTML = TP_MULTI.map(k => `<label style="margin-right:10px;white-space:nowrap;"><input type="checkbox" value="${k}" ${tp_dsSel.includes(k) ? "checked" : ""}> ${TP_DATASETS[k].label}</label>`).join("");
-    panel.querySelector("#tp-say-title").textContent = tp_dsCur === "bt" ? TP_DATASETS.bt.label + " ရှာဖွေရန်" : (tp_dsSel.length > 1 ? "ပေါင်းရှာရန် (" + tp_dsSel.length + " ခု)" : TP_DATASETS[tp_dsSel[0]].label + " ရှာဖွေရန်");
+    box.style.display = "none"; box.innerHTML = "";
+    panel.querySelector("#tp-say-title").textContent = tp_dsCur === "bt" ? TP_DATASETS.bt.label + " ရှာဖွေရန်" : (tp_dsSel.length > 1 ? "ပေါင်းရှာရန် (" + tp_dsSel.map(k => TP_DATASETS[k].label).join(" + ") + ")" : TP_DATASETS[tp_dsSel[0]].label + " ရှာဖွေရန်");
   }
   function tp_closeSayPanel(){
     const panel = document.getElementById("tp-say-panel");
@@ -918,6 +914,7 @@ let isRomanPali = false;
     if(tp_sayRefSrc) return;
     const idx = await ensureIndex();
     const byName = {};
+    try{ await ensureBurmeseMap(); }catch(e){}
     idx.books.forEach(b => { const k = String(b.short_name || "").replace(/၊$/, ""); if(k) (byName[k] = byName[k] || []).push(b); });
     const aliases = {};
     Object.keys(byName).forEach(K => {
@@ -942,13 +939,24 @@ let isRomanPali = false;
       if(book) out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page, key });
     }
     // မြန်မာပြန်ကိုးကား (ဥပမာ အံ၊မြန်၊၁။၁၃၆) — မူရင်းပါဠိကိုးကား (အံ၊၁၊၁၁၈) နဲ့ တွဲပြီး ပါဠိစာမျက်နှာကနေတဆင့် ဖွင့်မည်
-    const pali = out.slice(), mre = /(?<=^|[\s(,;\[])([^\s()၊။]+(?:၊[^\s()၊။]+)?)၊မြန်၊([၀-၉]+)[။၊]\s*([၀-၉]+)(?:[-–၊]\s*([၀-၉]+))?/g;
+    const pali = out.slice(), mre = /(?<=^|[\s(,;\[])([^\s()၊။]+(?:၊\s*[^\s()၊။]+)?)၊\s*မြန်(?:၊([၀-၉]+))?[။၊]\s*([၀-၉]+)(?:[-–၊]\s*([၀-၉]+))?/g;
+    const R = tp_sayRefBooks;
     while((m = mre.exec(text)) !== null){
-      const g = m[1] + "၊" + m[2], key = tp_sayRefBooks.aliases[g] || g;
-      const same = pali.filter(r => r.key === key);
-      if(!same.length) continue;
-      const before = same.filter(r => r.end <= m.index), sib = before.length ? before[before.length - 1] : same[0];
-      out.push({ start: m.index, end: m.index + m[0].length, book: sib.book, page: sib.page, mm: true });
+      const base = m[1].replace(/\s+/g, ""), baseKey = R.aliases[base] || base;
+      const g = m[2] ? base + "၊" + m[2] : base, key = R.aliases[g] || g;
+      // ၁) အတွဲနံပါတ်ပါတဲ့ ပါဠိကိုးကား ၂) မရှိရင် အတွဲမပါတဲ့ ပါဠိကိုးကား (ဥပမာ အဘိ၊ဝိ၊၃၉၁) ကို တွဲသုံးမည်
+      let same = pali.filter(r => r.key === key);
+      if(!same.length) same = pali.filter(r => r.key === baseKey);
+      const end = m.index + m[0].length;
+      if(same.length){
+        const before = same.filter(r => r.end <= m.index), sib = before.length ? before[before.length - 1] : same[0];
+        out.push({ start: m.index, end, book: sib.book, page: sib.page, mm: true });
+        continue;
+      }
+      // ၃) ပါဠိကိုးကား လုံးဝမပါရင် မြန်မာပြန်စာအုပ်ကို တိုက်ရိုက်ဖွင့်မည် (စာမျက်နှာက အနီးစပ်ဆုံး)
+      const pbooks = (R.byName[key] || R.byName[baseKey] || []).map(b => b.id);
+      const mmIds = [...new Set((burmeseMapIndex || []).filter(x => pbooks.includes(x.pali_book_id)).map(x => x.mm_book_id))];
+      if(mmIds.length === 1) out.push({ start: m.index, end, mmBook: mmIds[0], mmPage: tp_sayToInt(m[3]), mm: true });
     }
     out.sort((a, b) => a.start - b.start);
     return out;
@@ -995,13 +1003,13 @@ let isRomanPali = false;
     const nav = hits && hits.length > 1 ? tp_navBar(idx, hits.length) : "";
     body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div><div class="tp-say-detail-text">${html}</div>`;
     body.querySelector(".tp-say-back").addEventListener("click", back);
-    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm)));
+    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => { if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm); }));
     if(hits && hits.length > 1) tp_navWire(body, idx, hits.length, j => tp_sayDetail(hits[j].r, terms, back, hits, j));
     body.scrollTop = 0;
   }
   function tp_openDataset(key){
     tp_dsCur = key === "bt" ? "bt" : "multi";
-    if(key === "all") tp_dsSel = TP_MULTI.slice(); else if(key !== "bt") tp_dsSel = [key];
+    if(key !== "bt" && !tp_dsSel.includes(key)) tp_dsSel = [key];
     const panel = tp_sayEnsurePanel();
     tp_sayUpdateSel();
     const input = panel.querySelector("#tp-say-input");
@@ -1018,11 +1026,28 @@ let isRomanPali = false;
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button><button data-c="vat">📗 ပိဋကဝတ္ထု</button><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button><button data-c="all">🔎 ပေါင်းရှာရန် (၄ ခုလုံး)</button><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
+      menu.innerHTML = `<button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
-    menu.querySelectorAll("button").forEach(b => { b.onclick = () => { menu.classList.remove("tp-open"); if(b.dataset.c === "sutta") menu._openSutta(); else tp_openDataset(b.dataset.c); }; });
+    const checks = [...menu.querySelectorAll(".tp-sc-row input")];
+    checks.forEach(c => { c.checked = tp_dsSel.includes(c.dataset.k); });
+    checks.forEach(c => { c.onchange = () => {        // ✅ ရွေးတာနဲ့ ရွေးထားသလောက်ကို ပေါင်းရှာမည်
+      const on = checks.filter(x => x.checked).map(x => x.dataset.k);
+      if(!on.length){ c.checked = true; return; }
+      tp_dsSel = on;
+      const panel = document.getElementById("tp-say-panel");
+      if(panel && panel.classList.contains("tp-open") && tp_dsCur !== "bt"){
+        tp_sayUpdateSel(); tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {}));
+        tp_sayRun(panel.querySelector("#tp-say-input").value);
+      }
+    }; });
+    menu.querySelectorAll("button").forEach(b => { b.onclick = () => {
+      const c = b.dataset.c;
+      if(c === "sutta"){ menu.classList.remove("tp-open"); menu._openSutta(); return; }
+      if(c !== "bt"){ const cb = checks.find(x => x.dataset.k === c); if(cb){ cb.checked = true; tp_dsSel = checks.filter(x => x.checked).map(x => x.dataset.k); } }
+      menu.classList.remove("tp-open"); tp_openDataset(c);
+    }; });
     menu._openSutta = openSutta;
     if(menu.classList.contains("tp-open") && menu._anchor === anchor){ menu.classList.remove("tp-open"); return; }
     menu._anchor = anchor;
