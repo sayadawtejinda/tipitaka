@@ -251,6 +251,21 @@ p.gathalast {
   #tp-say-panel .tp-say-back{ color:#0645ad; cursor:pointer; margin-bottom:8px; font-size:13.5px; }
   .tp-say-ref{ color:#0645ad; cursor:pointer; text-decoration:underline; }
   @media (max-width:900px){ #tp-say-panel{ width:88vw; max-width:360px; } body.tp-say-docked{ margin-left:auto !important; margin-right:auto !important; max-width:960px !important; } body.tp-say-docked #tp-float-prev{ left:6px; } }
+  #tp-say-panel .tp-say-nav{ display:flex; align-items:center; justify-content:space-between; gap:6px; margin:4px 0 10px; }
+  #tp-say-panel .tp-say-nav button{ padding:6px 12px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; cursor:pointer; font-size:13.5px; font-family:inherit; }
+  #tp-say-panel .tp-say-nav button:hover{ background:#f9f0f0; color:#8b0000; }
+  #tp-say-panel .tp-say-nav button:disabled{ opacity:.35; cursor:default; }
+  #tp-say-panel .tp-say-nav span{ font-size:12.5px; color:#777; }
+  #tp-pdf-box{ position:fixed; top:64px; right:16px; width:46vw; min-width:320px; height:78vh; min-height:240px; z-index:2050; display:none; flex-direction:column; background:#fff; border:1px solid #94a3b8; border-radius:8px; box-shadow:0 6px 24px rgba(0,0,0,.3); overflow:hidden; resize:both; }
+  #tp-pdf-box.tp-open{ display:flex; }
+  #tp-pdf-box .tp-pdf-head{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:6px 10px; background:#e2e8f0; cursor:move; user-select:none; touch-action:none; font-size:13.5px; font-weight:bold; color:#334155; }
+  #tp-pdf-box .tp-pdf-head span.tp-pdf-title{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #tp-pdf-box .tp-pdf-btn{ cursor:pointer; padding:0 7px; color:#64748b; font-size:15px; }
+  #tp-pdf-box iframe{ flex:1; width:100%; border:0; background:#f8fafc; }
+  #tp-pdf-box.tp-dragging iframe{ pointer-events:none; }
+  #tp-pdf-box.tp-min{ height:auto !important; min-height:0; resize:none; }
+  #tp-pdf-box.tp-min iframe{ display:none; }
+  @media (max-width:900px){ #tp-pdf-box{ width:94vw; right:3vw; top:56px; height:70vh; } }
 </style>
 </head>
 <body>
@@ -855,12 +870,12 @@ let isRomanPali = false;
     const { terms, hits } = tp_saySearch(q, data);
     offset = offset || 0;
     status.textContent = hits.length ? `တွေ့ရှိမှု ${hits.length} ခု` : "မတွေ့ပါ";
-    body.innerHTML = "";
-    hits.slice(offset, offset + TP_SAY_PAGE).forEach(h => {
+    body.innerHTML = ""; body.ontouchstart = body.ontouchend = null;
+    hits.slice(offset, offset + TP_SAY_PAGE).forEach((h, k) => {
       const item = document.createElement("div");
       item.className = "tp-say-item";
       item.innerHTML = tp_sayRender(h.r.t, terms, []) + (h.inTitleAll ? "" : `<span class="tp-say-note">(စာသားထဲမှာ တွေ့)</span>`);
-      item.addEventListener("click", () => tp_sayDetail(h.r, terms, () => tp_sayRun(q, offset)));
+      item.addEventListener("click", () => tp_sayDetail(h.r, terms, () => tp_sayRun(q, offset), hits, offset + k));
       body.appendChild(item);
     });
     if(hits.length > TP_SAY_PAGE){
@@ -911,13 +926,30 @@ let isRomanPali = false;
     if(!meta) return;
     await loadPage(meta.basket, meta.category, meta.id, page, meta.firstpage);
   }
-  async function tp_sayDetail(r, terms, back){
+  // ရှေ့/နောက် ခလုပ် + ဘယ်ညာပွတ်ဆွဲ (swipe) — ရလဒ်တစ်ခုကနေ ကျန်တာကို ဆက်ဖွင့်ရန်
+  function tp_navBar(idx, total){
+    return `<div class="tp-say-nav"><button data-nav="-1" ${idx <= 0 ? "disabled" : ""}>◀ ရှေ့</button><span>${idx + 1} / ${total}</span><button data-nav="1" ${idx >= total - 1 ? "disabled" : ""}>နောက် ▶</button></div>`;
+  }
+  function tp_navWire(body, idx, total, go){
+    body.querySelectorAll(".tp-say-nav button").forEach(b => b.addEventListener("click", () => { const j = idx + (+b.dataset.nav); if(j >= 0 && j < total) go(j); }));
+    let sx = 0, sy = 0;
+    body.ontouchstart = e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; };
+    body.ontouchend = e => {
+      const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+      if(Math.abs(dx) < 70 || Math.abs(dx) < Math.abs(dy) * 1.5) return;      // ဘေးတိုက် ပွတ်ဆွဲတာမှသာ
+      const j = idx + (dx < 0 ? 1 : -1);                                      // ဘယ်ဘက်ပွတ် = နောက်တစ်ခု
+      if(j >= 0 && j < total) go(j);
+    };
+  }
+  async function tp_sayDetail(r, terms, back, hits, idx){
     const body = document.getElementById("tp-say-body");
     try{ await tp_sayEnsureRefs(); }catch(e){}
     const html = String(r.c).split(/<br\s*\/?>/i).map(part => tp_sayRender(part, terms, tp_sayFindRefs(part))).join("<br>");
-    body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div><div class="tp-say-detail-text">${html}</div>`;
+    const nav = hits && hits.length > 1 ? tp_navBar(idx, hits.length) : "";
+    body.innerHTML = `<div class="tp-say-back">← ခေါင်းစဉ်များသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div><div class="tp-say-detail-text">${html}</div>`;
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => tp_sayOpenRef(a.dataset.book, +a.dataset.page)));
+    if(hits && hits.length > 1) tp_navWire(body, idx, hits.length, j => tp_sayDetail(hits[j].r, terms, back, hits, j));
     body.scrollTop = 0;
   }
   function tp_openDataset(key){
@@ -1023,13 +1055,43 @@ let isRomanPali = false;
     })();
     return tp_btAvailPromise;
   }
-  function tp_btOpenPdf(url){
-    // စာအုပ်ဖွင့်တဲ့ window တစ်ခုတည်းကိုပဲ ပြန်သုံးပြီး (ညာဘက်တစ်ဝက်မှာ) စာမျက်နှာပြောင်းမည်
+  // PDF ကို browser အသစ်မဖွင့်ဘဲ ဒီစာမျက်နှာထဲမှာပဲ ရွှေ့လို့/ဆွဲချဲ့လို့ရတဲ့ box တစ်ခုထဲမှာ ဖွင့်မည် (အောက်က တိပိဋကစာကိုလည်း ဆက်ဖတ်လို့ရသည်)
+  function tp_pdfBox(){
+    let box = document.getElementById("tp-pdf-box");
+    if(box) return box;
+    box = document.createElement("div");
+    box.id = "tp-pdf-box";
+    box.innerHTML = `<div class="tp-pdf-head"><span class="tp-pdf-title"></span><span><span class="tp-pdf-btn" data-a="min" title="ခေါက်ထားမည်/ပြန်ဖြန့်မည်">▁</span><span class="tp-pdf-btn" data-a="close" title="ပိတ်မည်">✕</span></span></div><iframe title="PDF"></iframe>`;
+    document.body.appendChild(box);
+    const head = box.querySelector(".tp-pdf-head");
+    box.querySelector('[data-a="close"]').addEventListener("click", () => { box.classList.remove("tp-open"); box.querySelector("iframe").src = "about:blank"; });
+    box.querySelector('[data-a="min"]').addEventListener("click", () => box.classList.toggle("tp-min"));
+    let drag = null;
+    head.addEventListener("pointerdown", e => {
+      if(e.target.closest(".tp-pdf-btn")) return;
+      const r = box.getBoundingClientRect();
+      drag = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+      box.style.left = r.left + "px"; box.style.top = r.top + "px"; box.style.right = "auto";
+      box.classList.add("tp-dragging");
+      head.setPointerCapture(e.pointerId);
+    });
+    head.addEventListener("pointermove", e => {
+      if(!drag) return;
+      const x = Math.max(0, Math.min(e.clientX - drag.dx, window.innerWidth - 80)), y = Math.max(0, Math.min(e.clientY - drag.dy, window.innerHeight - 40));
+      box.style.left = x + "px"; box.style.top = y + "px";
+    });
+    const stop = () => { drag = null; box.classList.remove("tp-dragging"); };
+    head.addEventListener("pointerup", stop); head.addEventListener("pointercancel", stop);
+    return box;
+  }
+  function tp_btOpenPdf(url, title){
+    const box = tp_pdfBox();
     const m = /#page=(\d+)/.exec(url);
     const target = m ? url.split("#")[0] + "?p=" + m[1] + "#page=" + m[1] : url;   // query ကွဲမှ PDF viewer က စာမျက်နှာအသစ်ကို ခုန်ပေးသည်
-    const w = Math.floor((screen.availWidth || screen.width) / 2), h = screen.availHeight || screen.height;
-    const win = window.open(target, "pitakaBookViewer", `popup=yes,width=${w},height=${h},left=${(screen.availWidth || screen.width) - w},top=0`);
-    if(win) win.focus();
+    box.querySelector(".tp-pdf-title").textContent = "📕 " + (title || "PDF");
+    box.classList.remove("tp-min");
+    box.classList.add("tp-open");
+    box.querySelector("iframe").src = target;
   }
   async function tp_btRun(q){
     const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
@@ -1040,16 +1102,17 @@ let isRomanPali = false;
     const terms = String(q).toLowerCase().split(/\s+/).filter(Boolean);
     const hits = data.heads.filter(w => { const l = w.toLowerCase(); return terms.every(t => l.includes(t)); });
     status.textContent = hits.length ? `တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
-    body.innerHTML = "";
-    hits.slice(0, 100).forEach(w => {
+    body.innerHTML = ""; body.ontouchstart = body.ontouchend = null;
+    const shown = hits.slice(0, 100);
+    shown.forEach((w, k) => {
       const item = document.createElement("div");
       item.className = "tp-say-item";
       item.textContent = w;
-      item.addEventListener("click", () => tp_btShow(data.map[w], () => tp_btRun(q)));
+      item.addEventListener("click", () => tp_btShow(data.map[w], () => tp_btRun(q), shown.map(x => data.map[x]), k));
       body.appendChild(item);
     });
   }
-  async function tp_btShow(entry, back){
+  async function tp_btShow(entry, back, list, idx){
     const body = document.getElementById("tp-say-body");
     body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div><div class="tp-fts-status">ဖတ်နေသည်...</div>`;
     body.querySelector(".tp-say-back").addEventListener("click", back);
@@ -1061,12 +1124,14 @@ let isRomanPali = false;
         <b>${tp_sayEsc(r.book)}</b> ${note ? `<span class="tp-say-note">${note}</span>` : ""}
         <div style="font-size:12.5px;color:#666;">စာမျက်နှာ: ${tp_sayEsc(r.page)} ${can ? "· 📖 ဖွင့်ရန်နှိပ်ပါ" : ""}</div></div>`;
     }).join("");
-    body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div>${cards}`;
+    const nav = list && list.length > 1 ? tp_navBar(idx, list.length) : "";
+    body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div>${cards}`;
+    if(list && list.length > 1) tp_navWire(body, idx, list.length, j => tp_btShow(list[j], back, list, j));
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-item").forEach(el => el.addEventListener("click", () => {
       const r = entry.refs[+el.dataset.i];
       if(r.url === "#" || (r.file && !avail.has(r.file))) return;
-      tp_btOpenPdf(r.url);
+      tp_btOpenPdf(r.url, r.book + " — စာမျက်နှာ " + r.page);
     }));
   }
 
