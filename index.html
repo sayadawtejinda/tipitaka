@@ -26,6 +26,12 @@
   #tp-nissaya-content .bld, #tp-nissaya-content b, #tp-nissaya-content strong{
     font-weight:700;
   }
+  /* ပါဠိပုဒ်ရှင်းပြချက်ရှည်တွေ ("...။ ။" နဲ့ စတဲ့) ကို စာမျက်နှာအောက်ဆုံးမှာ မှတ်ချက်အဖြစ် စုစည်းထားခြင်း */
+  .tp-note-mark{ color:#8b0000; cursor:default; margin:0 1px; font-size:.8em; }
+  .tp-notes{ margin-top:16px; padding-top:10px; border-top:2px dashed #d9d0b8; font-size:.93em; color:#5a5348; }
+  .tp-notes-title{ font-weight:bold; color:#8b0000; margin-bottom:6px; }
+  .tp-note{ margin:.4em 0; }
+  .tp-note > sup{ color:#8b0000; margin-right:3px; }
 
   #tp-recent-books{display:flex;align-items:center;flex-wrap:nowrap;overflow-x:auto;gap:6px;margin:-4px 0 14px;font-size:.85em;scrollbar-width:thin;}
   #tp-recent-books::-webkit-scrollbar{height:5px;}
@@ -33,6 +39,8 @@
   #tp-recent-books .tp-recent-chip{display:flex;align-items:center;gap:4px;flex:0 0 auto;max-width:150px;min-width:0;background:#fffdf7;border:1px solid #d9d0b8;border-radius:14px;padding:4px 6px 4px 12px;cursor:pointer;color:#3a3229;transition:.15s;}
   #tp-recent-books .tp-recent-chip:hover{background:#eef3ea;border-color:#9fb8a8;}
   #tp-recent-books .tp-recent-chip.tp-recent-active{background:#eef3ea;border-color:#5a8f6c;border-width:2px;padding:3px 5px 3px 11px;}
+  @keyframes tp-recent-blink{ 0%,100%{opacity:1; box-shadow:0 0 0 3px rgba(139,0,0,.55);} 50%{opacity:.35; box-shadow:0 0 0 0 rgba(139,0,0,0);} }
+  #tp-recent-books .tp-recent-chip.tp-recent-blink{ animation:tp-recent-blink 0.9s ease-in-out infinite; border-color:#8b0000 !important; }
   #tp-recent-books .tp-recent-chip.tp-recent-active .tp-recent-name{font-weight:bold;color:#2d5c3d;}
   #tp-recent-books .tp-recent-name{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   #tp-recent-books .tp-recent-close{flex:0 0 auto;color:#9a8f7d;cursor:pointer;font-size:.95em;line-height:1;padding:2px 3px;border-radius:50%;}
@@ -959,7 +967,7 @@ let isRomanPali = false;
     });
     const all = Object.keys(byName).concat(Object.keys(aliases)).sort((p, q) => q.length - p.length);
     const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    tp_sayRefSrc = "(?<=^|[\\s(,;\\[])(" + all.map(esc).join("|") + ")[၊\\-]\\s*([၀-၉]+)(?:[-–]([၀-၉]+))?";
+    tp_sayRefSrc = "(?<=^|[\\s(,;\\[၊။])(" + all.map(esc).join("|") + ")[၊\\-]\\s*([၀-၉]+)(?:[-–]([၀-၉]+))?";
     tp_sayRefBooks = { byName, aliases };
   }
   function tp_sayToInt(str){ return parseInt(String(str).replace(/[၀-၉]/g, d => "၀၁၂၃၄၅၆၇၈၉".indexOf(d)), 10); }
@@ -2200,6 +2208,8 @@ let isRomanPali = false;
   // Split View နိဿယထဲက ကိုးကားချက်များ (ဥပမာ ဒီ၊ဋီ၊၂၊၄၀) ကို reader ထဲက စာမျက်နှာဖွင့်ပေးနိုင်တဲ့ လင့်များ ပြောင်းပေးသည်
   async function tp_nissayaLinkify(htmlText){
     try{ await tp_sayEnsureRefs(); }catch(e){ return htmlText; }
+    // လက်ရိုက်မူထဲမှာ "သုတ္တ နိ" လို အမည်တစ်ခုတည်းကို ကြားက space ခြားရေးထားတာမျိုး လင့်မလွဲစေရန် ဖျောက်ပေးမည်
+    htmlText = htmlText.replace(/သုတ္တ\s+နိ(?=[၊\-]\s*[၀-၉])/g, "သုတ္တနိ");
     const refs = tp_sayFindRefs(htmlText);
     if(!refs.length) return htmlText;
     let out = "", last = 0;
@@ -2240,7 +2250,8 @@ let isRomanPali = false;
               }
               extractedHtml = extractedHtml.replace(startMarker, `<span class="tp-mm-highlight">${startMarker}</span>`);
               contentEl.innerHTML = await tp_nissayaLinkify(extractedHtml);
-              contentEl.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => {
+              contentEl.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", (e) => {
+                e.preventDefault();
                 if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); }
                 else tp_sayOpenRef(a.dataset.book, +a.dataset.page, false, a.dataset.para != null ? +a.dataset.para : null);
               }));
@@ -2250,11 +2261,14 @@ let isRomanPali = false;
       } catch(e) {
           contentEl.innerHTML = `<p style='color:red'>နိဿယ ဖိုင်မရရှိနိုင်သေးပါ (${e.message})</p>`;
       }
-      
-      document.getElementById("tp-nissaya-close").addEventListener("click", () => {
-          container.style.display = "none";
-          isNissayaOpen = false; 
-      });
+
+      if(!container.dataset.closeWired){        // ✕ ခလုပ်ကို တစ်ခါတည်း wire လုပ်ပါမည် (openNissaya ထပ်ခေါ်တိုင်း listener ထပ်ပေါင်းမသွားစေရန်)
+        container.dataset.closeWired = "1";
+        document.getElementById("tp-nissaya-close").addEventListener("click", () => {
+            container.style.display = "none";
+            isNissayaOpen = false;
+        });
+      }
   }
 
   // စာမျက်နှာ တစ်ခုတည်း မဟုတ်ဘဲ၊ ရှေ့တစ်မျက်နှာ + လက်ရှိစာမျက်နှာ + နောက်တစ်မျက်နှာကို တွဲပြီး
@@ -2449,7 +2463,15 @@ let isRomanPali = false;
          const nissayaContainer = document.getElementById("tp-nissaya-container");
          if(nissayaContainer) nissayaContainer.style.display = "none";
       }
-    }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
+    }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; tp_blinkRecent(); }
+  }
+  // စာမျက်နှာ load လုပ်နေရင်း အမှားတက်ရင် (ဥပမာ ကိုးကားချက်တစ်ခုမှတဆင့် စာအုပ်ပျက်သွားရင်) "ဖတ်နေဆဲစာအုပ်များ" ထဲက
+  // လက်ရှိစာအုပ်ကို မှိတ်တုတ်မှိတ်တုတ် highlight ပြပေးမည် — နှိပ်ရင် အဲဒီစာအုပ်ကို အသစ်ပြန်ဖွင့်ပေးမည်
+  function tp_blinkRecent(){
+    const el = document.getElementById("tp-recent-books");
+    if(!el) return;
+    const chip = el.querySelector(".tp-recent-active") || el.querySelector(".tp-recent-chip");
+    if(chip) chip.classList.add("tp-recent-blink");
   }
 
   (async function init(){
