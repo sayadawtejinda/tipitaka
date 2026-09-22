@@ -167,11 +167,6 @@
   .tp-tb-btn{ flex:0 0 26px; width:26px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:15px; color:#555; user-select:none; }
   #tp-fts-panel .tp-fts-close, #tp-say-panel .tp-say-close{ position:static !important; color:#d00; font-weight:bold; padding:0; font-size:15px; }
   .tp-sel-btn{ width:100%; text-align:left; padding:7px 10px; margin:0 0 6px; border:1px solid #cbd5e1; background:#fff; border-radius:6px; font-size:13px; font-family:inherit; cursor:pointer; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .tp-sel-list{ display:none; background:#fff; border:1px solid #cbd5e1; border-radius:6px; padding:6px 10px; margin:0 0 8px; font-size:13.5px; }
-  .tp-sel-list.tp-open{ display:block; }
-  .tp-sel-list label{ display:flex; align-items:center; gap:8px; padding:4px 0; cursor:pointer; }
-  .tp-sel-list label input{ width:17px; height:17px; accent-color:#2d7a46; flex:0 0 auto; }
-  .tp-sel-list hr{ border:0; border-top:1px solid #e2e8f0; margin:4px 0; }
   #tp-fts-panel .tp-fts-close{ position:absolute; top:3px; right:6px; z-index:3; cursor:pointer; font-size:13px; line-height:1; color:#d00; font-weight:bold; padding:2px 4px; }
   #tp-fts-panel .tp-fts-close:hover{ color:#fff; background:#d00; border-radius:3px; }
   .tp-fts-scope-row{ display:flex; flex-wrap:wrap; gap:8px 14px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #e2e8f0; font-size:13.5px; }
@@ -879,7 +874,6 @@ let isRomanPali = false;
     panel.id = "tp-say-panel";
     panel.innerHTML = `<div class="tp-topbar"><div class="tp-tabs"><button data-t="data" class="on">📚 အဘိဓာန်/ကျမ်းညွှန်း</button><button data-t="fts">📖 ပိဋကတ်စာ</button></div><span class="tp-say-menu tp-tb-btn" title="ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်">☰</span><span class="tp-say-close tp-tb-btn" title="ပိတ်မည်">✕</span></div><div class="tp-say-head"><span id="tp-say-title"></span></div>
       <button id="tp-sel-toggle" class="tp-sel-btn" type="button"></button>
-      <div id="tp-sel-list" class="tp-sel-list"></div>
       <div id="tp-say-sel" style="display:none"></div>
       <select id="tp-mm-scope" style="display:none;width:100%;padding:6px;margin-bottom:6px;font-family:inherit;font-size:13.5px;border:1px solid #cbd5e1;border-radius:6px;"></select>
       <input type="text" id="tp-say-input" placeholder="စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)" autocomplete="off">
@@ -888,7 +882,7 @@ let isRomanPali = false;
     document.body.appendChild(panel);
     panel.querySelector(".tp-say-close").addEventListener("click", tp_closeSayPanel);
     tp_selWire(panel);
-    panel.querySelectorAll(".tp-tabs button").forEach(b => b.addEventListener("click", () => tp_tabTo(b.dataset.t)));
+    panel.querySelectorAll(".tp-tabs button").forEach(b => b.addEventListener("click", () => tp_tabTo(b.dataset.t, b)));
     panel.querySelector(".tp-say-menu").addEventListener("click", e => { e.stopPropagation(); tp_openSearchChoice(e.currentTarget, null, true); });
     const input = panel.querySelector("#tp-say-input");
     let timer = null;
@@ -899,122 +893,13 @@ let isRomanPali = false;
   function tp_sayUpdateSel(){
     const panel = document.getElementById("tp-say-panel"); if(!panel) return;
     const sc = panel.querySelector("#tp-mm-scope"); sc.style.display = tp_dsCur === "mm" ? "block" : "none";
-    // ရှာမည့်နေရာ ရွေးတဲ့ dropdown ဇယား (✅ တစ်ခုထက်ပိုရွေးလို့ရ၊ မြန်မာပြန်စာအုပ်က သီးသန့်)
-    const list = panel.querySelector("#tp-sel-list"), btn = panel.querySelector("#tp-sel-toggle");
-    list.innerHTML = TP_MULTI.map(k => `<label><input type="checkbox" data-k="${k}" ${tp_dsCur !== "mm" && tp_dsSel.includes(k) ? "checked" : ""}> ${TP_DATASETS[k].label}</label>`).join("") + `<hr><label><input type="checkbox" data-k="mm" ${tp_dsCur === "mm" ? "checked" : ""}> 📖 မြန်မာပြန်စာအုပ်များ</label>`;
-    const names = tp_dsCur === "mm" ? ["မြန်မာပြန်စာအုပ်များ"] : tp_dsSel.map(k => TP_DATASETS[k].label);
-    btn.textContent = "ရှာမည့်နေရာ: " + names.join(" + ") + " ▾";
+    const names = tp_dsCur === "mm" ? ["📖 မြန်မာပြန်စာအုပ်များ"] : tp_dsSel.map(k => TP_DATASETS[k].label);
+    panel.querySelector("#tp-sel-toggle").textContent = "ရှာမည့်နေရာ: " + names.join(" + ") + " ▾";
     panel.querySelector("#tp-say-title").textContent = tp_dsCur === "mm" ? "မြန်မာပြန်စာအုပ်များ ရှာဖွေရန်" : (tp_dsSel.length > 1 ? "ပေါင်းရှာရန် (" + tp_dsSel.length + " ခု)" : TP_DATASETS[tp_dsSel[0]].label + " ရှာဖွေရန်");
   }
   function tp_selWire(panel){
-    const list = panel.querySelector("#tp-sel-list"), btn = panel.querySelector("#tp-sel-toggle"), input = panel.querySelector("#tp-say-input");
-    btn.addEventListener("click", () => list.classList.toggle("tp-open"));
-    input.addEventListener("focus", () => list.classList.remove("tp-open"));
-    list.addEventListener("change", e => {
-      const cb = e.target; if(!cb || !cb.dataset || !cb.dataset.k) return;
-      const k = cb.dataset.k;
-      if(k === "mm"){ if(cb.checked){ tp_dsCur = "mm"; } else { tp_dsCur = "multi"; } }
-      else if(tp_dsCur === "mm"){ tp_dsCur = "multi"; tp_dsSel = [k]; }
-      else {
-        const on = [...list.querySelectorAll("input[data-k]:checked")].map(x => x.dataset.k).filter(x => x !== "mm");
-        tp_dsSel = on.length ? on : [k];
-      }
-      tp_lastKind = "data"; tp_saySig = tp_dsCur + "|" + tp_dsSel.join(",");
-      tp_sayUpdateSel(); list.classList.add("tp-open");
-      if(tp_dsCur === "mm") tp_mmFillScope(); else { tp_dsSel.forEach(x => tp_dsLoad(x).catch(() => {})); if(tp_dsSel.includes("bt")) tp_btAvail(); }
-      tp_sayRun(input.value);
-    });
-  }
-
-  // ================= မြန်မာပြန်စာအုပ်များ စာသားရှာဖွေရေး =================
-  // tipitaka-fts repo ရဲ့ mm/<စာအုပ်id>.json (စာမျက်နှာအလိုက် စာသား) ကို လိုသလောက်ပဲ ဖတ်ပြီး browser ထဲမှာ ရှာသည်
-  // (မြန်မာစာက စာလုံးခြားမပါလို့ စာလုံးအပိုင်းအစ (substring) အနေနဲ့ ရှာသည်)
-  const tp_mmTextCache = {};
-  let tp_mmRunId = 0;
-  function tp_mmText(id){
-    if(!tp_mmTextCache[id]) tp_mmTextCache[id] = fetchJson(TP_FTS_BASE + "mm/" + id + ".json").catch(e => { delete tp_mmTextCache[id]; throw e; });
-    return tp_mmTextCache[id];
-  }
-  async function tp_mmFillScope(){
-    const sel = document.getElementById("tp-mm-scope");
-    if(!sel || sel.options.length) return;
-    try{ await ensureBurmeseToc(); }catch(e){}
-    const cats = [...new Set(Object.values(burmeseBookMeta || {}).map(m => m.category))];
-    sel.innerHTML = `<option value="all">မြန်မာပြန်စာအုပ် အားလုံး</option>` + cats.map(c => `<option value="${c}">${MM_CATEGORY_LABELS[c] || c}</option>`).join("");
-  }
-  function tp_mmRender(hits, terms, offset, q, more){
-    const body = document.getElementById("tp-say-body");
-    body.innerHTML = ""; body.ontouchstart = body.ontouchend = null;
-    hits.slice(offset, offset + TP_SAY_PAGE).forEach(h => {
-      const item = document.createElement("div");
-      item.className = "tp-say-item";
-      item.innerHTML = `<b>${tp_sayEsc((burmeseBookMeta[h.id] || {}).title || h.id)}</b> <span class="tp-say-note">စာမျက်နှာ ${toMyanmarDigits(h.i + 1)}</span><div style="font-size:13px;color:#444;margin-top:2px;">${h.snip}</div>`;
-      item.addEventListener("click", () => tp_mmOpen(h.id, h.i, h.frag));
-      body.appendChild(item);
-    });
-    if(hits.length > TP_SAY_PAGE){
-      const next = document.createElement("div");
-      next.className = "tp-fts-next-link";
-      next.textContent = "နောက်ရလာဒ်";
-      next.addEventListener("click", () => tp_mmRender(hits, terms, offset + TP_SAY_PAGE >= hits.length ? 0 : offset + TP_SAY_PAGE, q, more));
-      body.appendChild(next);
-    }
-  }
-  async function tp_mmRun(q){
-    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
-    const run = ++tp_mmRunId;
-    const terms = String(q || "").trim().split(/\s+/).map(tp_sayNorm).filter(Boolean);
-    if(!terms.length){ status.textContent = ""; body.innerHTML = ""; return; }
-    status.textContent = "ရှာဖွေနေပါသည်...";
-    try{ await ensureBurmeseToc(); await tp_mmFillScope(); }catch(e){}
-    const scope = (document.getElementById("tp-mm-scope") || {}).value || "all";
-    const ids = Object.keys(burmeseBookMeta || {}).filter(id => scope === "all" || burmeseBookMeta[id].category === scope).sort();
-    const hits = [], CAP = 400; let done = 0, capped = false;
-    for(const id of ids){
-      if(run !== tp_mmRunId) return;                                   // ရှာစာလုံးအသစ်ရိုက်ပြီဆိုရင် အရင်ရှာတာကို ရပ်မည်
-      status.textContent = `ရှာဖွေနေပါသည်... (စာအုပ် ${done}/${ids.length}) — တွေ့ရှိမှု ${hits.length}`;
-      let pages; try{ pages = await tp_mmText(id); }catch(e){ done++; continue; }
-      if(run !== tp_mmRunId) return;
-      const before = hits.length;
-      for(let i = 0; i < pages.length && hits.length < CAP; i++){
-        const txt = pages[i]; if(!txt) continue;
-        const n = tp_sayNorm(txt);
-        if(!terms.every(t => n.indexOf(t) !== -1)) continue;
-        const m = tp_sayMap(txt), pos = m.plain.indexOf(terms[0]);
-        let snip, frag = terms[0];
-        if(pos === -1){ snip = tp_sayEsc(txt.slice(0, 90)); }
-        else {
-          const a = m.start[Math.max(0, pos - 30)], b = m.end[Math.min(m.plain.length - 1, pos + terms[0].length + 50)];
-          snip = (a > 0 ? "..." : "") + tp_sayRender(txt.slice(a, b + 1), terms, []) + "...";
-          frag = m.plain.slice(Math.max(0, pos - 4), pos + 24);
-        }
-        hits.push({ id, i, snip, frag });
-      }
-      done++;
-      if(hits.length >= CAP) capped = true;
-      if(hits.length !== before || done === ids.length) tp_mmRender(hits, terms, 0, q);
-      if(capped) break;
-      await new Promise(r => setTimeout(r, 0));                        // UI မခဲအောင် အခွင့်ပေးမည်
-    }
-    if(run !== tp_mmRunId) return;
-    status.textContent = hits.length ? `တွေ့ရှိမှု ${hits.length}${capped ? "+" : ""} ခု` : "မတွေ့ပါ";
-    if(!hits.length) body.innerHTML = "";
-  }
-  // ရှာတွေ့တဲ့ စာမျက်နှာကို reader မှာ ဖွင့်မည် (reader ရဲ့ စာမျက်နှာခွဲပုံနဲ့ အနည်းငယ်ကွဲနိုင်လို့ စာသားအပိုင်းအစနဲ့ ပြန်ရှာပြီး အတည်ပြုမည်)
-  async function tp_mmOpen(id, i, frag){
-    tp_sayHideForPhone();
-    let idx = i;
-    try{
-      const pages = await ensureMmPages(id);
-      idx = Math.min(i, pages.length - 1);
-      const has = k => k >= 0 && k < pages.length && tp_sayNorm(pages[k]).indexOf(frag) !== -1;
-      let found = -1;
-      for(const d of [0, 1, -1, 2, -2, 3, -3]) if(has(idx + d)){ found = idx + d; break; }
-      if(found < 0) for(let k = 0; k < pages.length; k++) if(has(k)){ found = k; break; }
-      if(found >= 0) idx = found;
-    }catch(e){}
-    mmBackContext = null;
-    openBurmeseTranslation(id, null, idx + 1);
+    // "ရှာမည့်နေရာ" ခလုပ်ကို နှိပ်ရင် 🔍 icon ကနေ ပေါ်တဲ့ menu အတိုင်းပဲ (☑ ရွေးလို့ရသော) ဖွင့်ပေးမည် — ပုံစံနှစ်မျိုး မကွဲစေရန်
+    panel.querySelector("#tp-sel-toggle").addEventListener("click", e => tp_openSearchChoice(e.currentTarget, null, true));
   }
 
   function tp_closeSayPanel(){
@@ -1215,10 +1100,10 @@ let isRomanPali = false;
     if(window.innerWidth > 900) { input.focus(); input.select(); }
     if(key === "mm"){ tp_mmFillScope(); } else { tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {})); if(tp_dsSel.includes("bt")) tp_btAvail(); }
   }
-  function tp_tabTo(which){
+  function tp_tabTo(which, anchor){
     if(which === "fts"){ tp_toggleFts(true); return; }
     tp_openDataset(tp_dsCur === "mm" ? "mm" : tp_dsSel[0]);
-    const l_ = document.querySelector("#tp-sel-list"); if(l_) l_.classList.add("tp-open");      // "အဘိဓာန်/ကျမ်းညွှန်း" ကိုရွေးတာနဲ့ ရှာမည့်နေရာစာရင်းကို ပြမည်
+    if(anchor) tp_openSearchChoice(anchor, null, true);   // "အဘိဓာန်/ကျမ်းညွှန်း" tab ကိုရွေးတာနဲ့ 🔍 menu အတိုင်းတူတဲ့ ရွေးစရာကို ပြမည်
   }
   function tp_toggleFts(forceOpen){
     const panel = tp_ensureFtsPanel();
@@ -2868,7 +2753,7 @@ let isRomanPali = false;
     `;
 
     panel.querySelector(".tp-fts-close").addEventListener("click", () => { panel.classList.remove("tp-open"); document.body.classList.remove("tp-say-docked"); });
-    panel.querySelectorAll(".tp-tabs button").forEach(b => b.addEventListener("click", () => tp_tabTo(b.dataset.t)));
+    panel.querySelectorAll(".tp-tabs button").forEach(b => b.addEventListener("click", () => tp_tabTo(b.dataset.t, b)));
     panel.querySelector(".tp-fts-menu").addEventListener("click", e => { e.stopPropagation(); tp_openSearchChoice(e.currentTarget, null, true); });
     const input = panel.querySelector("#tp-fts-input");
     const autocompleteList = panel.querySelector("#tp-fts-autocomplete");
