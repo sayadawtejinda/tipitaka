@@ -943,7 +943,7 @@ let isRomanPali = false;
   // ---- ကိုးကားချက် (ဥပမာ အံ၊ဋ္ဌ၊၂၊၁၀၄) ကို နှိပ်ရင် ခါတိုင်းဖတ်နေကျ reader မှာပဲ စာမျက်နှာဖွင့်ပေးမည် ----
   // ဒေတာထဲက အတိုကောက်တချို့ဟာ books.json ရဲ့ short_name နဲ့ မတူလို့ ဒီနေရာမှာ ချိတ်ပေးထားသည်
   // ("မြန်" မြန်မာပြန်ကိုးကားတွေကတော့ စာမျက်နှာ မကိုက်သေးလို့ link မလုပ်ပါ)
-  const TP_SAY_ALIAS = [["အပ", "အပဒါန"], ["ဇာ", "ဇာတက"], ["ဓမ္မ", "ဓမ္မပဒ"], ["စူဠနိ", "စူဋ္ဌနိ"], ["သာရတ္ထ၊ဋီ", "သာရတ္ထ"], ["သီ၊ဋီ၊သစ်", "သီဋီသစ်"], ["ပေဋကော", "ပေဋက"], ["သုတ်နိ", "သုတ္တနိ"], ["ဣတိ", "ဣတိဝုတ်"], ["လင်္ကာရ", "ဝိလင်ဋီ"], ["မဟာဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["သင်္ဂဟ၊ဋ္ဌ", "ဝိနယသင်္ဂဟ"], ["ဝိသုဒ္ဓိ၊ဋ္ဌ", "ဝိသုဒ္ဓိ"], ["ဝိသုဒ္ဓိ၊ဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["ဝိသုဒ္ဓိ၊ဋီ", "မဟာဋီ"], ["နေတ္တိ၊ဝိဘာ", "နေတ္တိဝိဘာဝိနီ"]];
+  const TP_SAY_ALIAS = [["အပ", "အပဒါန"], ["ဇာ", "ဇာတက"], ["ဓမ္မ", "ဓမ္မပဒ"], ["စူဠနိ", "စူဋ္ဌနိ"], ["သာရတ္ထ၊ဋီ", "သာရတ္ထ"], ["သီ၊ဋီ၊သစ်", "သီဋီသစ်"], ["ပေဋကော", "ပေဋက"], ["သုတ်နိ", "သုတ္တနိ"], ["ဣတိ", "ဣတိဝုတ်"], ["လင်္ကာရ", "ဝိလင်ဋီ"], ["မဟာဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["သင်္ဂဟ၊ဋ္ဌ", "ဝိနယသင်္ဂဟ"], ["ဝိသုဒ္ဓိ၊ဋ္ဌ", "ဝိသုဒ္ဓိ"], ["ဝိသုဒ္ဓိ၊ဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["ဝိသုဒ္ဓိ၊ဋီ", "မဟာဋီ"], ["နေတ္တိ၊ဝိဘာ", "နေတ္တိဝိဘာဝိနီ"], ["ဇာဋီသစ်", "ဇာတ်ဋီသစ်"], ["ဝိလံဋီ", "ဝိလင်ဋီ"], ["မောဂ်", "မောဂ်ပဉ္စိကာ"]];
   let tp_sayRefSrc = null, tp_sayRefBooks = null;
   async function tp_sayEnsureRefs(){
     if(tp_sayRefSrc) return;
@@ -959,7 +959,7 @@ let isRomanPali = false;
     });
     const all = Object.keys(byName).concat(Object.keys(aliases)).sort((p, q) => q.length - p.length);
     const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    tp_sayRefSrc = "(?<=^|[\\s(,;\\[])(" + all.map(esc).join("|") + ")၊\\s*([၀-၉]+)(?:[-–]([၀-၉]+))?";
+    tp_sayRefSrc = "(?<=^|[\\s(,;\\[])(" + all.map(esc).join("|") + ")[၊\\-]\\s*([၀-၉]+)(?:[-–]([၀-၉]+))?";
     tp_sayRefBooks = { byName, aliases };
   }
   function tp_sayToInt(str){ return parseInt(String(str).replace(/[၀-၉]/g, d => "၀၁၂၃၄၅၆၇၈၉".indexOf(d)), 10); }
@@ -2187,6 +2187,23 @@ let isRomanPali = false;
   function findBookMeta(idx, bookId, firstpageHint){ const matches = idx.books.filter(b=>b.id===bookId); if(matches.length<=1) return matches[0]; if(firstpageHint!=null){ const exact = matches.find(b=>b.firstpage===firstpageHint); if(exact) return exact; } return matches[0]; }
 
   // နိဿယ Split View ဖော်ပြမည့် Function
+  // Split View နိဿယထဲက ကိုးကားချက်များ (ဥပမာ ဒီ၊ဋီ၊၂၊၄၀) ကို reader ထဲက စာမျက်နှာဖွင့်ပေးနိုင်တဲ့ လင့်များ ပြောင်းပေးသည်
+  async function tp_nissayaLinkify(htmlText){
+    try{ await tp_sayEnsureRefs(); }catch(e){ return htmlText; }
+    const refs = tp_sayFindRefs(htmlText);
+    if(!refs.length) return htmlText;
+    let out = "", last = 0;
+    refs.forEach(r => {
+      out += htmlText.slice(last, r.start);
+      const seg = htmlText.slice(r.start, r.end);
+      out += r.mmBook
+        ? `<a class="tp-say-ref" data-mmbook="${r.mmBook}" data-mmpage="${r.mmPage}">${seg}</a>`
+        : `<a class="tp-say-ref" data-book="${r.book}" data-page="${r.page}">${seg}</a>`;
+      last = r.end;
+    });
+    out += htmlText.slice(last);
+    return out;
+  }
   async function openNissaya(bookId, pageNum) {
       isNissayaOpen = true; 
       const container = document.getElementById("tp-nissaya-container");
@@ -2210,7 +2227,11 @@ let isRomanPali = false;
                   extractedHtml = htmlText.substring(startIndex);
               }
               extractedHtml = extractedHtml.replace(startMarker, `<span class="tp-mm-highlight">${startMarker}</span>`);
-              contentEl.innerHTML = extractedHtml;
+              contentEl.innerHTML = await tp_nissayaLinkify(extractedHtml);
+              contentEl.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => {
+                if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); }
+                else tp_sayOpenRef(a.dataset.book, +a.dataset.page);
+              }));
           } else {
               contentEl.innerHTML = `<p style='color:red'>စာမျက်နှာ ${mmPageStr} အတွက် နိဿယကို မတွေ့ပါ။</p>`;
           }
