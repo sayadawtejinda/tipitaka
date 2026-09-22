@@ -842,7 +842,7 @@ let isRomanPali = false;
         if(openMark){ out += "</span>"; openMark = false; }
         if(openRef >= 0) out += "</a>";
         openRef = refAt[i];
-        if(openRef >= 0) out += `<a class="tp-say-ref" data-book="${refs[openRef].book || ""}" data-page="${refs[openRef].page || ""}"${refs[openRef].mmBook ? ` data-mmbook="${refs[openRef].mmBook}" data-mmpage="${refs[openRef].mmPage}"` : ""}${refs[openRef].mm ? ' data-mm="1"' : ""} title="${refs[openRef].mm ? "မြန်မာပြန်ကို ဖွင့်မည် (ပါဠိတော်ကနေတဆင့်)" : "စာအုပ်ကို ဖွင့်မည်"}">`;
+        if(openRef >= 0) out += `<a class="tp-say-ref" data-book="${refs[openRef].book || ""}" data-page="${refs[openRef].page || ""}"${refs[openRef].para != null ? ` data-para="${refs[openRef].para}"` : ""}${refs[openRef].mmBook ? ` data-mmbook="${refs[openRef].mmBook}" data-mmpage="${refs[openRef].mmPage}"` : ""}${refs[openRef].mm ? ' data-mm="1"' : ""} title="${refs[openRef].mm ? "မြန်မာပြန်ကို ဖွင့်မည် (ပါဠိတော်ကနေတဆင့်)" : "စာအုပ်ကို ဖွင့်မည်"}">`;
       }
       if(marks[i] && !openMark){ out += '<span class="tp-fts-highlight">'; openMark = true; }
       out += tp_sayEsc(text[i]);
@@ -963,6 +963,8 @@ let isRomanPali = false;
     tp_sayRefBooks = { byName, aliases };
   }
   function tp_sayToInt(str){ return parseInt(String(str).replace(/[၀-၉]/g, d => "၀၁၂၃၄၅၆၇၈၉".indexOf(d)), 10); }
+  // ဒီစာအုပ်တွေရဲ့ ကိုးကားနံပါတ်က စာမျက်နှာ မဟုတ်ဘဲ ဂါထာ/စာပိုဒ်နံပါတ် ဖြစ်တယ် (ဥပမာ ဓာန်၊၆၇၃ ဆိုတာ စာမျက်နှာ ၆၇၃ မဟုတ်ဘဲ ဂါထာ အမှတ် ၆၇၃)
+  const TP_PARA_BOOKS = { "ဓာန်": { id: "annya_sadda_11", max: 1203 }, "ကစ္စည်း": { id: "annya_sadda_01", max: 673 } };
   function tp_sayFindRefs(text){
     if(!tp_sayRefSrc) return [];
     const re = new RegExp(tp_sayRefSrc, "g"), out = [];
@@ -970,6 +972,11 @@ let isRomanPali = false;
     while((m = re.exec(text)) !== null){
       const key = tp_sayRefBooks.aliases[m[1]] || m[1];
       const page = tp_sayToInt(m[2]);
+      const paraBook = TP_PARA_BOOKS[key];
+      if(paraBook && page >= 1 && page <= paraBook.max){
+        out.push({ start: m.index, end: m.index + m[0].length, book: paraBook.id, para: page, key });
+        continue;
+      }
       const book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
       if(book){
         out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page, key });
@@ -1010,11 +1017,12 @@ let isRomanPali = false;
     out.sort((a, b) => a.start - b.start);
     return out;
   }
-  async function tp_sayOpenRef(bookId, page, wantMm){
+  async function tp_sayOpenRef(bookId, page, wantMm, para){
     tp_sayHideForPhone();
     const idx = await ensureIndex();
     const meta = idx.books.find(b => b.id === bookId);
     if(!meta) return;
+    if(para != null){ const p = await findPageForParagraph(bookId, para); if(p != null) page = p; }
     await loadPage(meta.basket, meta.category, meta.id, page, meta.firstpage);
     if(!wantMm) return;
     // ပါဠိစာမျက်နှာက "📖 မြန်မာပြန် ဖတ်ရန်" ခလုပ်တွေ ပေါ်လာသည်အထိ စောင့်မည်
@@ -1056,7 +1064,7 @@ let isRomanPali = false;
     const pdfBtn = body.querySelector(".tp-say-pdf");
     if(pdfBtn) pdfBtn.addEventListener("click", () => tp_btOpenPdf(TP_FTS_BASE + "books/" + r.v + ".pdf#page=" + tp_guidePdfPage(r.v, r.p), "ပိဋကလမ်းညွန် အတွဲ " + toMyanmarDigits(r.v) + " — စာမျက်နှာ " + toMyanmarDigits(r.p)));
     body.querySelector(".tp-say-back").addEventListener("click", back);
-    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => { if(a.dataset.mmbook){ tp_sayHideForPhone(); closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm); }));
+    body.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => { if(a.dataset.mmbook){ tp_sayHideForPhone(); closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm, a.dataset.para != null ? +a.dataset.para : null); }));
     if(hits && hits.length > 1) tp_navWire(body, idx, hits.length, j => tp_sayDetail(hits[j].r, terms, back, hits, j));
     body.scrollTop = 0;
   }
@@ -2198,6 +2206,8 @@ let isRomanPali = false;
       const seg = htmlText.slice(r.start, r.end);
       out += r.mmBook
         ? `<a class="tp-say-ref" data-mmbook="${r.mmBook}" data-mmpage="${r.mmPage}">${seg}</a>`
+        : r.para != null
+        ? `<a class="tp-say-ref" data-book="${r.book}" data-para="${r.para}">${seg}</a>`
         : `<a class="tp-say-ref" data-book="${r.book}" data-page="${r.page}">${seg}</a>`;
       last = r.end;
     });
@@ -2230,7 +2240,7 @@ let isRomanPali = false;
               contentEl.innerHTML = await tp_nissayaLinkify(extractedHtml);
               contentEl.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", () => {
                 if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); }
-                else tp_sayOpenRef(a.dataset.book, +a.dataset.page);
+                else tp_sayOpenRef(a.dataset.book, +a.dataset.page, false, a.dataset.para != null ? +a.dataset.para : null);
               }));
           } else {
               contentEl.innerHTML = `<p style='color:red'>စာမျက်နှာ ${mmPageStr} အတွက် နိဿယကို မတွေ့ပါ။</p>`;
