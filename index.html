@@ -1578,7 +1578,9 @@ let isRomanPali = false;
   })();
 
   function parseParanums(str){ if(!str) return []; return String(str).split("-").map(s=>s.trim()).filter(s=>s.length>0).map(s=>parseInt(s,10)).filter(n=>!isNaN(n)); }
-  async function findPageForParagraph(bookId, paragraphNum){ if(paragraphNum==null || isNaN(paragraphNum)) return null; try{ if(!bookPagesCache[bookId]) bookPagesCache[bookId] = await fetchBookPages(bookId); const rows = bookPagesCache[bookId]; const row = rows.find(r => parseParanums(r.paranum).includes(paragraphNum)); return row ? parseInt(row.page,10) : null; }catch(e){ return null; } }
+  async function findPageForParagraph(bookId, paragraphNum){ if(paragraphNum==null || isNaN(paragraphNum)) return null; try{ if(!bookPagesCache[bookId]) bookPagesCache[bookId] = await fetchBookPages(bookId); const rows = bookPagesCache[bookId]; let row = rows.find(r => parseParanums(r.paranum).includes(paragraphNum));
+    if(!row){ const mm = toMyanmarDigits(paragraphNum); row = rows.find(r => new RegExp(`class="paranum">\\s*${mm}\\s*<`).test(r.content || "")); }   // ဒီစာအုပ်တွေမှာ paranum field က ဗလာဖြစ်ပြီး content HTML ထဲမှာပဲ ပါဠိစာပိုဒ်နံပါတ် ပါနေသည်
+    return row ? parseInt(row.page,10) : null; }catch(e){ return null; } }
 
   async function getAllRelatedForParagraph(bookId, p) {
     const map = await ensureParagraphMap();
