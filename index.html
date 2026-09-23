@@ -437,45 +437,69 @@ let isRomanPali = false;
     return mmPagesCache[mmBookId];
   }
 
-  // မြန်မာပြန်စာအုပ်များ ရှာဖွေရန် - "ရှာမည့်စာအုပ်" ကို dropdown ဖြင့် ရွေးပြီးမှ ထိုစာအုပ်တစ်အုပ်တည်း၏ စာမျက်နှာများကို ရှာသည်
-  // (စာအုပ် ၆၀ ခု၊ စာမျက်နှာပေါင်း နှစ်သောင်းကျော်ရှိသဖြင့် "အားလုံးတွင် တစ်ပြိုင်နက်ရှာရန်" ကို မထောက်ပံ့ပါ)
+  // မြန်မာပြန်စာအုပ်များ ရှာဖွေရန် - "ရှာမည့်နေရာ" ကို dropdown ဖြင့် ရွေးပြီးမှ ရှာသည် - စာအုပ်တစ်အုပ်ချင်းစီ (သို့) ပိဋက
+  // အုပ်စု (ဝိနည်း/သုတ္တန်/အဘိဓမ္မာ) တစ်ခုလုံး တစ်ပြိုင်နက်။ ပိဋကအုပ်စုတစ်ခုလုံး ရှာရန် ရွေးလိုက်တိုင်း ထိုအုပ်စုထဲက
+  // စာအုပ်အားလုံးကို တစ်ကြိမ်ဆွဲယူ cache လုပ်ထားမည် (ensureMmPages ကိုယ်တိုင်ကလည်း per-book cache ရှိပြီးသား) -
+  // "သုတ္တန်" အုပ်စုက စာအုပ် ၄၀ ကျော်ရှိသဖြင့် ပထမဆုံးအကြိမ် ရှာချိန်တွင် အနည်းငယ် ကြာနိုင်သည်။
+  const MM_CAT_GROUPS = {
+    vinaya: { label: "ဝိနည်းပိဋက (အားလုံး)", cats: ["vinaya"] },
+    sutta: { label: "သုတ္တန်ပိဋက (အားလုံး)", cats: ["digha", "majjhima", "sanyutta", "anguttara", "khuddaka", "dhammapada", "jataka"] },
+    abhidhamma: { label: "အဘိဓမ္မာပိဋက (အားလုံး)", cats: ["abhidhamma", "visuddhimagga"] },
+  };
   async function tp_mmFillScope(){
     await ensureBurmeseToc();
     const sc = document.querySelector("#tp-say-panel #tp-mm-scope");
     if(!sc) return;
     if(!sc.dataset.filled){
       const ids = Object.keys(burmeseBookMeta).sort((a, b) => (burmeseBookMeta[a].title || "").localeCompare(burmeseBookMeta[b].title || "", "my"));
-      sc.innerHTML = `<option value="">-- ရှာမည့် စာအုပ် ရွေးပါ --</option>` + ids.map(id => `<option value="${id}">${tp_sayEsc(burmeseBookMeta[id].title || id)}</option>`).join("");
+      const groupOpts = Object.keys(MM_CAT_GROUPS).map(k => `<option value="cat:${k}">📚 ${MM_CAT_GROUPS[k].label}</option>`).join("");
+      const bookOpts = ids.map(id => `<option value="${id}">${tp_sayEsc(burmeseBookMeta[id].title || id)}</option>`).join("");
+      sc.innerHTML = `<option value="">-- ရှာမည့်နေရာ ရွေးပါ --</option><optgroup label="ပိဋကအုပ်စုလိုက်">${groupOpts}</optgroup><optgroup label="စာအုပ်တစ်အုပ်ချင်း">${bookOpts}</optgroup>`;
       sc.dataset.filled = "1";
     }
   }
   async function tp_mmRun(q){
     const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
     const sc = document.getElementById("tp-mm-scope");
-    const bookId = sc ? sc.value : "";
+    const scopeVal = sc ? sc.value : "";
     const term = String(q || "").trim();
-    if(!bookId){ status.textContent = ""; body.innerHTML = "<div class='tp-sutta-empty'>ဦးစွာ ရှာမည့် စာအုပ်ကို ရွေးပါ။</div>"; return; }
+    if(!scopeVal){ status.textContent = ""; body.innerHTML = "<div class='tp-sutta-empty'>ဦးစွာ ရှာမည့်နေရာကို ရွေးပါ။</div>"; return; }
     if(!term){ status.textContent = ""; body.innerHTML = ""; return; }
-    status.textContent = "ရှာဖွေနေပါသည်...";
-    let pages;
-    try{ pages = await ensureMmPages(bookId); }catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
-    const meta = burmeseBookMeta[bookId] || {};
+    let bookIds, scopeLabel;
+    if(scopeVal.startsWith("cat:")){
+      const grp = MM_CAT_GROUPS[scopeVal.slice(4)];
+      await ensureBurmeseToc();
+      bookIds = Object.keys(burmeseBookMeta).filter(id => grp.cats.includes(burmeseBookMeta[id].category));
+      scopeLabel = grp.label;
+      status.textContent = `${scopeLabel} ရှာဖွေနေပါသည် (စာအုပ် ${bookIds.length} အုပ်)...`;
+    } else {
+      bookIds = [scopeVal];
+      scopeLabel = (burmeseBookMeta[scopeVal] || {}).title || scopeVal;
+      status.textContent = "ရှာဖွေနေပါသည်...";
+    }
+    let perBook;
+    try{ perBook = await Promise.all(bookIds.map(id => ensureMmPages(id).then(pages => [id, pages]).catch(() => [id, null]))); }
+    catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
     const hits = [];
-    pages.forEach((html, i) => {
-      const text = html.replace(/<[^>]+>/g, "");
-      const idx = text.indexOf(term);
-      if(idx !== -1){
-        const s = Math.max(0, idx - 30), e = Math.min(text.length, idx + term.length + 60);
-        hits.push({ page: i + 1, snippet: (s > 0 ? "…" : "") + text.slice(s, e) + (e < text.length ? "…" : "") });
-      }
+    perBook.forEach(([bookId, pages]) => {
+      if(!pages) return;
+      pages.forEach((html, i) => {
+        const text = html.replace(/<[^>]+>/g, "");
+        const idx = text.indexOf(term);
+        if(idx !== -1){
+          const s = Math.max(0, idx - 30), e = Math.min(text.length, idx + term.length + 60);
+          hits.push({ bookId, page: i + 1, snippet: (s > 0 ? "…" : "") + text.slice(s, e) + (e < text.length ? "…" : "") });
+        }
+      });
     });
-    status.textContent = hits.length ? `${meta.title || bookId} ထဲမှာ တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
+    status.textContent = hits.length ? `${scopeLabel} ထဲမှာ တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
     body.innerHTML = "";
     hits.slice(0, 100).forEach(h => {
       const item = document.createElement("div");
       item.className = "tp-say-item";
-      item.innerHTML = `<b>စာမျက်နှာ ${toMyanmarDigits(h.page)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h.snippet)}</div>`;
-      item.addEventListener("click", () => { closeAllDropdowns(); openBurmeseTranslation(bookId, null, h.page); });
+      const bookLabel = bookIds.length > 1 ? `${tp_sayEsc((burmeseBookMeta[h.bookId] || {}).title || h.bookId)} — ` : "";
+      item.innerHTML = `<b>${bookLabel}စာမျက်နှာ ${toMyanmarDigits(h.page)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h.snippet)}</div>`;
+      item.addEventListener("click", () => { closeAllDropdowns(); openBurmeseTranslation(h.bookId, null, h.page); });
       body.appendChild(item);
     });
   }
