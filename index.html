@@ -437,6 +437,48 @@ let isRomanPali = false;
     return mmPagesCache[mmBookId];
   }
 
+  // မြန်မာပြန်စာအုပ်များ ရှာဖွေရန် - "ရှာမည့်စာအုပ်" ကို dropdown ဖြင့် ရွေးပြီးမှ ထိုစာအုပ်တစ်အုပ်တည်း၏ စာမျက်နှာများကို ရှာသည်
+  // (စာအုပ် ၆၀ ခု၊ စာမျက်နှာပေါင်း နှစ်သောင်းကျော်ရှိသဖြင့် "အားလုံးတွင် တစ်ပြိုင်နက်ရှာရန်" ကို မထောက်ပံ့ပါ)
+  async function tp_mmFillScope(){
+    await ensureBurmeseToc();
+    const sc = document.querySelector("#tp-say-panel #tp-mm-scope");
+    if(!sc) return;
+    if(!sc.dataset.filled){
+      const ids = Object.keys(burmeseBookMeta).sort((a, b) => (burmeseBookMeta[a].title || "").localeCompare(burmeseBookMeta[b].title || "", "my"));
+      sc.innerHTML = `<option value="">-- ရှာမည့် စာအုပ် ရွေးပါ --</option>` + ids.map(id => `<option value="${id}">${tp_sayEsc(burmeseBookMeta[id].title || id)}</option>`).join("");
+      sc.dataset.filled = "1";
+    }
+  }
+  async function tp_mmRun(q){
+    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
+    const sc = document.getElementById("tp-mm-scope");
+    const bookId = sc ? sc.value : "";
+    const term = String(q || "").trim();
+    if(!bookId){ status.textContent = ""; body.innerHTML = "<div class='tp-sutta-empty'>ဦးစွာ ရှာမည့် စာအုပ်ကို ရွေးပါ။</div>"; return; }
+    if(!term){ status.textContent = ""; body.innerHTML = ""; return; }
+    status.textContent = "ရှာဖွေနေပါသည်...";
+    let pages;
+    try{ pages = await ensureMmPages(bookId); }catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
+    const meta = burmeseBookMeta[bookId] || {};
+    const hits = [];
+    pages.forEach((html, i) => {
+      const text = html.replace(/<[^>]+>/g, "");
+      const idx = text.indexOf(term);
+      if(idx !== -1){
+        const s = Math.max(0, idx - 30), e = Math.min(text.length, idx + term.length + 60);
+        hits.push({ page: i + 1, snippet: (s > 0 ? "…" : "") + text.slice(s, e) + (e < text.length ? "…" : "") });
+      }
+    });
+    status.textContent = hits.length ? `${meta.title || bookId} ထဲမှာ တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
+    body.innerHTML = "";
+    hits.slice(0, 100).forEach(h => {
+      const item = document.createElement("div");
+      item.className = "tp-say-item";
+      item.innerHTML = `<b>စာမျက်နှာ ${toMyanmarDigits(h.page)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h.snippet)}</div>`;
+      item.addEventListener("click", () => { closeAllDropdowns(); openBurmeseTranslation(bookId, null, h.page); });
+      body.appendChild(item);
+    });
+  }
   async function ensureIndex(){ if(!bookIndex) bookIndex = await fetchJson(cdnUrl(INDEX_FILE)); return bookIndex; }
   async function ensureToc(){ if(!tocIndex){ try{ tocIndex = await fetchJson(cdnUrl(TOC_FILE)); }catch(e){ tocIndex = []; } } return tocIndex; }
 
@@ -896,7 +938,10 @@ let isRomanPali = false;
     panel.querySelector(".tp-say-menu").addEventListener("click", e => { e.stopPropagation(); tp_openSearchChoice(e.currentTarget, null, true); });
     const input = panel.querySelector("#tp-say-input");
     let timer = null;
-    input.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => tp_sayRun(input.value), 220); });
+    input.addEventListener("input", () => {
+      if(tp_dsCur === "sutta"){ tp_suttaSearchHandler(input, panel.querySelector("#tp-say-body"), input.value); return; }
+      clearTimeout(timer); timer = setTimeout(() => tp_sayRun(input.value), 220);
+    });
     panel.querySelector("#tp-mm-scope").addEventListener("change", () => tp_sayRun(input.value));
     return panel;
   }
@@ -1103,6 +1148,8 @@ let isRomanPali = false;
     tp_dsCur = key === "mm" ? "mm" : "multi"; tp_lastKind = "data";
     if(key !== "mm" && !tp_dsSel.includes(key)) tp_dsSel = [key];
     const panel = tp_sayEnsurePanel();
+    panel.querySelector("#tp-sel-toggle").style.display = "";
+    panel.querySelector("#tp-say-input").placeholder = "စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)";
     tp_sayUpdateSel();
     const input = panel.querySelector("#tp-say-input");
     const sig = tp_dsCur + "|" + tp_dsSel.join(",");
@@ -1117,6 +1164,24 @@ let isRomanPali = false;
     document.body.classList.add("tp-say-docked");
     if(window.innerWidth > 900) { input.focus(); input.select(); }
     if(key === "mm"){ tp_mmFillScope(); } else { tp_dsSel.forEach(k => tp_dsLoad(k).catch(() => {})); if(tp_dsSel.includes("bt")) tp_btAvail(); }
+  }
+  // သုတ္တန်/စာအုပ်အမည် ရှာဖွေခြင်းကိုလည်း တခြား ရှာဖွေမှုအားလုံးလို တစ်နေရာတည်း (say-panel) ထဲမှာပဲ ဖွင့်ပေးမည်
+  function tp_openSuttaPanel(){
+    tp_dsCur = "sutta"; tp_lastKind = "data";
+    const panel = tp_sayEnsurePanel();
+    panel.querySelector("#tp-mm-scope").style.display = "none";
+    panel.querySelector("#tp-sel-toggle").style.display = "none";
+    panel.querySelector("#tp-say-title").textContent = "သုတ္တန် (သို့) စာအုပ် ရှာဖွေရန်";
+    const input = panel.querySelector("#tp-say-input");
+    input.placeholder = "စာအုပ် (သို့) သုတ္တန်အမည် ရိုက်ရှာပါ...";
+    panel.querySelector("#tp-say-status").textContent = "";
+    panel.querySelector("#tp-say-body").innerHTML = "";
+    panel.classList.add("tp-open"); tp_sayHidden = false;
+    { const fp_ = document.getElementById("tp-fts-panel"); if(fp_) fp_.classList.remove("tp-open"); }
+    document.body.classList.add("tp-say-docked");
+    if(window.innerWidth > 900){ input.focus(); input.select(); }
+    ensureSuttas();
+    if(input.value.trim()) tp_suttaSearchHandler(input, panel.querySelector("#tp-say-body"), input.value);
   }
   function tp_tabTo(which, anchor){
     if(which === "fts"){ tp_toggleFts(true); return; }
@@ -1140,6 +1205,7 @@ let isRomanPali = false;
   let tp_lastKind = "", tp_lastOpenSutta = null;
   function tp_reopenLast(){
     if(tp_lastKind === "fts"){ tp_toggleFts(true); return; }
+    if(tp_dsCur === "sutta"){ tp_openSuttaPanel(); return; }
     tp_openDataset(tp_dsCur === "mm" ? "mm" : tp_dsSel[0]);
     const inp = document.querySelector("#tp-say-input"); if(inp){ inp.focus(); inp.select(); }
   }
@@ -1168,7 +1234,7 @@ let isRomanPali = false;
     }; });
     menu.querySelectorAll("button").forEach(b => { b.onclick = () => {
       const c = b.dataset.c;
-      if(c === "sutta"){ menu.classList.remove("tp-open"); menu._openSutta(); return; }
+      if(c === "sutta"){ menu.classList.remove("tp-open"); tp_openSuttaPanel(); return; }
       if(c === "fts"){ menu.classList.remove("tp-open"); tp_toggleFts(); return; }
       if(c === "resume"){ menu.classList.remove("tp-open"); tp_sayResume(); return; }
       if(c !== "bt"){ const cb = checks.find(x => x.dataset.k === c); if(cb){ cb.checked = true; tp_dsSel = checks.filter(x => x.checked).map(x => x.dataset.k); } }
@@ -1349,8 +1415,10 @@ let isRomanPali = false;
   }
 
   function wireSuttaSearchInput(inputEl, resultsEl){
-    inputEl.addEventListener("input", async (e) => {
-      const rawVal = e.target.value.trim();
+    inputEl.addEventListener("input", (e) => tp_suttaSearchHandler(inputEl, resultsEl, e.target.value));
+  }
+  async function tp_suttaSearchHandler(inputEl, resultsEl, rawVal0){
+      const rawVal = String(rawVal0 || "").trim();
       // မြန်မာစာနှင့် ဂဏန်းများမှလွဲ၍ ကျန်သည့် သင်္ကေတများ (ဥပမာ- ကော်မာ၊ ပုဒ်မ၊ Space) အားလုံးကို ဖြုတ်ပစ်မည်
       const valClean = rawVal.replace(/[^\u1000-\u109F0-9၀-၉a-zA-Z]/g, ""); 
       if(!valClean){ resultsEl.innerHTML = ""; return; }
@@ -1472,7 +1540,6 @@ let isRomanPali = false;
           });
         });
       } catch (err) { resultsEl.innerHTML = `<div class='tp-sutta-empty' style="color:red;">အမှားအယွင်းဖြစ်နေပါသည် (${err.message})</div>`; }
-    });
   }
 // --- အသစ်ထပ်ထည့်ထားသော Roman ပြောင်းသည့် Function များ ---
   
