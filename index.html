@@ -1163,7 +1163,7 @@ let isRomanPali = false;
   // တိပိဋကအဘိဓာန် PDF ၂၉ တွဲကို GitHub Pages repo နှစ်ခုခွဲထားသည် (Pages 1GB ကန့်သတ်ချက်)
   let tp_tabiBooks = {};
   const TABI_REPO2 = new Set(["14c","15","16","17","18","19","20","21","22","23","24","25","4a","4b","4c"]);
-  function tp_tabiUrl(bookId, page){ const b = tp_tabiBooks[bookId] || { start: 1 }; return `https://sayadawtejinda.github.io/tipitaka-abidan-pdf-${TABI_REPO2.has(bookId) ? 2 : 1}/${bookId}.pdf#page=${page + b.start - 1}`; }
+  function tp_tabiUrl(bookId, page){ const b = tp_tabiBooks[bookId] || { start: 1 }; return `https://sayadawtejinda.github.io/tipitaka-abidan-pdf-${TABI_REPO2.has(bookId) ? 2 : 1}/${bookId}.pdf#page=${page + b.start}`; }
   function tp_tabiShow(r, back, hits, idx, go){
     const body = document.getElementById("tp-say-body");
     const refs = r.tabi.split(",").map(x => { const [b, p] = x.split(":"); return { b, p: parseInt(p, 10) }; });

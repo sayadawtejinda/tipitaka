@@ -1,5 +1,5 @@
 # Tipitaka+Abidan/tipitaka_abidan.db ကနေ data/tabidan_index.json (တိပိဋကအဘိဓာန် - ဝေါဟာရ → အတွဲ:စာမျက်နှာ) ထုတ်ပေးသည်
-# PDF စာမျက်နှာ = စာမျက်နှာအမှတ် + start_page - 1
+# PDF စာမျက်နှာ = စာမျက်နှာအမှတ် + start_page (အတွဲ ၁ ၏ ၃၈ = PDF ၁၅၈ ဖြင့် အတည်ပြုပြီး)
 import sqlite3, json, os
 c = sqlite3.connect('Tipitaka+Abidan/tipitaka_abidan.db')
 books = {i: {'name': n.strip(), 'info': (inf or '').strip(), 'start': s} for i, n, inf, s in c.execute("select id,name,name_info,start_page from books order by id")}
