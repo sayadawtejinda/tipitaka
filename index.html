@@ -461,7 +461,7 @@ let isRomanPali = false;
       const ids = Object.keys(burmeseBookMeta).sort((a, b) => (burmeseBookMeta[a].title || "").localeCompare(burmeseBookMeta[b].title || "", "my"));
       const groupOpts = Object.keys(MM_CAT_GROUPS).map(k => `<option value="cat:${k}">📚 ${MM_CAT_GROUPS[k].label}</option>`).join("");
       const bookOpts = ids.map(id => `<option value="${id}">${tp_sayEsc(burmeseBookMeta[id].title || id)}</option>`).join("");
-      sc.innerHTML = `<option value="">-- ရှာမည့်နေရာ ရွေးပါ --</option><optgroup label="ပိဋကအုပ်စုလိုက်">${groupOpts}</optgroup><optgroup label="စာအုပ်တစ်အုပ်ချင်း">${bookOpts}</optgroup>`;
+      sc.innerHTML = `<option value="">-- ရှာမည့်နေရာ ရွေးပါ --</option><optgroup label="ပိဋကအုပ်စုလိုက်">${groupOpts}</optgroup><optgroup label="ဆရာတော်များ"><option value="skp">📚 ရွှေကျင်စာပေ</option></optgroup><optgroup label="စာအုပ်တစ်အုပ်ချင်း">${bookOpts}</optgroup>`;
       sc.dataset.filled = "1";
     }
   }
@@ -472,6 +472,7 @@ let isRomanPali = false;
     const term = String(q || "").trim();
     if(!scopeVal){ status.textContent = ""; body.innerHTML = "<div class='tp-sutta-empty'>ဦးစွာ ရှာမည့်နေရာကို ရွေးပါ။</div>"; return; }
     if(!term){ status.textContent = ""; body.innerHTML = ""; return; }
+    if(scopeVal === "skp"){ return tp_skpRun(term); }
     let bookIds, scopeLabel;
     if(scopeVal.startsWith("cat:")){
       const grp = MM_CAT_GROUPS[scopeVal.slice(4)];
@@ -2295,8 +2296,9 @@ let isRomanPali = false;
 
   function showSayadawList(){
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ"}]);
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-sayadaw="minkun">မင်းကွန်းဆရာတော်<span class="tp-count">${toMyanmarDigits(MBV_BOOKS.length)} အုပ်</span></div></div>`;
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-sayadaw="minkun">မင်းကွန်းဆရာတော်<span class="tp-count">${toMyanmarDigits(MBV_BOOKS.length)} အုပ်</span></div><div class="tp-card" data-sayadaw="skp">ရွှေကျင်စာပေ<span class="tp-count">၅၂ အုပ်</span></div></div>`;
     document.querySelector("[data-sayadaw='minkun']").addEventListener("click", showMbvBooks);
+    document.querySelector("[data-sayadaw='skp']").addEventListener("click", showSkpAuthors);
     setParams({basket: "sayadaw"});
   }
 
@@ -2306,6 +2308,62 @@ let isRomanPali = false;
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${MBV_BOOKS.map(b => `<div class="tp-card" data-mmbook="${b.id}">${b.title}<span class="tp-count">${toMyanmarDigits(b.pages)} စာမျက်နှာ</span></div>`).join("")}</div>`;
     document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "mbv" }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
     setParams({basket: "sayadaw", category: "minkun"});
+  }
+
+  // ဆရာတော်များ › ရွှေကျင်စာပေ (PDF စာအုပ် ၅၂ အုပ်၊ data/skp_index.json - scripts/build_skp_data.py) - ဘာသာဋီကာလို့ပဲ PDF ကို floating box ထဲမှာ ဖွင့်သည်
+  const SKP_PDF_BASE = "https://sayadawtejinda.github.io/tipitaka/ShweKyin+Sarpay/pdfs/";
+  let skpPromise = null;
+  function ensureSkp(){ if(!skpPromise){ skpPromise = fetchJson(cdnUrl(`${DATA_FOLDER}/skp_index.json`)); skpPromise.catch(() => { skpPromise = null; }); } return skpPromise; }
+  function skpOpenPdf(bookId, page, title){ tp_btOpenPdf(SKP_PDF_BASE + bookId + ".pdf" + (page > 1 ? "#page=" + page : ""), title); }
+  function skpCrumb(...more){ renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, ...more]); }
+
+  async function showSkpAuthors(){
+    setFloatSearchVisible(true); skpCrumb({label:"ရွှေကျင်စာပေ"});
+    document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
+    try{ const d = await ensureSkp();
+      document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${d.authors.map(a => `<div class="tp-card" data-skpauthor="${a.id}">${a.name}<span class="tp-count">${toMyanmarDigits(a.books.length)} အုပ်</span></div>`).join("")}</div>`;
+      document.querySelectorAll("[data-skpauthor]").forEach(el=> el.addEventListener("click", ()=> showSkpBooks(parseInt(el.dataset.skpauthor,10))));
+    }catch(e){ document.getElementById("tp-view").innerHTML = `<p>ဖတ်၍မရပါ (${e.message})</p>`; }
+    setParams({basket: "sayadaw", category: "skp"});
+  }
+
+  async function showSkpBooks(authorId){
+    const d = await ensureSkp(); const a = d.authors.find(x => x.id === authorId); if(!a) return;
+    setFloatSearchVisible(true); skpCrumb({label:"ရွှေကျင်စာပေ", onclick:(e)=>{e.preventDefault(); showSkpAuthors();}}, {label: a.name});
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${a.books.map(id => `<div class="tp-card" data-skpbook="${id}">${d.books[id].title}</div>`).join("")}</div>`;
+    document.querySelectorAll("[data-skpbook]").forEach(el=> el.addEventListener("click", ()=> showSkpBook(el.dataset.skpbook, authorId)));
+    setParams({basket: "sayadaw", category: "skp_" + authorId});
+  }
+
+  // စာအုပ်တစ်အုပ် - မာတိကာကို ပြပြီး ခေါင်းစဉ်ကိုနှိပ်ရင် PDF ကို ထိုစာမျက်နှာမှာ ဖွင့်ပေးမည်
+  async function showSkpBook(bookId, authorId){
+    const d = await ensureSkp(); const b = d.books[bookId]; const a = d.authors.find(x => x.id === authorId) || d.authors.find(x => x.books.includes(bookId));
+    setFloatSearchVisible(true); skpCrumb({label:"ရွှေကျင်စာပေ", onclick:(e)=>{e.preventDefault(); showSkpAuthors();}}, {label: a.name, onclick:(e)=>{e.preventDefault(); showSkpBooks(a.id);}}, {label: b.title});
+    const toc = b.toc.map(t => `<button class="tp-xref-item-btn tp-toc-item-btn" style="display:block;width:100%;margin-bottom:4px;padding-left:${t[1] >= 2 ? 30 : 10}px;" data-pg="${t[2]}">${tp_sayEsc(t[0])}</button>`).join("") || "<div class='tp-sutta-empty'>မာတိကာ မတွေ့ပါ။</div>";
+    document.getElementById("tp-view").innerHTML = `<h3 style="margin:0 0 10px;">${tp_sayEsc(b.title)}</h3><div style="margin-bottom:12px;"><button class="tp-icon-btn" id="skp-open">📕 PDF ဖွင့်မည်</button> <input type="number" id="skp-pg" min="1" placeholder="PDF စာမျက်နှာ" style="width:130px;"> <button class="tp-icon-btn" id="skp-go">သွားမည်</button></div><div>${toc}</div>`;
+    document.getElementById("skp-open").addEventListener("click", () => skpOpenPdf(bookId, 1, b.title));
+    document.getElementById("skp-go").addEventListener("click", () => { const v = parseInt(document.getElementById("skp-pg").value, 10); if(v > 0) skpOpenPdf(bookId, v, b.title); });
+    document.querySelectorAll("#tp-view [data-pg]").forEach(el => el.addEventListener("click", () => skpOpenPdf(bookId, parseInt(el.dataset.pg, 10), b.title)));
+    skpOpenPdf(bookId, 1, b.title);
+    setParams({basket: "sayadaw", category: "skp_" + a.id});
+  }
+
+  // ရွှေကျင်စာပေ ရှာဖွေခြင်း - PDF ထဲမှာ စာသားအလွှာ မရှိသဖြင့် မာတိကာခေါင်းစဉ် + အညွှန်းစကားလုံးတွေထဲကို ရှာသည်
+  async function tp_skpRun(term){
+    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
+    status.textContent = "ရှာဖွေနေပါသည်...";
+    let d; try{ d = await ensureSkp(); }catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
+    const hits = [];
+    Object.keys(d.books).forEach(id => d.books[id].toc.forEach(t => { if(t[0].includes(term)) hits.push({ id, page: t[2], text: t[0], kind: "မာတိကာ" }); }));
+    d.notes.forEach(n => { if(n[0].includes(term)) hits.push({ id: n[1], page: n[2], text: n[0], kind: "အညွှန်း" }); });
+    status.textContent = hits.length ? `ရွှေကျင်စာပေ ထဲမှာ တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
+    body.innerHTML = "";
+    hits.slice(0, 100).forEach(h => {
+      const item = document.createElement("div"); item.className = "tp-say-item";
+      item.innerHTML = `<b>${tp_sayEsc(d.books[h.id].title)} — PDF စာမျက်နှာ ${toMyanmarDigits(h.page)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${h.kind}: ${tp_sayEsc(h.text)}</div>`;
+      item.addEventListener("click", () => skpOpenPdf(h.id, h.page, d.books[h.id].title));
+      body.appendChild(item);
+    });
   }
 
   async function showBaskets(){
@@ -2615,7 +2673,7 @@ let isRomanPali = false;
     const {basket, category, book, page, firstpage} = getParams();
     try{
       if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
-      else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
+      else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
 
