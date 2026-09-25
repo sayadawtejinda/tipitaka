@@ -2311,7 +2311,7 @@ let isRomanPali = false;
   }
 
   // ဆရာတော်များ › ရွှေကျင်စာပေ (PDF စာအုပ် ၅၂ အုပ်၊ data/skp_index.json - scripts/build_skp_data.py) - ဘာသာဋီကာလို့ပဲ PDF ကို floating box ထဲမှာ ဖွင့်သည်
-  const SKP_PDF_BASE = "https://sayadawtejinda.github.io/tipitaka/ShweKyin+Sarpay/pdfs/";
+  const SKP_PDF_BASE = "https://sayadawtejinda.github.io/shwekyin-pdf/";
   let skpPromise = null;
   function ensureSkp(){ if(!skpPromise){ skpPromise = fetchJson(cdnUrl(`${DATA_FOLDER}/skp_index.json`)); skpPromise.catch(() => { skpPromise = null; }); } return skpPromise; }
   function skpOpenPdf(bookId, page, title){ tp_btOpenPdf(SKP_PDF_BASE + bookId + ".pdf" + (page > 1 ? "#page=" + page : ""), title); }
