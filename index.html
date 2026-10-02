@@ -1397,12 +1397,12 @@ let isRomanPali = false;
     if(box) return box;
     box = document.createElement("div");
     box.id = "tp-pdf-box";
-    box.innerHTML = `<div class="tp-pdf-head"><span class="tp-pdf-title"></span><span><span class="tp-pdf-btn" data-a="ext" title="ဘရောက်ဇာ၏ ကိုယ်ပိုင် PDF viewer ဖြင့် tab အသစ်မှာ ဖွင့်မည်">↗</span><span class="tp-pdf-btn" data-a="min" title="ခေါက်ထားမည်/ပြန်ဖြန့်မည်">▁</span><span class="tp-pdf-btn" data-a="close" title="ပိတ်မည်">✕</span></span></div><iframe title="PDF"></iframe>`;
+    box.innerHTML = `<div class="tp-pdf-head"><span class="tp-pdf-title"></span><span><span class="tp-pdf-btn" data-a="ext" title="tab အသစ်မှာ ကြီးကြီးဖွင့်မည်">↗</span><span class="tp-pdf-btn" data-a="min" title="ခေါက်ထားမည်/ပြန်ဖြန့်မည်">▁</span><span class="tp-pdf-btn" data-a="close" title="ပိတ်မည်">✕</span></span></div><iframe title="PDF"></iframe>`;
     document.body.appendChild(box);
     const head = box.querySelector(".tp-pdf-head");
     box.querySelector('[data-a="close"]').addEventListener("click", () => { box.classList.remove("tp-open"); box.querySelector("iframe").src = "about:blank"; });
     box.querySelector('[data-a="min"]').addEventListener("click", () => box.classList.toggle("tp-min"));
-    box.querySelector('[data-a="ext"]').addEventListener("click", () => { if(box.dataset.native) window.open(box.dataset.native, "_blank", "noopener"); });
+    box.querySelector('[data-a="ext"]').addEventListener("click", () => { if(box.dataset.native) window.open(tp_pdfViewerUrl(box.dataset.native), "_blank", "noopener"); });
     let drag = null;
     head.addEventListener("pointerdown", e => {
       if(e.target.closest(".tp-pdf-btn")) return;
