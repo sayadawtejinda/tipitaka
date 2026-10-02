@@ -1397,11 +1397,12 @@ let isRomanPali = false;
     if(box) return box;
     box = document.createElement("div");
     box.id = "tp-pdf-box";
-    box.innerHTML = `<div class="tp-pdf-head"><span class="tp-pdf-title"></span><span><span class="tp-pdf-btn" data-a="min" title="ခေါက်ထားမည်/ပြန်ဖြန့်မည်">▁</span><span class="tp-pdf-btn" data-a="close" title="ပိတ်မည်">✕</span></span></div><iframe title="PDF"></iframe>`;
+    box.innerHTML = `<div class="tp-pdf-head"><span class="tp-pdf-title"></span><span><span class="tp-pdf-btn" data-a="ext" title="ဘရောက်ဇာ၏ ကိုယ်ပိုင် PDF viewer ဖြင့် tab အသစ်မှာ ဖွင့်မည်">↗</span><span class="tp-pdf-btn" data-a="min" title="ခေါက်ထားမည်/ပြန်ဖြန့်မည်">▁</span><span class="tp-pdf-btn" data-a="close" title="ပိတ်မည်">✕</span></span></div><iframe title="PDF"></iframe>`;
     document.body.appendChild(box);
     const head = box.querySelector(".tp-pdf-head");
     box.querySelector('[data-a="close"]').addEventListener("click", () => { box.classList.remove("tp-open"); box.querySelector("iframe").src = "about:blank"; });
     box.querySelector('[data-a="min"]').addEventListener("click", () => box.classList.toggle("tp-min"));
+    box.querySelector('[data-a="ext"]').addEventListener("click", () => { if(box.dataset.native) window.open(box.dataset.native, "_blank", "noopener"); });
     let drag = null;
     head.addEventListener("pointerdown", e => {
       if(e.target.closest(".tp-pdf-btn")) return;
@@ -1420,11 +1421,13 @@ let isRomanPali = false;
     head.addEventListener("pointerup", stop); head.addEventListener("pointercancel", stop);
     return box;
   }
+  const TP_PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";      // PDF.js viewer (PDF ဖိုင်ကို CORS ခွင့်ပြုထားရမည် - GitHub Pages က ခွင့်ပြုထားသည်)
+  function tp_pdfViewerUrl(url){ const m = /#page=(\d+)/.exec(url); return TP_PDFJS + "?file=" + encodeURIComponent(url.split("#")[0]) + (m ? "#page=" + m[1] : ""); }
   function tp_btOpenPdf(url, title){
     tp_sayHideForPhone();
     const box = tp_pdfBox();
-    const m = /#page=(\d+)/.exec(url);
-    const target = m ? url.split("#")[0] + "?p=" + m[1] + "#page=" + m[1] : url;   // query ကွဲမှ PDF viewer က စာမျက်နှာအသစ်ကို ခုန်ပေးသည်
+    box.dataset.native = url;
+    const target = tp_pdfViewerUrl(url);
     box.querySelector(".tp-pdf-title").textContent = "📕 " + (title || "PDF");
     box.classList.remove("tp-min");
     box.classList.add("tp-open");
