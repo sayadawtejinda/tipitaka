@@ -336,7 +336,8 @@ const SAYOKESON_FILE = "sayokeson.json";
   let mmHtmlCache = {}, mmPagesCache = {}, mmBackContext = null, mmCurrentBookId = null, mmCurrentPageIdx = 1;
   let currentRows = [], currentRow = null, currentBookId = "", currentBookMeta = null, bookPagesCache = {};
 let isNissayaOpen = false;
-const TP_NISSAYA_BOOKS = ["mula_di_01", "mula_di_02", "mula_di_03", "mula_ma_01", "mula_ma_02", "mula_ma_03"];     // ဒီဃ ၁-၃၊ မဇ္ဈိမ ၁-၃ (data/<id>.html = နိဿယ၊ ပါဠိတော်စာမျက်နှာအလိုက်)
+const TP_NISSAYA_FALLBACK = ["annya_bi_03", "annya_bi_04", "attha_di_01", "attha_di_02", "attha_di_03", "attha_ku_02_01", "attha_ku_02_02", "attha_sa_03", "attha_vi_01_01", "attha_vi_01_02", "attha_vi_02", "attha_vi_03", "attha_vi_04", "attha_vi_05", "mula_di_01", "mula_di_02", "mula_di_03", "mula_ma_01", "mula_ma_02", "mula_ma_03", "mula_vi_01", "mula_vi_02", "mula_vi_03", "mula_vi_04", "mula_vi_05", "tika_di_01_02", "tika_di_01_03", "tika_vi_05", "tika_vi_06"];     // data/nissaya_books.json မရရင် သုံးမည့် စာရင်း
+let tpNissayaIds = null;
 let isRomanPali = false;
 
   // ==========================================================================================
@@ -2391,8 +2392,8 @@ let isRomanPali = false;
   }
 
   async function showBaskets(){
-    setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက"}]);
-    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${toMyanmarDigits(TP_NISSAYA_BOOKS.length)} အုပ်</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div>`;
+    setFloatSearchVisible(true); const idx = await ensureIndex(); const nisCount = (await nissayaBooksIn(idx)).length; renderBreadcrumb([{label:"တိပိဋက"}]);
+    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${toMyanmarDigits(nisCount)} အုပ်</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div>`;
     let last = null; try{ last = JSON.parse(localStorage.getItem("tp_last_read")); }catch(e){}
     const resume = last && last.name ? `<div class="tp-resume" style="margin:0 0 14px;padding:10px 14px;border:2px solid #5a8f6c;border-radius:10px;background:#eef3ea;cursor:pointer;color:#2d5c3d;font-weight:bold;">📌 ဆက်ဖတ်ရန် — ${last.name}<span style="font-weight:normal;color:#666;"> (${last.type === "mm" ? "စာမျက်နှာ " + toMyanmarDigits(last.pageIdx || 1) : "စာမျက်နှာ " + toMyanmarDigits(last.pageNum || 1)})</span></div>` : "";
     document.getElementById("tp-view").innerHTML = resume + `<div class="tp-grid">${html}</div>`;
@@ -2419,22 +2420,36 @@ let isRomanPali = false;
     setParams({basket: basketId, category: categoryId});
   }
 
-  // နိဿယများ - နိဿယကို ပါဠိတော်နဲ့ စာမျက်နှာတူအောင် လုပ်ထားလို့ စာအုပ်အမည်၊ မာတိကာ၊ စာမျက်နှာ အားလုံး ပါဠိတော်အတိုင်းပဲ။
-  // စာအုပ်ကို ဖွင့်ရင် ပါဠိတော်ကို နိဿယ Split View ဖွင့်ပြီးသားနဲ့ ပြမည်။ နိဿယအသစ် (data/<id>.html) web တင်တိုင်း TP_NISSAYA_BOOKS မှာ id ထပ်ထည့်ပါ။
-  async function nissayaBooksIn(idx){ return TP_NISSAYA_BOOKS.map(id => idx.books.find(b => b.id === id)).filter(Boolean); }
-  async function showNissayaCategories(){
-    setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"နိဿယများ"}]);
-    const books = await nissayaBooksIn(idx), cats = [...new Set(books.map(b => b.category))];
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${cats.map(c => `<div class="tp-card" data-category="${c}">${idx.category_labels[c] || c}<span class="tp-count">${toMyanmarDigits(books.filter(b => b.category === c).length)} အုပ်</span></div>`).join("")}</div>`;
-    document.querySelectorAll("[data-category]").forEach(el => el.addEventListener("click", () => showNissayaBooks(el.dataset.category)));
+  // နိဿယများ - web ပေါ်မှာ နိဿယ (data/<id>.html) ရှိပြီးသား စာအုပ်အားလုံး။ စာရင်းက data/nissaya_books.json ထဲက (nissaya_export.py --html က အလိုအလျောက် ထည့်ပေးသည်)။
+  // နိဿယကို ပါဠိတော်နဲ့ စာမျက်နှာတူအောင် လုပ်ထားလို့ အုပ်စု၊ စာအုပ်အမည်၊ မာတိကာ၊ စာမျက်နှာ အားလုံး ပါဠိတော်အတိုင်းပဲ။
+  // ဖွင့်လိုက်ရင် ပါဠိတော်ကို နိဿယ Split View ဖွင့်ပြီးသားနဲ့ ပြမည်။
+  async function ensureNissayaIds(){
+    if(tpNissayaIds) return tpNissayaIds;
+    try{ const j = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_books.json`)); tpNissayaIds = Array.isArray(j) ? j : (j.books || []); }catch(e){ tpNissayaIds = TP_NISSAYA_FALLBACK; }
+    return tpNissayaIds;
+  }
+  async function nissayaBooksIn(idx){ const ids = await ensureNissayaIds(); return ids.map(id => idx.books.find(b => b.id === id)).filter(Boolean); }
+  const nisCrumb = (idx, parts) => renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}].concat(parts));
+  async function showNissayaCategories(){                       // level 1: ပါဠိတော် / အဋ္ဌကထာ / ဋီကာ / အညပေါင်းကျမ်း (နိဿယရှိတာချည်း)
+    setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ"}]);
+    const books = await nissayaBooksIn(idx), baskets = Object.keys(idx.basket_labels).filter(b => books.some(x => x.basket === b));
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${baskets.map(b => `<div class="tp-card" data-nb="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(books.filter(x => x.basket === b).length)} အုပ်</span></div>`).join("")}</div>`;
+    document.querySelectorAll("[data-nb]").forEach(el => el.addEventListener("click", () => showNissayaSubjects(el.dataset.nb)));
     setParams({basket: "nissaya"});
   }
-  async function showNissayaBooks(categoryId){
-    setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.category_labels[categoryId] || categoryId}]);
-    const books = (await nissayaBooksIn(idx)).filter(b => b.category === categoryId);
+  async function showNissayaSubjects(basketId){                // level 2: ဝိနည်း / ဒီဃ / မဇ္ဈိမ ... (အဲဒီအုပ်စုထဲက)
+    setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId}]);
+    const books = (await nissayaBooksIn(idx)).filter(b => b.basket === basketId), cats = [...new Set(books.map(b => b.category))];
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${cats.map(c => `<div class="tp-card" data-nc="${c}">${idx.category_labels[c] || c}<span class="tp-count">${toMyanmarDigits(books.filter(b => b.category === c).length)} အုပ်</span></div>`).join("")}</div>`;
+    document.querySelectorAll("[data-nc]").forEach(el => el.addEventListener("click", () => showNissayaBooks(basketId, el.dataset.nc)));
+    setParams({basket: "nissaya", category: basketId});
+  }
+  async function showNissayaBooks(basketId, categoryId){       // level 3: စာအုပ်များ
+    setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showNissayaSubjects(basketId);}}, {label: idx.category_labels[categoryId] || categoryId}]);
+    const books = (await nissayaBooksIn(idx)).filter(b => b.basket === basketId && b.category === categoryId);
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ</span></div>`).join("")}</div>`;
     document.querySelectorAll("[data-book]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.book); isNissayaOpen = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
-    setParams({basket: "nissaya", category: categoryId});
+    setParams({basket: "nissaya", category: basketId + ":" + categoryId});
   }
   async function fetchBookPages(bookId){ return fetchJson(cdnUrl(`${DATA_FOLDER}/${bookId}.json`)); }
   function findBookMeta(idx, bookId, firstpageHint){ const matches = idx.books.filter(b=>b.id===bookId); if(matches.length<=1) return matches[0]; if(firstpageHint!=null){ const exact = matches.find(b=>b.firstpage===firstpageHint); if(exact) return exact; } return matches[0]; }
@@ -2714,7 +2729,7 @@ let isRomanPali = false;
     const {basket, category, book, page, firstpage} = getParams();
     try{
       if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
-      else if(basket === "nissaya" && category){ showNissayaBooks(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
+      else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
 
