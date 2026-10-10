@@ -599,7 +599,12 @@ let isRomanPali = false;
   }
 
   // click လုပ်လိုက်တဲ့ (x,y) coordinate မှ "space နှစ်ခုကြား" စာလုံးကို ရှာထုတ်ရန်
+  // 🔠 Roman Pāli ပြောင်းထားသော စာသား node တစ်ခုချင်း၏ မြန်မာမူရင်း (အဘိဓာန်ရှာရာတွင် Roman စာလုံးအစား မြန်မာစာလုံးကို သုံးရန်)
+  const tp_romanOrig = new WeakMap();
   function tp_getWordAtPoint(x, y){
+    return tp_getWordInfoAtPoint(x, y);
+  }
+  function tp_getWordInfoAtPoint(x, y){
     let range = null;
     if(document.caretRangeFromPoint){
       range = document.caretRangeFromPoint(x, y);
@@ -612,9 +617,16 @@ let isRomanPali = false;
     let start = range.startOffset, end = range.startOffset;
     while(start > 0 && !/\s/.test(text[start-1])) start--;
     while(end < text.length && !/\s/.test(text[end])) end++;
-    const word = text.slice(start, end).trim();
-    return word || null;
+    let word = text.slice(start, end).trim();
+    if(!word) return null;
+    const orig = tp_romanOrig.get(textNode);
+    if(orig){                                            // Roman ပြောင်းထားလျှင် - space ခြားသော စကားလုံးအစဉ်နံပါတ်ဖြင့် မြန်မာမူရင်းစာလုံးကို ပြန်ယူ
+      const before = (text.slice(0, start).match(/\S+/g) || []).length, toks = orig.match(/\S+/g) || [];
+      if(toks.length === (text.match(/\S+/g) || []).length && toks[before]) word = toks[before].trim();
+    }
+    return word;
   }
+  window.__tpWordAt = tp_getWordInfoAtPoint;   // (စမ်းသပ်ရန်)
 
   // dictList ထဲမှာ ရိုက်ထည့်လိုက်သောစကားလုံးနှင့် "အနီးစပ်ဆုံး" ဝင်ရောက်မှုများကို ရှာသည်
   function tp_findClosestDictEntries(dictList, word){
@@ -1692,6 +1704,7 @@ let isRomanPali = false;
     let node;
     while (node = walker.nextNode()) {
       if (node.nodeValue.trim() !== "") {
+        if(!tp_romanOrig.has(node)) tp_romanOrig.set(node, node.nodeValue);     // မူရင်း မြန်မာစာကို မှတ်ထား (ပထမအကြိမ်သာ)
         node.nodeValue = myanmarToRoman(node.nodeValue);
       }
     }
