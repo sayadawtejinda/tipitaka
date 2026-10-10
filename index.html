@@ -297,7 +297,7 @@ p.gathalast {
   #tp-pdf-box.tp-min iframe{ display:none; }
   @media (max-width:900px){ #tp-pdf-box{ width:94vw; right:3vw; top:56px; height:70vh; } }
 .tp-tabi-line{margin:3px 0;line-height:1.7;}.tp-tabi-ent{margin:6px 0 10px;padding-top:4px;border-top:1px dashed #e2e8f0;}.tp-tabi-cont{margin-top:4px;color:#555;font-size:13.5px;}.tp-tabi-dup{margin-top:4px;font-size:12.5px;color:#888;}.tp-tabi-head{margin-bottom:4px;}.tp-tabi-pdf{cursor:pointer;}
-#tp-say-panel .tp-tabi-card{cursor:default;}#tp-say-panel .tp-tabi-card:hover{background:transparent;color:#333;}.tp-tabi-line .tp-say-ref{color:inherit;text-decoration:none;cursor:text;}.tp-tabi-line .tp-say-ref:hover{color:#0645ad;text-decoration:underline;cursor:pointer;}.tp-tabi-pdf{cursor:pointer;font-size:15px;}
+#tp-say-panel .tp-tabi-card{cursor:default;}#tp-say-panel .tp-tabi-card:hover{background:transparent;color:#333;}.tp-tabi-line .tp-say-ref{color:#b3b8c4;text-decoration:none;cursor:pointer;transition:color .12s;}.tp-tabi-line .tp-say-ref[data-mm]{color:#b3b8c4;}.tp-tabi-line .tp-say-ref:hover{color:#0b6bff;text-decoration:underline;}mark.tp-cite-hl{background:#fff1a8;color:inherit;border-radius:2px;padding:0 1px;}.tp-tabi-pdf{cursor:pointer;font-size:15px;}
 .tp-tabi-warn{font-size:12px;color:#a16207;margin:2px 0;}.tp-tabi-tools{margin:3px 0;}.tp-tabi-orig{font-size:12px;color:#0645ad;cursor:pointer;}
 </style>
 </head>
@@ -1126,13 +1126,40 @@ let isRomanPali = false;
     out.sort((a, b) => a.start - b.start);
     return out;
   }
-  async function tp_sayOpenRef(bookId, page, wantMm, para){
+  // ကိုးကားချက် (quote) ကို ဖွင့်ထားသော ကျမ်းစာစာမျက်နှာထဲ ရှာပြီး highlight - တွေ့မှသာ၊ မတွေ့လျှင် ဘာမှမလုပ် (စာလုံးပေါင်း/ပုဒ်ဖြတ်ကွဲလွဲမှုကို sandhi-အတူ tp_sayNorm ဖြင့် ကျော်)
+  function tp_citeHighlight(quote){
+    const root = document.getElementById("tp-content"); if(!root || !quote) return false;
+    document.querySelectorAll("#tp-content mark.tp-cite-hl").forEach(m => { const t = m.parentNode; while(m.firstChild) t.insertBefore(m.firstChild, m); t.removeChild(m); t.normalize(); });
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = []; let full = "", n;
+    while((n = walker.nextNode())){ nodes.push({ node: n, start: full.length }); full += n.textContent; }
+    const mp = tp_sayMap(full);
+    const sents = String(quote).split(/(?<=။)/).map(x => x.trim()).filter(Boolean);
+    const cands = [];
+    for(let k = 0; k < sents.length; k++) cands.push(sents.slice(k).join(" "));       // ရှည်ဆုံးမှ နောက်ဆုံးဝါကျတစ်ခုတည်းအထိ
+    for(const c of cands){
+      const q = tp_sayMap(c).plain; if(q.length < 8) continue;
+      const at = mp.plain.indexOf(q); if(at < 0) continue;
+      const a = mp.start[at], b = mp.end[at + q.length - 1] + 1;
+      let first = null;
+      for(const o of nodes){
+        const ns = o.start, ne = o.start + o.node.textContent.length;
+        if(ne <= a || ns >= b) continue;
+        const s0 = Math.max(a, ns) - ns, e0 = Math.min(b, ne) - ns;
+        const r = document.createRange(); r.setStart(o.node, s0); r.setEnd(o.node, e0);
+        const mk = document.createElement("mark"); mk.className = "tp-cite-hl"; try{ r.surroundContents(mk); if(!first) first = mk; }catch(e){}
+      }
+      if(first){ first.scrollIntoView({ behavior: "smooth", block: "center" }); return true; }
+    }
+    return false;
+  }
+  async function tp_sayOpenRef(bookId, page, wantMm, para, quote){
     tp_sayHideForPhone();
     const idx = await ensureIndex();
     const meta = idx.books.find(b => b.id === bookId);
     if(!meta) return;
     if(para != null){ const p = await findPageForParagraph(bookId, para); if(p != null) page = p; }
     await loadPage(meta.basket, meta.category, meta.id, page, meta.firstpage);
+    if(quote) setTimeout(() => tp_citeHighlight(quote), 150);
     if(!wantMm) return;
     // ပါဠိစာမျက်နှာက "📖 မြန်မာပြန် ဖတ်ရန်" ခလုပ်တွေ ပေါ်လာသည်အထိ စောင့်မည်
     let btns = [];
@@ -1195,7 +1222,7 @@ let isRomanPali = false;
       const es = d ? ((d.entries[x.b + ":" + x.p] || []).filter(e => tp_sayNorm(e.hw) === nw)) : [];
       const pdfBtn = (pg, t) => `<span class="tp-tabi-pdf" data-b="${tp_sayEsc(x.b)}" data-p="${pg}" title="${tp_sayEsc(t)} — PDF ဖွင့်ရန်">📕</span>`;
       const inner = es.map(e => { const k = store.push(e) - 1;
-        return `<div class="tp-tabi-ent">${e.a ? `<div class="tp-tabi-warn" title="Excel စာထဲ headword မပါ၍ DB ၏ headword နှင့် ဆင်တူသဖြင့် ခန့်မှန်းချိတ်ထားသည်">⚠ headword ခန့်မှန်း</div>` : ""}<div class="tp-tabi-body" data-k="${k}">${tp_tabiLines(e.l)}</div>${e.o ? `<div class="tp-tabi-tools"><span class="tp-tabi-orig" data-k="${k}" data-show="0">✎ ပြင်ထားသည် · 🔁 မူရင်း (Excel) ကြည့်ရန်</span></div>` : ""}${e.t ? `<div class="tp-tabi-warn">နောက်ကပ်လာသော စာတို ${e.t} ခု ပေါင်းထည့်ထားသည်</div>` : ""}${(e.c || []).map(c => `<div class="tp-tabi-cont">↪ စာ.${tp_sayEsc(toMyanmarDigits(x.p + 1))} မှ ဆက်စာ ${pdfBtn(x.p + 1, "စာမျက်နှာ " + toMyanmarDigits(x.p + 1))}${tp_tabiLines(c)}</div>`).join("")}</div>`; }).join("");
+        return `<div class="tp-tabi-ent">${e.a ? `<div class="tp-tabi-warn" title="Excel စာထဲ headword မပါ၍ DB ၏ headword နှင့် ဆင်တူသဖြင့် ခန့်မှန်းချိတ်ထားသည်">⚠ headword ခန့်မှန်း</div>` : ""}<div class="tp-tabi-body" data-k="${k}">${tp_tabiLines(e.l)}</div>${e.o ? `<div class="tp-tabi-tools"><span class="tp-tabi-orig" data-k="${k}" data-show="0">✎ ပြင်ထားသည် · 🔁 မူရင်း (Excel) ကြည့်ရန်</span></div>` : ""}${e.t ? `<div class="tp-tabi-warn">နောက်ကပ်လာသော စာတို ${e.t} ခု ပေါင်းထည့်ထားသည်</div>` : ""}${(e.c || []).map(c0 => { const c = Array.isArray(c0) ? { p: x.p + 1, l: c0 } : c0; return `<div class="tp-tabi-cont">↪ စာ.${tp_sayEsc(toMyanmarDigits(c.p))} မှ ဆက်စာ ${pdfBtn(c.p, "စာမျက်နှာ " + toMyanmarDigits(c.p))}${tp_tabiLines(c.l)}</div>`; }).join("")}</div>`; }).join("");
       return `<div class="tp-say-item tp-tabi-card" data-i="${i}"><div class="tp-tabi-head">${pdfBtn(x.p, "တိပိဋကအဘိဓာန် " + bk.name + " — စာမျက်နှာ " + toMyanmarDigits(x.p))}</div>${inner}</div>`; }).join("");
     const nav = hits && hits.length > 1 ? tp_navBar(idx, hits.length) : "";
     body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div>${nav}<div class="tp-say-detail-title">${tp_sayEsc(r.t)}</div>${cards}`;
@@ -1212,7 +1239,8 @@ let isRomanPali = false;
         tg.textContent = showOrig ? "📄 Excel မူရင်း ပြနေသည် · နှိပ်ပြီး ပြင်ပြီးစာသို့ ပြန်ရန်" : "✎ ပြင်ထားသည် · 🔁 မူရင်း (Excel) ကြည့်ရန်";
         const bx = body.querySelector(`.tp-tabi-body[data-k="${tg.dataset.k}"]`); if(bx) bx.innerHTML = tp_tabiLines(showOrig ? e.o : e.l); return; }
       const a = ev.target.closest(".tp-say-ref");
-      if(a){ if(a.dataset.mmbook){ tp_sayHideForPhone(); closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm, a.dataset.para != null ? +a.dataset.para : null); }
+      if(a){ if(a.dataset.mmbook){ tp_sayHideForPhone(); closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); } else { const ln = a.closest(".tp-tabi-line"), tx = ln ? ln.textContent : "", pos = tx.indexOf(a.textContent);
+        tp_sayOpenRef(a.dataset.book, +a.dataset.page, !!a.dataset.mm, a.dataset.para != null ? +a.dataset.para : null, pos > 0 ? tx.slice(0, pos) : ""); } }
     };
   }
   async function tp_sayDetail(r, terms, back, hits, idx){
