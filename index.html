@@ -256,7 +256,7 @@ p.gathalast {
 }
 
   /* ==== Sayokeson / PitakaVatthu / Sayokepya ရှာဖွေရေး panel (လက်ဝဲဘေးထောင့်မှာ ကပ်ထားသည်) ==== */
-  #tp-search-choice{ display:none; position:fixed; z-index:2100; background:#fff; border:1px solid #cbd5e1; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.2); padding:6px; min-width:210px; }
+  #tp-search-choice{ display:none; position:fixed; z-index:2100; background:#fff; border:1px solid #cbd5e1; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.2); padding:6px; min-width:210px; max-height:calc(100vh - 80px); overflow-y:auto; -webkit-overflow-scrolling:touch; }
   #tp-search-choice.tp-open{ display:block; }
   #tp-search-choice button{ display:block; width:100%; text-align:left; padding:10px 12px; margin:2px 0; border:none; background:#f8fafc; border-radius:6px; cursor:pointer; font-size:14px; font-family:inherit; }
   #tp-search-choice .tp-sc-row{ display:flex; align-items:center; gap:4px; }
@@ -278,8 +278,10 @@ p.gathalast {
   #tp-say-panel .tp-say-detail-title{ font-weight:bold; color:#8b0000; font-size:16px; margin-bottom:8px; }
   #tp-say-panel .tp-say-detail-text{ font-size:14.5px; line-height:1.9; color:#333; }
   #tp-say-panel .tp-say-back{ color:#0645ad; cursor:pointer; margin-bottom:8px; font-size:13.5px; }
-  .tp-say-ref{ color:#0645ad; cursor:pointer; text-decoration:underline; }
-  .tp-say-ref[data-mm]{ color:#1b7a3a; }
+  .tp-say-ref{ color:#b3b8c4; cursor:pointer; text-decoration:none; transition:color .12s; }
+  .tp-say-ref:hover{ color:#0b6bff; text-decoration:underline; }
+  .tp-say-ref[data-mm]{ color:#b3b8c4; }
+  .tp-say-ref[data-mm]:hover{ color:#0b6bff; }
   @media (max-width:900px){ #tp-say-panel{ width:88vw; max-width:360px; } body.tp-say-docked{ margin-left:auto !important; margin-right:auto !important; max-width:960px !important; } body.tp-say-docked #tp-float-prev{ left:6px; } }
   #tp-say-panel .tp-say-nav{ display:flex; align-items:center; justify-content:space-between; gap:6px; margin:4px 0 10px; }
   #tp-say-panel .tp-say-nav button{ padding:6px 12px; border:1px solid #cbd5e1; border-radius:6px; background:#fff; cursor:pointer; font-size:13.5px; font-family:inherit; }
@@ -1351,7 +1353,7 @@ let isRomanPali = false;
     if(!menu){
       menu = document.createElement("div");
       menu.id = "tp-search-choice";
-      menu.innerHTML = `<button data-c="resume" style="display:none;background:#eef3ea;">↩ ခုနက ရှာထားတာ ပြန်ကြည့်ရန်</button><button data-c="fts">📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်</button><button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="guide" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="guide">📑 ပိဋကလမ်းညွန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="bt" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="tabi" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="tabi">📔 တိပိဋကအဘိဓာန်</button></div>`;
+      menu.innerHTML = `<button data-c="resume" style="display:none;background:#eef3ea;">↩ ခုနက ရှာထားတာ ပြန်ကြည့်ရန်</button><button data-c="fts">📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်</button><button data-c="sutta">📚 သုတ္တန်ရှာရန်</button><button data-c="mm">📖 မြန်မာပြန်စာအုပ် ရှာရန်</button><div class="tp-sc-row"><input type="checkbox" data-k="tabi" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="tabi">📔 တိပိဋကအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="guide" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="guide">📑 ပိဋကလမ်းညွန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="say" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="say">📒 သရုပ်စုံအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="bt" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="bt">📕 ဘာသာဋီကာအဘိဓာန်</button></div><div class="tp-sc-row"><input type="checkbox" data-k="sut" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="sut">📙 သုတ္တသူစီ ဝိဘာဝိနီ</button></div><div class="tp-sc-row"><input type="checkbox" data-k="vat" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="vat">📗 ပိဋကဝတ္ထု</button></div><div class="tp-sc-row"><input type="checkbox" data-k="pya" title="ပေါင်းရှာရန် ရွေးပါ"><button data-c="pya">📘 သုတေသနသရုပ်ပြ</button></div>`;
       document.body.appendChild(menu);
       document.addEventListener("click", (e) => { if(!e.target.closest("#tp-search-choice") && !e.target.closest("#tp-search-toggle") && !e.target.closest("#tp-float-search-toggle")) menu.classList.remove("tp-open"); });
     }
@@ -1381,7 +1383,7 @@ let isRomanPali = false;
     menu._anchor = anchor;
     const rect = anchor.getBoundingClientRect();
     menu.style.left = Math.max(8, Math.min(rect.left, window.innerWidth - 230)) + "px";
-    menu.style.top = Math.min(rect.bottom + 6, window.innerHeight - 430) + "px";
+    menu.style.top = Math.max(8, Math.min(rect.bottom + 6, window.innerHeight - 430)) + "px";
     menu.classList.add("tp-open");
   }
 
