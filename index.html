@@ -301,6 +301,7 @@ p.gathalast {
 .tp-tabi-line{margin:3px 0;line-height:1.7;}.tp-tabi-ent{margin:6px 0 10px;padding-top:4px;border-top:1px dashed #e2e8f0;}.tp-tabi-cont{position:relative;margin-top:4px;padding-left:24px;}.tp-tabi-cont>.tp-tabi-pdf{position:absolute;left:0;top:1px;}.tp-tabi-pdf,.tp-tabi-warn,.tp-tabi-tools{user-select:none;-webkit-user-select:none;}.tp-tabi-line b{font-weight:700;color:#000;}.tp-tabi-dup{margin-top:4px;font-size:12.5px;color:#888;}.tp-tabi-head{margin-bottom:4px;}.tp-tabi-pdf{cursor:pointer;}
 #tp-say-panel .tp-tabi-card{cursor:default;}#tp-say-panel .tp-tabi-card:hover{background:transparent;color:#333;}.tp-tabi-line .tp-say-ref{color:#b3b8c4;text-decoration:none;cursor:pointer;transition:color .12s;}.tp-tabi-line .tp-say-ref[data-mm]{color:#b3b8c4;}.tp-tabi-line .tp-say-ref:hover{color:#0b6bff;text-decoration:underline;}mark.tp-cite-hl{background:#fff1a8;color:inherit;border-radius:2px;padding:0 1px;}.tp-tabi-pdf{cursor:pointer;font-size:15px;}
 .tp-tabi-warn{font-size:12px;color:#a16207;margin:2px 0;}.tp-tabi-tools{margin:3px 0;}.tp-tabi-orig{font-size:12px;color:#0645ad;cursor:pointer;}
+mark.tp-cite-hl-fuzzy{background:#fff7cc;}
 </style>
 </head>
 <body>
@@ -1066,7 +1067,7 @@ let isRomanPali = false;
   // ---- ကိုးကားချက် (ဥပမာ အံ၊ဋ္ဌ၊၂၊၁၀၄) ကို နှိပ်ရင် ခါတိုင်းဖတ်နေကျ reader မှာပဲ စာမျက်နှာဖွင့်ပေးမည် ----
   // ဒေတာထဲက အတိုကောက်တချို့ဟာ books.json ရဲ့ short_name နဲ့ မတူလို့ ဒီနေရာမှာ ချိတ်ပေးထားသည်
   // ("မြန်" မြန်မာပြန်ကိုးကားတွေကတော့ စာမျက်နှာ မကိုက်သေးလို့ link မလုပ်ပါ)
-  const TP_SAY_ALIAS = [["နီတိ၊ ဓာ", "ဓာတုမာလာ"], ["နီတိ၊ဓာ", "ဓာတုမာလာ"], ["ခုဒ္ဒက", "ခုဒ္ဒကပါဌ"], ["ဓာန်၊ဋီ", "ဓာန်ဋီ"], ["ဗာ", "ဇာတက"], ["နေတ္တိဝိ", "နေတ္တိဝိဘာဝိနီ"], ["အပ", "အပဒါန"], ["ဇာ", "ဇာတက"], ["ဓမ္မ", "ဓမ္မပဒ"], ["စူဠနိ", "စူဋ္ဌနိ"], ["သာရတ္ထ၊ဋီ", "သာရတ္ထ"], ["သီ၊ဋီ၊သစ်", "သီဋီသစ်"], ["ပေဋကော", "ပေဋက"], ["သုတ်နိ", "သုတ္တနိ"], ["ဣတိ", "ဣတိဝုတ်"], ["လင်္ကာရ", "ဝိလင်ဋီ"], ["မဟာဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["သင်္ဂဟ၊ဋ္ဌ", "ဝိနယသင်္ဂဟ"], ["ဝိသုဒ္ဓိ၊ဋ္ဌ", "ဝိသုဒ္ဓိ"], ["ဝိသုဒ္ဓိ၊ဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["ဝိသုဒ္ဓိ၊ဋီ", "မဟာဋီ"], ["နေတ္တိ၊ဝိဘာ", "နေတ္တိဝိဘာဝိနီ"], ["ဇာဋီသစ်", "ဇာတ်ဋီသစ်"], ["ဝိလံဋီ", "ဝိလင်ဋီ"], ["မောဂ်", "မောဂ်ပဉ္စိကာ"]];
+  const TP_SAY_ALIAS = [["နေတ္တိ၊ ဝိ", "နေတ္တိဝိဘာဝိနီ"], ["နေတ္တိ၊ဝိ", "နေတ္တိဝိဘာဝိနီ"], ["ကင်္ခါ၊ဋီ၊သစ်", "ကင်္ခါဋီသစ်"], ["ကင်္ခါ၊ဋီ၊ဟောင်း", "ကင်္ခါဋီဟောင်း"], ["ထေရီ ဋ္ဌ", "ထေရီ၊ဋ္ဌ"], ["နီတိ၊ သုတ္တ", "သုတ္တမာလာ"], ["နီတိ၊သုတ္တ", "သုတ္တမာလာ"], ["နီတိ၊ ပဒ", "ပဒမာလာ"], ["နီတိ၊ပဒ", "ပဒမာလာ"], ["နီတိ၊ ဓာ", "ဓာတုမာလာ"], ["နီတိ၊ဓာ", "ဓာတုမာလာ"], ["ခုဒ္ဒက", "ခုဒ္ဒကပါဌ"], ["ဓာန်၊ဋီ", "ဓာန်ဋီ"], ["ဗာ", "ဇာတက"], ["နေတ္တိဝိ", "နေတ္တိဝိဘာဝိနီ"], ["အပ", "အပဒါန"], ["ဇာ", "ဇာတက"], ["ဓမ္မ", "ဓမ္မပဒ"], ["စူဠနိ", "စူဋ္ဌနိ"], ["သာရတ္ထ၊ဋီ", "သာရတ္ထ"], ["သီ၊ဋီ၊သစ်", "သီဋီသစ်"], ["ပေဋကော", "ပေဋက"], ["သုတ်နိ", "သုတ္တနိ"], ["ဣတိ", "ဣတိဝုတ်"], ["လင်္ကာရ", "ဝိလင်ဋီ"], ["မဟာဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["သင်္ဂဟ၊ဋ္ဌ", "ဝိနယသင်္ဂဟ"], ["ဝိသုဒ္ဓိ၊ဋ္ဌ", "ဝိသုဒ္ဓိ"], ["ဝိသုဒ္ဓိ၊ဋီ၊၂", "ဝိသုဒ္ဓိမဂ်မဟာဋီ၂"], ["ဝိသုဒ္ဓိ၊ဋီ", "မဟာဋီ"], ["နေတ္တိ၊ဝိဘာ", "နေတ္တိဝိဘာဝိနီ"], ["ဇာဋီသစ်", "ဇာတ်ဋီသစ်"], ["ဝိလံဋီ", "ဝိလင်ဋီ"], ["မောဂ်", "မောဂ်ပဉ္စိကာ"]];
   let tp_sayRefSrc = null, tp_sayRefBooks = null;
   async function tp_sayEnsureRefs(){
     if(tp_sayRefSrc) return;
@@ -1078,7 +1079,7 @@ let isRomanPali = false;
     Object.keys(byName).forEach(K => {
       TP_SAY_ALIAS.forEach(([A, B]) => { if(K === B || K.startsWith(B + "၊")) aliases[A + K.slice(B.length)] = K; });
       const m = /^(.+)၊([၀-၉])$/.exec(K);          // ဒီ၊၁ ကို ဒီ၁ လို ရေးတာလည်း လက်ခံမည်
-      if(m) aliases[m[1] + m[2]] = K;
+      if(m){ aliases[m[1] + m[2]] = K; aliases[m[1] + " " + m[2]] = K; }      // ဒီ၊၁ ကို "ဒီ၁" / "ဒီ ၁" လို ရေးတာကိုပါ
     });
     const all = Object.keys(byName).concat(Object.keys(aliases)).sort((p, q) => q.length - p.length);
     const esc = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -1088,9 +1089,11 @@ let isRomanPali = false;
   }
   function tp_sayToInt(str){ return parseInt(String(str).replace(/ဝ/g, "၀").replace(/ဂ/g, "၈").replace(/[၀-၉]/g, d => "၀၁၂၃၄၅၆၇၈၉".indexOf(d)), 10); }
   // ဒီစာအုပ်တွေရဲ့ ကိုးကားနံပါတ်က စာမျက်နှာ မဟုတ်ဘဲ ဂါထာ/စာပိုဒ်နံပါတ် ဖြစ်တယ် (ဥပမာ ဓာန်၊၆၇၃ ဆိုတာ စာမျက်နှာ ၆၇၃ မဟုတ်ဘဲ ဂါထာ အမှတ် ၆၇၃)
+  const TP_SIBLING = { "ထေရီ": "ထေရ", "ထေရ": "ထေရီ" };
   const TP_PARA_BOOKS = { "ဓာန်": { id: "annya_sadda_11", max: 1203 }, "ကစ္စည်း": { id: "annya_sadda_01", max: 673 }, "ရူ": { id: "annya_sadda_02", max: 684 }, "ဓာန်ဋီ": { id: "annya_sadda_12", max: 1201 } };   // ရူ (ပဒရူပသိဒ္ဓိ)၊ ဓာန်ဋီ (အဘိဓာနပ္ပဒီပိကာဋီကာ) ၏ ကိုးကားဂဏန်း = စာပိုဒ်(သုတ်/ဂါထာ)နံပါတ် (စာမျက်နှာမဟုတ်)
   function tp_sayFindRefs(text){
     if(!tp_sayRefSrc) return [];
+    text = String(text).replace(/[:：]/g, "၊");                 // "အံ:၃" ကဲ့သို့ ":" ကို "၊" ဟုယူ (အလျားမပြောင်း - နေရာတူ)
     const re = new RegExp(tp_sayRefSrc, "g"), out = [];
     let m;
     while((m = re.exec(text)) !== null){
@@ -1101,7 +1104,8 @@ let isRomanPali = false;
         out.push({ start: m.index, end: m.index + m[0].length, book: paraBook.id, para: page, key });
         continue;
       }
-      const book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
+      let book = (tp_sayRefBooks.byName[key] || []).find(b => page >= b.firstpage && page <= b.lastpage);
+      if(!book && TP_SIBLING[key]) book = (tp_sayRefBooks.byName[TP_SIBLING[key]] || []).find(b => page >= b.firstpage && page <= b.lastpage);   // ထေရီ၊၃၇၅ ကဲ့သို့ OCR/မူရင်းတွင် ထေရ/ထေရီ ရောနေသော ကိစ္စ
       if(book){
         out.push({ start: m.index, end: m.index + m[0].length, book: book.id, page, key });
         // အပ၊ဋ္ဌ၊၂၊၄၇၊ ၄၉ — နောက်ကလိုက်လာတဲ့ စာမျက်နှာနံပါတ်တွေ ကိုလည်း အဲဒီစာအုပ်ကိုပဲ လင့်ချိတ်မည်
@@ -1149,25 +1153,48 @@ let isRomanPali = false;
     const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = []; let full = "", n;
     while((n = walker.nextNode())){ nodes.push({ node: n, start: full.length }); full += n.textContent; }
     const mp = tp_sayMap(full);
+    function wrap(a, b, fuzzy){                           // plain index [a,b) → မူရင်းစာသားထဲ mark
+      const oa = mp.start[a], ob = mp.end[b - 1] + 1; let first = null;
+      for(const o of nodes){
+        const ns = o.start, ne = o.start + o.node.textContent.length;
+        if(ne <= oa || ns >= ob) continue;
+        const s0 = Math.max(oa, ns) - ns, e0 = Math.min(ob, ne) - ns;
+        const r = document.createRange(); r.setStart(o.node, s0); r.setEnd(o.node, e0);
+        const mk = document.createElement("mark"); mk.className = "tp-cite-hl" + (fuzzy ? " tp-cite-hl-fuzzy" : ""); try{ r.surroundContents(mk); if(!first) first = mk; }catch(e){}
+      }
+      if(first){ first.scrollIntoView({ behavior: "smooth", block: "center" }); return true; }
+      return false;
+    }
     const sents = String(quote).split(/(?<=။)/).map(x => x.trim()).filter(Boolean);
     const cands = [];
     for(let k = 0; k < sents.length; k++) cands.push(sents.slice(k).join(" "));       // ရှည်ဆုံးမှ နောက်ဆုံးဝါကျတစ်ခုတည်းအထိ
-    for(const c of cands){
+    for(const c of cands){                                   // ၁) အတိအကျ တူညီသော စာ
       const q = tp_sayMap(c).plain; if(q.length < 8) continue;
       const at = mp.plain.indexOf(q); if(at < 0) continue;
-      const a = mp.start[at], b = mp.end[at + q.length - 1] + 1;
-      let first = null;
-      for(const o of nodes){
-        const ns = o.start, ne = o.start + o.node.textContent.length;
-        if(ne <= a || ns >= b) continue;
-        const s0 = Math.max(a, ns) - ns, e0 = Math.min(b, ne) - ns;
-        const r = document.createRange(); r.setStart(o.node, s0); r.setEnd(o.node, e0);
-        const mk = document.createElement("mark"); mk.className = "tp-cite-hl"; try{ r.surroundContents(mk); if(!first) first = mk; }catch(e){}
-      }
-      if(first){ first.scrollIntoView({ behavior: "smooth", block: "center" }); return true; }
+      if(wrap(at, at + q.length, false)) return true;
     }
+    // ၂) အတိအကျ မတွေ့ - ဤစာမျက်နှာတစ်ခုအတွင်းသာ ရှာရာ၌ စာလုံး ၅ လုံးတွဲ (5-gram) တူညီမှု ၄၀% ခန့်ရှိသော အနီးစပ်ဆုံးနေရာကို အလင်းရောင်ဖြင့် ပြ (အစားထိုးမဟုတ်၍ မှားနေလည်း ပြဿနာမရှိ)
+    const G = 5; let best = null;
+    for(const c of cands){
+      const q = tp_sayMap(c).plain; if(q.length < G + 6) continue;
+      const grams = new Set(); for(let i = 0; i + G <= q.length; i++) grams.add(q.substr(i, G));
+      const total = q.length - G + 1, P = mp.plain, W = Math.min(P.length, Math.ceil(q.length * 1.15));
+      const hit = new Uint8Array(P.length + 1); for(let i = 0; i + G <= P.length; i++) if(grams.has(P.substr(i, G))) hit[i] = 1;
+      let cur = 0; for(let i = 0; i < W && i < P.length; i++) cur += hit[i];
+      let bestHits = cur, bestAt = 0;
+      for(let i = 1; i + W <= P.length; i++){ cur += hit[i + W - 1] - hit[i - 1]; if(cur > bestHits){ bestHits = cur; bestAt = i; } }
+      const ratio = Math.min(1, bestHits / total);
+      if(ratio >= 0.4 && (!best || ratio > best.ratio)){
+        let a = bestAt, e = Math.min(P.length - G, bestAt + W - 1);
+        while(a < e && !hit[a]) a++;                                                 // ပထမဆုံး တူညီသောနေရာမှ
+        while(e > a && !hit[e]) e--;                                                 // နောက်ဆုံး တူညီသောနေရာအထိ (gram ၅ လုံးပါ)
+        best = { ratio, a, b: Math.min(P.length, e + G) };
+      }
+    }
+    if(best && best.b > best.a) return wrap(best.a, best.b, true);
     return false;
   }
+  window.__tpHl = tp_citeHighlight;   // (စမ်းသပ်ရန်)
   async function tp_sayOpenRef(bookId, page, wantMm, para, quote){
     tp_sayHideForPhone();
     const idx = await ensureIndex();
