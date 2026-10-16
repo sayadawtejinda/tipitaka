@@ -32,11 +32,15 @@ if r.returncode:
     raise SystemExit("export failed - nothing uploaded")
 cfg = json.load(open(os.path.join(ROOT, "nissaya_data", "books", book + ".json"), encoding="utf-8"))
 pid = os.path.splitext(os.path.basename(cfg["pali"]))[0]
-files = [f"data/{pid}.html", "data/nissaya_books.json"]
+files = [f"data/{pid}.html", "data/nissaya_books.json", "data/nissaya_downloads.json"]
 print("\nWill upload:", files)
 if input("Commit and push to the web now? (y/n) ").strip().lower() != "y":
     raise SystemExit("not uploaded (the html is built locally)")
-subprocess.run(["git", "add"] + files, cwd=ROOT, check=True)
+subprocess.run(["git", "add", f"data/{pid}.html", "data/nissaya_books.json"], cwd=ROOT, check=True)
 subprocess.run(["git", "commit", "-m", f"Nissaya: {book} ({pid}) published"], cwd=ROOT, check=True)
+# the download page (nissaya_downloads.html) takes its dates from git, so its list is rebuilt AFTER the commit and pushed in a second small commit
+subprocess.run([sys.executable, os.path.join(HERE, "nissaya_build_downloads.py")], cwd=ROOT, env=env, check=True)
+subprocess.run(["git", "add", "data/nissaya_downloads.json"], cwd=ROOT, check=True)
+subprocess.run(["git", "commit", "-m", "Nissaya download list updated"], cwd=ROOT)
 subprocess.run(["git", "push"], cwd=ROOT, check=True)
 print(f"\nDONE - {book} is on the web. In the browser press Ctrl+Shift+R.")
