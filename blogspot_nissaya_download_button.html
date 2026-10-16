@@ -1,0 +1,27 @@
+<!-- Blogspot (HTML view) ထဲ comments နေရာအထက် သို့မဟုတ် ပိုစ့်ထဲ ကိုယ်လိုရာမှာ paste လုပ်ပါ။ comments ကို မထိပါ။ -->
+<button id="nsy-dl-btn" type="button"
+  style="font-size:16px;padding:10px 18px;border:1px solid #b8741f;background:#b8741f;color:#fff;border-radius:8px;cursor:pointer">
+  ⬇ နိဿယ ဖိုင်များ ဒေါင်းလုတ်
+</button>
+<script>
+(function () {
+  var btn = document.getElementById("nsy-dl-btn"), box = null;
+  function close() { if (box) { box.remove(); box = null; document.body.style.overflow = ""; } }
+  btn.addEventListener("click", function () {
+    if (box) return;
+    box = document.createElement("div");
+    box.style.cssText = "position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:99999;background:#f6f2e8";
+    var f = document.createElement("iframe");
+    f.src = "https://sayadawtejinda.github.io/tipitaka/nissaya_downloads.html";
+    f.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:0";
+    f.setAttribute("allow", "autoplay; downloads");
+    var x = document.createElement("button");
+    x.type = "button"; x.textContent = "✕ ပိတ်မည်";
+    x.style.cssText = "position:absolute;top:8px;right:8px;z-index:2;padding:6px 12px;border:1px solid #888;background:#fff;color:#222;border-radius:8px;font-size:15px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.3)";
+    x.addEventListener("click", close);
+    box.appendChild(f); box.appendChild(x);
+    document.body.appendChild(box); document.body.style.overflow = "hidden";
+  });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+})();
+</script>
