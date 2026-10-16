@@ -90,6 +90,20 @@
     overflow-y: auto;
   }
   .tp-dropdown-box.tp-open { display: block; }
+  /* ---- AI ဖြင့် ရှင်းပြခိုင်းရန် (🤖) */
+  #tp-ai.tp-dropdown-box{ width:420px; }
+  #tp-ai .ai-h{ font-weight:bold; color:#8b0000; margin:2px 0 6px; }
+  #tp-ai .ai-ctx{ font-size:.85em; color:#475569; background:#fff; border:1px solid #e2e8f0; border-radius:6px; padding:6px 8px; margin-bottom:8px; line-height:1.6; }
+  #tp-ai .ai-scope{ display:flex; gap:6px; margin-bottom:8px; }
+  #tp-ai .ai-scope button, #tp-ai .ai-opt{ border:1px solid #cbd5e1; background:#fff; border-radius:6px; padding:5px 10px; cursor:pointer; font:inherit; font-size:.9em; }
+  #tp-ai .ai-scope button.on, #tp-ai .ai-opt.on{ background:#8b0000; color:#fff; border-color:#8b0000; }
+  #tp-ai .ai-opts{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:8px; }
+  #tp-ai textarea{ width:100%; height:150px; box-sizing:border-box; font:inherit; font-size:.88em; border:1px solid #cbd5e1; border-radius:6px; padding:6px 8px; resize:vertical; }
+  #tp-ai .ai-go{ display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  #tp-ai .ai-go button{ border:0; border-radius:6px; padding:7px 12px; cursor:pointer; font:inherit; font-size:.9em; color:#fff; background:#0645ad; }
+  #tp-ai .ai-go button.cp{ background:#475569; } #tp-ai .ai-go button.g{ background:#1a73e8; } #tp-ai .ai-go button.c{ background:#10a37f; } #tp-ai .ai-go button.k{ background:#c15f3c; } #tp-ai .ai-go button.m{ background:#5b6bd5; }
+  #tp-ai .ai-note{ font-size:.8em; color:#64748b; margin-top:6px; line-height:1.5; }
+
   
   #tp-jumpbar.tp-dropdown-box.tp-open { display: flex; flex-direction: column; gap: 12px; }
   .tp-jump-row { display: flex; align-items: center; gap: 8px; }
@@ -1591,7 +1605,7 @@ let isRomanPali = false;
   }
 
   function closeAllDropdowns(exceptId) {
-    const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown', 'tp-float-search-box'];
+    const dropdowns = ['tp-toc-dropdown', 'tp-crossref', 'tp-jumpbar', 'tp-sutta-search', 'tp-lang-dropdown', 'tp-float-search-box', 'tp-ai'];
     dropdowns.forEach(id => { if(id !== exceptId) { const el = document.getElementById(id); if(el) el.classList.remove('tp-open'); } });
   }
 
@@ -2666,6 +2680,115 @@ let isRomanPali = false;
     contentEl.scrollTop += (curRect.top - contentRect.top);
   }
 
+
+  // ===================== 🤖 AI ဖြင့် ရှင်းပြခိုင်းရန် =====================
+  const TP_AI_TASKS = [
+    { id:"plain", short:"ရိုးရှင်းစွာ မြန်မာလို ရှင်းပြပါ",  label:"ရိုးရှင်းစွာ ရှင်းပြ",
+      text:"အောက်ပါ ပိဋကတ်တော်အပိုင်းကို ဘာသာရေးမသိသူလည်း နားလည်နိုင်အောင် ရိုးရှင်းသော မြန်မာစကားဖြင့် ရှင်းပြပါ။ အဓိကအချက်များကို အချက်လိုက် ပြပြီး နောက်ဆုံးတွင် အနှစ်ချုပ် တစ်ခုပေးပါ။" },
+    { id:"attha", short:"ပါဠိ၊ အဋ္ဌကထာ၊ ဋီကာနှင့် တကွ ရှင်းပြပါ",  label:"အဋ္ဌကထာ/ဋီကာနှင့် တကွ",
+      text:"အောက်ပါ ပိဋကတ်တော်အပိုင်းကို ပါဠိတော်၊ အဋ္ဌကထာ၊ ဋီကာ အစဉ်အတိုင်း ရှင်းပြပါ။ ပါဠိတော်က ဘာဆိုလိုသည်၊ အဋ္ဌကထာဆရာက ဘယ်လို ဖွင့်ဆိုသည်၊ ဋီကာက ထပ်မံ ဘာထည့်ရှင်းသည်ကို ခွဲပြပါ။ အဋ္ဌကထာ/ဋီကာကို တိတိကျကျ မသိပါက 'မသေချာပါ' ဟု ပြောပါ။ မမှန်ကန်သည်ကို ခန့်မှန်း၍ မဖြည့်ပါနှင့်။" },
+    { id:"words", short:"ပါဠိစကားလုံး တစ်လုံးချင်း ရှင်းပြပါ",  label:"ပါဠိစကားလုံး တစ်လုံးချင်း",
+      text:"အောက်ပါ ပါဠိစာသားကို စကားလုံးတစ်လုံးချင်း ခွဲပြီး (ပါဠိ - ပုဒ်ကွဲ၊ ဝိဘတ်၊ မြန်မာအနက်) ဇယားပုံစံဖြင့် ရှင်းပြပါ။ ပြီးလျှင် စာကြောင်းတစ်ခုလုံး၏ အဓိပ္ပာယ်ကို မြန်မာလို ပေါင်းပြပါ။" },
+    { id:"sum", short:"အနှစ်ချုပ်နှင့် သင်ခန်းစာ ပေးပါ",    label:"အနှစ်ချုပ် + သင်ခန်းစာ",
+      text:"အောက်ပါ ပိဋကတ်တော်အပိုင်း၏ အနှစ်ချုပ် (၅ ကြောင်းအတွင်း)၊ အဓိက သင်ခန်းစာ ၃ ချက်၊ ဟောကြားရသည့် အကြောင်းရင်း (နိဒါန်း) ကို ပေးပါ။" },
+    { id:"prac", short:"လက်တွေ့ ကျင့်သုံးပုံ ပြပါ",   label:"လက်တွေ့ကျင့်သုံးပုံ",
+      text:"အောက်ပါ ပိဋကတ်တော်အပိုင်းမှ ဆုံးမချက်ကို နေ့စဉ်ဘဝနှင့် တရားအားထုတ်ခြင်းတွင် ဘယ်လို လက်တွေ့ ကျင့်သုံးမလဲ အဆင့်လိုက် ပြပါ။ အမှားများတတ်သည့်အချက်ကိုလည်း ထည့်ပါ။" },
+    { id:"quiz", short:"မေးခွန်း/အဖြေ ၁၀ ခု ပြုလုပ်ပါ",   label:"မေးခွန်း/အဖြေ",
+      text:"အောက်ပါ ပိဋကတ်တော်အပိုင်းကို သင်ယူသူအတွက် မေးခွန်း ၁၀ ခု (အဖြေနှင့်တကွ၊ လွယ်ကူကနေ ခက်ခဲအထိ) ပြုလုပ်ပေးပါ။" },
+    { id:"en", short:"Explain in English with the Aṭṭhakathā and Ṭīkā",     label:"English explanation",
+      text:"Please explain the following passage from the Pali Canon in clear English: what the Pali says, how the commentary (Aṭṭhakathā) and sub-commentary (Ṭīkā) explain it, and the key points for a practising Buddhist. If you are not sure about what the commentary says, say so instead of guessing." },
+    { id:"custom", short:"", label:"ကိုယ်ပိုင်မေးခွန်း", text:"" }
+  ];
+  let tpAi = { task:"plain", scope:"page", custom:"" };
+
+  function tp_aiSiteUrl(meta, page){
+    const q = new URLSearchParams(); q.set("basket", meta.basket); q.set("category", meta.category); q.set("book", meta.id); q.set("page", page);
+    return location.origin + location.pathname + "?" + q.toString();
+  }
+  async function tp_aiContext(basketId, categoryId, bookId, pageNum, bookMeta){
+    const idx = await ensureIndex(); await ensureSuttas(); const toc = await ensureToc();
+    // sutta title + page range
+    const inBook = (suttaIndex || []).filter(x => x.book_id === bookId).sort((a,b)=>a.page_number-b.page_number);
+    let sutta = null, suttaEnd = null;
+    for(let i=0;i<inBook.length;i++){ if(inBook[i].page_number <= pageNum){ sutta = inBook[i]; suttaEnd = inBook[i+1] ? inBook[i+1].page_number - 1 : (bookMeta.lastpage || pageNum); } else break; }
+    let heading = ""; const items = toc.filter(t=>t.book_id===bookId).sort((a,b)=>a.page_number-b.page_number);
+    for(const it of items){ if(it.page_number <= pageNum) heading = it.name; else break; }
+    // linked books (Pali / Aṭṭhakathā / Ṭīkā / ...) of the paragraphs of this page, same logic as the 📖 box
+    const paranums = parseParanums(currentRow && currentRow.paranum); const links = []; const seen = new Set();
+    const add = (id, page) => { const k = id + "-" + page; if(seen.has(k)) return; seen.add(k); const m = findBookMetaByPageRange(idx, id, page); if(m) links.push({ name: m.name, page, url: tp_aiSiteUrl(m, page) }); };
+    for(const p of (paranums.length ? paranums : [null])){
+      let rel = []; if(p != null) { try{ rel = await getAllRelatedForParagraph(bookId, p); }catch(e){} }
+      if(rel.length){ rel.forEach(x => add(x.book, x.page)); }
+      else { try{ for(const expId of await getFallbackRelatedBooks(bookId)){ const meta = idx.books.find(b=>b.id===expId); const pg = p != null ? await findPageForParagraph(expId, p) : null; add(expId, pg || (meta ? meta.firstpage : 1)); } }catch(e){} }
+    }
+    const basketLabel = (idx.basket_labels && idx.basket_labels[basketId]) || basketId, catLabel = (idx.category_labels && idx.category_labels[categoryId]) || categoryId;
+    const text = (document.getElementById("tp-content") || {}).innerText || "";
+    return { basketLabel, catLabel, book: bookMeta.name || bookId, page: pageNum, paranums, sutta, suttaEnd, heading, links,
+             here: tp_aiSiteUrl({ basket: basketId, category: categoryId, id: bookId }, pageNum), text: text.replace(/\n{3,}/g, "\n\n").trim() };
+  }
+  // compact version for the address of the AI site (Burmese letters are long in a URL); the full prompt is on the clipboard
+  function tp_aiShort(ctx){
+    const task = TP_AI_TASKS.find(t=>t.id===tpAi.task);
+    const ask = task.id === "custom" ? (tpAi.custom || "ရှင်းပြပါ") : task.short;
+    const L = [ask + " (" + (ctx.sutta ? ctx.sutta.name : ctx.heading || ctx.book) + (tpAi.scope === "sutta" ? " - သုတ္တန်တစ်ခုလုံး" : "") + ")", ctx.book + " စာမျက်နှာ " + ctx.page, ctx.here];
+    ctx.links.slice(0, 3).forEach(l => L.push(l.url));
+    return L.join("\n");
+  }
+  function tp_aiBuild(ctx, full){
+    const task = TP_AI_TASKS.find(t=>t.id===tpAi.task);
+    const ask = task.id === "custom" ? (tpAi.custom || "(မေးလိုသည်ကို ဤနေရာတွင် ရေးပါ)") : task.text;
+    const L = [];
+    L.push(ask, "");
+    L.push("▶ ကျမ်းကိုးကား");
+    L.push("• ကျမ်း - " + ctx.book + (ctx.catLabel ? " (" + ctx.catLabel + ")" : ""));
+    if(ctx.sutta) L.push("• သုတ္တန်/အခန်း - " + ctx.sutta.name + (tpAi.scope === "sutta" ? " (စာမျက်နှာ " + ctx.sutta.page_number + " မှ " + ctx.suttaEnd + " အထိ)" : ""));
+    else if(ctx.heading) L.push("• အခန်း - " + ctx.heading);
+    L.push("• စာမျက်နှာ - " + ctx.page + (ctx.paranums.length ? "၊ စာပိုဒ် - " + ctx.paranums.join(", ") : ""));
+    L.push("• ဤစာမျက်နှာ၏ ဝက်ဘ်လင့် - " + ctx.here);
+    if(ctx.links.length){ L.push("", "▶ ဆက်စပ်ကျမ်းများ (ပါဠိ / အဋ္ဌကထာ / ဋီကာ / ဘာသာပြန်) - သင့်ဘက်က ဖွင့်ကြည့်နိုင်လျှင် ဖွင့်ကြည့်ပါ"); ctx.links.forEach(l => L.push("• " + l.name + " စာမျက်နှာ " + l.page + " - " + l.url)); }
+    if(tpAi.scope === "sutta"){ L.push("", "(သုတ္တန်တစ်ခုလုံးကို ရှင်းပြပေးပါ။ ပထမစာမျက်နှာ လင့်မှ စတင်ပါ။ အောက်တွင် လက်ရှိ စာမျက်နှာ၏ စာသားကို ဥပမာအဖြစ် ပေးထားသည်။)"); }
+    let body = ctx.text; const cap = full ? 7000 : 900;
+    if(body.length > cap) body = body.slice(0, cap) + " …(ဆက်ရှိသေးသည်)";
+    if(body) L.push("", "▶ ပါဠိစာသား (ဤစာမျက်နှာ)", body);
+    L.push("", "မှတ်ချက် - လင့်များကို ဖွင့်မရလျှင် အပေါ်ပါ စာသားကိုသာ အခြေခံပါ။ မသေချာသည့် အချက်ကို 'မသေချာပါ' ဟုပြောပြီး မမှန်သည့်အချက်ကို မထည့်ပါနှင့်။ ဖြေဆိုရာတွင် ကျမ်းကိုးကား (ကျမ်းအမည်၊ စာမျက်နှာ) ထည့်ပါ။");
+    return L.join("\n");
+  }
+  async function tp_aiSetup(basketId, categoryId, bookId, pageNum, bookMeta){
+    const toggle = document.getElementById("tp-ai-toggle"), box = document.getElementById("tp-ai");
+    if(!toggle || !box) return;
+    let ctx = null;
+    const paint = async () => {
+      if(!ctx) ctx = await tp_aiContext(basketId, categoryId, bookId, pageNum, bookMeta);
+      const suttaTxt = ctx.sutta ? ctx.sutta.name : (ctx.heading || "—");
+      box.innerHTML = `<div class="ai-h">🤖 AI ဖြင့် ရှင်းပြခိုင်းရန်</div>
+        <div class="ai-ctx">📖 ${tp_sayEsc(ctx.book)}<br>🔖 ${tp_sayEsc(suttaTxt)}<br>📄 စာမျက်နှာ ${ctx.page}${ctx.paranums.length ? " · စာပိုဒ် " + ctx.paranums.join(", ") : ""} · 🔗 ဆက်စပ်ကျမ်း ${ctx.links.length} ခု</div>
+        <div class="ai-scope"><button data-scope="page" class="${tpAi.scope==="page"?"on":""}">ဤစာမျက်နှာ</button><button data-scope="sutta" class="${tpAi.scope==="sutta"?"on":""}" ${ctx.sutta ? "" : "disabled"}>သုတ္တန်တစ်ခုလုံး</button></div>
+        <div class="ai-opts">${TP_AI_TASKS.map(t=>`<button class="ai-opt ${t.id===tpAi.task?"on":""}" data-task="${t.id}">${t.label}</button>`).join("")}</div>
+        <textarea id="tp-ai-text" spellcheck="false"></textarea>
+        <div class="ai-go"><button class="cp" data-go="copy">📋 Copy</button><button class="g" data-go="gai">Google AI</button><button data-go="gs">Google</button><button class="c" data-go="gpt">ChatGPT</button><button class="k" data-go="cl">Claude</button><button class="m" data-go="gem">Gemini</button></div>
+        <div class="ai-note">စာသားကို အပေါ်မှာ ကိုယ်တိုင်ပြင်လို့ရပါသည်။ ခလုတ်တစ်ခုနှိပ်လျှင် prompt အပြည့်အစုံကို Copy လုပ်ပြီး AI ကို ဖွင့်ပေးမည် — စာသားရှည်၍ AI ဘက်တွင် ဖြတ်ထားလျှင် Ctrl+V (Paste) လုပ်ပါ။</div>`;
+      const ta = box.querySelector("#tp-ai-text"); const refill = () => { ta.value = tp_aiBuild(ctx, true); };
+      refill();
+      if(tpAi.task === "custom"){ ta.value = ""; ta.placeholder = "မေးလိုသည့်မေးခွန်းကို ရေးပါ… (ကျမ်းကိုးကား၊ လင့်၊ ပါဠိစာသား အလိုအလျောက် ထည့်ပေးမည်)"; }
+      box.querySelectorAll("[data-scope]").forEach(b => b.addEventListener("click", () => { tpAi.scope = b.dataset.scope; paint(); }));
+      box.querySelectorAll("[data-task]").forEach(b => b.addEventListener("click", () => { tpAi.task = b.dataset.task; paint(); }));
+      box.querySelectorAll("[data-go]").forEach(b => b.addEventListener("click", async () => {
+        let full = ta.value;
+        if(tpAi.task === "custom"){ tpAi.custom = ta.value.trim(); full = tp_aiBuild(ctx, true); }
+        try{ await navigator.clipboard.writeText(full); }catch(e){ ta.focus(); ta.select(); try{ document.execCommand("copy"); }catch(e2){} }
+        const short = encodeURIComponent(tp_aiShort(ctx));
+        const go = b.dataset.go;
+        if(go === "copy"){ b.textContent = "✅ Copy လုပ်ပြီး"; setTimeout(()=>{ b.textContent = "📋 Copy"; }, 1500); return; }
+        const urls = { gai: "https://www.google.com/search?udm=50&q=" + short, gs: "https://www.google.com/search?q=" + short, gpt: "https://chatgpt.com/?q=" + short, cl: "https://claude.ai/new?q=" + short, gem: "https://gemini.google.com/app" };
+        window.open(urls[go], "_blank", "noopener");
+      }));
+    };
+    toggle.addEventListener("click", async () => {
+      const willOpen = !box.classList.contains("tp-open"); closeAllDropdowns("tp-ai"); box.classList.toggle("tp-open", willOpen);
+      if(willOpen){ box.innerHTML = "<div class='tp-sutta-empty'>ပြင်ဆင်နေပါသည်...</div>"; try{ await paint(); }catch(e){ box.innerHTML = "<div class='tp-sutta-empty'>ဒေတာ မဖတ်နိုင်ပါ။</div>"; } }
+    });
+  }
+
   async function loadPage(basketId, categoryId, bookId, pageNum, firstpageHint){
     setFloatSearchVisible(false); document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
@@ -2686,6 +2809,7 @@ let isRomanPali = false;
             <button id="tp-jump-toggle" class="tp-icon-btn" title="စာမျက်နှာ/စာပိုဒ် သွားမည်">📄</button>
             <button id="tp-search-toggle" class="tp-icon-btn" title="သုတ္တန်ရှာရန်">🔍</button>
             <button id="tp-lang-toggle" class="tp-icon-btn" title="ဘာသာပြန်/နိဿယ ဖတ်ရန်">🌐</button>
+            <button id="tp-ai-toggle" class="tp-icon-btn" title="AI ဖြင့် ရှင်းပြခိုင်းရန် (Google AI / ChatGPT / Claude)">🤖</button>
             
             <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
             <div id="tp-crossref" class="tp-dropdown-box"></div>
@@ -2700,6 +2824,7 @@ let isRomanPali = false;
               <div id="tp-sutta-results"></div>
             </div>
             <div id="tp-lang-dropdown" class="tp-dropdown-box"><div id="tp-lang-list"></div></div>
+            <div id="tp-ai" class="tp-dropdown-box"></div>
           </div>
         </div>
         <button id="tp-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
@@ -2721,6 +2846,7 @@ let isRomanPali = false;
       
       linkifyCitations(document.getElementById("tp-content"));
       attachDictDblClick(document.getElementById("tp-content"));
+      tp_aiSetup(basketId, categoryId, bookId, pageNum, bookMeta);
 
       document.getElementById("tp-float-prev").disabled = pageNum <= minPage; document.getElementById("tp-float-next").disabled = pageNum >= maxPage;
       document.getElementById("tp-float-prev").addEventListener("click", ()=> loadPage(basketId, categoryId, bookId, pageNum-1, firstpageHint));
