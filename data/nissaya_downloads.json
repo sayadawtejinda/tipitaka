@@ -1,0 +1,725 @@
+{
+ "generated": "2026-10-15",
+ "books": [
+  {
+   "id": "mula_vi_01",
+   "title": "ပါရာဇိကပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 5622737,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "mula_vi_02",
+   "title": "ပါစိတ္တိယပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 6463636,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "mula_vi_03",
+   "title": "မဟာဝဂ္ဂပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 7542364,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "mula_vi_04",
+   "title": "စူဠဝဂ္ဂပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 7351799,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "mula_vi_05",
+   "title": "ပရိဝါရပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 5688002,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "mula_di_01",
+   "title": "သီလက္ခန္ဓဝဂ္ဂပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3638767,
+   "date": "2026-09-27"
+  },
+  {
+   "id": "mula_di_02",
+   "title": "မဟာဝဂ္ဂပါဠိ(သုတ်)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 4402859,
+   "date": "2026-09-27"
+  },
+  {
+   "id": "mula_di_03",
+   "title": "ပါထိကဝဂ္ဂပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3763150,
+   "date": "2026-09-27"
+  },
+  {
+   "id": "mula_ma_01",
+   "title": "မူလပဏ္ဏာသပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 6820989,
+   "date": "2026-10-02"
+  },
+  {
+   "id": "mula_ma_02",
+   "title": "မဇ္ဈိမပဏ္ဏာသပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 7419934,
+   "date": "2026-10-02"
+  },
+  {
+   "id": "mula_ma_03",
+   "title": "ဥပရိပဏ္ဏာသပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 5678196,
+   "date": "2026-10-02"
+  },
+  {
+   "id": "mula_sa_01",
+   "title": "သဂါထာဝဂ္ဂသံယုတ္တပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 3162419,
+   "date": "2026-10-04"
+  },
+  {
+   "id": "mula_sa_02",
+   "title": "နိဒါနဝဂ္ဂသံယုတ္တပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 3275227,
+   "date": "2026-10-03"
+  },
+  {
+   "id": "mula_sa_03",
+   "title": "ခန္ဓဝဂ္ဂသံယုတ္တပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 3447451,
+   "date": "2026-10-03"
+  },
+  {
+   "id": "mula_sa_04",
+   "title": "သဠာယတနဝဂ္ဂသံယုတ္တပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 5236041,
+   "date": "2026-10-03"
+  },
+  {
+   "id": "mula_sa_05",
+   "title": "မဟာဝဂ္ဂသံယုတ္တပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 5906317,
+   "date": "2026-10-03"
+  },
+  {
+   "id": "mula_an_01",
+   "title": "ဧကကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 719455,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_02",
+   "title": "ဒုကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 826214,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_03",
+   "title": "တိကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 3352380,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_04",
+   "title": "စတုက္ကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 4340258,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_05",
+   "title": "ပဉ္စကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 3962880,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_06",
+   "title": "ဆက္ကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 2514711,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_07",
+   "title": "သတ္တကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 1912154,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_08",
+   "title": "အဋ္ဌကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 2598107,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_09",
+   "title": "နဝကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 1652376,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_10",
+   "title": "ဒသကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 4308141,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_11",
+   "title": "ဧကာဒသကနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 751329,
+   "date": "2026-10-09"
+  },
+  {
+   "id": "mula_ku_01",
+   "title": "ခုဒ္ဒကပါဌပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 109519,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_02",
+   "title": "ဓမ္မပဒပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 475922,
+   "date": "2026-10-14"
+  },
+  {
+   "id": "mula_ku_03",
+   "title": "ဥဒါနပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1525813,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_04",
+   "title": "ဣတိဝုတ္တကပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 274263,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_05",
+   "title": "သုတ္တနိပါတပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1969369,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_06",
+   "title": "ဝိမာနဝတ္ထုပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1444715,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_07",
+   "title": "ပေတဝတ္ထုပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1125175,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_08",
+   "title": "ထေရဂါထာပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1997364,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_09",
+   "title": "ထေရီဂါထာပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 633260,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_11",
+   "title": "အပဒါနပါဠိ (ဒု)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2548672,
+   "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_12",
+   "title": "ဗုဒ္ဓဝံသပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1054256,
+   "date": "2026-10-14"
+  },
+  {
+   "id": "mula_ku_13",
+   "title": "စရိယာပိဋကပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 381535,
+   "date": "2026-10-14"
+  },
+  {
+   "id": "mula_ku_14",
+   "title": "ဇာတကပါဠိ (ပ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3613566,
+   "date": "2026-10-14"
+  },
+  {
+   "id": "mula_ku_15",
+   "title": "ဇာတကပါဠိ (ဒု)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1694866,
+   "date": "2026-10-14"
+  },
+  {
+   "id": "mula_ku_16",
+   "title": "မဟာနိဒ္ဒေသပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 6083088,
+   "date": "2026-10-15"
+  },
+  {
+   "id": "mula_ku_17",
+   "title": "စူဠနိဒ္ဒေသပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4018349,
+   "date": "2026-10-15"
+  },
+  {
+   "id": "mula_ku_19",
+   "title": "မိလိန္ဒပဉှပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2869345,
+   "date": "2026-10-15"
+  },
+  {
+   "id": "mula_ku_20",
+   "title": "နေတ္တိပ္ပကရဏပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2501590,
+   "date": "2026-10-15"
+  },
+  {
+   "id": "mula_ku_21",
+   "title": "ပေဋကောပဒေသပါဠိ",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2455498,
+   "date": "2026-10-15"
+  },
+  {
+   "id": "attha_vi_01_01",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4584673,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_vi_01_02",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3761687,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_vi_02",
+   "title": "ပါစိတ္တိယအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 2760271,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_vi_03",
+   "title": "မဟာဝဂ္ဂအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 2711948,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_vi_04",
+   "title": "စူဠဝဂ္ဂအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 1785279,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_vi_05",
+   "title": "ပရိဝါရအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 1524615,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_di_01",
+   "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 5794319,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_di_02",
+   "title": "မဟာဝဂ္ဂဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 2931208,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_di_03",
+   "title": "ပါထိကဝဂ္ဂဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 2964466,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "attha_sa_01",
+   "title": "သဂါထာဝဂ္ဂအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 2420750,
+   "date": "2026-10-08"
+  },
+  {
+   "id": "attha_sa_02",
+   "title": "နိဒါနဝဂ္ဂအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 3336716,
+   "date": "2026-10-08"
+  },
+  {
+   "id": "attha_sa_03",
+   "title": "ခန္ဓဝဂ္ဂအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 1411824,
+   "date": "2026-10-08"
+  },
+  {
+   "id": "attha_sa_04",
+   "title": "သဠာယတနဝဂ္ဂအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 2064338,
+   "date": "2026-10-08"
+  },
+  {
+   "id": "attha_sa_05",
+   "title": "မဟာဝဂ္ဂအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 2602883,
+   "date": "2026-10-08"
+  },
+  {
+   "id": "attha_an_01",
+   "title": "ဧကကနိပါတအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 3488784,
+   "date": "2026-10-10"
+  },
+  {
+   "id": "attha_an_02",
+   "title": "ဒုကာဒိနိပါတအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 5719949,
+   "date": "2026-10-10"
+  },
+  {
+   "id": "attha_an_03",
+   "title": "ပဉ္စကာဒိနိပါတအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 2373249,
+   "date": "2026-10-10"
+  },
+  {
+   "id": "attha_an_04",
+   "title": "အဋ္ဌကာဒိနိပါတအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 2138012,
+   "date": "2026-10-10"
+  },
+  {
+   "id": "attha_ku_02_01",
+   "title": "ဓမ္မပဒအဋ္ဌကထာ (ပ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 9298473,
+   "date": "2026-09-22"
+  },
+  {
+   "id": "attha_ku_02_02",
+   "title": "ဓမ္မပဒအဋ္ဌကထာ (ဒု)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4408032,
+   "date": "2026-09-22"
+  },
+  {
+   "id": "tika_vi_05",
+   "title": "ဝိမတိဝိနောဒနီဋီကာ (ပ)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4838421,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "tika_vi_06",
+   "title": "ဝိမတိဝိနောဒနီဋီကာ (ဒု)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3489711,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "tika_di_01_02",
+   "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ပ)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 9478114,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "tika_di_01_03",
+   "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ဒု)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 7646968,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "annya_bi_03",
+   "title": "ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ (ပ)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 5711307,
+   "date": "2026-08-20"
+  },
+  {
+   "id": "annya_bi_04",
+   "title": "ဝိသုဒ္ဓိမဂ္ဂမဟာဋီကာ (ဒု)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 6938994,
+   "date": "2026-08-20"
+  }
+ ]
+}

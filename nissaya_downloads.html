@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="my">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>နိဿယ ဖိုင်များ ဒေါင်းလုတ်</title>
+<style>
+:root{--bg:#f6f2e8;--card:#fffdf7;--ink:#2b2418;--mute:#7a6d56;--line:#e3d9c0;--acc:#8a4b12;--acc2:#b8741f;--new:#1b7a3a;--upd:#b3261e}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1812;--card:#26211a;--ink:#efe6d2;--mute:#a79a80;--line:#3a3326;--acc:#e3a45a;--acc2:#c98b3f;--new:#5fd08a;--upd:#ff8a80}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Pyidaungsu","Noto Sans Myanmar","Myanmar Text",system-ui,sans-serif;line-height:1.7}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.5rem;margin:.2em 0 .1em;color:var(--acc)}
+.sub{color:var(--mute);margin:0 0 14px}
+.note{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--acc2);border-radius:8px;padding:10px 14px;margin:12px 0;font-size:.95rem}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}
+input[type=search]{flex:1 1 220px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit}
+button,.btn{font:inherit;cursor:pointer;border:1px solid var(--acc2);background:var(--card);color:var(--acc);border-radius:8px;padding:5px 12px;text-decoration:none;display:inline-block}
+button:hover,.btn:hover{background:var(--acc2);color:#fff}
+button.big{background:var(--acc2);color:#fff;padding:9px 16px;font-weight:600}
+button.big:hover{background:var(--acc)}
+button:disabled{opacity:.5;cursor:default}
+.fmt label{margin-right:10px;cursor:pointer}
+.chips button.on{background:var(--acc2);color:#fff}
+details.g{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+details.g>summary{cursor:pointer;padding:10px 14px;font-weight:600;display:flex;flex-wrap:wrap;gap:8px;align-items:center;list-style:none}
+details.g>summary::-webkit-details-marker{display:none}
+details.g>summary::before{content:"▸";color:var(--acc)}
+details.g[open]>summary::before{content:"▾"}
+details.g>summary .sp{flex:1}
+.cnt{color:var(--mute);font-weight:400;font-size:.9rem}
+.row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 14px;border-top:1px solid var(--line)}
+.row .t{flex:1 1 240px}
+.row .id{color:var(--mute);font-size:.8rem}
+.row .d{color:var(--mute);font-size:.85rem;white-space:nowrap}
+.tag{font-size:.75rem;border-radius:20px;padding:0 8px;margin-left:6px;color:#fff}
+.tag.new{background:var(--new)}.tag.upd{background:var(--upd)}
+#status{position:sticky;bottom:0;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-top:14px;display:none}
+.foot{color:var(--mute);font-size:.85rem;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>နိဿယ ဖိုင်များ — ဒေါင်းလုတ်ယူရန်</h1>
+<p class="sub">ပါဠိတော်၊ အဋ္ဌကထာ၊ ဋီကာ နိဿယ စာအုပ်များ။ တစ်အုပ်ချင်းဖြစ်စေ၊ အားလုံးတစ်ခါတည်းဖြစ်စေ ယူနိုင်ပါသည်။</p>
+<div class="note">ဤနိဿယများကို လက်ဖြင့်ရိုက်ထားသော စာမှ စစ်ဆေးထားသော်လည်း အမှားအယွင်း ကျန်နိုင်ပါသေးသည်။ စာအုပ်အသစ်များ ဆက်လက်ထည့်သွင်းနေပြီး စစ်ထားသောစာများ ပြန်လည်ပြင်ဆင်ရာတွင် ဖိုင်ရက်စွဲ ပြောင်းလာပါမည်။ ရက်စွဲကို ကြည့်၍ သင့်ဖိုင်က အသစ်လား အဟောင်းလား သိနိုင်ပါသည်။</div>
+
+<div class="bar">
+  <input id="q" type="search" placeholder="စာအုပ်အမည် ရှာရန် (ဥပမာ - ဓမ္မပဒ၊ ဒီဃ၊ mula_ku)">
+  <span class="fmt">ဖိုင်အမျိုးအစား:
+    <label><input type="radio" name="fmt" value="html" checked> HTML</label>
+    <label><input type="radio" name="fmt" value="txt"> စာသား (.txt)</label>
+  </span>
+</div>
+<div class="bar">
+  <button class="big" id="all">⬇ အားလုံး တစ်ခါတည်း (ZIP)</button>
+  <span class="cnt" id="total"></span>
+</div>
+<div class="bar chips" id="chips"></div>
+<div id="list">ဖတ်နေပါသည်…</div>
+<div id="status"></div>
+<p class="foot" id="gen"></p>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+const MD = "data/nissaya_downloads.json";
+let books = [], basketFilter = "";
+const $ = s => document.querySelector(s);
+const MY = "၀၁၂၃၄၅၆၇၈၉";
+const mm = s => String(s).replace(/\d/g, d => MY[d]);
+const fmt = () => document.querySelector('input[name=fmt]:checked').value;
+const mb = n => n >= 1e6 ? (n/1e6).toFixed(1) + " MB" : Math.max(1, Math.round(n/1e3)) + " KB";
+const ls = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k) || "{}"); }catch(e){ return {}; } },
+  set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+};
+function mine(){ return ls.get("nissaya_dl"); }
+function mark(ids){ const m = mine(); const t = new Date().toISOString().slice(0,10); ids.forEach(i => m[i] = t); ls.set("nissaya_dl", m); }
+function daysSince(d){ return (Date.now() - new Date(d + "T00:00:00").getTime()) / 864e5; }
+function safe(s){ return s.replace(/[\\/:*?"<>|]/g, "_"); }
+function fname(b, ext){ return safe(b.id + "_" + b.title + "_" + b.date) + "." + ext; }
+
+function wrapHtml(b, frag){
+  return '<!doctype html><html lang="my"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">' +
+    '<title>' + b.title + ' (နိဿယ)</title><style>body{max-width:820px;margin:0 auto;padding:18px;font-family:"Pyidaungsu","Noto Sans Myanmar","Myanmar Text",sans-serif;line-height:1.9;font-size:18px}' +
+    'h2,h4{color:#8a4b12}p{margin:.7em 0}.meta{color:#777;font-size:.8em;border-bottom:1px solid #ddd;padding-bottom:8px}</style></head><body>' +
+    '<p class="meta">' + b.basket + ' · ' + b.category + ' · ' + b.title + ' · ဖိုင်ရက်စွဲ ' + b.date + ' · ' + b.id + '</p>' + frag + '</body></html>';
+}
+function toText(b, frag){
+  const d = new DOMParser().parseFromString("<body>" + frag + "</body>", "text/html");
+  const out = [];
+  d.body.querySelectorAll("p,h1,h2,h3,h4,h5").forEach(e => { if(!e.querySelector("p,h1,h2,h3,h4,h5")){ const t = e.textContent.replace(/\s+/g, " ").trim(); if(t) out.push(t); } });
+  return b.title + " (" + b.id + ") — ဖိုင်ရက်စွဲ " + b.date + "\n\n" + out.join("\n\n") + "\n";
+}
+async function getFrag(b){
+  const r = await fetch("data/" + b.id + ".html?v=" + b.date, {cache: "no-cache"});
+  if(!r.ok) throw new Error(b.id + " " + r.status);
+  return await r.text();
+}
+function save(blob, name){
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 20000);
+}
+function status(t){ const s = $("#status"); s.style.display = t ? "block" : "none"; s.textContent = t || ""; }
+async function one(b, ext){
+  status(b.title + " ကို ယူနေပါသည်…");
+  try{
+    const f = await getFrag(b);
+    const body = ext === "html" ? wrapHtml(b, f) : toText(b, f);
+    save(new Blob([body], {type: ext === "html" ? "text/html;charset=utf-8" : "text/plain;charset=utf-8"}), fname(b, ext));
+    mark([b.id]); render();
+    status("");
+  }catch(e){ status("မရပါ: " + e.message); }
+}
+let busy = false;
+async function zip(list, zname){
+  if(busy) return; busy = true;
+  document.querySelectorAll("button").forEach(x => x.disabled = true);
+  const ext = fmt();
+  try{
+    if(typeof JSZip === "undefined") throw new Error("JSZip မရပါ (အင်တာနက်စစ်ပါ)");
+    const z = new JSZip(); let n = 0;
+    for(const b of list){
+      n++; status("(" + n + "/" + list.length + ") " + b.title + " ယူနေပါသည်…");
+      const f = await getFrag(b);
+      z.file(fname(b, ext), ext === "html" ? wrapHtml(b, f) : toText(b, f));
+    }
+    status("ZIP ဖိုင်ပြုလုပ်နေပါသည်… (အကြီးကြီးဖြစ်လျှင် ခဏကြာနိုင်ပါသည်)");
+    const blob = await z.generateAsync({type: "blob", compression: "DEFLATE", compressionOptions: {level: 3}}, m => status("ZIP ပြုလုပ်နေပါသည် " + Math.round(m.percent) + "%"));
+    save(blob, zname + "_" + new Date().toISOString().slice(0,10) + ".zip");
+    mark(list.map(b => b.id)); render();
+    status("ပြီးပါပြီ — " + list.length + " အုပ် (" + mb(blob.size) + ")");
+  }catch(e){ status("မအောင်မြင်ပါ: " + e.message + " (ဖုန်းမှာ အားလုံးယူရင် memory မလောက်နိုင်သဖြင့် အုပ်စုလိုက် ယူကြည့်ပါ)"); }
+  document.querySelectorAll("button").forEach(x => x.disabled = false); busy = false;
+}
+function render(){
+  const q = $("#q").value.trim().toLowerCase(), m = mine();
+  const shown = books.filter(b => (!basketFilter || b.basket === basketFilter) && (!q || (b.title + " " + b.id + " " + b.category + " " + b.basket).toLowerCase().includes(q)));
+  const groups = new Map();
+  shown.forEach(b => { const k = b.basket + " · " + b.category; if(!groups.has(k)) groups.set(k, []); groups.get(k).push(b); });
+  const openAll = !!q || !!basketFilter;
+  const root = $("#list"); root.innerHTML = "";
+  if(!shown.length){ root.textContent = "မတွေ့ပါ။"; }
+  groups.forEach((arr, k) => {
+    const d = document.createElement("details"); d.className = "g"; if(openAll) d.open = true;
+    const s = document.createElement("summary");
+    s.innerHTML = '<span>' + k + '</span><span class="cnt">' + mm(arr.length) + ' အုပ် · ' + mb(arr.reduce((a,b) => a + b.size, 0)) + '</span><span class="sp"></span>';
+    const gb = document.createElement("button"); gb.textContent = "⬇ ဤအုပ်စု ZIP";
+    gb.onclick = ev => { ev.preventDefault(); ev.stopPropagation(); zip(arr, safe(k.replace(/ · /, "_"))); };
+    s.appendChild(gb); d.appendChild(s);
+    arr.forEach(b => {
+      const r = document.createElement("div"); r.className = "row";
+      let tag = "";
+      if(m[b.id] && m[b.id] < b.date) tag = '<span class="tag upd">အသစ်ပြင်ထားသည်</span>';
+      else if(!m[b.id] && daysSince(b.date) <= 30) tag = '<span class="tag new">အသစ်</span>';
+      r.innerHTML = '<div class="t">' + b.title + tag + '<div class="id">' + b.id + (m[b.id] ? ' · သင်ယူထားသည့်ရက် ' + m[b.id] : '') + '</div></div><div class="d">ရက်စွဲ ' + b.date + '<br>' + mb(b.size) + '</div>';
+      ["html", "txt"].forEach(ext => { const x = document.createElement("button"); x.textContent = ext === "html" ? "⬇ HTML" : "⬇ TXT"; x.onclick = () => one(b, ext); r.appendChild(x); });
+      d.appendChild(r);
+    });
+    root.appendChild(d);
+  });
+}
+function chips(){
+  const bs = [...new Set(books.map(b => b.basket))];
+  const c = $("#chips"); c.innerHTML = "";
+  [["", "အားလုံး"]].concat(bs.map(x => [x, x])).forEach(([v, t]) => {
+    const x = document.createElement("button"); x.textContent = t; if(basketFilter === v) x.className = "on";
+    x.onclick = () => { basketFilter = v; chips(); render(); }; c.appendChild(x);
+  });
+}
+fetch(MD + "?t=" + Date.now(), {cache: "no-cache"}).then(r => r.json()).then(j => {
+  books = j.books;
+  $("#total").textContent = "စုစုပေါင်း " + mm(books.length) + " အုပ် · " + mb(books.reduce((a,b) => a + b.size, 0)) + " (မူရင်း)";
+  $("#gen").textContent = "စာရင်း ပြုပြင်သည့်ရက် " + j.generated + " — စာအုပ်အသစ်တင်တိုင်း ဤစာရင်း အလိုအလျောက် ပြောင်းပါသည်။";
+  chips(); render();
+}).catch(e => { $("#list").textContent = "စာရင်း မရပါ: " + e.message; });
+$("#q").addEventListener("input", render);
+$("#all").onclick = () => zip(books, "nissaya_all");
+})();
+</script>
+</body>
+</html>
