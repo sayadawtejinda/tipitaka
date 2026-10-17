@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-15",
+ "generated": "2026-10-17",
  "books": [
   {
    "id": "mula_vi_01",
@@ -288,8 +288,8 @@
    "basket_key": "mula",
    "category": "ခုဒ္ဒကနိကာယ်",
    "cat_key": "ku",
-   "size": 475922,
-   "date": "2026-10-14"
+   "size": 476014,
+   "date": "2026-10-17"
   },
   {
    "id": "mula_ku_03",
@@ -360,6 +360,16 @@
    "cat_key": "ku",
    "size": 633260,
    "date": "2026-10-12"
+  },
+  {
+   "id": "mula_ku_10",
+   "title": "အပဒါနပါဠိ (ပ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4016563,
+   "date": "2026-10-17"
   },
   {
    "id": "mula_ku_11",
@@ -650,6 +660,16 @@
    "cat_key": "an",
    "size": 2138012,
    "date": "2026-10-10"
+  },
+  {
+   "id": "attha_ku_01",
+   "title": "ခုဒ္ဒကပါဌအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3157004,
+   "date": "2026-10-17"
   },
   {
    "id": "attha_ku_02_01",
