@@ -2718,9 +2718,9 @@ let isRomanPali = false;
       text:"Please explain the following topic from the Pali Canon guide in clear English for a reader who is not familiar with Pali literature, using the references listed. If you are not sure what a reference says, say so instead of guessing." },
     { id:"custom", label:"ကိုယ်ပိုင်မေးခွန်း", short:"", text:"" }
   ];
-  let tpAi = { task:"plain", scope:"page", custom:"", size:"none" };
-  const TP_AI_NOTE_X = "မှတ်ချက် - အပေါ်ပါ လင့်များသည် JavaScript ဖြင့်မှ စာသားပြသောကြောင့် AI က တိုက်ရိုက်မဖတ်နိုင်ပါ။ ထို့ကြောင့် လင့်ထဲက စာမျက်နှာစာသားကို ဤ prompt ထဲတွင် တိုက်ရိုက်ထည့်ပေးထားသည်။ ထည့်ပေးထားသော စာသားကိုသာ အခြေခံ၍ ဖြေပါ။ မသေချာသည်ကို 'မသေချာပါ' ဟုပြောပါ။ ကျမ်းအမည်၊ စာမျက်နှာ ကိုးကား၍ ဖြေပါ။";
-  const TP_AI_NOTE = "မှတ်ချက် - လင့်များကို ဖွင့်မရလျှင် အပေါ်ပါ စာသားကိုသာ အခြေခံပါ။ မသေချာသည့် အချက်ကို 'မသေချာပါ' ဟုပြောပြီး မမှန်သည့်အချက်ကို မထည့်ပါနှင့်။ ဖြေဆိုရာတွင် ကျမ်းကိုးကား (ကျမ်းအမည်၊ စာမျက်နှာ) ထည့်ပါ။";
+  let tpAi = { task:"plain", scope:"page", custom:"", size:"short" };
+  const TP_AI_NOTE = "မှတ်ချက် - အပေါ်ပါ ပါဠိတော်၊ အဋ္ဌကထာ၊ ဋီကာ၊ သုတ္တန် စာသားများကိုသာ အခြေခံ၍ ဖြေပါ။ ဝက်ဘ်လင့်များကို ဖွင့်ရန် မလိုပါ။ စာသားထဲတွင် မပါသည့်အချက်ကို မသိလျှင် 'မသေချာပါ' ဟု ပြောပါ။";
+  const TP_AI_NOTE_X = TP_AI_NOTE;
 
   function tp_aiSiteUrl(meta, page){
     const q = new URLSearchParams(); q.set("basket", meta.basket); q.set("category", meta.category); q.set("book", meta.id); q.set("page", page);
@@ -2728,7 +2728,6 @@ let isRomanPali = false;
   }
   // ---- လင့်များသည် JavaScript ဖြင့်မှ စာသားပြသောကြောင့် AI က တိုက်ရိုက်မဖတ်နိုင် → လင့်ထဲက စာမျက်နှာစာသားကို prompt ထဲ တိုက်ရိုက်ထည့်ပေးသည်
   const TP_AI_SIZES = [
-    { id:"none",  label:"မထည့်ပါ (လင့်သာ)", chars:0 },
     { id:"short", label:"အတို (~၈,၀၀၀ လုံး)", chars:8000 },
     { id:"mid",   label:"အလယ် (~၂၅,၀၀၀ လုံး)", chars:25000 },
     { id:"long",  label:"အရှည် (~၆၀,၀၀၀ လုံး)", chars:60000 }
@@ -2768,7 +2767,7 @@ let isRomanPali = false;
     if(spec.scopes && !spec.scopes.some(s => s.id === tpAi.scope && !s.disabled)) tpAi.scope = spec.scopes[0].id;
     box.innerHTML = `<div class="ai-h">🤖 AI ဖြင့် ရှင်းပြခိုင်းရန်</div>
       <div class="ai-ctx">${spec.ctxHtml}</div>
-      ${spec.sizes ? `<div class="ai-h2">🔗 လင့်ထဲက စာသားကို prompt ထဲ ထည့်မလား? <small>(AI က လင့်ကို မဖတ်နိုင်သောကြောင့် စာသားကို တိုက်ရိုက်ထည့်ပေးသည်)</small></div><div class="ai-opts ai-sizes">${TP_AI_SIZES.map(z => `<button class="ai-opt ${z.id === tpAi.size ? "on" : ""}" data-size="${z.id}">${z.label}</button>`).join("")}</div><div class="ai-load"></div>` : ""}
+      ${spec.sizes ? `<div class="ai-h2">📖 prompt ထဲ ထည့်မည့် ကျမ်းစာသား ပမာဏ <small>(AI က လင့်ကို မဖတ်နိုင်သောကြောင့် ပါဠိ/အဋ္ဌကထာ/သုတ္တန် စာသားကို တိုက်ရိုက်ထည့်ပေးသည်)</small></div><div class="ai-opts ai-sizes">${TP_AI_SIZES.map(z => `<button class="ai-opt ${z.id === tpAi.size ? "on" : ""}" data-size="${z.id}">${z.label}</button>`).join("")}</div><div class="ai-load"></div>` : ""}
       ${spec.scopes ? `<div class="ai-scope">${spec.scopes.map(s => `<button data-scope="${s.id}" class="${tpAi.scope === s.id ? "on" : ""}" ${s.disabled ? "disabled" : ""}>${s.label}</button>`).join("")}</div>` : ""}
       <div class="ai-opts">${tasks.map(t => `<button class="ai-opt ${t.id === tpAi.task ? "on" : ""}" data-task="${t.id}">${t.label}</button>`).join("")}</div>
       <textarea class="ai-ta" spellcheck="false"></textarea>
@@ -2842,25 +2841,25 @@ let isRomanPali = false;
         }
         this.extra.key = key;
       },
-      ctxHtml: `📖 ${tp_sayEsc(ctx.book)}<br>🔖 ${tp_sayEsc(title)}<br>📄 စာမျက်နှာ ${ctx.page}${ctx.paranums.length ? " · စာပိုဒ် " + ctx.paranums.join(", ") : ""} · 🔗 ဆက်စပ်ကျမ်း ${ctx.links.length} ခု`,
+      ctxHtml: `📖 ${tp_sayEsc(ctx.book)}<br>🔖 ${tp_sayEsc(title)}<br>📄 စာမျက်နှာ ${ctx.page}${ctx.paranums.length ? " · စာပိုဒ် " + ctx.paranums.join(", ") : ""} · 📚 ဆက်စပ်ကျမ်း ${ctx.links.length} ခု`,
       build(full){
         const task = tp_aiTask(TP_AI_TASKS), ask = task.id === "custom" ? (tpAi.custom || "(မေးလိုသည်ကို ဤနေရာတွင် ရေးပါ)") : task.text;
         const L = [ask, "", "▶ ကျမ်းကိုးကား", "• ကျမ်း - " + ctx.book + (ctx.catLabel ? " (" + ctx.catLabel + ")" : "")];
         if(ctx.sutta) L.push("• သုတ္တန်/အခန်း - " + ctx.sutta.name + (tpAi.scope === "sutta" ? " (စာမျက်နှာ " + ctx.sutta.page_number + " မှ " + ctx.suttaEnd + " အထိ)" : ""));
         else if(ctx.heading) L.push("• အခန်း - " + ctx.heading);
-        L.push("• စာမျက်နှာ - " + ctx.page + (ctx.paranums.length ? "၊ စာပိုဒ် - " + ctx.paranums.join(", ") : ""), "• ဤစာမျက်နှာ၏ ဝက်ဘ်လင့် - " + ctx.here);
-        if(ctx.links.length){ L.push("", "▶ ဆက်စပ်ကျမ်းများ (ပါဠိ / အဋ္ဌကထာ / ဋီကာ / ဘာသာပြန်) - သင့်ဘက်က ဖွင့်ကြည့်နိုင်လျှင် ဖွင့်ကြည့်ပါ"); ctx.links.forEach(l => L.push("• " + l.name + " စာမျက်နှာ " + l.page + " - " + l.url)); }
-        if(tpAi.scope === "sutta") L.push("", "(သုတ္တန်တစ်ခုလုံးကို ရှင်းပြပေးပါ။ ပထမစာမျက်နှာ လင့်မှ စတင်ပါ။ အောက်တွင် လက်ရှိ စာမျက်နှာ၏ စာသားကို ဥပမာအဖြစ် ပေးထားသည်။)");
+        L.push("• စာမျက်နှာ - " + ctx.page + (ctx.paranums.length ? "၊ စာပိုဒ် - " + ctx.paranums.join(", ") : ""));
+        if(ctx.links.length){ L.push("", "▶ ဆက်စပ်ကျမ်းများ (ပါဠိ / အဋ္ဌကထာ / ဋီကာ / ဘာသာပြန်) - စာသားကို အောက်တွင် ထည့်ပေးထားသည်"); ctx.links.forEach(l => L.push("• " + l.name + " စာမျက်နှာ " + l.page)); }
+        if(tpAi.scope === "sutta") L.push("", "(သုတ္တန်တစ်ခုလုံးကို ရှင်းပြပေးပါ။ အောက်တွင် သုတ္တန်၏ စာမျက်နှာများ၏ စာသားကို ပေးထားသည်။)");
         let body = ctx.text; if(body.length > 7000) body = body.slice(0, 7000) + " …(ဆက်ရှိသေးသည်)";
         if(body) L.push("", "▶ ပါဠိစာသား (ဤစာမျက်နှာ)", body);
         const sx = this.extra, haveX = tpAi.size !== "none" && sx.key === tpAi.size + "|" + tpAi.scope;
-        if(haveX){ tp_aiTextBlocks("သုတ္တန်၏ အခြားစာမျက်နှာများ (ပါဠိတော်)", sx.pali).forEach(x => L.push(x)); tp_aiTextBlocks("ဆက်စပ်ကျမ်းများ၏ စာသား (အဋ္ဌကထာ / ဋီကာ စသည် — လင့်ထဲက စာမျက်နှာများ)", sx.link).forEach(x => L.push(x)); }
+        if(haveX){ tp_aiTextBlocks("သုတ္တန်၏ အခြားစာမျက်နှာများ (ပါဠိတော်)", sx.pali).forEach(x => L.push(x)); tp_aiTextBlocks("ဆက်စပ်ကျမ်းများ၏ စာသား (အဋ္ဌကထာ / ဋီကာ စသည်)", sx.link).forEach(x => L.push(x)); }
         L.push("", haveX ? TP_AI_NOTE_X : TP_AI_NOTE); return L.join("\n");
       },
       shorten(){
         const task = tp_aiTask(TP_AI_TASKS), ask = task.id === "custom" ? (tpAi.custom || "ရှင်းပြပါ") : task.short;
-        const L = [ask + " (" + (ctx.sutta ? ctx.sutta.name : ctx.heading || ctx.book) + (tpAi.scope === "sutta" ? " - သုတ္တန်တစ်ခုလုံး" : "") + ")", ctx.book + " စာမျက်နှာ " + ctx.page, ctx.here];
-        ctx.links.slice(0, 3).forEach(l => L.push(l.url)); return L.join("\n");
+        const L = [ask + " (" + (ctx.sutta ? ctx.sutta.name : ctx.heading || ctx.book) + (tpAi.scope === "sutta" ? " - သုတ္တန်တစ်ခုလုံး" : "") + ")", ctx.book + " စာမျက်နှာ " + ctx.page];
+        ctx.links.slice(0, 3).forEach(l => L.push(l.name + " စာမျက်နှာ " + l.page)); return L.join("\n");
       }
     };
   }
@@ -2872,7 +2871,7 @@ let isRomanPali = false;
       const willOpen = !box.classList.contains("tp-open"); closeAllDropdowns("tp-ai"); box.classList.toggle("tp-open", willOpen);
       if(!willOpen) return;
       box.innerHTML = "<div class='tp-sutta-empty'>ပြင်ဆင်နေပါသည်...</div>";
-      try{ if(!spec) spec = tp_aiPageSpec(await tp_aiContext(basketId, categoryId, bookId, pageNum, bookMeta)); tp_aiPaint(box, spec); }
+      try{ if(!spec) spec = tp_aiPageSpec(await tp_aiContext(basketId, categoryId, bookId, pageNum, bookMeta)); box.innerHTML = "<div class='tp-sutta-empty'>⏳ ကျမ်းစာသား ဖတ်နေသည်…</div>"; try{ await spec.loadExtra(tpAi.size, tpAi.scope); }catch(e2){} tp_aiPaint(box, spec); }
       catch(e){ box.innerHTML = "<div class='tp-sutta-empty'>ဒေတာ မဖတ်နိုင်ပါ။</div>"; }
     });
   }
@@ -2908,7 +2907,7 @@ let isRomanPali = false;
       build(){
         const task = tp_aiTask(TP_AI_GUIDE_TASKS), ask = task.id === "custom" ? (tpAi.custom || "(မေးလိုသည်ကို ဤနေရာတွင် ရေးပါ)") : task.text;
         const L = [ask, "", "▶ ခေါင်းစဉ် - " + title];
-        if(refs.length){ L.push("", "▶ ကျမ်းညွှန်းများ (ကျမ်း - စာမျက်နှာ - လင့်)"); refs.slice(0, 60).forEach(r => L.push("• " + r.name + " - " + r.page + (r.url ? " - " + r.url : ""))); if(refs.length > 60) L.push("• …နောက်ထပ် " + (refs.length - 60) + " ခု"); }
+        if(refs.length){ L.push("", "▶ ကျမ်းညွှန်းများ (ကျမ်း - စာမျက်နှာ)"); refs.slice(0, 60).forEach(r => L.push("• " + r.name + " - " + r.page)); if(refs.length > 60) L.push("• …နောက်ထပ် " + (refs.length - 60) + " ခု"); }
         if(text) L.push("", "▶ စာမျက်နှာပါ စာသား", text);
         const haveX = tpAi.size !== "none" && this.extra.key === tpAi.size;
         if(haveX) tp_aiTextBlocks("ကျမ်းညွှန်းများ ညွှန်းထားသော စာမျက်နှာများ၏ စာသား", this.extra.link).forEach(x => L.push(x));
@@ -2916,7 +2915,7 @@ let isRomanPali = false;
       },
       shorten(){
         const task = tp_aiTask(TP_AI_GUIDE_TASKS), ask = task.id === "custom" ? (tpAi.custom || "ရှင်းပြပါ") : task.short;
-        const L = [ask + " (" + title + ")"]; refs.filter(r => r.url).slice(0, 4).forEach(r => L.push(r.url)); return L.join("\n");
+        const L = [ask + " (" + title + ")"]; refs.slice(0, 4).forEach(r => L.push(r.name + " - " + r.page)); return L.join("\n");
       }
     };
   }
@@ -2936,7 +2935,7 @@ let isRomanPali = false;
         if(box){ box.remove(); box = null; return; }
         box = document.createElement("div"); box.className = "tp-aibox"; box.innerHTML = "<div class='tp-sutta-empty'>ပြင်ဆင်နေပါသည်...</div>";
         bar.insertAdjacentElement("afterend", box);
-        try{ tp_aiPaint(box, await tp_aiGuideSpec(body)); }catch(err){ box.innerHTML = "<div class='tp-sutta-empty'>ဒေတာ မဖတ်နိုင်ပါ။</div>"; }
+        try{ const gs = await tp_aiGuideSpec(body); box.innerHTML = "<div class='tp-sutta-empty'>⏳ ကျမ်းစာသား ဖတ်နေသည်…</div>"; try{ await gs.loadExtra(tpAi.size); }catch(e2){} tp_aiPaint(box, gs); }catch(err){ box.innerHTML = "<div class='tp-sutta-empty'>ဒေတာ မဖတ်နိုင်ပါ။</div>"; }
       });
     };
     new MutationObserver(() => { if(busy) return; busy = true; setTimeout(attach, 60); }).observe(document.body, { childList: true, subtree: true });

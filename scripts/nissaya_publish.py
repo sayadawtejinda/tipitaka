@@ -6,7 +6,9 @@
 1. takes the NEWEST  <book>_edits*.json  from your Downloads folder (what the Export button saved)
 2. warns if you saved more work in the review page AFTER that Export (then press Export again first)
 3. copies it to nissaya_data/<book>_edits.json and runs nissaya_export.py <book> --html (lossless check included)
-4. shows what will be uploaded and asks y/n before git commit + push (only data/<pali id>.html and data/nissaya_books.json)
+4. shows what will be uploaded and asks y/n before git commit + push (data/<pali id>.html, data/nissaya_books.json, the download-page list)
+5. AFTER the push: the Export copies of that book go from Downloads to the Recycle Bin; Nissaya_Final and NISSAYA_STATUS.html are refreshed
+   (the book's state/aligned/gemini files are kept, so it can be re-reviewed and re-published any time: review -> Export -> publish again)
 """
 import glob, json, os, re, shutil, subprocess, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
@@ -44,3 +46,15 @@ subprocess.run(["git", "add", "data/nissaya_downloads.json"], cwd=ROOT, check=Tr
 subprocess.run(["git", "commit", "-m", "Nissaya download list updated"], cwd=ROOT)
 subprocess.run(["git", "push"], cwd=ROOT, check=True)
 print(f"\nDONE - {book} is on the web. In the browser press Ctrl+Shift+R.")
+
+# ---- clean up (only AFTER the push worked): the Export copies in Downloads are not needed any more (the newest one is kept as nissaya_data/<book>_edits.json and in Nissaya_Final).
+# They go to the Recycle Bin, not deleted for good. The book's state / aligned / gemini files stay, so the book can be re-reviewed and re-published any time.
+old_exports = [f for f in glob.glob(os.path.join(dl, book + "_edits*.json")) if re.search(r"^" + re.escape(book) + r"_edits( \(\d+\))?\.json$", os.path.basename(f))]
+if old_exports:
+    ps = "Add-Type -AssemblyName Microsoft.VisualBasic; " + "; ".join(
+        "[Microsoft.VisualBasic.FileIO.FileSystem]::DeleteFile('%s','OnlyErrorDialogs','SendToRecycleBin')" % f.replace("'", "''") for f in old_exports)
+    subprocess.run(["powershell", "-NoProfile", "-Command", ps])
+    print(f"{len(old_exports)} Export file(s) of {book} moved from Downloads to the Recycle Bin.")
+for script in ("nissaya_data/make_archive.py", "scripts/nissaya_status.py"):             # refresh Nissaya_Final (the one folder with everything) and the status page
+    subprocess.run([sys.executable, os.path.join(ROOT, script)], cwd=ROOT, env=env)
+print("Nissaya_Final and NISSAYA_STATUS.html updated.")
