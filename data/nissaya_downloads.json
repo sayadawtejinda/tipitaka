@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-26",
+ "generated": "2026-10-27",
  "books": [
   {
    "id": "mula_vi_01",
@@ -690,6 +690,16 @@
    "cat_key": "ku",
    "size": 4408032,
    "date": "2026-09-22"
+  },
+  {
+   "id": "attha_ku_06",
+   "title": "ဝိမာနဝတ္ထုအဋ္ဌကထာ",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3188696,
+   "date": "2026-10-27"
   },
   {
    "id": "attha_ku_10",
