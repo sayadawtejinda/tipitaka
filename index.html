@@ -1975,8 +1975,7 @@ let isRomanPali = false;
        if(meta.category === "paauk") renderBreadcrumb([
            {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
            {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}},
-           {label:"ဖားအောက်ဆရာတော်", onclick:(e)=>{e.preventDefault(); showPaMenu();}},
-           {label:"ဖတ်စာ", onclick:(e)=>{e.preventDefault(); showPaBooks();}},
+           {label:"ဖားအောက်ဆရာတော်", onclick:(e)=>{e.preventDefault(); showPaBooks();}},
            {label: meta.title}
        ]); else if(meta.category === "mbv") renderBreadcrumb([
            {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
@@ -2473,7 +2472,7 @@ let isRomanPali = false;
   function showSayadawList(){
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ"}]);
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-sayadaw="minkun">မင်းကွန်းဆရာတော်<span class="tp-count">${toMyanmarDigits(MBV_BOOKS.length)} အုပ်</span></div><div class="tp-card" data-sayadaw="skp">ရွှေကျင်စာပေ<span class="tp-count">၅၂ အုပ်</span></div><div class="tp-card" data-sayadaw="paauk">ဖားအောက်ဆရာတော်</div></div>`;
-    document.querySelector("[data-sayadaw='paauk']").addEventListener("click", showPaMenu);
+    document.querySelector("[data-sayadaw='paauk']").addEventListener("click", showPaBooks);
     document.querySelector("[data-sayadaw='minkun']").addEventListener("click", showMbvBooks);
     document.querySelector("[data-sayadaw='skp']").addEventListener("click", showSkpAuthors);
     setParams({basket: "sayadaw"});
@@ -2529,14 +2528,8 @@ let isRomanPali = false;
   }
   function paPageOf(mmId, block){ const pg = paPageStarts[mmId]; let lo = 0, hi = pg.length - 1; while(lo < hi){ const m = (lo + hi + 1) >> 1; if(pg[m] <= block) lo = m; else hi = m - 1; } return lo; }
 
-  function showPaMenu(){
-    setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, {label:"ဖားအောက်ဆရာတော်"}]);
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-pa="texts">📚 ဖတ်စာ</div></div>`;
-    document.querySelector("[data-pa='texts']").addEventListener("click", showPaBooks);
-    setParams({basket: "sayadaw", category: "paauk"});
-  }
   async function showPaBooks(){
-    setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, {label:"ဖားအောက်ဆရာတော်", onclick:(e)=>{e.preventDefault(); showPaMenu();}}, {label:"ဖတ်စာ"}]);
+    setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, {label:"ဖားအောက်ဆရာတော်"}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     try{
       const list = await ensurePaIndex(); let html = "", g = null;
@@ -2547,7 +2540,7 @@ let isRomanPali = false;
       document.getElementById("tp-view").innerHTML = html + "</div>";
       document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "pa" }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
     }catch(e){ document.getElementById("tp-view").innerHTML = `<p>ဖတ်၍မရပါ (${e.message})</p>`; }
-    setParams({basket: "sayadaw", category: "paauk_texts"});
+    setParams({basket: "sayadaw", category: "paauk"});
   }
   // 📚 ဖတ်စာ ရှာဖွေခြင်း - library မှာလိုပဲ ဖတ်စာအားလုံးရဲ့ မာတိကာ/ခေါင်းစဉ်ထဲကို ရှာသည် (စာအုပ်တစ်အုပ်ချင်းရွေးရင် စာသားအပြည့်ရှာနိုင်သည်)
   async function tp_paRun(term){
@@ -3222,7 +3215,7 @@ let isRomanPali = false;
     const {basket, category, book, page, firstpage} = getParams();
     try{
       if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
-      else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && category === "paauk"){ showPaMenu(); } else if(basket === "sayadaw" && category === "paauk_texts"){ showPaBooks(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
+      else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && (category === "paauk" || category === "paauk_texts")){ showPaBooks(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
 
