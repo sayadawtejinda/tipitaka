@@ -239,6 +239,10 @@
     border-bottom: 1px dashed #ccc; padding-bottom: 8px; position: sticky; top: 0; background: #fffdf7; z-index: 10;
   }
 
+  #tp-content .pa-pali{color:#7a1f1f;}
+  #tp-content .pa-verse{margin:.6em 2em;white-space:pre-line;}
+  #tp-content .pa-quote{margin:.6em 1.5em;padding-left:.8em;border-left:3px solid #c9a96a;}
+  #tp-content .pa-fn{font-size:.85em;color:#555;border-top:1px solid #ccc;margin-top:1.2em;padding-top:.4em;}
   #tp-content .nikaya{font-weight:bold;font-size:1.2em;text-align:center;color:#1e3a5f;}
   #tp-content .book{font-weight:bold;text-align:center;color:#1e3a5f;}
   #tp-content .centered{text-align:center;}
@@ -455,6 +459,7 @@ let isRomanPali = false;
   }
 
   async function ensureMmPages(mmBookId){
+    if(!mmPagesCache[mmBookId] && mmBookId.startsWith("pa_")){ await ensurePaText(mmBookId); }
     if(!mmPagesCache[mmBookId] && mmBookId.startsWith("mbv_")){
       await ensureBurmeseToc();
       const d = await fetchJson(cdnUrl(`${DATA_FOLDER}/${mmBookId}.json`));
@@ -485,7 +490,7 @@ let isRomanPali = false;
     if(!sc) return;
     if(!sc.dataset.filled){
       const groupOpts = Object.keys(MM_CAT_GROUPS).map(k => `<option value="cat:${k}">📚 ${MM_CAT_GROUPS[k].label}</option>`).join("");
-      sc.innerHTML = `<option value="">-- ရှာမည့်နေရာ ရွေးပါ --</option><optgroup label="ပိဋကအုပ်စုလိုက်">${groupOpts}</optgroup><optgroup label="ဆရာတော်များ"><option value="skp">📚 ရွှေကျင်စာပေ</option></optgroup>`;
+      sc.innerHTML = `<option value="">-- ရှာမည့်နေရာ ရွေးပါ --</option><optgroup label="ပိဋကအုပ်စုလိုက်">${groupOpts}</optgroup><optgroup label="ဆရာတော်များ"><option value="skp">📚 ရွှေကျင်စာပေ</option><option value="pa">📚 ဖတ်စာ (ဖားအောက်)</option></optgroup>`;
       sc.dataset.filled = "1";
     }
   }
@@ -497,6 +502,7 @@ let isRomanPali = false;
     if(!scopeVal){ status.textContent = ""; body.innerHTML = "<div class='tp-sutta-empty'>ဦးစွာ ရှာမည့်နေရာကို ရွေးပါ။</div>"; return; }
     if(!term){ status.textContent = ""; body.innerHTML = ""; return; }
     if(scopeVal === "skp"){ return tp_skpRun(term); }
+    if(scopeVal === "pa"){ return tp_paRun(term); }
     let bookIds, scopeLabel;
     if(scopeVal.startsWith("cat:")){
       const grp = MM_CAT_GROUPS[scopeVal.slice(4)];
@@ -1966,7 +1972,13 @@ let isRomanPali = false;
     // Breadcrumb တွင် မြန်မာပြန် စာအုပ်အမည် အပြည့်အစုံ ပြသရန် ပေါင်းထည့်ခြင်း
     if (burmeseBookMeta && burmeseBookMeta[mmCurrentBookId]) {
        const meta = burmeseBookMeta[mmCurrentBookId];
-       if(meta.category === "mbv") renderBreadcrumb([
+       if(meta.category === "paauk") renderBreadcrumb([
+           {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+           {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}},
+           {label:"ဖားအောက်ဆရာတော်", onclick:(e)=>{e.preventDefault(); showPaMenu();}},
+           {label:"ဖတ်စာ", onclick:(e)=>{e.preventDefault(); showPaBooks();}},
+           {label: meta.title}
+       ]); else if(meta.category === "mbv") renderBreadcrumb([
            {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
            {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}},
            {label:"မင်းကွန်းဆရာတော်", onclick:(e)=>{e.preventDefault(); showMbvBooks();}},
@@ -1981,8 +1993,9 @@ let isRomanPali = false;
     }
 
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
-    const isMbv = mmCurrentBookId.startsWith("mbv_");
-    const backLabel = isMbv ? "← မင်းကွန်းဆရာတော်သို့" : "← ပါဠိတော်သို့";
+    const isPa = mmCurrentBookId.startsWith("pa_");
+    const isMbv = mmCurrentBookId.startsWith("mbv_") || isPa;
+    const backLabel = isPa ? "← ဖတ်စာစာရင်းသို့" : isMbv ? "← မင်းကွန်းဆရာတော်သို့" : "← ပါဠိတော်သို့";
 
     // "စာပိုဒ်နံပါတ်ကို-သွားမည်" ဟု ပြင်ဆင်ပြီး
     document.getElementById("tp-view").innerHTML = `
@@ -2009,7 +2022,7 @@ let isRomanPali = false;
       </div>
       <button id="tp-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
       <button id="tp-float-next" class="tp-float-nav" title="နောက်စာမျက်နှာ">→</button>
-      <div id="tp-meta">မြန်မာပြန် - စာမျက်နှာ ${toMyanmarDigits(mmCurrentPageIdx)} / ${toMyanmarDigits(total)}</div>
+      <div id="tp-meta">${isMbv ? "" : "မြန်မာပြန် - "}စာမျက်နှာ ${toMyanmarDigits(mmCurrentPageIdx)} / ${toMyanmarDigits(total)}</div>
       <div id="tp-content">${pageHtml}</div>
     `;
 
@@ -2017,6 +2030,7 @@ let isRomanPali = false;
     document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
     document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
     document.getElementById("tp-mm-back").addEventListener("click", async ()=>{
+      if(mmCurrentBookId.startsWith("pa_")){ closeAllDropdowns(); showPaBooks(); return; }
       if(mmCurrentBookId.startsWith("mbv_")){ closeAllDropdowns(); showMbvBooks(); return; }
       try {
         const bMap = await ensureBurmeseMap();
@@ -2430,7 +2444,7 @@ let isRomanPali = false;
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်"}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     await ensureBurmeseToc();
-    const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))].filter(slug => slug !== "other" && slug !== "mbv");
+    const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))].filter(slug => slug !== "other" && slug !== "mbv" && slug !== "paauk");
     const html = slugs.map(slug => {
       const count = Object.values(burmeseBookMeta).filter(m => m.category === slug).length;
       return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`;
@@ -2458,7 +2472,8 @@ let isRomanPali = false;
 
   function showSayadawList(){
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ"}]);
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-sayadaw="minkun">မင်းကွန်းဆရာတော်<span class="tp-count">${toMyanmarDigits(MBV_BOOKS.length)} အုပ်</span></div><div class="tp-card" data-sayadaw="skp">ရွှေကျင်စာပေ<span class="tp-count">၅၂ အုပ်</span></div></div>`;
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-sayadaw="minkun">မင်းကွန်းဆရာတော်<span class="tp-count">${toMyanmarDigits(MBV_BOOKS.length)} အုပ်</span></div><div class="tp-card" data-sayadaw="skp">ရွှေကျင်စာပေ<span class="tp-count">၅၂ အုပ်</span></div><div class="tp-card" data-sayadaw="paauk">ဖားအောက်ဆရာတော်</div></div>`;
+    document.querySelector("[data-sayadaw='paauk']").addEventListener("click", showPaMenu);
     document.querySelector("[data-sayadaw='minkun']").addEventListener("click", showMbvBooks);
     document.querySelector("[data-sayadaw='skp']").addEventListener("click", showSkpAuthors);
     setParams({basket: "sayadaw"});
@@ -2470,6 +2485,87 @@ let isRomanPali = false;
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${MBV_BOOKS.map(b => `<div class="tp-card" data-mmbook="${b.id}">${b.title}<span class="tp-count">${toMyanmarDigits(b.pages)} စာမျက်နှာ</span></div>`).join("")}</div>`;
     document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "mbv" }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
     setParams({basket: "sayadaw", category: "minkun"});
+  }
+
+  // ================= ဆရာတော်များ › ဖားအောက်ဆရာတော် › 📚 ဖတ်စာ =================
+  // ဖားအောက် ဓမ္မစာကြည့်တိုက် (https://sayadawtejinda.github.io/dhamma/library/) ရဲ့ "📚 ဖတ်စာ" ကို တိုက်ရိုက်ဖတ်သည် - စာအုပ်အသစ်တိုးရင် အလိုအလျောက် ပေါ်မည်
+  const PA_BASE = "https://sayadawtejinda.github.io/dhamma/library/texts/";
+  let paIndexPromise = null, paTocPromise = null; const paPageStarts = {};
+  function ensurePaIndex(){
+    if(!paIndexPromise){ paIndexPromise = (async () => {
+      await ensureBurmeseToc();
+      const list = await fetchJson(PA_BASE + "index.json");
+      list.forEach(t => { burmeseBookMeta["pa_" + t.id] = { title: t.title, pagecount: t.pages, category: "paauk", group: t.group }; });
+      return list;
+    })(); paIndexPromise.catch(() => { paIndexPromise = null; }); }
+    return paIndexPromise;
+  }
+  // စာအုပ်တစ်အုပ် - block (စာပိုဒ်) တွေကို library ရဲ့ စာမျက်နှာခွဲထားတဲ့အတိုင်း HTML စာမျက်နှာများအဖြစ် ပြောင်းသည်
+  async function ensurePaText(mmId){
+    await ensurePaIndex();
+    const id = mmId.slice(3);
+    const RB = await fetchJson(PA_BASE + id + ".json");
+    const nch = Math.ceil(RB.n / RB.chunk);
+    const chunks = await Promise.all(Array.from({ length: nch }, (_, k) => fetchJson(PA_BASE + id + "." + k + ".json")));
+    const inl = h => h.replace(/\u0001(\d+)\u0002/g, (m, n) => `<sup>[${toMyanmarDigits(n)}]</sup>`);
+    const pages = RB.pages.map((st, pi) => {
+      const en = pi + 1 < RB.pages.length ? RB.pages[pi + 1] : RB.n; let h = ""; const fns = new Set();
+      for(let i = st; i < en; i++){
+        const [k, x] = chunks[Math.floor(i / RB.chunk)][i % RB.chunk];
+        (x.match(/\u0001(\d+)\u0002/g) || []).forEach(m => fns.add(m.replace(/[^\d]/g, "")));
+        const t = inl(x);
+        if(k === "h2" || k === "h3" || k === "h4") h += `<${k} style="text-align:center">${t}</${k}>`;
+        else if(k === "sh") h += `<h5 style="text-align:center">${t}</h5>`;
+        else if(k === "pl") h += `<p class="pa-pali">${t}</p>`;
+        else if(k === "v") h += `<div class="pa-verse">${t}</div>`;
+        else if(k === "q") h += `<div class="pa-quote">${t}</div>`;
+        else h += `<p>${t}</p>`;
+      }
+      if(fns.size) h += `<div class="pa-fn">${[...fns].map(n => `<div><b>[${toMyanmarDigits(n)}]</b> ${inl((RB.fn || {})[n] || "")}</div>`).join("")}</div>`;
+      return h;
+    });
+    mmPagesCache[mmId] = pages; paPageStarts[mmId] = RB.pages;
+    burmeseTocIndex[mmId] = RB.toc.map(t => ({ level: t[1], title: t[2], page: paPageOf(mmId, t[0]) + 1, indent: 10 + (t[1] - 2) * 14 }));
+  }
+  function paPageOf(mmId, block){ const pg = paPageStarts[mmId]; let lo = 0, hi = pg.length - 1; while(lo < hi){ const m = (lo + hi + 1) >> 1; if(pg[m] <= block) lo = m; else hi = m - 1; } return lo; }
+
+  function showPaMenu(){
+    setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, {label:"ဖားအောက်ဆရာတော်"}]);
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-pa="texts">📚 ဖတ်စာ</div></div>`;
+    document.querySelector("[data-pa='texts']").addEventListener("click", showPaBooks);
+    setParams({basket: "sayadaw", category: "paauk"});
+  }
+  async function showPaBooks(){
+    setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, {label:"ဖားအောက်ဆရာတော်", onclick:(e)=>{e.preventDefault(); showPaMenu();}}, {label:"ဖတ်စာ"}]);
+    document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
+    try{
+      const list = await ensurePaIndex(); let html = "", g = null;
+      list.forEach(t => {
+        if(t.group !== g){ if(g !== null) html += "</div>"; g = t.group; html += `<h4 style="margin:16px 0 8px;color:#1e3a5f;">${tp_sayEsc(g)}</h4><div class="tp-grid">`; }
+        html += `<div class="tp-card" data-mmbook="pa_${t.id}">${tp_sayEsc(t.title)}<span class="tp-count">${toMyanmarDigits(t.pages)} စာမျက်နှာ</span></div>`;
+      });
+      document.getElementById("tp-view").innerHTML = html + "</div>";
+      document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "pa" }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
+    }catch(e){ document.getElementById("tp-view").innerHTML = `<p>ဖတ်၍မရပါ (${e.message})</p>`; }
+    setParams({basket: "sayadaw", category: "paauk_texts"});
+  }
+  // 📚 ဖတ်စာ ရှာဖွေခြင်း - library မှာလိုပဲ ဖတ်စာအားလုံးရဲ့ မာတိကာ/ခေါင်းစဉ်ထဲကို ရှာသည် (စာအုပ်တစ်အုပ်ချင်းရွေးရင် စာသားအပြည့်ရှာနိုင်သည်)
+  async function tp_paRun(term){
+    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
+    status.textContent = "ရှာဖွေနေပါသည်...";
+    let toc;
+    try{ await ensurePaIndex(); if(!paTocPromise){ paTocPromise = fetchJson(PA_BASE + "toc.json"); paTocPromise.catch(() => { paTocPromise = null; }); } toc = await paTocPromise; }
+    catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
+    const hits = toc.toc.filter(t => t[3].includes(term));
+    status.textContent = hits.length ? `ဖတ်စာ ထဲမှာ တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
+    body.innerHTML = "";
+    hits.slice(0, 100).forEach(h => {
+      const id = "pa_" + toc.books[h[0]], meta = burmeseBookMeta[id]; if(!meta) return;
+      const item = document.createElement("div"); item.className = "tp-say-item";
+      item.innerHTML = `<b>${tp_sayEsc(meta.title)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h[3])}</div>`;
+      item.addEventListener("click", async () => { closeAllDropdowns(); mmBackContext = { kind: "pa" }; await openBurmeseTranslationBrowse(id); mmCurrentPageIdx = paPageOf(id, h[1]) + 1; renderMmPage(); });
+      body.appendChild(item);
+    });
   }
 
   // ဆရာတော်များ › ရွှေကျင်စာပေ (PDF စာအုပ် ၅၂ အုပ်၊ data/skp_index.json - scripts/build_skp_data.py) - ဘာသာဋီကာလို့ပဲ PDF ကို floating box ထဲမှာ ဖွင့်သည်
@@ -3126,7 +3222,7 @@ let isRomanPali = false;
     const {basket, category, book, page, firstpage} = getParams();
     try{
       if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
-      else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
+      else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && category === "paauk"){ showPaMenu(); } else if(basket === "sayadaw" && category === "paauk_texts"){ showPaBooks(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
 
