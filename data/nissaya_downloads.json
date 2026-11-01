@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-29",
+ "generated": "2026-10-31",
  "books": [
   {
    "id": "mula_vi_01",
@@ -520,6 +520,16 @@
    "cat_key": "bi",
    "size": 4325802,
    "date": "2026-10-29"
+  },
+  {
+   "id": "mula_bi_06_02",
+   "title": "ယမကပါဠိ (ဒု)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 5709729,
+   "date": "2026-10-31"
   },
   {
    "id": "attha_vi_01_01",
