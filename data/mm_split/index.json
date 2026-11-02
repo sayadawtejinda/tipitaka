@@ -79,6 +79,10 @@
   "mm": "06_khuddaka_04",
   "pages": 83
  },
+ "mula_ku_05": {
+  "mm": "06_khuddaka_05",
+  "pages": 177
+ },
  "mula_ku_07": {
   "mm": "06_khuddaka_07",
   "pages": 92
@@ -139,9 +143,17 @@
   "mm": "04_sanyutta_04",
   "pages": 332
  },
+ "mula_sa_05": {
+  "mm": "04_sanyutta_05",
+  "pages": 415
+ },
  "mula_vi_01": {
   "mm": "01_vinaya_01",
   "pages": 381
+ },
+ "mula_vi_02": {
+  "mm": "01_vinaya_02",
+  "pages": 470
  },
  "mula_vi_03": {
   "mm": "01_vinaya_03",
