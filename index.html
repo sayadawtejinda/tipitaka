@@ -129,6 +129,7 @@
   .tp-xref-links{display:flex;flex-direction:column;gap:6px;}
   .tp-xref-item-btn{text-align:left;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;padding:6px 12px;font-size:.9em;cursor:pointer;color:#0645ad;transition:.15s;}
   .tp-xref-item-btn:hover{background:#e2e8f0;text-decoration:underline;}
+  #tp-nissaya-content.tp-mm-split h1, #tp-nissaya-content.tp-mm-split h2, #tp-nissaya-content.tp-mm-split h3, #tp-nissaya-content.tp-mm-split h4, #tp-nissaya-content.tp-mm-split h5, #tp-nissaya-content.tp-mm-split h6 { text-align:center !important; }
   .tp-mm-highlight{background:#fff3b0;border-radius:2px;padding:2px 4px;font-weight:bold;color:#a00;}
   .tp-xref-empty{font-size:.85em;color:#888;text-align:center;padding:10px;}
 
@@ -2766,6 +2767,7 @@ let isRomanPali = false;
       if(!container || !contentEl) return;
       container.style.display = "block";
       const edBox = document.getElementById("tp-nissaya-editions"); if(edBox) edBox.innerHTML = "";
+      contentEl.classList.add("tp-mm-split");
       contentEl.innerHTML = "<p class='tp-loading'>မြန်မာပြန် ဆွဲယူနေပါသည်...</p>";
       try {
           const idx = await ensureMmSplitIndex();
@@ -2797,6 +2799,7 @@ let isRomanPali = false;
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
       container.style.display = "block";
+      contentEl.classList.remove("tp-mm-split");
       contentEl.innerHTML = "<p class='tp-loading'>နိဿယ ဒေတာ ဆွဲယူနေပါသည်...</p>";
       
       try {

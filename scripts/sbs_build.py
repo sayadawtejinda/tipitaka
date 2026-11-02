@@ -110,6 +110,33 @@ def chunks(html):
     op, inner, cl = m.groups()
     return [(op + x + cl, (max(1, len(MMARK.findall(TAG.sub('', x)))) if MODE == 'clause' else tlen(x))) for x in split_inner(inner) if x]
 
+NUMONLY = re.compile(r'<p\b[^>]*>\s*(?:<[^>]+>)*\s*[၀-၉]+\s*(?:</[^>]+>)*\s*[။.]?\s*(?:</[^>]+>)*\s*</p>$', re.S)
+def is_numonly(h): return bool(NUMONLY.match(h)) and len(TAG.sub('', h).strip()) <= 12
+
+def merge_numbers(htmls):
+    """a paragraph number that sits in a <p> of its own goes in front of the paragraph that follows it: '၁။' + 'အကျွန်ုပ်သည် …'"""
+    out, i = [], 0
+    while i < len(htmls):
+        h = htmls[i]
+        if is_numonly(h) and i + 1 < len(htmls) and htmls[i + 1].startswith('<p') and htmls[i + 1].endswith('</p>'):
+            m = re.match(r'<p\b[^>]*>', htmls[i + 1])
+            num = re.sub(r'^<p\b[^>]*>|</p>$', '', h, flags=re.S).strip()
+            out.append(htmls[i + 1][:m.end()] + num + ' ' + htmls[i + 1][m.end():].lstrip()); i += 2
+        else: out.append(h); i += 1
+    return out
+
+def join_pieces(entries):
+    """entries = [(block id | None, html)]; pieces of one block that landed on the same page become one <p> again"""
+    out, last = [], None
+    for bid, h in entries:
+        if bid is not None and bid == last and out and out[-1].endswith('</p>') and h.endswith('</p>'):
+            m = re.match(r'<p\b[^>]*>', h)
+            if m:
+                out[-1] = out[-1][:-4] + ' ' + h[m.end():].lstrip()
+                continue
+        out.append(h); last = bid
+    return out
+
 def split_group(g, seglens):
     """Distribute group blocks over len(seglens) pieces proportionally -> list of html lists."""
     n = len(seglens)
@@ -117,13 +144,13 @@ def split_group(g, seglens):
     if n == 1:
         for b in g['blocks']: out[0].append(b['html'])
         return out
-    items = []   # (kind, html, len)
-    for b in g['blocks']:
-        if b['tag'].startswith('h') and tlen(b['html']) <= 400: items.append(('h', b['html'], 0))   # a mis-tagged long 'heading' is text
-        elif is_foot(b): items.append(('f', b['html'], 0))
+    items = []   # (kind, html, len, block id)
+    for bi, b in enumerate(g['blocks']):
+        if b['tag'].startswith('h') and tlen(b['html']) <= 400: items.append(('h', b['html'], 0, None))   # a mis-tagged long 'heading' is text
+        elif is_foot(b) or is_numonly(b['html']): items.append(('h' if is_numonly(b['html']) else 'f', b['html'], 0, None))
         else:
-            for h, l in chunks(b['html']): items.append(('t', h, l))
-    total = sum(l for k, h, l in items) or 1
+            for h, l in chunks(b['html']): items.append(('t', h, l, bi))
+    total = sum(it[2] for it in items) or 1
     ptot = sum(seglens) or 1
     cuts, acc = [], 0
     for L in seglens[:-1]:
@@ -134,17 +161,16 @@ def split_group(g, seglens):
         for i, c in enumerate(cuts):
             if mid < c: return i
         return n - 1
-    for k, h, l in items:
+    for k, h, l, bid in items:
         if k == 'h':
             pending.append(h); continue
         if k == 't':
             cur = which(pos + l / 2); pos += l
-        for ph in pending: out[cur].append(ph)
+        for ph in pending: out[cur].append((None, ph))
         pending = []
-        out[cur].append(h)
-    for ph in pending: out[cur].append(ph)
-    # merge adjacent split pieces of one paragraph back into valid <p> runs (cosmetic)
-    return out
+        out[cur].append((bid, h))
+    for ph in pending: out[cur].append((None, ph))
+    return [join_pieces(o) if o and isinstance(o[0], tuple) else o for o in out]
 
 def _ov(a, b): return a[0] <= b[1] and b[0] <= a[1]
 
@@ -242,7 +268,7 @@ def _build(mm_id, pali_id, window=None):
             per_page[s['pi']].extend(p)
         last_pi = chain[0]['pi']
     if tail: per_page[-1].extend(b['html'] for b in tail)
-    out = [{'p': p['page'], 'n': p['nums'], 'pali': p['html'], 'mm': chr(10).join(mm)}
+    out = [{'p': p['page'], 'n': p['nums'], 'pali': p['html'], 'mm': chr(10).join(merge_numbers(mm))}
            for p, mm in zip(pages, per_page)]
     skipped = sum(1 for i, p in enumerate(pages) if p['nums'] and not per_page[i])
     big = max(tlen(chr(10).join(x)) for x in per_page)
@@ -274,7 +300,9 @@ def export_split(pali_id, mm_id, data):
     """Publishable form: data/mm_split/<pali_id>.json = {"<pali page>": "<mm html>"} (empty pages left out)
     and data/mm_split/index.json = {pali_id: {"mm": mm_id}} (only books that matched fully)."""
     os.makedirs(SPLIT_DIR, exist_ok=True)
-    pages = {str(d['p']): d['mm'] for d in data if d['mm'].strip()}
+    pages = {}
+    for d in data:                                        # two Pali records may carry the same page number (mula_sa_03 p.122): keep both texts
+        if d['mm'].strip(): pages[str(d['p'])] = (pages[str(d['p'])] + chr(10) + d['mm']) if str(d['p']) in pages else d['mm']
     with open(os.path.join(SPLIT_DIR, pali_id + '.json'), 'w', encoding='utf-8') as f:
         json.dump(pages, f, ensure_ascii=False, separators=(',', ':'))
     ip = os.path.join(SPLIT_DIR, 'index.json')
@@ -309,6 +337,8 @@ def main():
     names = {x['id']: x['name'] for x in json.load(open(os.path.join(ROOT, 'myanmar_books.json'), encoding='utf-8'))}
     lst = [{'id': r['mm'], 'name': names.get(r['mm'], r['mm']), 'pages': r['pali_pages'],
             'bad': r['unmatched_count']} for r in reps if 'pali_pages' in r and r['mm_paragraphs'] > 0]
+    ab = os.path.join(OUT, 'attha_books.json')           # commentary books, written by sbs_attha.py
+    if os.path.exists(ab): lst += json.load(open(ab, encoding='utf-8'))
     with open(os.path.join(OUT, 'books.js'), 'w', encoding='utf-8') as f:
         f.write('window.SBS_BOOKS=' + json.dumps(lst, ensure_ascii=False) + ';')
     json.dump(reps, open(os.path.join(OUT, 'sbs_report.json'), 'w', encoding='utf-8'),
