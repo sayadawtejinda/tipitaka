@@ -169,7 +169,7 @@ def match_groups(groups, segs):
             gi, row, prow = gn[i - 1], dp[i], dp[i - 1]
             for j in range(1, m + 1):
                 if _ov(gi, sn[j - 1]):
-                    v = prow[j - 1] + 1
+                    v = prow[j - 1] + 1 - 1e-4 * abs(i / n - j / m)   # on equal counts prefer the match at the same relative place
                     if prow[j] > v: v = prow[j]
                     if row[j - 1] > v: v = row[j - 1]
                     row[j] = v
@@ -178,7 +178,7 @@ def match_groups(groups, segs):
         matched = [None] * n
         i, j = n, m
         while i > 0 and j > 0:
-            if _ov(gn[i - 1], sn[j - 1]) and dp[i][j] == dp[i - 1][j - 1] + 1:
+            if _ov(gn[i - 1], sn[j - 1]) and dp[i][j] == dp[i - 1][j - 1] + 1 - 1e-4 * abs(i / n - j / m):
                 matched[i - 1] = j - 1; i -= 1; j -= 1
             elif dp[i - 1][j] >= dp[i][j - 1]: i -= 1
             else: j -= 1
@@ -190,10 +190,29 @@ def match_groups(groups, segs):
                     matched[gi] = matched[nb]; break
     return num_idx, matched
 
+def settle(groups, matched):
+    """in place: attach numbered notes / repeated numbers to their paragraph; returns the attached numbers"""
+    # a numbered note whose number restarts (1, 2 ... after paragraph 339) belongs to the paragraph before it
+    attached, anchor, gi = [], None, 0
+    while gi < len(groups):
+        if matched[gi] is not None: anchor = gi; gi += 1; continue
+        z = gi
+        while z < len(groups) and matched[z] is None: z += 1
+        if anchor is not None and z - gi <= 12:           # a long unmatched run is a real mismatch, not notes
+            for x in range(gi, z):
+                if groups[x]['num'] <= groups[anchor]['num']:
+                    matched[x] = matched[anchor]; attached.append(groups[x]['num'])
+        gi = z
+    for gi in range(len(groups) - 2, -1, -1):          # same number twice in a row: both parts belong to one Pali paragraph
+        if matched[gi] is None and matched[gi + 1] is not None and groups[gi]['num'] == groups[gi + 1]['num']:
+            matched[gi] = matched[gi + 1]
+    return attached
+
 def build(mm_id, pali_id):
     pages, segs = pali_segments(pali_id)
     groups, tail = group_blocks(parse_mm(os.path.join(DATA, mm_id + '.html')))
     num_idx, matched = match_groups(groups, segs)
+    attached = settle(groups, matched)
     per_page = [[] for _ in pages]
     unmatched = [g['num'] for g, j in zip(groups, matched) if j is None]
     last_pi, gi = 0, 0
@@ -216,8 +235,9 @@ def build(mm_id, pali_id):
     out = [{'p': p['page'], 'n': p['nums'], 'pali': p['html'], 'mm': chr(10).join(mm)}
            for p, mm in zip(pages, per_page)]
     skipped = sum(1 for i, p in enumerate(pages) if p['nums'] and not per_page[i])
+    big = max(tlen(chr(10).join(x)) for x in per_page)
     rep = {'mm': mm_id, 'pali': pali_id, 'pali_pages': len(pages), 'mm_paragraphs': len(groups),
-           'pali_numbers': len(num_idx), 'unmatched_mm': unmatched[:50], 'unmatched_count': len(unmatched),
+           'pali_numbers': len(num_idx), 'unmatched_mm': unmatched[:50], 'unmatched_count': len(unmatched), 'attached_notes': len(attached), 'max_page_chars': big,
            'numbered_pali_pages_without_mm': skipped,
            'pali_pages_without_numbers': sum(1 for p in pages if not p['nums'])}
     return out, rep
@@ -226,6 +246,9 @@ SPLIT_DIR = os.path.join(DATA, 'mm_split')
 def _published(pali_id):
     ip = os.path.join(SPLIT_DIR, 'index.json')
     return os.path.exists(ip) and pali_id in json.load(open(ip, encoding='utf-8'))
+def exportable(rep):
+    """fully matched and no page holds a lump of text (one huge Myanmar paragraph / a numbering gap)"""
+    return rep['mm_paragraphs'] > 0 and rep['unmatched_count'] == 0 and rep['max_page_chars'] <= 30000
 def export_split(pali_id, mm_id, data):
     """Publishable form: data/mm_split/<pali_id>.json = {"<pali page>": "<mm html>"} (empty pages left out)
     and data/mm_split/index.json = {pali_id: {"mm": mm_id}} (only books that matched fully)."""
@@ -254,7 +277,7 @@ def main():
             reps.append({'mm': b['mm_book_id'], 'error': repr(e)}); continue
         rep['title'] = b['mm_book_id']
         rep['pali_book'] = b['pali_book_id']
-        if rep['mm_paragraphs'] > 0 and (rep['unmatched_count'] == 0 or _published(b['pali_book_id'])):
+        if exportable(rep) or _published(b['pali_book_id']):
             export_split(b['pali_book_id'], b['mm_book_id'], data)
         reps.append(rep)
         with open(os.path.join(OUT, b['mm_book_id'] + '.js'), 'w', encoding='utf-8') as f:

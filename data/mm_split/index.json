@@ -47,6 +47,10 @@
   "mm": "07_abhidhamma_03",
   "pages": 85
  },
+ "mula_bi_05": {
+  "mm": "07_abhidhamma_05",
+  "pages": 454
+ },
  "mula_di_01": {
   "mm": "02_digha_01",
   "pages": 236
@@ -74,6 +78,14 @@
  "mula_ku_07": {
   "mm": "06_khuddaka_07",
   "pages": 92
+ },
+ "mula_ku_08": {
+  "mm": "06_khuddaka_08",
+  "pages": 157
+ },
+ "mula_ku_09": {
+  "mm": "06_khuddaka_09",
+  "pages": 59
  },
  "mula_ku_10": {
   "mm": "06_khuddaka_10",
@@ -110,6 +122,14 @@
  "mula_sa_01": {
   "mm": "04_sanyutta_01",
   "pages": 242
+ },
+ "mula_sa_02": {
+  "mm": "04_sanyutta_02",
+  "pages": 230
+ },
+ "mula_sa_03": {
+  "mm": "04_sanyutta_03",
+  "pages": 235
  },
  "mula_sa_04": {
   "mm": "04_sanyutta_04",

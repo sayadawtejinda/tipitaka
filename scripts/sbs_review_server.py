@@ -36,6 +36,7 @@ def analyze(mm_id, pali_id):
     pages, segs = pali_book(pali_id)
     groups, _ = B.group_blocks(B.parse_mm(os.path.join(DATA, mm_id + '.html')))
     num_idx, matched = B.match_groups(groups, segs)
+    B.settle(groups, matched)
     used = {j for j in matched if j is not None}
     issues = []
     for gi, g in enumerate(groups):
@@ -115,7 +116,7 @@ def insert_pali_number(pali_id, page, offset, num):
         with open(os.path.join(OUT, mm + '.js'), 'w', encoding='utf-8') as f:
             f.write('window.SBS_DATA=window.SBS_DATA||{};window.SBS_DATA[%s]=%s;' % (json.dumps(mm), json.dumps(data, ensure_ascii=False)))
         exported = False
-        if rep['unmatched_count'] == 0: B.export_split(pali_id, mm, data); exported = True
+        if B.exportable(rep): B.export_split(pali_id, mm, data); exported = True
         _cache.pop(mm, None)
         res.update({'left_in_book': rep['unmatched_count'], 'exported': exported})
     return res
@@ -147,7 +148,7 @@ def apply_fix(mm, k, old, new):
     with open(os.path.join(OUT, mm + '.js'), 'w', encoding='utf-8') as f:
         f.write('window.SBS_DATA=window.SBS_DATA||{};window.SBS_DATA[%s]=%s;' % (json.dumps(mm), json.dumps(data, ensure_ascii=False)))
     exported = False
-    if rep['unmatched_count'] == 0:
+    if B.exportable(rep):
         B.export_split(b['pali_book_id'], mm, data); exported = True
     _cache.pop(mm, None)
     return {'left_in_book': rep['unmatched_count'], 'exported': exported}
