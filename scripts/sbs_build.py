@@ -24,8 +24,16 @@ def mm2int(s):
     t = ''.join(str(MM_DIGITS.index(c)) if c in MM_DIGITS else c for c in s)
     return int(t) if t.isdigit() else None
 
+NUMRE = re.compile(r'\s*([၀-၉]+)(?:\s*[-–]\s*([၀-၉]+))?')
+def parse_num(t):
+    """'၁၇၇' -> (177, 177);  '၁၇၇-၁၇၉' -> (177, 179);  '၁။' -> (1, 1);  anything else -> None"""
+    m = NUMRE.match(t or '')
+    if not m: return None
+    lo = mm2int(m.group(1)); hi = mm2int(m.group(2)) if m.group(2) else lo
+    return (lo, hi) if hi >= lo else (lo, lo)
+
 BLOCK = re.compile(r'<(p|h[1-6])\b[^>]*>.*?</\1>', re.S)
-PARA = re.compile(r'<span class="paragraph">([^<]*)</span>')
+PARA = re.compile(r'<span class="paragraph">([^<]*)')   # closing </span> may be missing/garbled in the source (e.g. '၂၇၈</b></a></a>။')
 
 def parse_mm(path):
     h = open(path, encoding='utf-8').read()
@@ -34,8 +42,9 @@ def parse_mm(path):
     for m in BLOCK.finditer(body):
         html = m.group(0)
         pm = PARA.search(html)
+        pn = parse_num(pm.group(1)) if pm else None
         blocks.append({'tag': m.group(1), 'html': html,
-                       'num': mm2int(pm.group(1)) if pm else None})
+                       'num': pn[0] if pn else None, 'hi': pn[1] if pn else None})
     return blocks
 
 def group_blocks(blocks):
@@ -43,7 +52,7 @@ def group_blocks(blocks):
     groups, pending = [], []
     for b in blocks:
         if b['num'] is not None:
-            groups.append({'num': b['num'], 'blocks': pending + [b]})
+            groups.append({'num': b['num'], 'hi': b['hi'], 'blocks': pending + [b]})
             pending = []
         elif b['tag'].startswith('h'):
             pending.append(b)          # heading waits for next numbered paragraph
@@ -72,7 +81,8 @@ def pali_segments(book):
         if tlen(parts[0]) > 0:
             segs.append({'pi': i, 'num': None, 'len': (len(PMARK.findall(TAG.sub('', parts[0]))) if MODE == 'clause' else tlen(parts[0]))})
         for k in range(1, len(parts), 2):
-            segs.append({'pi': i, 'num': mm2int(parts[k]), 'len': (len(PMARK.findall(TAG.sub('', parts[k + 1]))) if MODE == 'clause' else tlen(parts[k + 1]) + 1)})
+            pn = parse_num(parts[k]) or (None, None)
+            segs.append({'pi': i, 'num': pn[0], 'hi': pn[1], 'txt': parts[k].strip(), 'len': (len(PMARK.findall(TAG.sub('', parts[k + 1]))) if MODE == 'clause' else tlen(parts[k + 1]) + 1)})
     return pages, segs
 
 def is_foot(b): return b['tag'] == 'p' and 'text-indent:3em' in b['html'][:60]
@@ -82,10 +92,23 @@ MODE = _os.environ.get('SBS_MODE', 'chars')
 SENT = re.compile(r'(?<=[။၊])(?![^<]*>)')
 PMARK = re.compile(r'[,?–။]')
 MMARK = re.compile(r'[၊။]')
+def split_inner(inner):
+    """Cut after every '။' or '၊' that is outside a tag. The pieces always add up to exactly `inner`."""
+    out, cur = [], ''
+    for tok in re.split('(<[^>]*>)', inner):
+        if len(tok) > 1 and tok[0] == '<' and tok[-1] == '>':
+            cur += tok; continue
+        for piece in re.split('(?<=[။၊])', tok):
+            cur += piece
+            if piece.endswith('။') or piece.endswith('၊'):
+                out.append(cur); cur = ''
+    if cur: out.append(cur)
+    return out
+
 def chunks(html):
     m = re.match(r'(<(?:p|h\d)\b[^>]*>)(.*)(</(?:p|h\d)>)$', html, re.S)
     op, inner, cl = m.groups()
-    return [(op + x + cl, (max(1, len(MMARK.findall(TAG.sub('', x)))) if MODE == 'clause' else tlen(x))) for x in SENT.split(inner) if x]
+    return [(op + x + cl, (max(1, len(MMARK.findall(TAG.sub('', x)))) if MODE == 'clause' else tlen(x))) for x in split_inner(inner) if x]
 
 def split_group(g, seglens):
     """Distribute group blocks over len(seglens) pieces proportionally -> list of html lists."""
@@ -123,31 +146,72 @@ def split_group(g, seglens):
     # merge adjacent split pieces of one paragraph back into valid <p> runs (cosmetic)
     return out
 
+def _ov(a, b): return a[0] <= b[1] and b[0] <= a[1]
+
+def match_groups(groups, segs):
+    """Align Myanmar paragraphs with the numbered Pali segments.
+    Numbers may be ranges (177-179) on either side. Returns (num_idx, matched) where matched[gi] is an index
+    into num_idx or None.  Greedy first; if anything is left over, longest-common-subsequence (so a duplicated or
+    mistyped number blames the right paragraph, and the later duplicate keeps the match)."""
+    num_idx = [i for i, s in enumerate(segs) if s['num'] is not None]
+    sn = [(segs[i]['num'], segs[i]['hi']) for i in num_idx]
+    gn = [(g['num'], g['hi']) for g in groups]
+    n, m = len(gn), len(sn)
+    matched, pos = [], 0
+    for g in gn:
+        j = pos
+        while j < m and not _ov(g, sn[j]): j += 1
+        if j >= m: matched.append(None)
+        else: matched.append(j); pos = j + 1 if sn[j][1] <= g[1] else j
+    if any(x is None for x in matched):
+        dp = [[0] * (m + 1) for _ in range(n + 1)]
+        for i in range(1, n + 1):
+            gi, row, prow = gn[i - 1], dp[i], dp[i - 1]
+            for j in range(1, m + 1):
+                if _ov(gi, sn[j - 1]):
+                    v = prow[j - 1] + 1
+                    if prow[j] > v: v = prow[j]
+                    if row[j - 1] > v: v = row[j - 1]
+                    row[j] = v
+                else:
+                    row[j] = prow[j] if prow[j] >= row[j - 1] else row[j - 1]
+        matched = [None] * n
+        i, j = n, m
+        while i > 0 and j > 0:
+            if _ov(gn[i - 1], sn[j - 1]) and dp[i][j] == dp[i - 1][j - 1] + 1:
+                matched[i - 1] = j - 1; i -= 1; j -= 1
+            elif dp[i - 1][j] >= dp[i][j - 1]: i -= 1
+            else: j -= 1
+        # a leftover paragraph that sits inside the same range as its matched neighbour (177, 178 inside 177-179)
+        for gi in range(n):
+            if matched[gi] is not None: continue
+            for nb in (gi - 1, gi + 1):
+                if 0 <= nb < n and matched[nb] is not None and sn[matched[nb]][1] > sn[matched[nb]][0] and _ov(gn[gi], sn[matched[nb]]):
+                    matched[gi] = matched[nb]; break
+    return num_idx, matched
+
 def build(mm_id, pali_id):
     pages, segs = pali_segments(pali_id)
     groups, tail = group_blocks(parse_mm(os.path.join(DATA, mm_id + '.html')))
-    # numbered seg index -> [seg + following continuation segs]
-    num_idx = [i for i, s in enumerate(segs) if s['num'] is not None]
+    num_idx, matched = match_groups(groups, segs)
     per_page = [[] for _ in pages]
-    unmatched, pos = [], 0
-    for g in groups:
-        j = pos
-        while j < len(num_idx) and segs[num_idx[j]]['num'] != g['num']:
-            j += 1
-        if j >= len(num_idx):
-            unmatched.append(g['num'])
-            pi = segs[num_idx[pos - 1]]['pi'] if pos else 0
-            per_page[pi].extend(b['html'] for b in g['blocks']); continue
-        pos = j + 1
+    unmatched = [g['num'] for g, j in zip(groups, matched) if j is None]
+    last_pi, gi = 0, 0
+    while gi < len(groups):
+        j = matched[gi]
+        if j is None:
+            per_page[last_pi].extend(b['html'] for b in groups[gi]['blocks']); gi += 1; continue
+        blocks = list(groups[gi]['blocks']); gi += 1
+        while gi < len(groups) and matched[gi] == j:       # several paragraphs inside one Pali range -> one piece
+            blocks.extend(groups[gi]['blocks']); gi += 1
         k = num_idx[j]
-        chain = [segs[k]]
-        k += 1
+        chain = [segs[k]]; k += 1
         while k < len(segs) and segs[k]['num'] is None:
             chain.append(segs[k]); k += 1
-        parts = split_group(g, [s['len'] for s in chain])
-        # several chain segs may sit on one page? no: cont seg is always on a later page
+        parts = split_group({'blocks': blocks}, [s['len'] for s in chain])
         for s, p in zip(chain, parts):
             per_page[s['pi']].extend(p)
+        last_pi = chain[0]['pi']
     if tail: per_page[-1].extend(b['html'] for b in tail)
     out = [{'p': p['page'], 'n': p['nums'], 'pali': p['html'], 'mm': chr(10).join(mm)}
            for p, mm in zip(pages, per_page)]
@@ -159,6 +223,9 @@ def build(mm_id, pali_id):
     return out, rep
 
 SPLIT_DIR = os.path.join(DATA, 'mm_split')
+def _published(pali_id):
+    ip = os.path.join(SPLIT_DIR, 'index.json')
+    return os.path.exists(ip) and pali_id in json.load(open(ip, encoding='utf-8'))
 def export_split(pali_id, mm_id, data):
     """Publishable form: data/mm_split/<pali_id>.json = {"<pali page>": "<mm html>"} (empty pages left out)
     and data/mm_split/index.json = {pali_id: {"mm": mm_id}} (only books that matched fully)."""
@@ -187,7 +254,7 @@ def main():
             reps.append({'mm': b['mm_book_id'], 'error': repr(e)}); continue
         rep['title'] = b['mm_book_id']
         rep['pali_book'] = b['pali_book_id']
-        if rep['unmatched_count'] == 0 and rep['mm_paragraphs'] > 0:
+        if rep['mm_paragraphs'] > 0 and (rep['unmatched_count'] == 0 or _published(b['pali_book_id'])):
             export_split(b['pali_book_id'], b['mm_book_id'], data)
         reps.append(rep)
         with open(os.path.join(OUT, b['mm_book_id'] + '.js'), 'w', encoding='utf-8') as f:

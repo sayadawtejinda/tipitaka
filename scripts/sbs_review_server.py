@@ -15,7 +15,7 @@ import sbs_build as B
 ROOT, DATA, OUT = B.ROOT, B.DATA, B.OUT
 BACKUP = os.path.join(OUT, 'backups')
 PORT = 8796
-MAX_ISSUES_PER_BOOK = 6          # books with more are "other kinds of problems" (restarts, jumps ...)
+MAX_ISSUES_PER_BOOK = 30         # books with more are "other kinds of problems" (restarts, jumps ...)
 LOCK = threading.Lock()
 _cache = {}                      # mm_id -> issues list
 _pali = {}                       # pali_id -> pages
@@ -35,14 +35,7 @@ def pali_book(pali_id):
 def analyze(mm_id, pali_id):
     pages, segs = pali_book(pali_id)
     groups, _ = B.group_blocks(B.parse_mm(os.path.join(DATA, mm_id + '.html')))
-    num_idx = [i for i, s in enumerate(segs) if s['num'] is not None]
-    pos, matched = 0, []
-    for g in groups:
-        j = pos
-        while j < len(num_idx) and segs[num_idx[j]]['num'] != g['num']:
-            j += 1
-        if j >= len(num_idx): matched.append(None)
-        else: matched.append(j); pos = j + 1
+    num_idx, matched = B.match_groups(groups, segs)
     used = {j for j in matched if j is not None}
     issues = []
     for gi, g in enumerate(groups):
@@ -53,7 +46,7 @@ def analyze(mm_id, pali_id):
         for j in range(prev + 1, nxt):
             if j in used: continue
             sg = segs[num_idx[j]]
-            cands.append({'num': sg['num'], 'page': pages[sg['pi']]['page']})
+            cands.append({'num': sg['num'], 'txt': sg['txt'], 'page': pages[sg['pi']]['page']})
         p_from = pages[segs[num_idx[prev]]['pi']]['page'] if prev >= 0 else pages[0]['page']
         p_to = pages[segs[num_idx[min(nxt, len(num_idx) - 1)]]['pi']]['page']
         if cands: p_to = max(p_to, cands[-1]['page']); p_from = min(p_from, cands[0]['page'])

@@ -1,4 +1,24 @@
 {
+ "mula_an_01": {
+  "mm": "05_anguttara_01",
+  "pages": 48
+ },
+ "mula_an_02": {
+  "mm": "05_anguttara_02",
+  "pages": 50
+ },
+ "mula_an_03": {
+  "mm": "05_anguttara_03",
+  "pages": 207
+ },
+ "mula_an_04": {
+  "mm": "05_anguttara_04",
+  "pages": 274
+ },
+ "mula_an_05": {
+  "mm": "05_anguttara_05",
+  "pages": 246
+ },
  "mula_an_06": {
   "mm": "05_anguttara_06",
   "pages": 147
@@ -6,6 +26,22 @@
  "mula_an_07": {
   "mm": "05_anguttara_07",
   "pages": 119
+ },
+ "mula_an_08": {
+  "mm": "05_anguttara_08",
+  "pages": 162
+ },
+ "mula_an_09": {
+  "mm": "05_anguttara_09",
+  "pages": 94
+ },
+ "mula_an_10": {
+  "mm": "05_anguttara_10",
+  "pages": 257
+ },
+ "mula_an_11": {
+  "mm": "05_anguttara_11",
+  "pages": 44
  },
  "mula_bi_04": {
   "mm": "07_abhidhamma_03",
@@ -75,9 +111,21 @@
   "mm": "04_sanyutta_01",
   "pages": 242
  },
+ "mula_sa_04": {
+  "mm": "04_sanyutta_04",
+  "pages": 332
+ },
+ "mula_vi_01": {
+  "mm": "01_vinaya_01",
+  "pages": 381
+ },
  "mula_vi_03": {
   "mm": "01_vinaya_03",
   "pages": 511
+ },
+ "mula_vi_04": {
+  "mm": "01_vinaya_04",
+  "pages": 508
  },
  "mula_vi_05": {
   "mm": "01_vinaya_05",

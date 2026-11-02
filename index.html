@@ -470,7 +470,7 @@ let isRomanPali = false;
       await ensureMmSplitIndex(); const ent = mmSplitEntryByMm(mmBookId);
       if(ent){
         if(!mmSplitCache[ent.pali]) mmSplitCache[ent.pali] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${ent.pali}.json`));
-        const arr = []; for(let i = 1; i <= ent.pages; i++) arr.push(mmSplitCache[ent.pali][String(i)] || "");
+        const keys = Object.keys(mmSplitCache[ent.pali]).map(Number), last = Math.max(ent.pages, ...keys), arr = []; for(let i = 1; i <= last; i++) arr.push(mmSplitCache[ent.pali][String(i)] || "");   // ပါဠိစာမျက်နှာနံပါတ်က စာမျက်နှာအရေအတွက်ထက် ကြီးနိုင်သည် (ဥပမာ ၄၉–၉၈)
         mmPagesCache[mmBookId] = arr;
       }
     }
