@@ -269,7 +269,7 @@ def _published(pali_id):
     return os.path.exists(ip) and pali_id in json.load(open(ip, encoding='utf-8'))
 def exportable(rep):
     """fully matched and no page holds a lump of text (one huge Myanmar paragraph / a numbering gap)"""
-    return rep['mm_paragraphs'] > 0 and rep['unmatched_count'] == 0 and rep['max_page_chars'] <= 30000 and rep['numbered_pali_pages_without_mm'] <= 0.1 * rep['pali_pages']
+    return rep['mm_paragraphs'] > 0 and rep['unmatched_count'] == 0 and rep["max_page_chars"] <= 40000 and rep['numbered_pali_pages_without_mm'] <= 0.1 * rep['pali_pages']
 def export_split(pali_id, mm_id, data):
     """Publishable form: data/mm_split/<pali_id>.json = {"<pali page>": "<mm html>"} (empty pages left out)
     and data/mm_split/index.json = {pali_id: {"mm": mm_id}} (only books that matched fully)."""
