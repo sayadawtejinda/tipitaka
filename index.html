@@ -1916,7 +1916,7 @@ let isRomanPali = false;
     try{
       const idx = await ensureIndex(); const paranums = parseParanums(currentRow && currentRow.paranum);
       const listParanums = paranums.length > 0 ? paranums : [null];
-      await ensureBurmeseMap(); const burmeseEntry = findBurmeseMapping(bookId, pageNum); const mmNew = (await ensureMmSplitIndex())[bookId];
+      await ensureBurmeseMap(); const burmeseEntry = findBurmeseMapping(bookId, pageNum); const mmNew = (await ensureMmSplitIndex().catch(() => ({})))[bookId];
       let containerHtml = "", hasAnyRefs = false;
       for(const p of listParanums){
         const pTitle = p != null ? `စာပိုဒ် - ${toMyanmarDigits(p)}` : "ဆက်စပ်ကျမ်းများ";
@@ -2737,7 +2737,11 @@ let isRomanPali = false;
     try{ const j = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_editions.json`)); if(j && typeof j === "object") TP_NISSAYA_EDITIONS = j; }catch(e){ /* အရန်စာရင်းကိုပဲ သုံးမည် */ }
   }
   async function ensureMmSplitIndex(){
-    if(!mmSplitIndex){ try{ mmSplitIndex = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/index.json`)); }catch(e){ mmSplitIndex = {}; } }
+    if(!mmSplitIndex){
+      let lastErr = null;
+      for(let i = 0; i < 3 && !mmSplitIndex; i++){ try{ mmSplitIndex = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/index.json`)); }catch(e){ lastErr = e; await new Promise(r => setTimeout(r, 600)); } }
+      if(!mmSplitIndex){ throw lastErr || new Error("mm_split/index.json"); }   // မအောင်ရင် {} မမှတ်ထားဘဲ နောက်တစ်ခါ ပြန်ကြိုးစားနိုင်စေရန်
+    }
     return mmSplitIndex;
   }
   function mmSplitEntryByMm(mmBookId){
@@ -3234,7 +3238,7 @@ let isRomanPali = false;
               allOptions.push({label: "(ဒီစာမျက်နှာအတွက် SC သုတ္တန်မတွေ့ပါ)", action: "none"});
           }
           allOptions.push({label: "📖 နိဿယ (Split View ဖတ်ရန်)", action: "nissaya"});
-          const mmSplitIdx = await ensureMmSplitIndex();
+          const mmSplitIdx = await ensureMmSplitIndex().catch(() => ({}));
           allOptions.push(mmSplitIdx[bookId] ? {label: "📖 မြန်မာပြန် (Split View ဖတ်ရန်)", action: "mmsplit"} : {label: "(ဒီစာအုပ်အတွက် မြန်မာပြန် Split View မရှိသေးပါ)", action: "none"});
           
           langList.innerHTML = allOptions.map((o, i) => `<div class="tp-sutta-item" ${o.action !== 'none' ? `data-idx="${i}"` : `style="color:#888;cursor:default;"`}>${o.label}</div>`).join("");
