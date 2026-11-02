@@ -79,6 +79,54 @@ def all_issues():
         if 0 < len(_cache[mm]) <= MAX_ISSUES_PER_BOOK: out.extend(_cache[mm])
     return out
 
+WORD = re.compile(r'<[^>]*>|[^<\s]+')
+def wrap_words(content):
+    """Wrap every word of the raw page html in <i class=w data-o=raw-offset> so the viewer can say where a paragraph starts."""
+    out, in_num, last = [], False, 0
+    for m in WORD.finditer(content):
+        t = m.group(0)
+        out.append(content[last:m.start()]); last = m.end()
+        if t.startswith('<'):
+            if t.startswith('<span class="paranum"'): in_num = True
+            elif in_num and t.startswith('</span'): in_num = False
+            out.append(t)
+        elif in_num: out.append(t)
+        else: out.append('<i class="w" data-o="%d">%s</i>' % (m.start(), t))
+    out.append(content[last:])
+    return ''.join(out)
+
+def pali_json_path(pali_id): return os.path.join(DATA, pali_id + '.json')
+
+def insert_pali_number(pali_id, page, offset, num):
+    """Insert <span class="paranum">N</span>။ at a raw offset of a Pali page and refresh that page's paranum field."""
+    path = pali_json_path(pali_id)
+    recs = json.load(open(path, encoding='utf-8'))
+    rec = next((r for r in recs if r['page'] == page), None)
+    if rec is None: raise ValueError('page not found')
+    c = rec['content']
+    if not (0 <= offset < len(c)) or c[offset] in ('<', '>', ' ', chr(10)): raise ValueError('bad position')
+    if re.search(r'<span class="paranum">%s</span>' % my(num), c): raise ValueError('this page already has paragraph %d' % num)
+    os.makedirs(BACKUP, exist_ok=True)
+    shutil.copy2(path, os.path.join(BACKUP, '%s.%s.json' % (pali_id, time.strftime('%Y%m%d-%H%M%S'))))
+    rec['content'] = c[:offset] + '<span class="paranum">%s</span>။ ' % my(num) + c[offset:]
+    nums = [B.mm2int(x) for x in B.SPAN.findall(rec['content'])]
+    rec['paranum'] = '-' + '-'.join(str(n) for n in nums) + '-'
+    with open(path, 'w', encoding='utf-8', newline=chr(10)) as f:
+        f.write(json.dumps(recs, indent=4, ensure_ascii=False, sort_keys=True))
+    _pali.pop(pali_id, None)
+    res = {'books': []}
+    for b in BOOKS:
+        if b['pali_book_id'] != pali_id: continue
+        mm = b['mm_book_id']
+        data, rep = B.build(mm, pali_id)
+        with open(os.path.join(OUT, mm + '.js'), 'w', encoding='utf-8') as f:
+            f.write('window.SBS_DATA=window.SBS_DATA||{};window.SBS_DATA[%s]=%s;' % (json.dumps(mm), json.dumps(data, ensure_ascii=False)))
+        exported = False
+        if rep['unmatched_count'] == 0: B.export_split(pali_id, mm, data); exported = True
+        _cache.pop(mm, None)
+        res.update({'left_in_book': rep['unmatched_count'], 'exported': exported})
+    return res
+
 def my(n):
     return ''.join(B.MM_DIGITS[int(c)] for c in str(n))
 
@@ -125,15 +173,17 @@ class H(SimpleHTTPRequestHandler):
             with LOCK: return self.j({'issues': all_issues()})
         if u.path == '/api/pali':
             q = parse_qs(u.query); pid = q['book'][0]; a, z = int(q['from'][0]), int(q['to'][0])
-            with LOCK: pages, _ = pali_book(pid)
-            return self.j([{'page': p['page'], 'html': p['html']} for p in pages if a <= p['page'] <= z])
+            recs = json.load(open(pali_json_path(pid), encoding='utf-8'))
+            return self.j([{'page': r['page'], 'html': wrap_words(r['content'])} for r in recs if a <= r['page'] <= z])
         return super().do_GET()
     def do_POST(self):
-        if urlparse(self.path).path != '/api/fix': return self.j({'error': 'not found'}, 404)
+        path = urlparse(self.path).path
+        if path not in ('/api/fix', '/api/paliinsert'): return self.j({'error': 'not found'}, 404)
         try:
             d = json.loads(self.rfile.read(int(self.headers.get('Content-Length', 0))))
             with LOCK:
-                res = apply_fix(d['mm'], int(d['k']), int(d['old']), int(d['new']))
+                if path == '/api/fix': res = apply_fix(d['mm'], int(d['k']), int(d['old']), int(d['new']))
+                else: res = insert_pali_number(d['pali'], int(d['page']), int(d['offset']), int(d['num']))
                 res['issues'] = all_issues()
             self.j(res)
         except Exception as e:
