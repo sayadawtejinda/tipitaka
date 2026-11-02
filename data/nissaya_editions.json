@@ -8,5 +8,15 @@
    "label": "ဘုရားကြီးမူ",
    "file": "mula_vi_01_bhurakyi"
   }
+ ],
+ "mula_vi_02": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_vi_02"
+  },
+  {
+   "label": "ဘုရားကြီးမူ",
+   "file": "mula_vi_02_bhurakyi"
+  }
  ]
 }
