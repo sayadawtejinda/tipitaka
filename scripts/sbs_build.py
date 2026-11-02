@@ -32,7 +32,7 @@ def parse_num(t):
     lo = mm2int(m.group(1)); hi = mm2int(m.group(2)) if m.group(2) else lo
     return (lo, hi) if hi >= lo else (lo, lo)
 
-BLOCK = re.compile(r'<(p|h[1-6])\b[^>]*>.*?</\1>', re.S)
+BLOCK = re.compile(r'<(p|h[1-6])\b[^>]*>.*?</(?:p|h[1-6])>', re.S)   # some sources close <h1> with </p>
 PARA = re.compile(r'<span class="paragraph">([^<]*)')   # closing </span> may be missing/garbled in the source (e.g. '၂၇၈</b></a></a>။')
 
 def parse_mm(path):
@@ -40,7 +40,7 @@ def parse_mm(path):
     body = h[h.find('<body>') + 6:]
     blocks = []
     for m in BLOCK.finditer(body):
-        html = m.group(0)
+        html = re.sub(r'</(?:p|h[1-6])>$', '</%s>' % m.group(1), m.group(0))
         pm = PARA.search(html)
         pn = parse_num(pm.group(1)) if pm else None
         blocks.append({'tag': m.group(1), 'html': html,
@@ -119,7 +119,7 @@ def split_group(g, seglens):
         return out
     items = []   # (kind, html, len)
     for b in g['blocks']:
-        if b['tag'].startswith('h'): items.append(('h', b['html'], 0))
+        if b['tag'].startswith('h') and tlen(b['html']) <= 400: items.append(('h', b['html'], 0))   # a mis-tagged long 'heading' is text
         elif is_foot(b): items.append(('f', b['html'], 0))
         else:
             for h, l in chunks(b['html']): items.append(('t', h, l))
@@ -148,7 +148,7 @@ def split_group(g, seglens):
 
 def _ov(a, b): return a[0] <= b[1] and b[0] <= a[1]
 
-def match_groups(groups, segs):
+def match_groups(groups, segs, window=None):
     """Align Myanmar paragraphs with the numbered Pali segments.
     Numbers may be ranges (177-179) on either side. Returns (num_idx, matched) where matched[gi] is an index
     into num_idx or None.  Greedy first; if anything is left over, longest-common-subsequence (so a duplicated or
@@ -163,12 +163,12 @@ def match_groups(groups, segs):
         while j < m and not _ov(g, sn[j]): j += 1
         if j >= m: matched.append(None)
         else: matched.append(j); pos = j + 1 if sn[j][1] <= g[1] else j
-    if any(x is None for x in matched):
+    if window or any(x is None for x in matched):
         dp = [[0] * (m + 1) for _ in range(n + 1)]
         for i in range(1, n + 1):
             gi, row, prow = gn[i - 1], dp[i], dp[i - 1]
             for j in range(1, m + 1):
-                if _ov(gi, sn[j - 1]):
+                if _ov(gi, sn[j - 1]) and not (window and abs(i / n - j / m) > window):
                     v = prow[j - 1] + 1 - 1e-4 * abs(i / n - j / m)   # on equal counts prefer the match at the same relative place
                     if prow[j] > v: v = prow[j]
                     if row[j - 1] > v: v = row[j - 1]
@@ -178,7 +178,7 @@ def match_groups(groups, segs):
         matched = [None] * n
         i, j = n, m
         while i > 0 and j > 0:
-            if _ov(gn[i - 1], sn[j - 1]) and dp[i][j] == dp[i - 1][j - 1] + 1 - 1e-4 * abs(i / n - j / m):
+            if _ov(gn[i - 1], sn[j - 1]) and not (window and abs(i / n - j / m) > window) and dp[i][j] == dp[i - 1][j - 1] + 1 - 1e-4 * abs(i / n - j / m):
                 matched[i - 1] = j - 1; i -= 1; j -= 1
             elif dp[i - 1][j] >= dp[i][j - 1]: i -= 1
             else: j -= 1
@@ -190,6 +190,12 @@ def match_groups(groups, segs):
                     matched[gi] = matched[nb]; break
     return num_idx, matched
 
+def _bracketed(g):
+    """the paragraph is only a bracketed abridgement note, e.g. '(... ကို အကျယ်ချဲ့အပ်၏။)'"""
+    txt = ' '.join(re.sub(r'\s+', ' ', TAG.sub('', b['html'])).strip() for b in g['blocks'])
+    txt = re.sub(r'^[၀-၉]+[။.]?\s*', '', txt)
+    return len(txt) < 400 and txt.startswith('(') and txt.rstrip().endswith(')')
+
 def settle(groups, matched):
     """in place: attach numbered notes / repeated numbers to their paragraph; returns the attached numbers"""
     # a numbered note whose number restarts (1, 2 ... after paragraph 339) belongs to the paragraph before it
@@ -200,7 +206,7 @@ def settle(groups, matched):
         while z < len(groups) and matched[z] is None: z += 1
         if anchor is not None and z - gi <= 12:           # a long unmatched run is a real mismatch, not notes
             for x in range(gi, z):
-                if groups[x]['num'] <= groups[anchor]['num']:
+                if groups[x]['num'] <= groups[anchor]['num'] or _bracketed(groups[x]):
                     matched[x] = matched[anchor]; attached.append(groups[x]['num'])
         gi = z
     for gi in range(len(groups) - 2, -1, -1):          # same number twice in a row: both parts belong to one Pali paragraph
@@ -208,10 +214,10 @@ def settle(groups, matched):
             matched[gi] = matched[gi + 1]
     return attached
 
-def build(mm_id, pali_id):
+def _build(mm_id, pali_id, window=None):
     pages, segs = pali_segments(pali_id)
     groups, tail = group_blocks(parse_mm(os.path.join(DATA, mm_id + '.html')))
-    num_idx, matched = match_groups(groups, segs)
+    num_idx, matched = match_groups(groups, segs, window)
     attached = settle(groups, matched)
     per_page = [[] for _ in pages]
     unmatched = [g['num'] for g, j in zip(groups, matched) if j is None]
@@ -224,9 +230,13 @@ def build(mm_id, pali_id):
         while gi < len(groups) and matched[gi] == j:       # several paragraphs inside one Pali range -> one piece
             blocks.extend(groups[gi]['blocks']); gi += 1
         k = num_idx[j]
-        chain = [segs[k]]; k += 1
-        while k < len(segs) and segs[k]['num'] is None:
-            chain.append(segs[k]); k += 1
+        nj = next((matched[x] for x in range(gi, len(groups)) if matched[x] is not None), None)
+        if nj is not None and 0 < nj - j - 1 <= 60:        # Pali numbers the translation has no paragraph for (104-105 as one): share the text
+            chain = segs[k:num_idx[nj]]
+        else:
+            chain = [segs[k]]; k += 1
+            while k < len(segs) and segs[k]['num'] is None:
+                chain.append(segs[k]); k += 1
         parts = split_group({'blocks': blocks}, [s['len'] for s in chain])
         for s, p in zip(chain, parts):
             per_page[s['pi']].extend(p)
@@ -242,13 +252,24 @@ def build(mm_id, pali_id):
            'pali_pages_without_numbers': sum(1 for p in pages if not p['nums'])}
     return out, rep
 
+def build(mm_id, pali_id):
+    out, rep = _build(mm_id, pali_id)
+    if rep['max_page_chars'] > 30000 and rep['mm_paragraphs'] > 0:
+        # numbering restarts (per chapter) can pair a paragraph with the same number far away: allow only nearby matches
+        for w in (0.05, 0.1):
+            o2, r2 = _build(mm_id, pali_id, w)
+            if (r2['unmatched_count'], r2['max_page_chars']) < (rep['unmatched_count'], rep['max_page_chars']):
+                out, rep = o2, r2; rep['window'] = w
+                if r2['max_page_chars'] <= 30000: break
+    return out, rep
+
 SPLIT_DIR = os.path.join(DATA, 'mm_split')
 def _published(pali_id):
     ip = os.path.join(SPLIT_DIR, 'index.json')
     return os.path.exists(ip) and pali_id in json.load(open(ip, encoding='utf-8'))
 def exportable(rep):
     """fully matched and no page holds a lump of text (one huge Myanmar paragraph / a numbering gap)"""
-    return rep['mm_paragraphs'] > 0 and rep['unmatched_count'] == 0 and rep['max_page_chars'] <= 30000
+    return rep['mm_paragraphs'] > 0 and rep['unmatched_count'] == 0 and rep['max_page_chars'] <= 30000 and rep['numbered_pali_pages_without_mm'] <= 0.1 * rep['pali_pages']
 def export_split(pali_id, mm_id, data):
     """Publishable form: data/mm_split/<pali_id>.json = {"<pali page>": "<mm html>"} (empty pages left out)
     and data/mm_split/index.json = {pali_id: {"mm": mm_id}} (only books that matched fully)."""
