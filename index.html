@@ -364,7 +364,7 @@ const SAYOKESON_FILE = "sayokeson.json";
   let mmHtmlCache = {}, mmPagesCache = {}, mmBackContext = null, mmCurrentBookId = null, mmCurrentPageIdx = 1;
   let currentRows = [], currentRow = null, currentBookId = "", currentBookMeta = null, bookPagesCache = {};
 let isNissayaOpen = false;
-let isMmSplitOpen = false, mmSplitIndex = null, mmSplitCache = {};   // 📖 မြန်မာပြန် Split View (data/mm_split/<ပါဠိစာအုပ်>.json = {ပါဠိစာမျက်နှာ: မြန်မာပြန်html})
+let isMmSplitOpen = false, mmSplitIndex = null, mmSplitCache = {}, mmSplitPendingPara = null;   // 📖 မြန်မာပြန် Split View (data/mm_split/<ပါဠိစာအုပ်>.json = {ပါဠိစာမျက်နှာ: မြန်မာပြန်html})
 // ဆိုင်ရာ ပါဠိစာအုပ်အတွက် နိဿယမူ တစ်မျိုးထက်ပိုရှိလျှင် ရွေးရန်။ စာရင်းက data/nissaya_editions.json ထဲမှာ (nissaya_multi/scripts/m_publish.py က အလိုအလျောက် ထည့်သည်)
 // { "mula_vi_01": [ {"label":"မူလနိဿယ","file":"mula_vi_01"}, {"label":"ဘုရားကြီးမူ","file":"mula_vi_01_bhurakyi"} ], ... }   (file = data/ ထဲက .html ဖိုင်အမည်၊ .html မပါ)
 let TP_NISSAYA_EDITIONS = { "mula_vi_01": [ {label:"မူလနိဿယ", file:"mula_vi_01"}, {label:"ဘုရားကြီးမူ", file:"mula_vi_01_bhurakyi"} ] };   // ဖိုင်ဖတ်မရလျှင် သုံးမည့် အရန်
@@ -439,6 +439,7 @@ let isRomanPali = false;
     if(b.type === "mm"){
       document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
       try{
+        if(await openMmSplitFromMm(b.bookId, b.pageIdx || 1, null)) return;
         await ensureBurmeseToc();
         await ensureMmPages(b.bookId);
         mmCurrentBookId = b.bookId; mmCurrentPageIdx = b.pageIdx || 1;
@@ -465,6 +466,14 @@ let isRomanPali = false;
   }
 
   async function ensureMmPages(mmBookId){
+    if(!mmPagesCache[mmBookId]){
+      await ensureMmSplitIndex(); const ent = mmSplitEntryByMm(mmBookId);
+      if(ent){
+        if(!mmSplitCache[ent.pali]) mmSplitCache[ent.pali] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${ent.pali}.json`));
+        const arr = []; for(let i = 1; i <= ent.pages; i++) arr.push(mmSplitCache[ent.pali][String(i)] || "");
+        mmPagesCache[mmBookId] = arr;
+      }
+    }
     if(!mmPagesCache[mmBookId] && mmBookId.startsWith("pa_")){ await ensurePaText(mmBookId); }
     if(!mmPagesCache[mmBookId] && mmBookId.startsWith("mbv_")){
       await ensureBurmeseToc();
@@ -543,7 +552,7 @@ let isRomanPali = false;
       item.className = "tp-say-item";
       const bookLabel = bookIds.length > 1 ? `${tp_sayEsc((burmeseBookMeta[h.bookId] || {}).title || h.bookId)} — ` : "";
       item.innerHTML = `<b>${bookLabel}စာမျက်နှာ ${toMyanmarDigits(h.page)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h.snippet)}</div>`;
-      item.addEventListener("click", () => { closeAllDropdowns(); openBurmeseTranslation(h.bookId, null, h.page); });
+      item.addEventListener("click", () => { closeAllDropdowns(); openBurmeseTranslation(h.bookId, null, h.page, true); });
       body.appendChild(item);
     });
   }
@@ -1960,7 +1969,17 @@ let isRomanPali = false;
     }catch(e){ toggleBtn.disabled = true; }
   }
 
-  async function openBurmeseTranslation(mmBookId, targetParagraph, targetMmPage){
+  async function openBurmeseTranslation(mmBookId, targetParagraph, targetMmPage, isPaliPage){
+    await ensureMmSplitIndex(); const splitEnt = mmSplitEntryByMm(mmBookId);
+    if(splitEnt){
+      let pp = null;
+      if(targetParagraph != null){ const pgs = await ensureMmPages(mmBookId); const f = pgs.findIndex(x => x.includes(`class="paragraph">${toMyanmarDigits(targetParagraph)}<`)); if(f >= 0) pp = f + 1; }
+      if(pp == null && targetMmPage != null){
+        const m = burmeseBookMeta && burmeseBookMeta[mmBookId];
+        pp = isPaliPage ? targetMmPage : (m && m.pagecount ? Math.round(targetMmPage / m.pagecount * splitEnt.pages) : targetMmPage);   // မူရင်း မြန်မာစာမျက်နှာနံပါတ်အဟောင်းကို အချိုးနဲ့ ခန့်မှန်း
+      }
+      if(await openMmSplitFromMm(mmBookId, pp || 1, targetParagraph)) return;
+    }
     document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{
       const pages = await ensureMmPages(mmBookId); let pageIdx = 1, highlightText = null;
@@ -2474,6 +2493,7 @@ let isRomanPali = false;
   }
 
   async function openBurmeseTranslationBrowse(mmBookId){
+    if(await openMmSplitFromMm(mmBookId, 1, null)) return;
     document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>';
     try{ await ensureMmPages(mmBookId); mmCurrentBookId = mmBookId; mmCurrentPageIdx = 1; renderMmPage(null, false); } 
     catch(e){ document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`; }
@@ -2720,9 +2740,23 @@ let isRomanPali = false;
     if(!mmSplitIndex){ try{ mmSplitIndex = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/index.json`)); }catch(e){ mmSplitIndex = {}; } }
     return mmSplitIndex;
   }
+  function mmSplitEntryByMm(mmBookId){
+    if(!mmSplitIndex) return null;
+    for(const [pali, e] of Object.entries(mmSplitIndex)){ if(e.mm === mmBookId) return { pali, mm: e.mm, pages: e.pages }; }
+    return null;
+  }
+  // "တိပိဋက › မြန်မာပြန်" ကနေ ဖွင့်လျှင် သီးသန့်မပြတော့ဘဲ ပါဠိစာမျက်နှာကို ဖွင့်ပြီး မြန်မာပြန်ကို ဘေးတခြမ်းမှာ ပြမည် (မူရင်းမြန်မာပြန်ဖိုင် မရှိတော့သော ကျမ်းများအတွက်)
+  async function openMmSplitFromMm(mmBookId, paliPage, para){
+    await ensureMmSplitIndex(); const ent = mmSplitEntryByMm(mmBookId); if(!ent) return false;
+    const idx = await ensureIndex(); const meta = idx.books.find(b => b.id === ent.pali); if(!meta) return false;
+    isNissayaOpen = false; isMmSplitOpen = true; mmSplitPendingPara = para != null ? para : null;
+    await loadPage(meta.basket, meta.category, meta.id, Math.max(paliPage || 1, meta.firstpage || 1), meta.firstpage);
+    return true;
+  }
   // မြန်မာပြန်ကို ပါဠိစာမျက်နှာနံပါတ်အတိုင်း ဘေးတခြမ်းမှာ ပြမည် (နိဿယ Split View နေရာကိုပဲ မျှသုံး)
   async function openMmSplit(bookId, pageNum, para) {
       isMmSplitOpen = true; isNissayaOpen = false;
+      if(para == null){ para = mmSplitPendingPara; } mmSplitPendingPara = null;
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
       if(!container || !contentEl) return;

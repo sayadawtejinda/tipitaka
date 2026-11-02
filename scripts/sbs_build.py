@@ -179,6 +179,8 @@ def main():
         if b['link_type'] != 'paragraph' or (want and b['mm_book_id'] not in want):
             if b['link_type'] != 'paragraph': reps.append({'mm': b['mm_book_id'], 'skipped': 'link_type=' + b['link_type']})
             continue
+        if not os.path.exists(os.path.join(DATA, b['mm_book_id'] + '.html')):
+            continue          # old translation file removed after its split was published (data/mm_split/)
         try:
             data, rep = build(b['mm_book_id'], b['pali_book_id'])
         except Exception as e:
