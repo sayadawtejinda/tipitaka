@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-31",
+ "generated": "2026-11-03",
  "books": [
   {
    "id": "mula_vi_01",
@@ -12,6 +12,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "mula_vi_01_bhurakyi",
+   "title": "ပါရာဇိကပါဠိ (ဘုရားကြီးမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3863413,
+   "date": "2026-11-02",
+   "edition_of": "mula_vi_01"
+  },
+  {
    "id": "mula_vi_02",
    "title": "ပါစိတ္တိယပါဠိ",
    "basket": "ပါဠိတော်",
@@ -20,6 +31,17 @@
    "cat_key": "vi",
    "size": 6463636,
    "date": "2026-08-20"
+  },
+  {
+   "id": "mula_vi_02_bhurakyi",
+   "title": "ပါစိတ္တိယပါဠိ (ဘုရားကြီးမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3930475,
+   "date": "2026-11-02",
+   "edition_of": "mula_vi_02"
   },
   {
    "id": "mula_vi_03",
@@ -991,5 +1013,7 @@
    "size": 6938994,
    "date": "2026-08-20"
   }
- ]
+ ],
+ "n_books": 99,
+ "n_editions": 2
 }

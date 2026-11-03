@@ -146,7 +146,7 @@ function render(){
   groups.forEach((arr, k) => {
     const d = document.createElement("details"); d.className = "g"; if(openAll) d.open = true;
     const s = document.createElement("summary");
-    s.innerHTML = '<span>' + k + '</span><span class="cnt">' + mm(arr.length) + ' အုပ် · ' + mb(arr.reduce((a,b) => a + b.size, 0)) + '</span><span class="sp"></span>';
+    s.innerHTML = '<span>' + k + '</span><span class="cnt">' + mm(arr.filter(x => !x.edition_of).length) + ' အုပ်' + (arr.some(x => x.edition_of) ? ' (+' + mm(arr.filter(x => x.edition_of).length) + ' မူ)' : '') + ' · ' + mb(arr.reduce((a,b) => a + b.size, 0)) + '</span><span class="sp"></span>';
     const gb = document.createElement("button"); gb.textContent = "⬇ ဤအုပ်စု ZIP";
     gb.onclick = ev => { ev.preventDefault(); ev.stopPropagation(); zip(arr, safe(k.replace(/ · /, "_"))); };
     s.appendChild(gb); d.appendChild(s);
@@ -172,7 +172,8 @@ function chips(){
 }
 fetch(MD + "?t=" + Date.now(), {cache: "no-cache"}).then(r => r.json()).then(j => {
   books = j.books;
-  $("#total").textContent = "စုစုပေါင်း " + mm(books.length) + " အုပ် · " + mb(books.reduce((a,b) => a + b.size, 0)) + " (မူရင်း)";
+  const nEd = books.filter(b => b.edition_of).length;
+  $("#total").textContent = "စုစုပေါင်း " + mm(books.length - nEd) + " အုပ်" + (nEd ? " (နိဿယမူ အပိုပါ " + mm(nEd) + " ခုပါ၍ ဖိုင် " + mm(books.length) + " ဖိုင်)" : "") + " · " + mb(books.reduce((a,b) => a + b.size, 0)) + " (မူရင်း)";
   $("#gen").textContent = "စာရင်း ပြုပြင်သည့်ရက် " + j.generated + " — စာအုပ်အသစ်တင်တိုင်း ဤစာရင်း အလိုအလျောက် ပြောင်းပါသည်။";
   chips(); render();
 }).catch(e => { $("#list").textContent = "စာရင်း မရပါ: " + e.message; });
