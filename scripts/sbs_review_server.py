@@ -21,7 +21,8 @@ _cache = {}                      # mm_id -> issues list
 _pali = {}                       # pali_id -> pages
 NAMES = {x['id']: x['name'] for x in json.load(open(os.path.join(ROOT, 'myanmar_books.json'), encoding='utf-8'))}
 BOOKS = [b for b in json.load(open(os.path.join(ROOT, 'burmese_translated_books.json'), encoding='utf-8'))
-         if b['link_type'] == 'paragraph' and os.path.exists(os.path.join(DATA, b['mm_book_id'] + '.html'))]
+         if b['link_type'] == 'paragraph' and os.path.exists(os.path.join(DATA, b['mm_book_id'] + '.html'))
+         and (b['pali_book_id'] not in B.VIRTUAL or b['mm_book_id'] == B.VIRTUAL[b['pali_book_id']][0])]
 TAG = re.compile(r'<[^>]+>')
 
 def plain(blocks):
@@ -34,7 +35,7 @@ def pali_book(pali_id):
 
 def analyze(mm_id, pali_id):
     pages, segs = pali_book(pali_id)
-    groups, _ = B.group_blocks(B.parse_mm(os.path.join(DATA, mm_id + '.html')))
+    groups, _ = B.group_blocks(B.parse_mm(B.mm_sources(mm_id, pali_id)))
     num_idx, matched = B.match_groups(groups, segs)
     B.settle(groups, matched)
     used = {j for j in matched if j is not None}

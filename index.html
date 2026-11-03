@@ -2747,7 +2747,7 @@ let isRomanPali = false;
   }
   function mmSplitEntryByMm(mmBookId){
     if(!mmSplitIndex) return null;
-    for(const [pali, e] of Object.entries(mmSplitIndex)){ if(e.mm === mmBookId) return { pali, mm: e.mm, pages: e.pages }; }
+    for(const [pali, e] of Object.entries(mmSplitIndex)){ if(e.mm === mmBookId || (e.mms && mmBookId in e.mms)) return { pali, mm: e.mm, pages: e.pages, start: (e.mms && e.mms[mmBookId]) || 1 }; }
     return null;
   }
   // "တိပိဋက › မြန်မာပြန်" ကနေ ဖွင့်လျှင် သီးသန့်မပြတော့ဘဲ ပါဠိစာမျက်နှာကို ဖွင့်ပြီး မြန်မာပြန်ကို ဘေးတခြမ်းမှာ ပြမည် (မူရင်းမြန်မာပြန်ဖိုင် မရှိတော့သော ကျမ်းများအတွက်)
@@ -2755,7 +2755,7 @@ let isRomanPali = false;
     await ensureMmSplitIndex(); const ent = mmSplitEntryByMm(mmBookId); if(!ent) return false;
     const idx = await ensureIndex(); const meta = idx.books.find(b => b.id === ent.pali); if(!meta) return false;
     isNissayaOpen = false; isMmSplitOpen = true; mmViaMm = true; mmSplitPendingPara = para != null ? para : null;
-    await loadPage(meta.basket, meta.category, meta.id, Math.max(paliPage || 1, meta.firstpage || 1), meta.firstpage);
+    await loadPage(meta.basket, meta.category, meta.id, Math.max(paliPage || 1, ent.start || 1, meta.firstpage || 1), meta.firstpage);
     return true;
   }
   // မြန်မာပြန်ကို ပါဠိစာမျက်နှာနံပါတ်အတိုင်း ဘေးတခြမ်းမှာ ပြမည် (နိဿယ Split View နေရာကိုပဲ မျှသုံး)

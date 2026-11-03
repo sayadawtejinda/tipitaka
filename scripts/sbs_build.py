@@ -35,16 +35,32 @@ def parse_num(t):
 BLOCK = re.compile(r'<(p|h[1-6])\b[^>]*>.*?</(?:p|h[1-6])>', re.S)   # some sources close <h1> with </p>
 PARA = re.compile(r'<span class="paragraph">([^<]*)')   # closing </span> may be missing/garbled in the source (e.g. '၂၇၈</b></a></a>။')
 
+# The Visuddhimagga translation volumes: one Pali book (annya_bi_01/02) is read against two translation files; its paragraph
+# numbers stand as plain text at the start of a <p> ('၁၃။ ...') and run on from one file to the next.
+VIRTUAL = {'annya_bi_01': ['08_visuddhimagga_01', '08_visuddhimagga_02'], 'annya_bi_02': ['08_visuddhimagga_03', '08_visuddhimagga_04']}
+LEADNUM = re.compile(r'<p\b[^>]*>\s*(?:<[^>]+>)*\s*([၀-၉]+(?:\s*[-–]\s*[၀-၉]+)?)\s*။')
+
+def mm_sources(mm_id, pali_id):
+    return [os.path.join(DATA, x + '.html') for x in VIRTUAL.get(pali_id, [mm_id])]
+
 def parse_mm(path):
-    h = open(path, encoding='utf-8').read()
-    body = h[h.find('<body>') + 6:]
+    paths = path if isinstance(path, (list, tuple)) else [path]
     blocks = []
-    for m in BLOCK.finditer(body):
-        html = re.sub(r'</(?:p|h[1-6])>$', '</%s>' % m.group(1), m.group(0))
-        pm = PARA.search(html)
-        pn = parse_num(pm.group(1)) if pm else None
-        blocks.append({'tag': m.group(1), 'html': html,
-                       'num': pn[0] if pn else None, 'hi': pn[1] if pn else None})
+    for pth in paths:
+        h = open(pth, encoding='utf-8').read()
+        body = h[h.find('<body>') + 6:]
+        lead = os.path.basename(pth).startswith('08_visuddhimagga')
+        h2seen = 0 if os.path.basename(pth).startswith('08_visuddhimagga_01') else 9      # volume 1 opens with the translator's own numbered verses (before the second <h2>)
+        for m in BLOCK.finditer(body):
+            if m.group(1) == 'h2': h2seen += 1
+            html = re.sub(r'</(?:p|h[1-6])>$', '</%s>' % m.group(1), m.group(0))
+            pm = PARA.search(html)
+            pn = parse_num(pm.group(1)) if pm else None
+            if pn is None and lead and m.group(1) == 'p' and h2seen >= 1:
+                lm = LEADNUM.match(html)
+                if lm: pn = parse_num(lm.group(1))
+            blocks.append({'tag': m.group(1), 'html': html,
+                           'num': pn[0] if pn else None, 'hi': pn[1] if pn else None})
     return blocks
 
 def group_blocks(blocks):
@@ -235,6 +251,9 @@ def settle(groups, matched):
                 if groups[x]['num'] <= groups[anchor]['num'] or _bracketed(groups[x]):
                     matched[x] = matched[anchor]; attached.append(groups[x]['num'])
         gi = z
+    first = next((x for x in range(len(groups)) if matched[x] is not None), None)
+    if first:                                           # front matter that carries numbers of its own (translator's verses) stays with the first paragraph
+        for x in range(first): matched[x] = matched[first]; attached.append(groups[x]['num'])
     for gi in range(len(groups) - 2, -1, -1):          # same number twice in a row: both parts belong to one Pali paragraph
         if matched[gi] is None and matched[gi + 1] is not None and groups[gi]['num'] == groups[gi + 1]['num']:
             matched[gi] = matched[gi + 1]
@@ -242,7 +261,7 @@ def settle(groups, matched):
 
 def _build(mm_id, pali_id, window=None):
     pages, segs = pali_segments(pali_id)
-    groups, tail = group_blocks(parse_mm(os.path.join(DATA, mm_id + '.html')))
+    groups, tail = group_blocks(parse_mm(mm_sources(mm_id, pali_id)))
     num_idx, matched = match_groups(groups, segs, window)
     attached = settle(groups, matched)
     per_page = [[] for _ in pages]
@@ -296,7 +315,7 @@ def _published(pali_id):
 def exportable(rep):
     """fully matched and no page holds a lump of text (one huge Myanmar paragraph / a numbering gap)"""
     return rep['mm_paragraphs'] > 0 and rep['unmatched_count'] == 0 and rep["max_page_chars"] <= 40000 and rep['numbered_pali_pages_without_mm'] <= 0.1 * rep['pali_pages']
-def export_split(pali_id, mm_id, data):
+def export_split(pali_id, mm_id, data, mms=None):
     """Publishable form: data/mm_split/<pali_id>.json = {"<pali page>": "<mm html>"} (empty pages left out)
     and data/mm_split/index.json = {pali_id: {"mm": mm_id}} (only books that matched fully)."""
     os.makedirs(SPLIT_DIR, exist_ok=True)
@@ -308,6 +327,7 @@ def export_split(pali_id, mm_id, data):
     ip = os.path.join(SPLIT_DIR, 'index.json')
     idx = json.load(open(ip, encoding='utf-8')) if os.path.exists(ip) else {}
     idx[pali_id] = {'mm': mm_id, 'pages': len(data)}
+    if mms: idx[pali_id]['mms'] = mms                  # {translation file: first Pali page it covers}
     json.dump(idx, open(ip, 'w', encoding='utf-8'), ensure_ascii=False, indent=1, sort_keys=True)
 
 def main():
@@ -318,7 +338,9 @@ def main():
         if b['link_type'] != 'paragraph' or (want and b['mm_book_id'] not in want):
             if b['link_type'] != 'paragraph': reps.append({'mm': b['mm_book_id'], 'skipped': 'link_type=' + b['link_type']})
             continue
-        if not os.path.exists(os.path.join(DATA, b['mm_book_id'] + '.html')):
+        if b['pali_book_id'] in VIRTUAL and b['mm_book_id'] != VIRTUAL[b['pali_book_id']][0]:
+            continue          # built together with the first file of the pair
+        if not all(os.path.exists(x) for x in mm_sources(b['mm_book_id'], b['pali_book_id'])):
             continue          # old translation file removed after its split was published (data/mm_split/)
         try:
             data, rep = build(b['mm_book_id'], b['pali_book_id'])
@@ -327,7 +349,8 @@ def main():
         rep['title'] = b['mm_book_id']
         rep['pali_book'] = b['pali_book_id']
         if exportable(rep) or _published(b['pali_book_id']):
-            export_split(b['pali_book_id'], b['mm_book_id'], data)
+            mms = {x['mm_book_id']: x['pali_first_page'] for x in books if x['pali_book_id'] == b['pali_book_id']} if b['pali_book_id'] in VIRTUAL else None
+            export_split(b['pali_book_id'], b['mm_book_id'], data, mms)
         reps.append(rep)
         with open(os.path.join(OUT, b['mm_book_id'] + '.js'), 'w', encoding='utf-8') as f:
             f.write('window.SBS_DATA=window.SBS_DATA||{};window.SBS_DATA[%s]=%s;' % (

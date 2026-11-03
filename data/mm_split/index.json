@@ -1,4 +1,20 @@
 {
+ "annya_bi_01": {
+  "mm": "08_visuddhimagga_01",
+  "mms": {
+   "08_visuddhimagga_01": 1,
+   "08_visuddhimagga_02": 173
+  },
+  "pages": 370
+ },
+ "annya_bi_02": {
+  "mm": "08_visuddhimagga_03",
+  "mms": {
+   "08_visuddhimagga_03": 1,
+   "08_visuddhimagga_04": 148
+  },
+  "pages": 356
+ },
  "attha_ku_02_01": {
   "mm": "08_dhammapada_01",
   "pages": 447
