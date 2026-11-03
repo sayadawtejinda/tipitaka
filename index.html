@@ -2484,15 +2484,25 @@ let isRomanPali = false;
   }
   // ဒေါင်းလုဒ် HTML ဖိုင်၏ ပုံစံ (မြန်မာပြန်၊ နိဿယ နှစ်မျိုးလုံး မျှသုံး)
   function dlComposeHtml(title, subtitle, rows, toc){
-    const tocHtml = (toc || []).map(x => `<div class="l${x[0]}"><a href="#p${x[2]}">${x[1]}</a></div>`).join("");
+    const tocHtml = (toc || []).map(x => `<div class="l${x[0]}"><a data-p="${x[2]}" href="#p${x[2]}">${x[1]}</a></div>`).join("");
     const css = "body{margin:0;background:#f4f1e8;color:#2b2415;font-family:'Padauk','Myanmar Text','Noto Sans Myanmar',serif;line-height:1.9}"
       + "header{padding:18px 16px;text-align:center;background:#fffdf7;border-bottom:1px solid #d9d0b8}h1{margin:0;font-size:22px}header p{margin:6px 0 0;color:#7a5c1e;font-size:13px}"
-      + "details{max-width:900px;margin:12px auto;padding:8px 16px;background:#fffdf7;border:1px solid #d9d0b8;border-radius:8px}summary{cursor:pointer;font-weight:bold}details a{color:#7a5c1e;text-decoration:none}.l2{padding-left:16px}.l3{padding-left:32px;font-size:.92em}"
+      + "#tocbtn{position:fixed;right:14px;bottom:14px;z-index:20;border:1px solid #b8941f;background:#fffdf7;color:#7a5c1e;border-radius:22px;padding:8px 14px;font:inherit;font-size:14px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}"
+      + "#tocbox{display:none;position:fixed;right:14px;bottom:62px;z-index:21;width:min(380px,92vw);max-height:68vh;overflow:auto;background:#fffdf7;border:1px solid #d9d0b8;border-radius:10px;padding:8px 10px;box-shadow:0 4px 16px rgba(0,0,0,.25);font-size:14px;line-height:1.7}"
+      + "#tocbox a{display:block;color:#5a3f10;text-decoration:none;padding:2px 6px;border-radius:5px}#tocbox a:hover{background:#f3ead2}#tocbox a.act{background:#e9d9a8;font-weight:bold}.l2{padding-left:14px}.l3{padding-left:28px;font-size:.92em}"
       + ".row{max-width:860px;margin:0 auto;padding:12px 16px;border-bottom:1px solid #d9d0b8;overflow-wrap:anywhere}"
       + ".pg{font-size:12px;color:#a08040;margin-bottom:6px;border-bottom:1px dashed #d9d0b8}.row h1,.row h2,.row h3,.row h4,.row h5,.row h6{text-align:center!important}.paranum,.paragraph{font-weight:bold;color:#a00}";
     return `<!doctype html><html lang="my"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css}</style></head><body>`
       + `<header><h1>${title}</h1><p>${subtitle}</p></header>`
-      + (tocHtml ? `<details><summary>မြန်မာမာတိကာ</summary>${tocHtml}</details>` : "") + rows + `</body></html>`;
+      + rows
+      + (tocHtml ? `<button id="tocbtn" type="button">☰ မာတိကာ</button><div id="tocbox">${tocHtml}</div><script>`
+        + "(function(){var b=document.getElementById('tocbtn'),x=document.getElementById('tocbox');"
+        + "function cur(){var r=document.querySelectorAll('.row');for(var i=0;i<r.length;i++){if(r[i].getBoundingClientRect().bottom>60)return +r[i].id.slice(1);}return 0}"
+        + "b.onclick=function(){var o=x.style.display!=='block';x.style.display=o?'block':'none';if(!o)return;var p=cur(),a=null,l=x.querySelectorAll('a[data-p]');"
+        + "for(var i=0;i<l.length;i++){l[i].className='';if(+l[i].getAttribute('data-p')<=p)a=l[i];}"
+        + "if(a){a.className='act';x.scrollTop=a.offsetTop-x.clientHeight/2;}};"
+        + "x.onclick=function(e){var n=e.target;while(n&&n!==x){if(n.tagName==='A'){x.style.display='none';return}n=n.parentNode}};"
+        + "})();<\/script>" : "") + `</body></html>`;
   }
   async function mmDownloadBook(paliId, title, btn){
     const old = btn ? btn.textContent : ""; if(btn){ btn.disabled = true; btn.textContent = "⏳"; }
