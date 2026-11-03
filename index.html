@@ -52,7 +52,10 @@
   #tp-breadcrumb a{color:#0645ad;cursor:pointer;text-decoration:none;}
   #tp-breadcrumb a:hover{text-decoration:underline;}
   .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:16px 0;}
-    .tp-card{border:1px solid #d9d0b8;border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:.2s;background:#fffdf7;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+    .tp-dl-btn{position:absolute;top:5px;right:5px;width:26px;height:26px;border-radius:50%;border:1px solid #d9d0b8;background:#fff;font-size:13px;line-height:1;padding:0;cursor:pointer;color:#7a5c1e;}
+    .tp-dl-btn:hover{background:#f3ead2;}
+    .tp-dl-btn[disabled]{opacity:.6;cursor:wait;width:auto;padding:0 7px;border-radius:13px;font-size:11px;}
+    .tp-card{position:relative;border:1px solid #d9d0b8;border-radius:10px;padding:14px;cursor:pointer;text-align:center;transition:.2s;background:#fffdf7;box-shadow:0 1px 3px rgba(0,0,0,.05);}
   .tp-card:hover{background:#eef3ea;border-color:#9fb8a8;box-shadow:0 3px 8px rgba(0,0,0,.08);}
   .tp-card .tp-count{font-size:.8em;color:#7d8f83;display:block;margin-top:4px;}
   #tp-nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
@@ -2469,6 +2472,60 @@ let isRomanPali = false;
     parts.forEach((p,i) => { if(p.onclick) el.querySelector(`a[data-idx="${i}"]`).addEventListener("click", p.onclick); });
   }
 
+
+  // ⬇ Pali | မြန်မာပြန် ဘေးချင်းကပ် HTML ဖိုင် (စာမျက်နှာနံပါတ်အတိုင်း) - ဘရောက်ဇာထဲမှာပဲ ဖန်တီးပြီး ဒေါင်းလုဒ်ဆွဲသည်
+  async function mmBuildDownloadHtml(paliId, title){
+    const [recs, mm] = await Promise.all([fetchJson(cdnUrl(`${DATA_FOLDER}/${paliId}.json`)), fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${paliId}.json`))]);
+    let toc = []; try{ toc = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split_toc/${paliId}.json`)); }catch(e){ toc = []; }
+    recs.sort((a, b) => a.page - b.page);
+    const seen = new Set();
+    const rows = recs.map(r => {
+      const first = !seen.has(r.page); seen.add(r.page);
+      const m = first ? (mm[String(r.page)] || "") : "";
+      return `<section id="p${r.page}" class="row"><div class="pali"><div class="pg">ပါဠိ စာမျက်နှာ ${toMyanmarDigits(r.page)}</div>${r.content.replace(/<a name="[^"]*"><\/a>/g, "")}</div><div class="mm">${m}</div></section>`;
+    }).join("\n");
+    const tocHtml = toc.map(x => `<div class="l${x[0]}"><a href="#p${x[2]}">${x[1]}</a></div>`).join("");
+    const css = "body{margin:0;background:#f4f1e8;color:#2b2415;font-family:'Padauk','Myanmar Text','Noto Sans Myanmar',serif;line-height:1.9}"
+      + "header{padding:18px 16px;text-align:center;background:#fffdf7;border-bottom:1px solid #d9d0b8}h1{margin:0;font-size:22px}header p{margin:6px 0 0;color:#7a5c1e;font-size:13px}"
+      + "details{max-width:900px;margin:12px auto;padding:8px 16px;background:#fffdf7;border:1px solid #d9d0b8;border-radius:8px}summary{cursor:pointer;font-weight:bold}details a{color:#7a5c1e;text-decoration:none}.l2{padding-left:16px}.l3{padding-left:32px;font-size:.92em}"
+      + ".row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #d9d0b8}.pali,.mm{padding:12px 16px;overflow-wrap:anywhere}.pali{background:#fffdf7;border-right:1px solid #d9d0b8}"
+      + ".pg{font-size:12px;color:#a08040;margin-bottom:6px}.mm h1,.mm h2,.mm h3,.mm h4,.mm h5,.mm h6{text-align:center!important}.paranum,.paragraph{font-weight:bold;color:#a00}"
+      + "@media(max-width:760px){.row{grid-template-columns:1fr}.pali{border-right:none;border-bottom:1px dashed #d9d0b8}}";
+    return `<!doctype html><html lang="my"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css}</style></head><body>`
+      + `<header><h1>${title}</h1><p>ပါဠိတော် (ဘယ်) | မြန်မာပြန် (ညာ) - ပါဠိစာမျက်နှာနံပါတ်အတိုင်း အနီးစပ်ဆုံး တွဲထားသည်</p></header>`
+      + (tocHtml ? `<details><summary>မြန်မာမာတိကာ</summary>${tocHtml}</details>` : "") + rows + `</body></html>`;
+  }
+  async function mmDownloadBook(paliId, title, btn){
+    const old = btn ? btn.textContent : ""; if(btn){ btn.disabled = true; btn.textContent = "⏳"; }
+    try{
+      const html = await mmBuildDownloadHtml(paliId, title);
+      const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
+      a.download = (title || paliId).replace(/[\\/:*?"<>|]+/g, " ").trim() + ".html"; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 20000);
+    } catch(e){ alert("ဒေါင်းလုဒ် မရပါ (" + e.message + ")"); }
+    if(btn){ btn.disabled = false; btn.textContent = old; }
+  }
+  async function mmDownloadList(mmIds){
+    await ensureMmSplitIndex(); const out = [], seenP = new Set();
+    for(const id of mmIds){ const ent = mmSplitEntryByMm(id); if(ent && !seenP.has(ent.pali)){ seenP.add(ent.pali); const bm = burmeseBookMeta[id]; out.push({ pali: ent.pali, title: bm ? ((MM_CATEGORY_LABELS[bm.category] ? MM_CATEGORY_LABELS[bm.category] + " - " : "") + bm.title) : ent.pali }); } }
+    return out;
+  }
+  function wireMmDownloadButtons(){
+    document.querySelectorAll("[data-dlbook]").forEach(b => b.addEventListener("click", async e => {
+      e.stopPropagation(); const it = (await mmDownloadList([b.dataset.dlbook]))[0]; if(!it){ alert("ဒီစာအုပ်အတွက် ဒေါင်းလုဒ် မရှိသေးပါ။"); return; }
+      mmDownloadBook(it.pali, it.title, b);
+    }));
+    document.querySelectorAll("[data-dlcat]").forEach(b => b.addEventListener("click", async e => {
+      e.stopPropagation(); const slug = b.dataset.dlcat, old = b.textContent; b.disabled = true; b.textContent = "⏳";
+      try{
+        await ensureBurmeseToc(); const list = await mmDownloadList(Object.keys(burmeseBookMeta).filter(id => burmeseBookMeta[id].category === slug));
+        if(list.length > 3 && !confirm(`စာအုပ် ${toMyanmarDigits(list.length)} အုပ်ကို တစ်အုပ်ချင်း ဒေါင်းလုဒ်လုပ်ပါမည်။ ဆက်လုပ်မလား?`)){ b.disabled = false; b.textContent = old; return; }
+        for(let i = 0; i < list.length; i++){ b.textContent = `⏳ ${i + 1}/${list.length}`; await mmDownloadBook(list[i].pali, list[i].title, null); await new Promise(r => setTimeout(r, 700)); }
+      } catch(e){ alert("ဒေါင်းလုဒ် မရပါ (" + e.message + ")"); }
+      b.disabled = false; b.textContent = old;
+    }));
+  }
+
   async function showMmCategories(){
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်"}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
@@ -2476,10 +2533,11 @@ let isRomanPali = false;
     const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))].filter(slug => slug !== "other" && slug !== "mbv" && slug !== "paauk");
     const html = slugs.map(slug => {
       const count = Object.values(burmeseBookMeta).filter(m => m.category === slug).length;
-      return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`;
+      return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span><button class="tp-dl-btn" data-dlcat="${slug}" title="ပါဠိ | မြန်မာပြန် ဘေးချင်းကပ် ဒေါင်းလုဒ်">⬇</button></div>`;
     }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     document.querySelectorAll("[data-mmcat]").forEach(el=> el.addEventListener("click", ()=> showMmBookList(el.dataset.mmcat)));
+    wireMmDownloadButtons();
     setParams({basket: "myanmar"});
   }
 
@@ -2487,8 +2545,9 @@ let isRomanPali = false;
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}}, {label: MM_CATEGORY_LABELS[categorySlug] || categorySlug}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     await ensureBurmeseToc(); const bookIds = Object.keys(burmeseBookMeta).filter(id => burmeseBookMeta[id].category === categorySlug);
-    const html = bookIds.map(id => { const meta = burmeseBookMeta[id]; const pageLabel = meta.pagecount ? `<span class="tp-count">${toMyanmarDigits(meta.pagecount)} စာမျက်နှာ</span>` : ""; return `<div class="tp-card" data-mmbook="${id}">${meta.title || id}${pageLabel}</div>`; }).join("");
+    const html = bookIds.map(id => { const meta = burmeseBookMeta[id]; const pageLabel = meta.pagecount ? `<span class="tp-count">${toMyanmarDigits(meta.pagecount)} စာမျက်နှာ</span>` : ""; return `<div class="tp-card" data-mmbook="${id}">${meta.title || id}${pageLabel}<button class="tp-dl-btn" data-dlbook="${id}" title="ပါဠိ | မြန်မာပြန် ဘေးချင်းကပ် ဒေါင်းလုဒ်">⬇</button></div>`; }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
+    wireMmDownloadButtons();
     document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "browse", categorySlug }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
     setParams({basket: "myanmar", category: categorySlug});
   }
