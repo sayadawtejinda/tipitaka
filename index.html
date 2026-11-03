@@ -2524,8 +2524,12 @@ let isRomanPali = false;
       e.stopPropagation(); const slug = b.dataset.dlcat, old = b.textContent; b.disabled = true; b.textContent = "⏳";
       try{
         await ensureBurmeseToc(); const list = await mmDownloadList(Object.keys(burmeseBookMeta).filter(id => burmeseBookMeta[id].category === slug));
-        if(list.length > 3 && !confirm(`စာအုပ် ${toMyanmarDigits(list.length)} အုပ်ကို တစ်အုပ်ချင်း ဒေါင်းလုဒ်လုပ်ပါမည်။ ဆက်လုပ်မလား?`)){ b.disabled = false; b.textContent = old; return; }
-        for(let i = 0; i < list.length; i++){ b.textContent = `⏳ ${i + 1}/${list.length}`; await mmDownloadBook(list[i].pali, list[i].title, null); await new Promise(r => setTimeout(r, 700)); }
+        if(list.length === 1){ await mmDownloadBook(list[0].pali, list[0].title, null); }
+        else if(list.length > 1){                                  // စာအုပ်များစွာ → zip တစ်ဖိုင်
+          const files = [];
+          for(let i = 0; i < list.length; i++){ b.textContent = `⏳ ${i + 1}/${list.length}`; files.push({ name: dlSafeName(list[i].title) + ".html", text: await mmBuildDownloadHtml(list[i].pali, list[i].title) }); }
+          b.textContent = "⏳ zip"; dlSaveBlob(await zipBuild(files), dlSafeName(MM_CATEGORY_LABELS[slug] || slug) + " (ပါဠိ-မြန်မာပြန်).zip");
+        }
       } catch(e){ alert("ဒေါင်းလုဒ် မရပါ (" + e.message + ")"); }
       b.disabled = false; b.textContent = old;
     }));
@@ -2752,6 +2756,36 @@ let isRomanPali = false;
   async function nissayaBooksIn(idx){ const ids = await ensureNissayaIds(); return ids.map(id => idx.books.find(b => b.id === id)).filter(Boolean); }
   const nisCrumb = (idx, parts) => renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}].concat(parts));
 
+
+  // ဖိုင်များစွာကို zip တစ်ဖိုင်တည်း ပေါင်းပေးသည် (library မလို - deflate ကို ဘရောက်ဇာ CompressionStream ဖြင့်၊ မရှိလျှင် မဖိသိပ်ဘဲ)
+  const ZIP_CRC = (() => { const tb = new Uint32Array(256); for(let n = 0; n < 256; n++){ let c = n; for(let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); tb[n] = c >>> 0; } return tb; })();
+  function zipCrc32(u8){ let c = 0xFFFFFFFF; for(let i = 0; i < u8.length; i++) c = ZIP_CRC[(c ^ u8[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+  async function zipDeflate(u8){
+    if(typeof CompressionStream === "undefined") return null;
+    try{ const cs = new Blob([u8]).stream().pipeThrough(new CompressionStream("deflate-raw")); return new Uint8Array(await new Response(cs).arrayBuffer()); }catch(e){ return null; }
+  }
+  async function zipBuild(files){                                  // files = [{name, text}] → Blob
+    const enc = new TextEncoder(), parts = [], central = []; let offset = 0;
+    const u16 = v => [v & 255, (v >> 8) & 255], u32 = v => [v & 255, (v >>> 8) & 255, (v >>> 16) & 255, (v >>> 24) & 255];
+    const d = new Date(), dosTime = (d.getHours() << 11) | (d.getMinutes() << 5) | (d.getSeconds() >> 1), dosDate = ((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate();
+    for(const f of files){
+      const name = enc.encode(f.name), raw = enc.encode(f.text), crc = zipCrc32(raw);
+      let data = await zipDeflate(raw), method = 8; if(!data || data.length >= raw.length){ data = raw; method = 0; }
+      const head = new Uint8Array([0x50, 0x4b, 3, 4, 20, 0, 0, 8, ...u16(method), ...u16(dosTime), ...u16(dosDate), ...u32(crc), ...u32(data.length), ...u32(raw.length), ...u16(name.length), 0, 0]);
+      parts.push(head, name, data);
+      central.push(new Uint8Array([0x50, 0x4b, 1, 2, 20, 0, 20, 0, 0, 8, ...u16(method), ...u16(dosTime), ...u16(dosDate), ...u32(crc), ...u32(data.length), ...u32(raw.length), ...u16(name.length), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...u32(offset)]), name);
+      offset += head.length + name.length + data.length;
+    }
+    let csize = 0; central.forEach(c => csize += c.length);
+    const end = new Uint8Array([0x50, 0x4b, 5, 6, 0, 0, 0, 0, ...u16(files.length), ...u16(files.length), ...u32(csize), ...u32(offset), 0, 0]);
+    return new Blob([...parts, ...central, end], { type: "application/zip" });
+  }
+  function dlSaveBlob(blob, name){
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 30000);
+  }
+  const dlSafeName = n => (n || "").replace(/[\\/:*?"<>|]+/g, " ").trim();
+
   function dlSaveHtml(html, name){
     const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
     a.download = name.replace(/[\\/:*?"<>|]+/g, " ").trim() + ".html"; document.body.appendChild(a); a.click(); a.remove();
@@ -2784,10 +2818,11 @@ let isRomanPali = false;
       e.stopPropagation(); const old = b.textContent; b.disabled = true; b.textContent = "⏳";
       try{
         await tp_loadEditions(); const items = nisDownloadItems(await resolve(b.dataset.dlnis));
-        if(items.length > 3 && !confirm(`နိဿယဖိုင် ${toMyanmarDigits(items.length)} ဖိုင်ကို တစ်ဖိုင်ချင်း ဒေါင်းလုဒ်လုပ်ပါမည်။ ဆက်လုပ်မလား?`)){ b.disabled = false; b.textContent = old; return; }
-        for(let i = 0; i < items.length; i++){
-          b.textContent = items.length > 1 ? `⏳ ${i + 1}/${items.length}` : "⏳";
-          const r = await nisBuildDownloadHtml(items[i]); dlSaveHtml(r.html, r.title); await new Promise(res => setTimeout(res, 700));
+        if(items.length === 1){ const r = await nisBuildDownloadHtml(items[0]); dlSaveHtml(r.html, r.title); }
+        else if(items.length > 1){                                  // ဖိုင်များစွာ → zip တစ်ဖိုင်
+          const files = [];
+          for(let i = 0; i < items.length; i++){ b.textContent = `⏳ ${i + 1}/${items.length}`; const r = await nisBuildDownloadHtml(items[i]); files.push({ name: dlSafeName(r.title) + ".html", text: r.html }); }
+          b.textContent = "⏳ zip"; dlSaveBlob(await zipBuild(files), dlSafeName(b.closest(".tp-card").firstChild.textContent || "နိဿယ") + " (ပါဠိ-နိဿယ).zip");
         }
       } catch(err){ alert("ဒေါင်းလုဒ် မရပါ (" + err.message + ")"); }
       b.disabled = false; b.textContent = old;
