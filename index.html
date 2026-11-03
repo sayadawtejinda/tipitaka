@@ -2749,7 +2749,7 @@ let isRomanPali = false;
     return tpNissayaIds;
   }
   // "၉၉ အုပ်" (+ နိဿယမူ အပိုရှိလျှင် " · ၂ မူပို") - မူအပို = data/nissaya_editions.json ထဲမှာ မူလအပြင် ထပ်ရှိသော မူများ
-  const nisCountText = books => { const extra = books.reduce((n, b) => n + Math.max(0, ((TP_NISSAYA_EDITIONS[b.id] || []).length || 1) - 1), 0); return `${toMyanmarDigits(books.length)} အုပ်` + (extra ? ` · မူပို ${toMyanmarDigits(extra)}` : ""); };
+  const nisCountText = books => `${toMyanmarDigits(books.reduce((n, b) => n + Math.max(1, (TP_NISSAYA_EDITIONS[b.id] || []).length), 0))} အုပ်`;   // နိဿယမူ တစ်မျိုးချင်းစီကို တစ်အုပ်စီ ရေတွက် (data/nissaya_editions.json)
   async function nissayaBooksIn(idx){ const ids = await ensureNissayaIds(); return ids.map(id => idx.books.find(b => b.id === id)).filter(Boolean); }
   const nisCrumb = (idx, parts) => renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}].concat(parts));
 
