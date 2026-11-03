@@ -2815,7 +2815,9 @@ let isRomanPali = false;
     const rows = Object.keys(by).map(Number).sort((a, b) => a - b).filter(pg => by[pg].trim())
       .map(pg => `<section id="p${pg}" class="row"><div class="pg">စာမျက်နှာ ${toMyanmarDigits(pg)}</div>${by[pg]}</section>`).join("\n");
     const title = "နိဿယ - " + it.name + (it.label ? " (" + it.label + ")" : "");
-    return { title, html: dlComposeHtml(title, "နိဿယ - စာမျက်နှာနံပါတ်က ပါဠိတော်၏ စာမျက်နှာအတိုင်း", rows, null) };
+    let toc = null;                                               // နိဿယက ပါဠိစာမျက်နှာအတိုင်းမို့ မာတိကာက ပါဠိတော်မာတိကာအတိုင်း
+    try{ toc = (await ensureToc()).filter(x => x.book_id === it.id).sort((p, q) => p.page_number - q.page_number).map(x => [x.type === "chapter" ? 1 : 2, x.name, x.page_number]); }catch(e){ toc = null; }
+    return { title, html: dlComposeHtml(title, "နိဿယ - စာမျက်နှာနံပါတ်က ပါဠိတော်၏ စာမျက်နှာအတိုင်း", rows, toc) };
   }
   function wireNisDownloadButtons(resolve){
     document.querySelectorAll("[data-dlnis]").forEach(b => b.addEventListener("click", async e => {
