@@ -236,6 +236,7 @@
     box-shadow: inset 0 0 8px rgba(0,0,0,0.03); 
   }
   @media (max-width: 768px) { 
+    #tp-split-wrapper.mm-first #tp-nissaya-container { order: -1; max-height: none; overflow-y: visible; border-top: none; padding-top: 16px; border-bottom: 2px dashed #d9d0b8; }   /* ဖုန်း - မြန်မာပြန်ကို ပထမ၊ ပါဠိကို အောက်မှာ */
     #tp-nissaya-container { border-left: none; border-top: 2px dashed #d9d0b8; padding-left: 0; padding-top: 20px; } 
   }
   #tp-nissaya-header { 
@@ -3197,7 +3198,17 @@ let isRomanPali = false;
       const minPage = bookMeta.firstpage || 1, maxPage = bookMeta.lastpage || Math.max(...currentRows.map(r=>parseInt(r.page,10)));
       if(pageNum == null || pageNum < minPage) pageNum = minPage; if(pageNum > maxPage) pageNum = maxPage;
       const row = currentRows.find(r => parseInt(r.page,10) === pageNum); currentRow = row || null;
-      renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}}, {label: bookMeta.name || bookId}]);
+      let mmCrumbs = null;                                  // မြန်မာပြန်အုပ်စုကနေ ဖွင့်ထားလျှင် ထိပ်က လမ်းကြောင်းလည်း မြန်မာပြန်အတိုင်း ပြမည်
+      if(isMmSplitOpen && mmViaMm){
+        try{
+          await ensureBurmeseToc(); await ensureMmSplitIndex();
+          const ent = mmSplitIndex[bookId]; let mid = ent && ent.mm;
+          if(ent && ent.mms){ let best = -1; for(const [k, v] of Object.entries(ent.mms)){ if(v <= pageNum && v > best){ best = v; mid = k; } } }
+          const bm = mid && burmeseBookMeta[mid];
+          if(bm) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = false; showMmCategories();}}, {label: MM_CATEGORY_LABELS[bm.category] || bm.category, onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = false; showMmBookList(bm.category);}}, {label: bm.title || mid}];
+        }catch(e){ mmCrumbs = null; }
+      }
+      renderBreadcrumb(mmCrumbs || [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}}, {label: bookMeta.name || bookId}]);
       if(!row){ document.getElementById("tp-view").innerHTML = `<p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`; return; }
 
       // HTML Layout ထဲတွင် Split Wrapper ထည့်သွင်းထားသည်
@@ -3232,7 +3243,7 @@ let isRomanPali = false;
         
         <div id="tp-meta">${citationText(bookMeta, row.page)}</div>
         
-        <div id="tp-split-wrapper">
+        <div id="tp-split-wrapper"${(isMmSplitOpen && mmViaMm) ? ' class="mm-first"' : ''}>
           <div id="tp-content" class="tp-split-pane">${buildStitchedPageHtml(currentRows, row, pageNum, bookMeta)}</div>
           <div id="tp-nissaya-container" class="tp-split-pane">
              <div id="tp-nissaya-header" style="justify-content: flex-end; border-bottom: none; background: transparent; padding-bottom: 0;">
