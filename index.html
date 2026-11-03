@@ -2475,27 +2475,21 @@ let isRomanPali = false;
 
 
   // ⬇ Pali | မြန်မာပြန် ဘေးချင်းကပ် HTML ဖိုင် (စာမျက်နှာနံပါတ်အတိုင်း) - ဘရောက်ဇာထဲမှာပဲ ဖန်တီးပြီး ဒေါင်းလုဒ်ဆွဲသည်
-  async function mmBuildDownloadHtml(paliId, title){
-    const [recs, mm] = await Promise.all([fetchJson(cdnUrl(`${DATA_FOLDER}/${paliId}.json`)), fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${paliId}.json`))]);
+  async function mmBuildDownloadHtml(paliId, title){            // မြန်မာပြန်သက်သက် (ပါဠိမပါ) - ပါဠိစာမျက်နှာနံပါတ်ကို အညွှန်းအဖြစ်သာ ပြသည်
+    const mm = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${paliId}.json`));
     let toc = []; try{ toc = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split_toc/${paliId}.json`)); }catch(e){ toc = []; }
-    recs.sort((a, b) => a.page - b.page);
-    const seen = new Set();
-    const rows = recs.map(r => {
-      const first = !seen.has(r.page); seen.add(r.page);
-      const m = first ? (mm[String(r.page)] || "") : "";
-      return `<section id="p${r.page}" class="row"><div class="pali"><div class="pg">ပါဠိ စာမျက်နှာ ${toMyanmarDigits(r.page)}</div>${r.content.replace(/<a name="[^"]*"><\/a>/g, "")}</div><div class="mm">${m}</div></section>`;
-    }).join("\n");
-    return dlComposeHtml(title, "ပါဠိတော် (ဘယ်) | မြန်မာပြန် (ညာ) - ပါဠိစာမျက်နှာနံပါတ်အတိုင်း အနီးစပ်ဆုံး တွဲထားသည်", rows, toc);
+    const rows = Object.keys(mm).map(Number).sort((a, b) => a - b).filter(pg => (mm[String(pg)] || "").trim())
+      .map(pg => `<section id="p${pg}" class="row"><div class="pg">စာမျက်နှာ ${toMyanmarDigits(pg)}</div>${mm[String(pg)]}</section>`).join("\n");
+    return dlComposeHtml(title, "မြန်မာပြန် - စာမျက်နှာနံပါတ်က ပါဠိတော်၏ စာမျက်နှာအတိုင်း (အနီးစပ်ဆုံး)", rows, toc);
   }
-  // ဘေးချင်းကပ် HTML ဖိုင်၏ ပုံစံ (မြန်မာပြန်၊ နိဿယ နှစ်မျိုးလုံး မျှသုံး)
+  // ဒေါင်းလုဒ် HTML ဖိုင်၏ ပုံစံ (မြန်မာပြန်၊ နိဿယ နှစ်မျိုးလုံး မျှသုံး)
   function dlComposeHtml(title, subtitle, rows, toc){
     const tocHtml = (toc || []).map(x => `<div class="l${x[0]}"><a href="#p${x[2]}">${x[1]}</a></div>`).join("");
     const css = "body{margin:0;background:#f4f1e8;color:#2b2415;font-family:'Padauk','Myanmar Text','Noto Sans Myanmar',serif;line-height:1.9}"
       + "header{padding:18px 16px;text-align:center;background:#fffdf7;border-bottom:1px solid #d9d0b8}h1{margin:0;font-size:22px}header p{margin:6px 0 0;color:#7a5c1e;font-size:13px}"
       + "details{max-width:900px;margin:12px auto;padding:8px 16px;background:#fffdf7;border:1px solid #d9d0b8;border-radius:8px}summary{cursor:pointer;font-weight:bold}details a{color:#7a5c1e;text-decoration:none}.l2{padding-left:16px}.l3{padding-left:32px;font-size:.92em}"
-      + ".row{display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:1px solid #d9d0b8}.pali,.mm{padding:12px 16px;overflow-wrap:anywhere}.pali{background:#fffdf7;border-right:1px solid #d9d0b8}"
-      + ".pg{font-size:12px;color:#a08040;margin-bottom:6px}.mm h1,.mm h2,.mm h3,.mm h4,.mm h5,.mm h6{text-align:center!important}.paranum,.paragraph{font-weight:bold;color:#a00}"
-      + "@media(max-width:760px){.row{grid-template-columns:1fr}.pali{border-right:none;border-bottom:1px dashed #d9d0b8}}";
+      + ".row{max-width:860px;margin:0 auto;padding:12px 16px;border-bottom:1px solid #d9d0b8;overflow-wrap:anywhere}"
+      + ".pg{font-size:12px;color:#a08040;margin-bottom:6px;border-bottom:1px dashed #d9d0b8}.row h1,.row h2,.row h3,.row h4,.row h5,.row h6{text-align:center!important}.paranum,.paragraph{font-weight:bold;color:#a00}";
     return `<!doctype html><html lang="my"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>${css}</style></head><body>`
       + `<header><h1>${title}</h1><p>${subtitle}</p></header>`
       + (tocHtml ? `<details><summary>မြန်မာမာတိကာ</summary>${tocHtml}</details>` : "") + rows + `</body></html>`;
@@ -2528,7 +2522,7 @@ let isRomanPali = false;
         else if(list.length > 1){                                  // စာအုပ်များစွာ → zip တစ်ဖိုင်
           const files = [];
           for(let i = 0; i < list.length; i++){ b.textContent = `⏳ ${i + 1}/${list.length}`; files.push({ name: dlSafeName(list[i].title) + ".html", text: await mmBuildDownloadHtml(list[i].pali, list[i].title) }); }
-          b.textContent = "⏳ zip"; dlSaveBlob(await zipBuild(files), dlSafeName(MM_CATEGORY_LABELS[slug] || slug) + " (ပါဠိ-မြန်မာပြန်).zip");
+          b.textContent = "⏳ zip"; dlSaveBlob(await zipBuild(files), dlSafeName(MM_CATEGORY_LABELS[slug] || slug) + " (မြန်မာပြန်).zip");
         }
       } catch(e){ alert("ဒေါင်းလုဒ် မရပါ (" + e.message + ")"); }
       b.disabled = false; b.textContent = old;
@@ -2542,7 +2536,7 @@ let isRomanPali = false;
     const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))].filter(slug => slug !== "other" && slug !== "mbv" && slug !== "paauk");
     const html = slugs.map(slug => {
       const count = Object.values(burmeseBookMeta).filter(m => m.category === slug).length;
-      return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span><button class="tp-dl-btn" data-dlcat="${slug}" title="ပါဠိ | မြန်မာပြန် ဘေးချင်းကပ် ဒေါင်းလုဒ်">⬇</button></div>`;
+      return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span><button class="tp-dl-btn" data-dlcat="${slug}" title="မြန်မာပြန် ဒေါင်းလုဒ်">⬇</button></div>`;
     }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     document.querySelectorAll("[data-mmcat]").forEach(el=> el.addEventListener("click", ()=> showMmBookList(el.dataset.mmcat)));
@@ -2554,7 +2548,7 @@ let isRomanPali = false;
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}}, {label: MM_CATEGORY_LABELS[categorySlug] || categorySlug}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     await ensureBurmeseToc(); const bookIds = Object.keys(burmeseBookMeta).filter(id => burmeseBookMeta[id].category === categorySlug);
-    const html = bookIds.map(id => { const meta = burmeseBookMeta[id]; const pageLabel = meta.pagecount ? `<span class="tp-count">${toMyanmarDigits(meta.pagecount)} စာမျက်နှာ</span>` : ""; return `<div class="tp-card" data-mmbook="${id}">${meta.title || id}${pageLabel}<button class="tp-dl-btn" data-dlbook="${id}" title="ပါဠိ | မြန်မာပြန် ဘေးချင်းကပ် ဒေါင်းလုဒ်">⬇</button></div>`; }).join("");
+    const html = bookIds.map(id => { const meta = burmeseBookMeta[id]; const pageLabel = meta.pagecount ? `<span class="tp-count">${toMyanmarDigits(meta.pagecount)} စာမျက်နှာ</span>` : ""; return `<div class="tp-card" data-mmbook="${id}">${meta.title || id}${pageLabel}<button class="tp-dl-btn" data-dlbook="${id}" title="မြန်မာပြန် ဒေါင်းလုဒ်">⬇</button></div>`; }).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     wireMmDownloadButtons();
     document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "browse", categorySlug }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
@@ -2803,18 +2797,15 @@ let isRomanPali = false;
     }
     return out;
   }
-  async function nisBuildDownloadHtml(it){
-    const [recs, text] = await Promise.all([fetchJson(cdnUrl(`${DATA_FOLDER}/${it.id}.json`)), fetchText(cdnUrl(`${DATA_FOLDER}/${it.file}.html`))]);
+  async function nisBuildDownloadHtml(it){                       // နိဿယသက်သက် (ပါဠိကို တွဲမပြ)
+    const text = await fetchText(cdnUrl(`${DATA_FOLDER}/${it.file}.html`));
     const MM = "၀၁၂၃၄၅၆၇၈၉", toInt = s => parseInt([...s].map(c => MM.indexOf(c)).join(""), 10);
     const marks = [...text.matchAll(/\[စာမျက်နှာ-([၀-၉]+)\]/g)], by = {};
     marks.forEach((m, k) => { const end = k + 1 < marks.length ? marks[k + 1].index : text.length; const pg = toInt(m[1]); by[pg] = (by[pg] || "") + text.slice(m.index + m[0].length, end); });
-    recs.sort((a, b) => a.page - b.page); const seen = new Set();
-    const rows = recs.map(r => {
-      const first = !seen.has(r.page); seen.add(r.page);
-      return `<section id="p${r.page}" class="row"><div class="pali"><div class="pg">ပါဠိ စာမျက်နှာ ${toMyanmarDigits(r.page)}</div>${r.content.replace(/<a name="[^"]*"><\/a>/g, "")}</div><div class="mm">${first ? (by[r.page] || "") : ""}</div></section>`;
-    }).join("\n");
+    const rows = Object.keys(by).map(Number).sort((a, b) => a - b).filter(pg => by[pg].trim())
+      .map(pg => `<section id="p${pg}" class="row"><div class="pg">စာမျက်နှာ ${toMyanmarDigits(pg)}</div>${by[pg]}</section>`).join("\n");
     const title = "နိဿယ - " + it.name + (it.label ? " (" + it.label + ")" : "");
-    return { title, html: dlComposeHtml(title, "ပါဠိတော် (ဘယ်) | နိဿယ (ညာ) - ပါဠိစာမျက်နှာနံပါတ်အတိုင်း", rows, null) };
+    return { title, html: dlComposeHtml(title, "နိဿယ - စာမျက်နှာနံပါတ်က ပါဠိတော်၏ စာမျက်နှာအတိုင်း", rows, null) };
   }
   function wireNisDownloadButtons(resolve){
     document.querySelectorAll("[data-dlnis]").forEach(b => b.addEventListener("click", async e => {
@@ -2825,7 +2816,7 @@ let isRomanPali = false;
         else if(items.length > 1){                                  // ဖိုင်များစွာ → zip တစ်ဖိုင်
           const files = [];
           for(let i = 0; i < items.length; i++){ b.textContent = `⏳ ${i + 1}/${items.length}`; const r = await nisBuildDownloadHtml(items[i]); files.push({ name: dlSafeName(r.title) + ".html", text: r.html }); }
-          b.textContent = "⏳ zip"; dlSaveBlob(await zipBuild(files), dlSafeName(b.closest(".tp-card").firstChild.textContent || "နိဿယ") + " (ပါဠိ-နိဿယ).zip");
+          b.textContent = "⏳ zip"; dlSaveBlob(await zipBuild(files), dlSafeName(b.closest(".tp-card").firstChild.textContent || "နိဿယ") + " (နိဿယ).zip");
         }
       } catch(err){ alert("ဒေါင်းလုဒ် မရပါ (" + err.message + ")"); }
       b.disabled = false; b.textContent = old;
@@ -2835,7 +2826,7 @@ let isRomanPali = false;
   async function showNissayaCategories(){                       // level 1: ပါဠိတော် / အဋ္ဌကထာ / ဋီကာ / အညပေါင်းကျမ်း (နိဿယရှိတာချည်း)
     setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ"}]);
     const books = await nissayaBooksIn(idx), baskets = Object.keys(idx.basket_labels).filter(b => books.some(x => x.basket === b));
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${baskets.map(b => `<div class="tp-card" data-nb="${b}">${idx.basket_labels[b]}<span class="tp-count">${nisCountText(books.filter(x => x.basket === b))}</span><button class="tp-dl-btn" data-dlnis="${b}" title="ပါဠိ | နိဿယ ဘေးချင်းကပ် ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${baskets.map(b => `<div class="tp-card" data-nb="${b}">${idx.basket_labels[b]}<span class="tp-count">${nisCountText(books.filter(x => x.basket === b))}</span><button class="tp-dl-btn" data-dlnis="${b}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
     document.querySelectorAll("[data-nb]").forEach(el => el.addEventListener("click", () => showNissayaSubjects(el.dataset.nb)));
     wireNisDownloadButtons(async key => books.filter(x => x.basket === key));
     setParams({basket: "nissaya"});
@@ -2843,7 +2834,7 @@ let isRomanPali = false;
   async function showNissayaSubjects(basketId){                // level 2: ဝိနည်း / ဒီဃ / မဇ္ဈိမ ... (အဲဒီအုပ်စုထဲက)
     setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId}]);
     const books = (await nissayaBooksIn(idx)).filter(b => b.basket === basketId), cats = [...new Set(books.map(b => b.category))];
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${cats.map(c => `<div class="tp-card" data-nc="${c}">${idx.category_labels[c] || c}<span class="tp-count">${nisCountText(books.filter(b => b.category === c))}</span><button class="tp-dl-btn" data-dlnis="${c}" title="ပါဠိ | နိဿယ ဘေးချင်းကပ် ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${cats.map(c => `<div class="tp-card" data-nc="${c}">${idx.category_labels[c] || c}<span class="tp-count">${nisCountText(books.filter(b => b.category === c))}</span><button class="tp-dl-btn" data-dlnis="${c}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
     document.querySelectorAll("[data-nc]").forEach(el => el.addEventListener("click", () => showNissayaBooks(basketId, el.dataset.nc)));
     wireNisDownloadButtons(async key => books.filter(b => b.category === key));
     setParams({basket: "nissaya", category: basketId});
@@ -2851,7 +2842,7 @@ let isRomanPali = false;
   async function showNissayaBooks(basketId, categoryId){       // level 3: စာအုပ်များ
     setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showNissayaSubjects(basketId);}}, {label: idx.category_labels[categoryId] || categoryId}]);
     const books = (await nissayaBooksIn(idx)).filter(b => b.basket === basketId && b.category === categoryId);
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ${(TP_NISSAYA_EDITIONS[b.id] || []).length > 1 ? " · နိဿယမူ " + toMyanmarDigits(TP_NISSAYA_EDITIONS[b.id].length) + " မျိုး" : ""}</span><button class="tp-dl-btn" data-dlnis="${b.id}" title="ပါဠိ | နိဿယ ဘေးချင်းကပ် ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ${(TP_NISSAYA_EDITIONS[b.id] || []).length > 1 ? " · နိဿယမူ " + toMyanmarDigits(TP_NISSAYA_EDITIONS[b.id].length) + " မျိုး" : ""}</span><button class="tp-dl-btn" data-dlnis="${b.id}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
     wireNisDownloadButtons(async key => books.filter(b => b.id === key));
     document.querySelectorAll("[data-book]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.book); isNissayaOpen = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
     setParams({basket: "nissaya", category: basketId + ":" + categoryId});
