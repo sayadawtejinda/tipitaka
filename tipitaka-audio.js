@@ -1,5 +1,5 @@
 /* 🔊 next to the paragraph numbers of the Digha Nikaya (mula_di_01..03): tap = plays that paragraph only, tap again = stops.
-   A separate button at the top of the page (📽) starts the slide view from the first verified paragraph of the page: the paragraphs are read one after another and their text is shown.
+   The 📽 Slide button beside each paragraph number starts the slide view from that paragraph: the paragraphs are read one after another and their text is shown.
    Recordings: archive.org item tipitaka-audio-myanmar.  Paragraph times: /dhamma/tipitaka-audio/data + the teacher's marks (Firestore tpkaudio/digha, public read). */
 (function () {
   var DATA = '/dhamma/tipitaka-audio/data/digha.json', DATA_TEXT = '/dhamma/tipitaka-audio/data/digha_text.json', TEXT = null, TEXTP = null, slide = null, slideFz = 1.7, slideK = null, slideSent = [];
@@ -9,7 +9,7 @@
   au.preload = 'none';
   var st = document.createElement('style');
   st.textContent = '.tpa{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 3px;vertical-align:baseline}.tpa:hover{transform:scale(1.2)}' +
-    '.tpa-top{margin:6px 0 10px}.tpa-top button{border:1px solid #7b3fb8;background:#7b3fb8;color:#fff;border-radius:999px;padding:5px 16px;cursor:pointer;font:inherit;font-size:.9rem}' +
+    '.tpa-sl{border:1px solid #7b3fb8;background:#fffdf7;color:#7b3fb8;border-radius:999px;cursor:pointer;font:inherit;font-size:.72rem;padding:0 7px;margin:0 2px;vertical-align:baseline;line-height:1.5}' +
     '.tpa-c{border:1px solid #7b3fb8;background:#fffdf7;color:#7b3fb8;border-radius:8px;padding:0 8px;margin-left:4px;cursor:pointer;font:inherit;font-size:.85rem}' +
     '#tpa-slide{position:fixed;inset:0;z-index:99998;background:#fffdf7;color:#2a2118;display:flex;flex-direction:column;font-family:inherit}#tpa-slide .hd{padding:10px 14px;border-bottom:1px solid #e3d8c8;display:flex;justify-content:space-between;gap:8px;align-items:center;color:#7a6a58;font-size:.9rem}' +
     '#tpa-slide .bd{flex:1;overflow:auto;padding:18px 18px 30px;max-width:900px;margin:0 auto;width:100%;line-height:2.1;white-space:pre-wrap}#tpa-slide .s{border-radius:8px;padding:0 3px;opacity:.45;transition:.25s}#tpa-slide .s.on{opacity:1;background:#ffe9a8}' +
@@ -49,7 +49,7 @@
             try { MISS = {}; JSON.parse(D.m || '[]').forEach(function (n) { MISS[n] = 1 }) } catch (e) { MISS = {} }
             try { UP = JSON.parse(D.u || '{}') } catch (e) { UP = {} }
             calc(); READY = true;
-            document.querySelectorAll('.tpa,.tpa-c,.tpa-top').forEach(function (b) { b.remove() }); document.querySelectorAll('[data-tpa]').forEach(function (e) { delete e.dataset.tpa });
+            document.querySelectorAll('.tpa,.tpa-c,.tpa-top,.tpa-sl').forEach(function (b) { b.remove() }); document.querySelectorAll('[data-tpa]').forEach(function (e) { delete e.dataset.tpa });
             decorate();
           }, function () {});
         });
@@ -141,13 +141,10 @@
         curK = k; cont = false; finished = false; stopAt = endOf(k); playAt(TM[k], OV[k] !== undefined ? 2 : 12); ui();
       };
       el.insertAdjacentElement('afterend', btn);
+      var sl = document.createElement('button'); sl.type = 'button'; sl.className = 'tpa-sl'; sl.textContent = '📽 Slide'; sl.title = 'ဒီစာပိုဒ်ကနေ စာသားပြပြီး ဆက်တိုက် ဖတ်ပေးမည်';
+      sl.onclick = function (e) { e.preventDefault(); e.stopPropagation(); if (cont && stopAt !== null) stop(); else startSlide(k) };
+      btn.insertAdjacentElement('afterend', sl);
     });
-    var tc = document.querySelector('#tp-content'), first = tc && tc.querySelector('button.tpa[data-k]');
-    if (tc && first && !tc.querySelector('.tpa-top')) {
-      var d = document.createElement('div'); d.className = 'tpa-top'; var tb = document.createElement('button'); tb.type = 'button'; tb.textContent = '📽 Slide နဲ့ နားထောင်ရန်'; tb.title = 'ဒီစာမျက်နှာက စာပိုဒ်ကနေ စာသားပြပြီး ဆက်တိုက်ဖတ်ပေးမည်';
-      tb.onclick = function (e) { e.preventDefault(); e.stopPropagation(); var f = tc.querySelector('button.tpa[data-k]'); if (!f) return; if (cont && stopAt !== null) stop(); else startSlide(f.dataset.k) };
-      d.appendChild(tb); tc.insertBefore(d, tc.firstChild);
-    }
     ui();
   }
   var timer = null;
