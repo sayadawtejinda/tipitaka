@@ -11,7 +11,6 @@
   var st = document.createElement('style');
   st.textContent = '.tpa{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 3px;vertical-align:baseline}.tpa:hover{transform:scale(1.2)}' +
     '.tpa-c{border:1px solid #7b3fb8;background:#fffdf7;color:#7b3fb8;border-radius:8px;padding:0 8px;margin-left:4px;cursor:pointer;font:inherit;font-size:.85rem}' +
-    '.tpa-hl{background:rgba(123,63,184,.12);border-radius:6px}' +
     '#tpa-toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 14px;border-radius:10px;z-index:99999;display:none;max-width:90vw}';
   document.head.appendChild(st);
   var toastEl = null, toastT = null;
@@ -67,10 +66,8 @@
   function playing() { return !au.paused && !au.ended && stopAt !== null }
   function ui() {
     document.querySelectorAll('.tpa-c').forEach(function (b) { b.remove() });
-    document.querySelectorAll('.tpa-hl').forEach(function (e) { e.classList.remove('tpa-hl') });
     document.querySelectorAll('button.tpa').forEach(function (b) {
       var on = playing() && b.dataset.k === curK; b.textContent = on ? '⏹' : '🔊';
-      var host = b.closest('p,div'); if (on && host) host.classList.add('tpa-hl');
       if (!playing() && finished && b.dataset.k === curK) { var c = document.createElement('button'); c.type = 'button'; c.className = 'tpa-c'; c.textContent = '▶ ဆက်ဖွင့်'; c.title = 'နောက်စာပိုဒ်တွေကို ဆက်တိုက်ဖွင့်ရန်'; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); goOn() }; b.insertAdjacentElement('afterend', c) }
     });
   }
