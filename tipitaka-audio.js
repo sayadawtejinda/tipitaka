@@ -18,7 +18,7 @@
     '.tpa-sl{border:1px solid #7b3fb8;background:#fffdf7;color:#7b3fb8;border-radius:999px;cursor:pointer;font:inherit;font-size:.72rem;padding:0 7px;margin:0 6px;vertical-align:baseline;line-height:1.5}' +
     '.tpa-c{border:1px solid #7b3fb8;background:#fffdf7;color:#7b3fb8;border-radius:8px;padding:0 8px;margin-left:4px;cursor:pointer;font:inherit;font-size:.85rem}' +
     '#tpa-slide{position:fixed;inset:0;z-index:99998;background:#fffdf7;color:#2a2118;display:flex;flex-direction:column;font-family:inherit}#tpa-slide .hd{padding:10px 14px;border-bottom:1px solid #e3d8c8;display:flex;justify-content:space-between;gap:8px;align-items:center;color:#7a6a58;font-size:.9rem}' +
-    '#tpa-slide .bd{flex:1;overflow:auto;padding:18px 18px 30px;max-width:900px;margin:0 auto;width:100%;line-height:2.1;white-space:pre-wrap}#tpa-slide .s{border-radius:8px;padding:0 3px;opacity:.45;transition:.25s}#tpa-slide .s.on{opacity:1;background:#ffe9a8}' +
+    '#tpa-slide .bd{flex:1;overflow:auto;padding:18px 18px 30px;max-width:900px;margin:0 auto;width:100%;line-height:2.1;white-space:pre-wrap}#tpa-slide .s{border-radius:8px;padding:0 3px;opacity:.45;transition:.25s}#tpa-slide .s.on{opacity:1;background:#ffe9a8}#tpa-slide .s.hh{display:inline-block;font-weight:700;color:#7b3fb8;text-align:center;width:100%}' +
     '#tpa-slide .ft{display:flex;gap:8px;justify-content:center;padding:10px;border-top:1px solid #e3d8c8;flex-wrap:wrap}#tpa-slide button{border:1px solid #7b3fb8;background:#fff;color:#7b3fb8;border-radius:10px;padding:6px 14px;cursor:pointer;font:inherit}#tpa-slide button.pri{background:#7b3fb8;color:#fff}' +
     '#tpa-toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 14px;border-radius:10px;z-index:99999;display:none;max-width:90vw}';
   document.head.appendChild(st);
@@ -112,10 +112,11 @@
       var rom = !!(window.tpRomanApi && window.tpRomanApi.is()), cv = function (x) { return rom ? window.tpRomanApi.conv(x) : x };
       if (slideK !== curK || slideR !== rom) {
         slideR = rom;
-        slideK = curK; var parts = (TEXT[curK] || '').split(/(?<=[။\n])/).filter(function (x) { return x.trim() });
+        slideK = curK; var hd = TEXT[curK + '^'] || [[], []], body = (TEXT[curK] || '').split(/(?<=[။\n])/).filter(function (x) { return x.trim() });
+        var parts = hd[0].concat(body, hd[1]), nH = hd[0].length, nB = body.length;       // headings before and the closing line after the paragraph are read aloud too
         slideSent = parts.map(function (x) { return x.length });
         slide.querySelector('#tpa-sh').textContent = '🔊 ' + cv(NK.suttas[curK.split('|')[0]]) + ' · ¶' + cv(lab(curK.split('|')[1]));
-        slide.querySelector('.bd').innerHTML = parts.map(function (x) { return '<span class="s">' + esc(cv(x)) + '</span>' }).join('');
+        slide.querySelector('.bd').innerHTML = parts.map(function (x, i) { var h = i < nH || i >= nH + nB; return '<span class="s' + (h ? ' hh' : '') + '">' + esc(cv(x)) + '</span>' + (h ? '<br>' : '') }).join('');
         slide.querySelector('.bd').scrollTop = 0;
       }
       hilite();
