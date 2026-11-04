@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-03",
+ "generated": "2026-11-04",
  "books": [
   {
    "id": "mula_vi_01",
@@ -20,6 +20,17 @@
    "cat_key": "vi",
    "size": 3863413,
    "date": "2026-11-02",
+   "edition_of": "mula_vi_01"
+  },
+  {
+   "id": "mula_vi_01_pakhokku",
+   "title": "ပါရာဇိကပါဠိ (ပခုက္ကူမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 6461719,
+   "date": "2026-11-04",
    "edition_of": "mula_vi_01"
   },
   {
@@ -1015,5 +1026,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 2
+ "n_editions": 3
 }
