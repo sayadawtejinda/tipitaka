@@ -94,7 +94,7 @@
   function openSlide() {
     if (slide) return;
     slide = document.createElement('div'); slide.id = 'tpa-slide'; slideK = null;
-    slide.innerHTML = '<div class="hd"><span id="tpa-sh"></span><span><button type="button" data-a="-1">A−</button> <button type="button" data-a="1">A+</button></span></div><div class="bd"></div><div class="ft"><button type="button" data-c="prev">⏮ အရင်ပိုဒ်</button><button type="button" class="pri" data-c="pp">⏸ ရပ်ထားရန်</button><button type="button" data-c="next">⏭ နောက်ပိုဒ်</button><button type="button" data-c="close">✕ ပိတ်ရန်</button></div>';
+    slide.innerHTML = '<div class="hd"><span id="tpa-sh"></span><span><button type="button" data-a="-1">A−</button> <button type="button" data-a="1">A+</button></span></div><div class="bd"></div><div class="ft"><button type="button" data-c="prev" title="အရင်ပိုဒ်">⏮</button><button type="button" class="pri" data-c="pp">⏸</button><button type="button" data-c="next" title="နောက်ပိုဒ်">⏭</button><button type="button" data-c="close" title="ပိတ်ရန်">✕</button></div>';
     document.body.appendChild(slide); slide.querySelector('.bd').style.fontSize = slideFz + 'rem';
     slide.onclick = function (e) {
       var a = e.target.dataset.a, c = e.target.dataset.c;
@@ -128,7 +128,7 @@
     for (var i = 0; i < slideSent.length; i++) { acc += slideSent[i]; if (acc / tot > f) { idx = i; break } }
     var on = null; slide.querySelectorAll('.s').forEach(function (el, i) { var o = i === idx; if (o !== el.classList.contains('on')) el.classList.toggle('on', o); if (o) on = el });
     if (on) { var bd = slide.querySelector('.bd'), r = on.getBoundingClientRect(), b = bd.getBoundingClientRect(); if (r.bottom > b.bottom - 40 || r.top < b.top + 20) bd.scrollTop += r.top - b.top - b.height / 3 }
-    var pp = slide.querySelector('[data-c="pp"]'); if (pp) pp.textContent = au.paused ? '▶ ဆက်ဖွင့်ရန်' : '⏸ ရပ်ထားရန်';
+    var pp = slide.querySelector('[data-c="pp"]'); if (pp) pp.textContent = au.paused ? '▶' : '⏸';
   }
   function stop() { au.pause(); stopAt = null; cont = false; finished = false; ui() }
   function startSlide(k) { curK = k; cont = true; finished = false; stopAt = runEnd(k); playAt(TM[k], 2); ui() }      // slide: start right at the paragraph (2 s ahead) so the text and the voice are the same paragraph
