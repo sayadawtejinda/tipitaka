@@ -2,7 +2,7 @@
    The 📽 Slide button beside the page citation at the top (#tp-meta) starts the slide view from the first verified paragraph of the page: the paragraphs are read one after another and their text is shown.
    Recordings: archive.org item tipitaka-audio-myanmar.  Paragraph times: /dhamma/tipitaka-audio/data + the teacher's marks (Firestore tpkaudio/digha, public read). */
 (function () {
-  var DATA = '/dhamma/tipitaka-audio/data/', TEXTC = {}, slide = null, slideFz = 1.7, slideK = null, slideSent = [];
+  var DATA = '/dhamma/tipitaka-audio/data/', TEXTC = {}, slide = null, slideFz = 1.7, slideK = null, slideR = false, slideSent = [];
   // which recording set reads which book
   function setOf(b) {
     if (/^mula_di_0[123]$/.test(b)) return 'digha'; if (/^mula_ma_/.test(b)) return 'mn'; if (/^mula_sa_/.test(b)) return 'sn'; if (/^mula_an_/.test(b)) return 'an'; if (/^mula_ku_/.test(b)) return 'kn';
@@ -109,11 +109,13 @@
     if (!slide || !curK) return;
     var kk = curK; loadText(kk).then(function (TEXT) {
       if (!slide || kk !== curK) return;
-      if (slideK !== curK) {
+      var rom = !!(window.tpRomanApi && window.tpRomanApi.is()), cv = function (x) { return rom ? window.tpRomanApi.conv(x) : x };
+      if (slideK !== curK || slideR !== rom) {
+        slideR = rom;
         slideK = curK; var parts = (TEXT[curK] || '').split(/(?<=[။\n])/).filter(function (x) { return x.trim() });
         slideSent = parts.map(function (x) { return x.length });
-        slide.querySelector('#tpa-sh').textContent = '🔊 ' + NK.suttas[curK.split('|')[0]] + ' · ¶' + lab(curK.split('|')[1]);
-        slide.querySelector('.bd').innerHTML = parts.map(function (x) { return '<span class="s">' + esc(x) + '</span>' }).join('');
+        slide.querySelector('#tpa-sh').textContent = '🔊 ' + cv(NK.suttas[curK.split('|')[0]]) + ' · ¶' + cv(lab(curK.split('|')[1]));
+        slide.querySelector('.bd').innerHTML = parts.map(function (x) { return '<span class="s">' + esc(cv(x)) + '</span>' }).join('');
         slide.querySelector('.bd').scrollTop = 0;
       }
       hilite();
@@ -157,7 +159,7 @@
     document.querySelectorAll('#tp-content .paranum').forEach(function (el) {
       if (el.dataset.tpa) return; el.dataset.tpa = 1;
       var pg = pg0 === null ? null : (el.closest('.tp-prev-page') ? pg0 - 1 : el.closest('.tp-next-page') ? pg0 + 1 : pg0);      // the reader stitches the previous / next page around the current one
-      var num = el.textContent.trim().replace(/[။.\s]/g, ''), sk = num + '@' + pg, n = seenL[sk] = (seenL[sk] === undefined ? 0 : seenL[sk] + 1), k = pick(NUM[b + '|' + num], pg, n); if (!k || !okP(k)) return;
+      var num = el.textContent.trim().replace(/[။.\s]/g, '').replace(/[0-9]/g, function (d) { return '၀၁၂၃၄၅၆၇၈၉'[d] }), sk = num + '@' + pg, n = seenL[sk] = (seenL[sk] === undefined ? 0 : seenL[sk] + 1), k = pick(NUM[b + '|' + num], pg, n); if (!k || !okP(k)) return;
       if (MISS[k]) { var no = document.createElement('span'); no.className = 'tpa'; no.textContent = '🔇'; no.title = 'ဒီစာပိုဒ်ရဲ့ အသံ မရှိပါ'; no.style.opacity = '.6'; el.insertAdjacentElement('afterend', no); return }
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'tpa'; btn.dataset.k = k; btn.textContent = (playing() && curK === k) ? '⏹' : '🔊'; btn.title = 'ဒီစာပိုဒ်ကနေ အသံနားထောင်ရန် (ထပ်နှိပ်ရင် ရပ်မည်)';
       btn.onclick = function (e) {
