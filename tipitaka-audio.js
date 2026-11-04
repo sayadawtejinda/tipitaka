@@ -3,7 +3,7 @@
 (function () {
   var DATA = '/dhamma/tipitaka-audio/data/digha.json';
   var FB = {apiKey: "AIzaSyAZkNjG9WnRVIn1np1uPFvLZtL_M_Q7Vl0", authDomain: "dhamma-songs.firebaseapp.com", projectId: "dhamma-songs", appId: "1:342644793786:web:e9f64de5f0672d46f4bd83"};
-  var V = '11.6.1', NK = null, VER = {}, READY = false, OV = {}, TM = {}, KEY = {}, au = null, bar = null, cur = 0, loading = null;
+  var V = '11.6.1', NK = null, UP = {}, IDX = {}, VER = {}, READY = false, OV = {}, TM = {}, KEY = {}, au = null, bar = null, cur = 0, loading = null;
   var st = document.createElement('style');
   st.textContent = '.tpa{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 3px;vertical-align:baseline}.tpa:hover{transform:scale(1.2)}' +
     '#tpa-bar{position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#fffdf7;border:2px solid #7b3fb8;border-radius:12px;padding:6px 10px;box-shadow:0 4px 18px rgba(0,0,0,.3);display:none;font-family:inherit}' +
@@ -27,12 +27,12 @@
   }
   function load() {
     return loading || (loading = fetch(DATA).then(function (r) { return r.json() }).then(function (d) {
-      NK = d; NK.groups.forEach(function (g) { g.paras.forEach(function (x) { KEY[NK.book[x[0]] + '|' + x[1]] = x[0] + '|' + x[1] }) });
+      NK = d; var cn = {}; NK.groups.forEach(function (g) { g.paras.forEach(function (x) { KEY[NK.book[x[0]] + '|' + x[1]] = x[0] + '|' + x[1]; IDX[x[0] + '|' + x[1]] = cn[x[0]] = (cn[x[0]] === undefined ? 0 : cn[x[0]] + 1) }) });
       calc();
       import('https://www.gstatic.com/firebasejs/' + V + '/firebase-app.js').then(function (A) {
         return import('https://www.gstatic.com/firebasejs/' + V + '/firebase-firestore.js').then(function (F) {
           var db = F.getFirestore(A.initializeApp(FB, 'tpkread'));
-          F.onSnapshot(F.doc(db, 'tpkaudio', NK.id), function (s) { try { OV = s.exists() ? JSON.parse(s.data().j || '{}') : {} } catch (e) { OV = {} } try { VER = {}; (s.exists() ? JSON.parse(s.data().v || '[]') : []).forEach(function (n) { VER[n] = 1 }) } catch (e) { VER = {} } calc(); READY = true; document.querySelectorAll('.tpa').forEach(function (b) { b.remove() }); document.querySelectorAll('[data-tpa]').forEach(function (e) { delete e.dataset.tpa }); decorate() }, function () {});
+          F.onSnapshot(F.doc(db, 'tpkaudio', NK.id), function (s) { try { OV = s.exists() ? JSON.parse(s.data().j || '{}') : {} } catch (e) { OV = {} } try { VER = {}; (s.exists() ? JSON.parse(s.data().v || '[]') : []).forEach(function (n) { VER[n] = 1 }) } catch (e) { VER = {} } try { UP = s.exists() ? JSON.parse(s.data().u || '{}') : {} } catch (e) { UP = {} } calc(); READY = true; document.querySelectorAll('.tpa').forEach(function (b) { b.remove() }); document.querySelectorAll('[data-tpa]').forEach(function (e) { delete e.dataset.tpa }); decorate() }, function () {});
         });
       }).catch(function () {});
       return NK;
@@ -60,7 +60,7 @@
       if (el.dataset.tpa) return; el.dataset.tpa = 1;
       var num = el.textContent.trim().replace(/[။.\s]/g, '');
       load().then(function () {
-        var k = KEY[b + '|' + num]; if (!k || !VER[k.split('|')[0]]) return;
+        var k = KEY[b + '|' + num]; if (!k) return; var sn = k.split('|')[0]; if (!(VER[sn] || (UP[sn] !== undefined && IDX[k] <= IDX[sn + '|' + UP[sn]]))) return;
         var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'tpa'; btn.textContent = '🔊'; btn.title = 'ဒီစာပိုဒ်ကနေ အသံနားထောင်ရန်';
         btn.onclick = function (e) { e.preventDefault(); e.stopPropagation(); ensureBar(); bar.style.display = 'block'; document.getElementById('tpa-t').textContent = '🔊 စာပိုဒ် ' + num + ' · ' + NK.suttas[k.split('|')[0]];
           playAt(TM[k], OV[k] !== undefined ? 2 : 12) };
