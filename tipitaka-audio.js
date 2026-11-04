@@ -129,13 +129,13 @@
     var pp = slide.querySelector('[data-c="pp"]'); if (pp) pp.textContent = au.paused ? '▶ ဆက်ဖွင့်ရန်' : '⏸ ရပ်ထားရန်';
   }
   function stop() { au.pause(); stopAt = null; cont = false; finished = false; ui() }
-  function startSlide(k) { curK = k; cont = true; finished = false; stopAt = runEnd(k); playAt(TM[k], OV[k] !== undefined ? 2 : 12); ui() }
+  function startSlide(k) { curK = k; cont = true; finished = false; stopAt = runEnd(k); playAt(TM[k], 2); ui() }      // slide: start right at the paragraph (2 s ahead) so the text and the voice are the same paragraph
   function goOn() { if (!curK) return; cont = true; finished = false; stopAt = runEnd(curK); au.play().catch(function () {}); ui() }
   function onTick() {
     if (!ready || stopAt === null || !cur) return;
     var g = NK.starts[cur - 1] + au.currentTime;
     if (g >= stopAt) { au.pause(); stopAt = null; finished = true; ui(); return }
-    if (cont) { var i = POS[curK]; while (ORD[i + 1] !== undefined && TM[ORD[i + 1]] <= g && okP(ORD[i + 1])) i++; if (ORD[i] !== curK) { curK = ORD[i]; ui() } else hilite() }
+    if (cont) { var lo = 0, hi = ORD.length - 1; while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (TM[ORD[mid]] <= g) lo = mid; else hi = mid - 1 } var nk = ORD[lo]; if (nk !== curK && okP(nk)) { curK = nk; ui() } else hilite() }
   }
   au.addEventListener('timeupdate', onTick);
   au.addEventListener('ended', function () { if (cur && cur < NK.dur.length && stopAt !== null && stopAt > NK.starts[cur]) playAt(NK.starts[cur], 0); else { stopAt = null; finished = true; ui() } });
