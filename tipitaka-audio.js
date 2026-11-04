@@ -3,7 +3,7 @@
 (function () {
   var DATA = '/dhamma/tipitaka-audio/data/digha.json';
   var FB = {apiKey: "AIzaSyAZkNjG9WnRVIn1np1uPFvLZtL_M_Q7Vl0", authDomain: "dhamma-songs.firebaseapp.com", projectId: "dhamma-songs", appId: "1:342644793786:web:e9f64de5f0672d46f4bd83"};
-  var ready = true, V = '11.6.1', ORD = [], POS = {}, curK = null, stopAt = null, NK = null, UP = {}, IDX = {}, VER = {}, READY = false, OV = {}, TM = {}, KEY = {}, au = null, bar = null, cur = 0, loading = null;
+  var MISS = {}, ready = true, V = '11.6.1', ORD = [], POS = {}, curK = null, stopAt = null, NK = null, UP = {}, IDX = {}, VER = {}, READY = false, OV = {}, TM = {}, KEY = {}, au = null, bar = null, cur = 0, loading = null;
   var st = document.createElement('style');
   st.textContent = '.tpa{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 3px;vertical-align:baseline}.tpa:hover{transform:scale(1.2)}' +
     '#tpa-bar{position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#fffdf7;border:2px solid #7b3fb8;border-radius:12px;padding:6px 10px;box-shadow:0 4px 18px rgba(0,0,0,.3);display:none;font-family:inherit}' +
@@ -12,16 +12,16 @@
   function calc() {
     TM = {};
     NK.groups.forEach(function (g) {
-      var t0 = NK.starts[g.fa], t1 = NK.starts[g.fb], cum = 0, tot = g.paras.reduce(function (a, x) { return a + x[2] }, 0) || 1;
+      var t0 = NK.starts[g.fa], t1 = NK.starts[g.fb], cum = 0, W = function (x) { return MISS[x[0] + '|' + x[1]] ? 0 : x[2] }, tot = g.paras.reduce(function (a, x) { return a + W(x) }, 0) || 1;
       var pts = [{c: 0, t: t0}];
-      g.paras.forEach(function (x) { var k = x[0] + '|' + x[1]; if (OV[k] !== undefined && cum > 0 && OV[k] >= t0 && OV[k] < t1) { var q = pts[pts.length - 1]; if (OV[k] > q.t && cum > q.c) pts.push({c: cum, t: OV[k]}) } cum += x[2] });
+      g.paras.forEach(function (x) { var k = x[0] + '|' + x[1]; if (!MISS[k] && OV[k] !== undefined && cum > 0 && OV[k] >= t0 && OV[k] < t1) { var q = pts[pts.length - 1]; if (OV[k] > q.t && cum > q.c) pts.push({c: cum, t: OV[k]}) } cum += W(x) });
       pts.push({c: tot, t: t1}); cum = 0; var j = 0;
       g.paras.forEach(function (x) {
         var k = x[0] + '|' + x[1];
-        if (OV[k] !== undefined && cum === 0) pts[0].t = OV[k] >= t0 ? OV[k] : t0;
+        if (!MISS[k] && OV[k] !== undefined && cum === 0) pts[0].t = OV[k] >= t0 ? OV[k] : t0;
         while (j < pts.length - 2 && cum >= pts[j + 1].c) j++;
         var a = pts[j], b = pts[j + 1]; TM[k] = b.c > a.c ? a.t + (cum - a.c) / (b.c - a.c) * (b.t - a.t) : a.t;
-        if (OV[k] !== undefined) TM[k] = OV[k]; cum += x[2];
+        if (!MISS[k] && OV[k] !== undefined) TM[k] = OV[k]; cum += W(x);
       });
     });
   }
@@ -32,7 +32,7 @@
       import('https://www.gstatic.com/firebasejs/' + V + '/firebase-app.js').then(function (A) {
         return import('https://www.gstatic.com/firebasejs/' + V + '/firebase-firestore.js').then(function (F) {
           var db = F.getFirestore(A.initializeApp(FB, 'tpkread'));
-          F.onSnapshot(F.doc(db, 'tpkaudio', NK.id), function (s) { try { OV = s.exists() ? JSON.parse(s.data().j || '{}') : {} } catch (e) { OV = {} } try { VER = {}; (s.exists() ? JSON.parse(s.data().v || '[]') : []).forEach(function (n) { VER[n] = 1 }) } catch (e) { VER = {} } try { UP = s.exists() ? JSON.parse(s.data().u || '{}') : {} } catch (e) { UP = {} } calc(); READY = true; document.querySelectorAll('.tpa').forEach(function (b) { b.remove() }); document.querySelectorAll('[data-tpa]').forEach(function (e) { delete e.dataset.tpa }); decorate() }, function () {});
+          F.onSnapshot(F.doc(db, 'tpkaudio', NK.id), function (s) { try { OV = s.exists() ? JSON.parse(s.data().j || '{}') : {} } catch (e) { OV = {} } try { VER = {}; (s.exists() ? JSON.parse(s.data().v || '[]') : []).forEach(function (n) { VER[n] = 1 }) } catch (e) { VER = {} } try { MISS = {}; (s.exists() ? JSON.parse(s.data().m || '[]') : []).forEach(function (n) { MISS[n] = 1 }) } catch (e) { MISS = {} } try { UP = s.exists() ? JSON.parse(s.data().u || '{}') : {} } catch (e) { UP = {} } calc(); READY = true; document.querySelectorAll('.tpa').forEach(function (b) { b.remove() }); document.querySelectorAll('[data-tpa]').forEach(function (e) { delete e.dataset.tpa }); decorate() }, function () {});
         });
       }).catch(function () {});
       return NK;
@@ -71,6 +71,7 @@
       var num = el.textContent.trim().replace(/[။.\s]/g, '');
       load().then(function () {
         var k = KEY[b + '|' + num]; if (!k) return; var sn = k.split('|')[0]; if (!(VER[sn] || (UP[sn] !== undefined && IDX[k] <= IDX[sn + '|' + UP[sn]]))) return;
+        if (MISS[k]) { var no = document.createElement('span'); no.className = 'tpa'; no.textContent = '🔇'; no.title = 'ဒီစာပိုဒ်ရဲ့ အသံ မရှိပါ'; no.style.opacity = '.6'; el.insertAdjacentElement('afterend', no); return }
         var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'tpa'; btn.textContent = '🔊'; btn.title = 'ဒီစာပိုဒ်ကနေ အသံနားထောင်ရန်';
         btn.onclick = function (e) { e.preventDefault(); e.stopPropagation(); ensureBar(); bar.style.display = 'block'; document.getElementById('tpa-t').textContent = '🔊 စာပိုဒ် ' + num + ' · ' + NK.suttas[k.split('|')[0]];
           curK = k; playAt(TM[k], OV[k] !== undefined ? 2 : 12); setMode(false) };
