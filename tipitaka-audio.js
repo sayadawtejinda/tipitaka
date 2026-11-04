@@ -135,7 +135,7 @@
     if (!ready || stopAt === null || !cur) return;
     var g = NK.starts[cur - 1] + au.currentTime;
     if (g >= stopAt) { au.pause(); stopAt = null; finished = true; ui(); return }
-    if (cont) { var lo = 0, hi = ORD.length - 1; while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (TM[ORD[mid]] <= g) lo = mid; else hi = mid - 1 } var nk = ORD[lo]; if (nk !== curK && okP(nk)) { curK = nk; ui() } else hilite() }
+    if (cont) { var lo = 0, hi = ORD.length - 1; while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (TM[ORD[mid]] <= g) lo = mid; else hi = mid - 1 } var nk = ORD[lo]; if (nk !== curK && okP(nk) && !(POS[nk] < POS[curK] && g < TM[curK])) { curK = nk; ui() } else hilite() }      // (the 2 s lead-in before the first paragraph still belongs to the paragraph that was asked for)
   }
   au.addEventListener('timeupdate', onTick);
   au.addEventListener('ended', function () { if (cur && cur < NK.dur.length && stopAt !== null && stopAt > NK.starts[cur]) playAt(NK.starts[cur], 0); else { stopAt = null; finished = true; ui() } });
@@ -153,10 +153,11 @@
     if (!ST[sid] || !ST[sid].ready || !ST[sid].snap) { load(sid); return }
     if (curSet !== sid) { if (curSet && (cont || stopAt !== null || playingNow())) stop(); curSet = sid }
     use(sid);
-    var seenL = {}, pg = pageNo();
+    var seenL = {}, pg0 = pageNo();
     document.querySelectorAll('#tp-content .paranum').forEach(function (el) {
       if (el.dataset.tpa) return; el.dataset.tpa = 1;
-      var num = el.textContent.trim().replace(/[။.\s]/g, ''), n = seenL[num] = (seenL[num] === undefined ? 0 : seenL[num] + 1), k = pick(NUM[b + '|' + num], pg, n); if (!k || !okP(k)) return;
+      var pg = pg0 === null ? null : (el.closest('.tp-prev-page') ? pg0 - 1 : el.closest('.tp-next-page') ? pg0 + 1 : pg0);      // the reader stitches the previous / next page around the current one
+      var num = el.textContent.trim().replace(/[။.\s]/g, ''), sk = num + '@' + pg, n = seenL[sk] = (seenL[sk] === undefined ? 0 : seenL[sk] + 1), k = pick(NUM[b + '|' + num], pg, n); if (!k || !okP(k)) return;
       if (MISS[k]) { var no = document.createElement('span'); no.className = 'tpa'; no.textContent = '🔇'; no.title = 'ဒီစာပိုဒ်ရဲ့ အသံ မရှိပါ'; no.style.opacity = '.6'; el.insertAdjacentElement('afterend', no); return }
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'tpa'; btn.dataset.k = k; btn.textContent = (playing() && curK === k) ? '⏹' : '🔊'; btn.title = 'ဒီစာပိုဒ်ကနေ အသံနားထောင်ရန် (ထပ်နှိပ်ရင် ရပ်မည်)';
       btn.onclick = function (e) {
@@ -166,10 +167,10 @@
       };
       el.insertAdjacentElement('afterend', btn);
     });
-    var meta = document.getElementById('tp-meta'), first = document.querySelector('#tp-content button.tpa[data-k]');
+    var meta = document.getElementById('tp-meta'), first = document.querySelector('#tp-current-page button.tpa[data-k]');
     if (meta && first && !meta.querySelector('.tpa-sl')) {
       var sl = document.createElement('button'); sl.type = 'button'; sl.className = 'tpa-sl'; sl.textContent = '📽 Slide'; sl.title = 'ဒီစာမျက်နှာရဲ့ ပထမစာပိုဒ်ကနေ စာသားပြပြီး ဆက်တိုက် ဖတ်ပေးမည်';
-      sl.onclick = function (e) { e.preventDefault(); e.stopPropagation(); var f = document.querySelector('#tp-content button.tpa[data-k]'); if (!f) return; if (cont && stopAt !== null) stop(); else startSlide(f.dataset.k) };
+      sl.onclick = function (e) { e.preventDefault(); e.stopPropagation(); var f = document.querySelector('#tp-current-page button.tpa[data-k]'); if (!f) return; if (cont && stopAt !== null) stop(); else startSlide(f.dataset.k) };
       meta.appendChild(sl);
     }
     ui();
