@@ -3,7 +3,7 @@
    (as far as the teacher has verified) until a speaker is tapped.  No player box: the browser's audio runs invisibly.
    Recordings: archive.org item tipitaka-audio-myanmar.  Paragraph times: /dhamma/tipitaka-audio/data + the teacher's marks (Firestore tpkaudio/digha, public read). */
 (function () {
-  var DATA = '/dhamma/tipitaka-audio/data/digha.json';
+  var DATA = '/dhamma/tipitaka-audio/data/digha.json', DATA_TEXT = '/dhamma/tipitaka-audio/data/digha_text.json', TEXT = null, TEXTP = null, slide = null, slideFz = 1.7, slideK = null, slideSent = [];
   var FB = {apiKey: "AIzaSyAZkNjG9WnRVIn1np1uPFvLZtL_M_Q7Vl0", authDomain: "dhamma-songs.firebaseapp.com", projectId: "dhamma-songs", appId: "1:342644793786:web:e9f64de5f0672d46f4bd83"};
   var V = '11.6.1', NK = null, OV = {}, TM = {}, KEY = {}, UP = {}, VER = {}, MISS = {}, IDX = {}, ORD = [], POS = {}, READY = false, loading = null;
   var au = new Audio(), cur = 0, ready = true, curK = null, stopAt = null, cont = false, finished = false;
@@ -11,6 +11,9 @@
   var st = document.createElement('style');
   st.textContent = '.tpa{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 3px;vertical-align:baseline}.tpa:hover{transform:scale(1.2)}' +
     '.tpa-c{border:1px solid #7b3fb8;background:#fffdf7;color:#7b3fb8;border-radius:8px;padding:0 8px;margin-left:4px;cursor:pointer;font:inherit;font-size:.85rem}' +
+    '#tpa-slide{position:fixed;inset:0;z-index:99998;background:#fffdf7;color:#2a2118;display:flex;flex-direction:column;font-family:inherit}#tpa-slide .hd{padding:10px 14px;border-bottom:1px solid #e3d8c8;display:flex;justify-content:space-between;gap:8px;align-items:center;color:#7a6a58;font-size:.9rem}' +
+    '#tpa-slide .bd{flex:1;overflow:auto;padding:18px 18px 30px;max-width:900px;margin:0 auto;width:100%;line-height:2.1;white-space:pre-wrap}#tpa-slide .s{border-radius:8px;padding:0 3px;opacity:.45;transition:.25s}#tpa-slide .s.on{opacity:1;background:#ffe9a8}' +
+    '#tpa-slide .ft{display:flex;gap:8px;justify-content:center;padding:10px;border-top:1px solid #e3d8c8;flex-wrap:wrap}#tpa-slide button{border:1px solid #7b3fb8;background:#fff;color:#7b3fb8;border-radius:10px;padding:6px 14px;cursor:pointer;font:inherit}#tpa-slide button.pri{background:#7b3fb8;color:#fff}' +
     '#tpa-toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#333;color:#fff;padding:8px 14px;border-radius:10px;z-index:99999;display:none;max-width:90vw}';
   document.head.appendChild(st);
   var toastEl = null, toastT = null;
@@ -65,11 +68,53 @@
   }
   function playing() { return !au.paused && !au.ended && stopAt !== null }
   function ui() {
+    if (cont && stopAt !== null) { openSlide(); paintSlide() } else closeSlide();
     document.querySelectorAll('.tpa-c').forEach(function (b) { b.remove() });
     document.querySelectorAll('button.tpa').forEach(function (b) {
       var on = playing() && b.dataset.k === curK; b.textContent = on ? '⏹' : '🔊';
-      if (!playing() && finished && b.dataset.k === curK) { var c = document.createElement('button'); c.type = 'button'; c.className = 'tpa-c'; c.textContent = '▶ ဆက်ဖွင့်'; c.title = 'နောက်စာပိုဒ်တွေကို ဆက်တိုက်ဖွင့်ရန်'; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); goOn() }; b.insertAdjacentElement('afterend', c) }
+      if (!playing() && finished && b.dataset.k === curK) { var c = document.createElement('button'); c.type = 'button'; c.className = 'tpa-c'; c.textContent = '▶ ဆက်ဖွင့်'; c.title = 'စာသားကို slide လို ပြပြီး နောက်စာပိုဒ်တွေကို ဆက်တိုက်ဖွင့်ရန်'; c.onclick = function (e) { e.preventDefault(); e.stopPropagation(); goOn() }; b.insertAdjacentElement('afterend', c) }
     });
+  }
+  // ---- slide view (while the paragraphs play one after another): the text of the paragraph that is being read, the sentence in the reading position lit
+  function gtime() { return cur ? NK.starts[cur - 1] + au.currentTime : 0 }
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c] }) }
+  function loadText() { return TEXTP || (TEXTP = fetch(DATA_TEXT).then(function (r) { return r.json() }).then(function (d) { TEXT = d; return d })) }
+  function openSlide() {
+    if (slide) return;
+    slide = document.createElement('div'); slide.id = 'tpa-slide'; slideK = null;
+    slide.innerHTML = '<div class="hd"><span id="tpa-sh"></span><span><button type="button" data-a="-1">A−</button> <button type="button" data-a="1">A+</button></span></div><div class="bd"></div><div class="ft"><button type="button" data-c="prev">⏮ အရင်ပိုဒ်</button><button type="button" class="pri" data-c="pp">⏸ ရပ်ထားရန်</button><button type="button" data-c="next">⏭ နောက်ပိုဒ်</button><button type="button" data-c="close">✕ ပိတ်ရန်</button></div>';
+    document.body.appendChild(slide); slide.querySelector('.bd').style.fontSize = slideFz + 'rem';
+    slide.onclick = function (e) {
+      var a = e.target.dataset.a, c = e.target.dataset.c;
+      if (a) { slideFz = Math.max(1, Math.min(3, slideFz + (+a) * .2)); slide.querySelector('.bd').style.fontSize = slideFz + 'rem'; return }
+      if (c === 'close') { stop(); return }
+      if (c === 'pp') { if (au.paused) au.play().catch(function () {}); else au.pause(); hilite(); return }
+      if (c === 'prev' || c === 'next') { var i = POS[curK] + (c === 'next' ? 1 : -1); if (ORD[i] !== undefined && okP(ORD[i])) { curK = ORD[i]; playAt(TM[curK], 0); ui() } }
+    };
+  }
+  function closeSlide() { if (slide) { slide.remove(); slide = null; slideK = null } }
+  function paintSlide() {
+    if (!slide || !curK) return;
+    loadText().then(function () {
+      if (!slide) return;
+      if (slideK !== curK) {
+        slideK = curK; var parts = (TEXT[curK] || '').split(/(?<=[။\n])/).filter(function (x) { return x.trim() });
+        slideSent = parts.map(function (x) { return x.length });
+        slide.querySelector('#tpa-sh').textContent = '🔊 ' + NK.suttas[curK.split('|')[0]] + ' · ¶' + curK.split('|')[1];
+        slide.querySelector('.bd').innerHTML = parts.map(function (x) { return '<span class="s">' + esc(x) + '</span>' }).join('');
+        slide.querySelector('.bd').scrollTop = 0;
+      }
+      hilite();
+    });
+  }
+  function hilite() {
+    if (!slide || !slideSent.length || !curK) return;
+    var s = TM[curK], nx = ORD[POS[curK] + 1], e = nx !== undefined ? TM[nx] : NK.starts[NK.dur.length], f = e > s ? Math.max(0, Math.min(.999, (gtime() - s) / (e - s))) : 0;
+    var tot = slideSent.reduce(function (a, b) { return a + b }, 0), acc = 0, idx = slideSent.length - 1;
+    for (var i = 0; i < slideSent.length; i++) { acc += slideSent[i]; if (acc / tot > f) { idx = i; break } }
+    var on = null; slide.querySelectorAll('.s').forEach(function (el, i) { var o = i === idx; if (o !== el.classList.contains('on')) el.classList.toggle('on', o); if (o) on = el });
+    if (on) { var bd = slide.querySelector('.bd'), r = on.getBoundingClientRect(), b = bd.getBoundingClientRect(); if (r.bottom > b.bottom - 40 || r.top < b.top + 20) bd.scrollTop += r.top - b.top - b.height / 3 }
+    var pp = slide.querySelector('[data-c="pp"]'); if (pp) pp.textContent = au.paused ? '▶ ဆက်ဖွင့်ရန်' : '⏸ ရပ်ထားရန်';
   }
   function stop() { au.pause(); stopAt = null; cont = false; finished = false; ui() }
   function goOn() { if (!curK) return; cont = true; finished = false; stopAt = runEnd(curK); au.play().catch(function () {}); ui() }
@@ -77,7 +122,7 @@
     if (!ready || stopAt === null || !cur) return;
     var g = NK.starts[cur - 1] + au.currentTime;
     if (g >= stopAt) { au.pause(); stopAt = null; finished = true; ui(); return }
-    if (cont) { var i = POS[curK]; while (ORD[i + 1] !== undefined && TM[ORD[i + 1]] <= g && okP(ORD[i + 1])) i++; if (ORD[i] !== curK) { curK = ORD[i]; ui() } }
+    if (cont) { var i = POS[curK]; while (ORD[i + 1] !== undefined && TM[ORD[i + 1]] <= g && okP(ORD[i + 1])) i++; if (ORD[i] !== curK) { curK = ORD[i]; ui() } else hilite() }
   }
   au.addEventListener('timeupdate', onTick);
   au.addEventListener('ended', function () { if (cur && cur < NK.dur.length && stopAt !== null && stopAt > NK.starts[cur]) playAt(NK.starts[cur], 0); else { stopAt = null; finished = true; ui() } });
