@@ -1,11 +1,17 @@
-/* 🔊 next to the paragraph numbers of the Digha Nikaya (mula_di_01..03): tap = plays that paragraph only, tap again = stops.
+/* 🔊 next to the paragraph numbers of the books that have a recording (Digha, Majjhima, Samyutta, Anguttara, Khuddaka, Abhidhamma): tap = plays that paragraph only, tap again = stops.
    The 📽 Slide button beside the page citation at the top (#tp-meta) starts the slide view from the first verified paragraph of the page: the paragraphs are read one after another and their text is shown.
    Recordings: archive.org item tipitaka-audio-myanmar.  Paragraph times: /dhamma/tipitaka-audio/data + the teacher's marks (Firestore tpkaudio/digha, public read). */
 (function () {
-  var DATA = '/dhamma/tipitaka-audio/data/digha.json', DATA_TEXT = '/dhamma/tipitaka-audio/data/digha_text.json', TEXT = null, TEXTP = null, slide = null, slideFz = 1.7, slideK = null, slideSent = [];
+  var DATA = '/dhamma/tipitaka-audio/data/', TEXTC = {}, slide = null, slideFz = 1.7, slideK = null, slideSent = [];
+  // which recording set reads which book
+  function setOf(b) {
+    if (/^mula_di_0[123]$/.test(b)) return 'digha'; if (/^mula_ma_/.test(b)) return 'mn'; if (/^mula_sa_/.test(b)) return 'sn'; if (/^mula_an_/.test(b)) return 'an'; if (/^mula_ku_/.test(b)) return 'kn';
+    var m = /^mula_bi_0([1-5])$/.exec(b); if (m) return 'ab' + m[1]; if (/^mula_bi_06_/.test(b)) return 'ab6'; if (/^mula_bi_07_/.test(b)) return 'pt'; return null;
+  }
+  var lab = function (p) { return String(p).replace(/_\d+$/, '') }, ST = {}, curSet = null, NUM = {};
   var FB = {apiKey: "AIzaSyAZkNjG9WnRVIn1np1uPFvLZtL_M_Q7Vl0", authDomain: "dhamma-songs.firebaseapp.com", projectId: "dhamma-songs", appId: "1:342644793786:web:e9f64de5f0672d46f4bd83"};
-  var V = '11.6.1', NK = null, OV = {}, TM = {}, KEY = {}, UP = {}, VER = {}, MISS = {}, IDX = {}, ORD = [], POS = {}, READY = false, loading = null;
-  var au = new Audio(), cur = 0, ready = true, curK = null, stopAt = null, cont = false, finished = false;
+  var V = '11.6.1', NK = null, OV = {}, TM = {}, UP = {}, VER = {}, MISS = {}, IDX = {}, ORD = [], POS = {}, READY = false;
+  var audioSet = null, au = new Audio(), cur = 0, ready = true, curK = null, stopAt = null, cont = false, finished = false;
   au.preload = 'none';
   var st = document.createElement('style');
   st.textContent = '.tpa{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 3px;vertical-align:baseline}.tpa:hover{transform:scale(1.2)}' +
@@ -34,36 +40,42 @@
       });
     });
   }
-  function load() {
-    return loading || (loading = fetch(DATA).then(function (r) { return r.json() }).then(function (d) {
-      NK = d; var cn = {};
-      NK.groups.forEach(function (g) { g.paras.forEach(function (x) { var k = x[0] + '|' + x[1]; KEY[NK.book[x[0]] + '|' + x[1]] = k; POS[k] = ORD.length; ORD.push(k); IDX[k] = cn[x[0]] = (cn[x[0]] === undefined ? 0 : cn[x[0]] + 1) }) });
-      calc();
+  function use(id) { var s = ST[id]; if (!s || !s.ready) return false; NK = s.NK; OV = s.OV; TM = s.TM; UP = s.UP; VER = s.VER; MISS = s.MISS; IDX = s.IDX; ORD = s.ORD; POS = s.POS; NUM = s.NUM; READY = true; return true }
+  function load(id) {
+    if (ST[id]) return ST[id].p;
+    var s = ST[id] = {ready: false, OV: {}, UP: {}, VER: {}, MISS: {}};
+    s.p = fetch(DATA + id + '.json').then(function (r) { return r.json() }).then(function (d) {
+      s.NK = d; s.TM = {}; s.IDX = {}; s.ORD = []; s.POS = {}; s.NUM = {}; var cn = {};
+      d.groups.forEach(function (g) { g.paras.forEach(function (x) { var k = x[0] + '|' + x[1]; s.POS[k] = s.ORD.length; s.ORD.push(k); s.IDX[k] = cn[x[0]] = (cn[x[0]] === undefined ? 0 : cn[x[0]] + 1); var nk = d.book[x[0]] + '|' + lab(x[1]); (s.NUM[nk] = s.NUM[nk] || []).push([k, typeof x[3] === 'number' ? x[3] : null]) }) });
+      s.ready = true; var keep = curSet; use(id); calc(); s.TM = TM; if (keep && keep !== id) use(keep);
       import('https://www.gstatic.com/firebasejs/' + V + '/firebase-app.js').then(function (A) {
         return import('https://www.gstatic.com/firebasejs/' + V + '/firebase-firestore.js').then(function (F) {
-          var db = F.getFirestore(A.initializeApp(FB, 'tpkread'));
-          F.onSnapshot(F.doc(db, 'tpkaudio', NK.id), function (s) {
-            var D = s.exists() ? s.data() : {};
-            try { OV = JSON.parse(D.j || '{}') } catch (e) { OV = {} }
-            try { VER = {}; JSON.parse(D.v || '[]').forEach(function (n) { VER[n] = 1 }) } catch (e) { VER = {} }
-            try { MISS = {}; JSON.parse(D.m || '[]').forEach(function (n) { MISS[n] = 1 }) } catch (e) { MISS = {} }
-            try { UP = JSON.parse(D.u || '{}') } catch (e) { UP = {} }
-            calc(); READY = true;
+          var app; try { app = A.getApp('tpkread') } catch (e) { app = A.initializeApp(FB, 'tpkread') }
+          var db = F.getFirestore(app);
+          F.onSnapshot(F.doc(db, 'tpkaudio', id), function (sn) {
+            var D = sn.exists() ? sn.data() : {};
+            try { s.OV = JSON.parse(D.j || '{}') } catch (e) { s.OV = {} }
+            try { s.VER = {}; JSON.parse(D.v || '[]').forEach(function (n) { s.VER[n] = 1 }) } catch (e) { s.VER = {} }
+            try { s.MISS = {}; JSON.parse(D.m || '[]').forEach(function (n) { s.MISS[n] = 1 }) } catch (e) { s.MISS = {} }
+            try { s.UP = JSON.parse(D.u || '{}') } catch (e) { s.UP = {} }
+            s.snap = true; var keep2 = curSet; use(id); calc(); s.TM = TM; if (keep2 && keep2 !== id) use(keep2);
             document.querySelectorAll('.tpa,.tpa-c,.tpa-top,.tpa-sl').forEach(function (b) { b.remove() }); document.querySelectorAll('[data-tpa]').forEach(function (e) { delete e.dataset.tpa });
             decorate();
           }, function () {});
         });
       }).catch(function () {});
-      return NK;
-    }));
+      return d;
+    });
+    return s.p;
   }
+  function playingNow() { return au && !au.paused }
   var okP = function (k) { var sn = k.split('|')[0]; return !!(VER[sn] || (UP[sn] !== undefined && IDX[k] <= IDX[sn + '|' + UP[sn]])) };
   function fileOf(t) { var f = 0; while (f < NK.dur.length - 1 && NK.starts[f + 1] <= t) f++; return f }
   function endOf(k) { var n = ORD[POS[k] + 1]; if (n === undefined) return NK.starts[NK.dur.length]; return TM[n] + (OV[n] !== undefined ? 1 : 6) }
   function runEnd(k) { var i = POS[k]; while (ORD[i + 1] !== undefined && okP(ORD[i + 1])) i++; return endOf(ORD[i]) }
   function playAt(t, lead) {
-    var f = fileOf(t), url = NK.base + NK.pre + '-' + String(f + 1).padStart(3, '0') + '.mp3', off = Math.max(0, t - NK.starts[f] - lead);
-    if (cur !== f + 1) { ready = false; au.src = url; cur = f + 1; au.addEventListener('loadedmetadata', function () { au.currentTime = off; ready = true }, {once: true}); au.load() } else au.currentTime = off;
+    var f = fileOf(t), url = NK.base + (NK.files ? NK.files[f] : NK.pre + '-' + String(f + 1).padStart(3, '0') + '.mp3'), off = Math.max(0, t - NK.starts[f] - lead);
+    if (cur !== f + 1 || audioSet !== curSet) { audioSet = curSet; ready = false; au.src = url; cur = f + 1; au.addEventListener('loadedmetadata', function () { au.currentTime = off; ready = true }, {once: true}); au.load() } else au.currentTime = off;
     au.play().catch(function () {});
   }
   function playing() { return !au.paused && !au.ended && stopAt !== null }
@@ -77,7 +89,8 @@
   // ---- slide view (while the paragraphs play one after another): the text of the paragraph that is being read, the sentence in the reading position lit
   function gtime() { return cur ? NK.starts[cur - 1] + au.currentTime : 0 }
   function esc(s) { return s.replace(/[&<>]/g, function (c) { return {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c] }) }
-  function loadText() { return TEXTP || (TEXTP = fetch(DATA_TEXT).then(function (r) { return r.json() }).then(function (d) { TEXT = d; return d })) }
+  function textFile(k) { var b = NK.book[k.split('|')[0]]; return NK.id === 'digha' ? DATA + 'digha_text.json' : DATA + 'txt/' + b + '.json' }
+  function loadText(k) { var f = textFile(k); return TEXTC[f] || (TEXTC[f] = fetch(f).then(function (r) { return r.json() })) }
   function openSlide() {
     if (slide) return;
     slide = document.createElement('div'); slide.id = 'tpa-slide'; slideK = null;
@@ -94,12 +107,12 @@
   function closeSlide() { if (slide) { slide.remove(); slide = null; slideK = null } }
   function paintSlide() {
     if (!slide || !curK) return;
-    loadText().then(function () {
-      if (!slide) return;
+    var kk = curK; loadText(kk).then(function (TEXT) {
+      if (!slide || kk !== curK) return;
       if (slideK !== curK) {
         slideK = curK; var parts = (TEXT[curK] || '').split(/(?<=[။\n])/).filter(function (x) { return x.trim() });
         slideSent = parts.map(function (x) { return x.length });
-        slide.querySelector('#tpa-sh').textContent = '🔊 ' + NK.suttas[curK.split('|')[0]] + ' · ¶' + curK.split('|')[1];
+        slide.querySelector('#tpa-sh').textContent = '🔊 ' + NK.suttas[curK.split('|')[0]] + ' · ¶' + lab(curK.split('|')[1]);
         slide.querySelector('.bd').innerHTML = parts.map(function (x) { return '<span class="s">' + esc(x) + '</span>' }).join('');
         slide.querySelector('.bd').scrollTop = 0;
       }
@@ -128,11 +141,22 @@
   au.addEventListener('ended', function () { if (cur && cur < NK.dur.length && stopAt !== null && stopAt > NK.starts[cur]) playAt(NK.starts[cur], 0); else { stopAt = null; finished = true; ui() } });
   au.addEventListener('error', function () { stopAt = null; ui(); toast('ဒီအသံဖိုင်ကို မတင်ရသေးပါ (နောက်မှ ပြန်စမ်းပါ)') });
   function book() { return new URLSearchParams(location.search).get('book') || '' }
+  function pageNo() { var p = new URLSearchParams(location.search).get('page'); return p ? +p : null }
+  function pick(cands, page, seen) {
+    if (!cands) return null; if (cands.length === 1) return cands[0][0];
+    var best = 1e9, list = [];
+    cands.forEach(function (c) { var d = c[1] === null || page === null ? 0 : Math.abs(c[1] - page); if (d < best) { best = d; list = [c] } else if (d === best) list.push(c) });
+    return (list[Math.min(seen, list.length - 1)] || cands[0])[0];
+  }
   function decorate() {
-    var b = book(); if (!/^mula_di_0[123]$/.test(b)) return; if (!READY) { load(); return }
+    var b = book(), sid = setOf(b); if (!sid) return;
+    if (!ST[sid] || !ST[sid].ready || !ST[sid].snap) { load(sid); return }
+    if (curSet !== sid) { if (curSet && (cont || stopAt !== null || playingNow())) stop(); curSet = sid }
+    use(sid);
+    var seenL = {}, pg = pageNo();
     document.querySelectorAll('#tp-content .paranum').forEach(function (el) {
       if (el.dataset.tpa) return; el.dataset.tpa = 1;
-      var num = el.textContent.trim().replace(/[။.\s]/g, ''), k = KEY[b + '|' + num]; if (!k || !okP(k)) return;
+      var num = el.textContent.trim().replace(/[။.\s]/g, ''), n = seenL[num] = (seenL[num] === undefined ? 0 : seenL[num] + 1), k = pick(NUM[b + '|' + num], pg, n); if (!k || !okP(k)) return;
       if (MISS[k]) { var no = document.createElement('span'); no.className = 'tpa'; no.textContent = '🔇'; no.title = 'ဒီစာပိုဒ်ရဲ့ အသံ မရှိပါ'; no.style.opacity = '.6'; el.insertAdjacentElement('afterend', no); return }
       var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'tpa'; btn.dataset.k = k; btn.textContent = (playing() && curK === k) ? '⏹' : '🔊'; btn.title = 'ဒီစာပိုဒ်ကနေ အသံနားထောင်ရန် (ထပ်နှိပ်ရင် ရပ်မည်)';
       btn.onclick = function (e) {
