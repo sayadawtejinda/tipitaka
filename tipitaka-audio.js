@@ -134,7 +134,7 @@
   function onTick() {
     if (!ready || stopAt === null || !cur) return;
     var g = NK.starts[cur - 1] + au.currentTime;
-    if (g >= stopAt) { au.pause(); stopAt = null; finished = true; ui(); return }
+    if (g >= stopAt) { var wasCont = cont; au.pause(); stopAt = null; cont = false; finished = true; ui(); if (wasCont) toast('ဒီနေရာအထိပဲ အသံ အတည်ပြုပြီးသေးပါသည် — နောက်ပိုင်းကို ဆရာ စစ်ပြီးမှ ဆက်နားထောင်နိုင်ပါမည်'); return }
     if (cont) { var lo = 0, hi = ORD.length - 1; while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (TM[ORD[mid]] <= g) lo = mid; else hi = mid - 1 } var nk = ORD[lo]; if (nk !== curK && okP(nk) && !(POS[nk] < POS[curK] && g < TM[curK])) { curK = nk; ui() } else hilite() }      // (the 2 s lead-in before the first paragraph still belongs to the paragraph that was asked for)
   }
   au.addEventListener('timeupdate', onTick);
