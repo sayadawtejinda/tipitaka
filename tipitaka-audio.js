@@ -3,7 +3,7 @@
 (function () {
   var DATA = '/dhamma/tipitaka-audio/data/digha.json';
   var FB = {apiKey: "AIzaSyAZkNjG9WnRVIn1np1uPFvLZtL_M_Q7Vl0", authDomain: "dhamma-songs.firebaseapp.com", projectId: "dhamma-songs", appId: "1:342644793786:web:e9f64de5f0672d46f4bd83"};
-  var V = '11.6.1', NK = null, UP = {}, IDX = {}, VER = {}, READY = false, OV = {}, TM = {}, KEY = {}, au = null, bar = null, cur = 0, loading = null;
+  var ready = true, V = '11.6.1', ORD = [], POS = {}, curK = null, stopAt = null, NK = null, UP = {}, IDX = {}, VER = {}, READY = false, OV = {}, TM = {}, KEY = {}, au = null, bar = null, cur = 0, loading = null;
   var st = document.createElement('style');
   st.textContent = '.tpa{border:0;background:none;cursor:pointer;font-size:1rem;padding:0 3px;vertical-align:baseline}.tpa:hover{transform:scale(1.2)}' +
     '#tpa-bar{position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#fffdf7;border:2px solid #7b3fb8;border-radius:12px;padding:6px 10px;box-shadow:0 4px 18px rgba(0,0,0,.3);display:none;font-family:inherit}' +
@@ -27,7 +27,7 @@
   }
   function load() {
     return loading || (loading = fetch(DATA).then(function (r) { return r.json() }).then(function (d) {
-      NK = d; var cn = {}; NK.groups.forEach(function (g) { g.paras.forEach(function (x) { KEY[NK.book[x[0]] + '|' + x[1]] = x[0] + '|' + x[1]; IDX[x[0] + '|' + x[1]] = cn[x[0]] = (cn[x[0]] === undefined ? 0 : cn[x[0]] + 1) }) });
+      NK = d; var cn = {}; NK.groups.forEach(function (g) { g.paras.forEach(function (x) { KEY[NK.book[x[0]] + '|' + x[1]] = x[0] + '|' + x[1]; POS[x[0] + '|' + x[1]] = ORD.length; ORD.push(x[0] + '|' + x[1]); IDX[x[0] + '|' + x[1]] = cn[x[0]] = (cn[x[0]] === undefined ? 0 : cn[x[0]] + 1) }) });
       calc();
       import('https://www.gstatic.com/firebasejs/' + V + '/firebase-app.js').then(function (A) {
         return import('https://www.gstatic.com/firebasejs/' + V + '/firebase-firestore.js').then(function (F) {
@@ -42,16 +42,26 @@
   function ensureBar() {
     if (bar) return;
     bar = document.createElement('div'); bar.id = 'tpa-bar';
-    bar.innerHTML = '<div class="t"><span id="tpa-t"></span><button type="button" id="tpa-x">✕</button></div><audio controls></audio>';
+    bar.innerHTML = '<div class="t"><span id="tpa-t"></span><span><button type="button" id="tpa-m"></button> <button type="button" id="tpa-x">✕</button></span></div><audio controls></audio>';
     document.body.appendChild(bar); au = bar.querySelector('audio');
     bar.querySelector('#tpa-x').onclick = function () { au.pause(); bar.style.display = 'none' };
+    bar.querySelector('#tpa-m').onclick = function () { setMode(!bar.dataset.cont); };
+    au.addEventListener('timeupdate', function () { if (ready && stopAt !== null && cur && NK.starts[cur - 1] + au.currentTime >= stopAt) { au.pause(); stopAt = null; bar.querySelector('#tpa-m').textContent = '⏩ သုတ္တန်ကို ဆက်ဖွင့်ရန်'; bar.dataset.cont = ''; } });
     au.addEventListener('error', function () { document.getElementById('tpa-t').textContent += ' — ဒီအသံဖိုင်ကို မတင်ရသေးပါ (နောက်မှ ပြန်စမ်းပါ)' });
-    au.addEventListener('ended', function () { if (cur && cur < NK.dur.length) playAt(NK.starts[cur], 0) });
+    au.addEventListener('ended', function () { if (cur && cur < NK.dur.length && (stopAt === null || stopAt > NK.starts[cur])) playAt(NK.starts[cur], 0) });
   }
   function playAt(t, lead) {
     var f = fileOf(t), url = NK.base + NK.pre + '-' + String(f + 1).padStart(3, '0') + '.mp3', off = Math.max(0, t - NK.starts[f] - lead);
-    if (cur !== f + 1) { au.src = url; cur = f + 1; au.addEventListener('loadedmetadata', function () { au.currentTime = off }, {once: true}); au.load() } else au.currentTime = off;
+    if (cur !== f + 1) { ready = false; au.src = url; cur = f + 1; au.addEventListener('loadedmetadata', function () { au.currentTime = off; ready = true }, {once: true}); au.load() } else au.currentTime = off;
     au.play().catch(function () {});
+  }
+  function endOf(k) { var i = POS[k], n = ORD[i + 1]; if (n === undefined) return NK.starts[NK.dur.length]; return TM[n] + (OV[n] !== undefined ? 1 : 6) }
+  function suttaEnd(k) { var s = k.split('|')[0], i = POS[k]; while (ORD[i + 1] !== undefined && ORD[i + 1].split('|')[0] === s) i++; return endOf(ORD[i]) }
+  function setMode(cont) {
+    var m = bar.querySelector('#tpa-m'); bar.dataset.cont = cont ? '1' : '';
+    stopAt = cont ? suttaEnd(curK) : endOf(curK);
+    m.textContent = cont ? '⏹ ဒီပိုဒ်ပြီးရင် ရပ်ရန်' : '⏩ သုတ္တန်ကို ဆက်ဖွင့်ရန်';
+    if (au.paused) au.play().catch(function () {});
   }
   function book() { return new URLSearchParams(location.search).get('book') || '' }
   function decorate() {
@@ -63,7 +73,7 @@
         var k = KEY[b + '|' + num]; if (!k) return; var sn = k.split('|')[0]; if (!(VER[sn] || (UP[sn] !== undefined && IDX[k] <= IDX[sn + '|' + UP[sn]]))) return;
         var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'tpa'; btn.textContent = '🔊'; btn.title = 'ဒီစာပိုဒ်ကနေ အသံနားထောင်ရန်';
         btn.onclick = function (e) { e.preventDefault(); e.stopPropagation(); ensureBar(); bar.style.display = 'block'; document.getElementById('tpa-t').textContent = '🔊 စာပိုဒ် ' + num + ' · ' + NK.suttas[k.split('|')[0]];
-          playAt(TM[k], OV[k] !== undefined ? 2 : 12) };
+          curK = k; playAt(TM[k], OV[k] !== undefined ? 2 : 12); setMode(false) };
         el.insertAdjacentElement('afterend', btn);
       });
     });
