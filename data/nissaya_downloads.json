@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-04",
+ "generated": "2026-11-05",
  "books": [
   {
    "id": "mula_vi_01",
@@ -93,6 +93,17 @@
    "cat_key": "di",
    "size": 3638767,
    "date": "2026-09-27"
+  },
+  {
+   "id": "mula_di_01_pakhokku",
+   "title": "သီလက္ခန္ဓဝဂ္ဂပါဠိ (ပခုက္ကူမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 6729357,
+   "date": "2026-11-05",
+   "edition_of": "mula_di_01"
   },
   {
    "id": "mula_di_02",
@@ -1026,5 +1037,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 3
+ "n_editions": 4
 }
