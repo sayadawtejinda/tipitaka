@@ -22,5 +22,15 @@
    "label": "ဘုရားကြီးမူ",
    "file": "mula_vi_02_bhurakyi"
   }
+ ],
+ "mula_di_01": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_di_01"
+  },
+  {
+   "label": "ပခုက္ကူမူ",
+   "file": "mula_di_01_pakhokku"
+  }
  ]
 }
