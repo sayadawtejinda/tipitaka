@@ -42,5 +42,15 @@
    "label": "ပခုက္ကူမူ",
    "file": "mula_di_02_pakhokku"
   }
+ ],
+ "mula_di_03": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_di_03"
+  },
+  {
+   "label": "ပခုက္ကူမူ",
+   "file": "mula_di_03_pakhokku"
+  }
  ]
 }
