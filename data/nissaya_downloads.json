@@ -137,6 +137,17 @@
    "date": "2026-09-27"
   },
   {
+   "id": "mula_di_03_pakhokku",
+   "title": "ပါထိကဝဂ္ဂပါဠိ (ပခုက္ကူမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 6219665,
+   "date": "2026-11-06",
+   "edition_of": "mula_di_03"
+  },
+  {
    "id": "mula_ma_01",
    "title": "မူလပဏ္ဏာသပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1048,5 +1059,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 5
+ "n_editions": 6
 }
