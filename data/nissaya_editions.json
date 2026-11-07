@@ -52,5 +52,15 @@
    "label": "ပခုက္ကူမူ",
    "file": "mula_di_03_pakhokku"
   }
+ ],
+ "attha_di_01": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_di_01"
+  },
+  {
+   "label": "ပခုက္ကူ (ပ)",
+   "file": "attha_di_01_sheet097"
+  }
  ]
 }
