@@ -70,5 +70,17 @@
    "from": 122,
    "to": 338
   }
+ ],
+ "attha_di_02": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_di_02"
+  },
+  {
+   "label": "ပခုက္ကူ (ပ)",
+   "file": "attha_di_02_sheet105",
+   "from": 1,
+   "to": 207
+  }
  ]
 }
