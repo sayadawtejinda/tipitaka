@@ -100,5 +100,13 @@
    "from": 1,
    "to": 251
   }
+ ],
+ "annya_bi_01": [
+  {
+   "label": "ပြည် (ပ)",
+   "file": "annya_bi_01_sheet168",
+   "from": 1,
+   "to": 190
+  }
  ]
 }
