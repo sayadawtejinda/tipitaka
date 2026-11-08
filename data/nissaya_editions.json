@@ -88,5 +88,17 @@
    "from": 208,
    "to": 403
   }
+ ],
+ "attha_di_03": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_di_03"
+  },
+  {
+   "label": "ပခုက္ကူ",
+   "file": "attha_di_03_sheet110",
+   "from": 1,
+   "to": 251
+  }
  ]
 }
