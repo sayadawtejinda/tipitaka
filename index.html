@@ -2804,7 +2804,8 @@ let isRomanPali = false;
     const out = [];
     for(const b of books){
       const eds = (TP_NISSAYA_EDITIONS[b.id] && TP_NISSAYA_EDITIONS[b.id].length) ? TP_NISSAYA_EDITIONS[b.id] : [{ label: "", file: b.id }];
-      for(const e of eds) out.push({ id: b.id, name: b.name, file: e.file, label: eds.length > 1 ? e.label : "" });
+      for(const e of eds){ let lb = e.label || ""; if(lb && eds.filter(x => x.label === e.label).length > 1 && e.from != null) lb += ` စာမျက်နှာ ${toMyanmarDigits(e.from)}–${toMyanmarDigits(e.to)}`;       // တွဲ ၂ ခု မူတူ - စာမျက်နှာအပိုင်းအခြားဖြင့် ခွဲ
+        out.push({ id: b.id, name: b.name, file: e.file, label: lb }); }
     }
     return out;
   }
@@ -2855,7 +2856,7 @@ let isRomanPali = false;
   async function showNissayaBooks(basketId, categoryId){       // level 3: စာအုပ်များ
     setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showNissayaSubjects(basketId);}}, {label: idx.category_labels[categoryId] || categoryId}]);
     const books = (await nissayaBooksIn(idx)).filter(b => b.basket === basketId && b.category === categoryId);
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ${(TP_NISSAYA_EDITIONS[b.id] || []).length > 1 ? " · နိဿယမူ " + toMyanmarDigits(TP_NISSAYA_EDITIONS[b.id].length) + " မျိုး" : ""}</span><button class="tp-dl-btn" data-dlnis="${b.id}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ${(TP_NISSAYA_EDITIONS[b.id] || []).length > 1 ? " · နိဿယမူ " + toMyanmarDigits(TP_NISSAYA_EDITIONS[b.id].length) + " မျိုး" : ((TP_NISSAYA_EDITIONS[b.id] || [])[0] && TP_NISSAYA_EDITIONS[b.id][0].label ? " · " + TP_NISSAYA_EDITIONS[b.id][0].label : "")}</span><button class="tp-dl-btn" data-dlnis="${b.id}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
     wireNisDownloadButtons(async key => books.filter(b => b.id === key));
     document.querySelectorAll("[data-book]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.book); isNissayaOpen = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
     setParams({basket: "nissaya", category: basketId + ":" + categoryId});
@@ -2959,7 +2960,7 @@ let isRomanPali = false;
           const chosen = editions.find(e => e.file === nissayaFile) || editions[0] || null;       // မူရွေးထားသည့်အတိုင်း (မရွေးရသေးလျှင် ပထမမူ)
           const edBox = document.getElementById("tp-nissaya-editions");
           if (edBox) {
-              edBox.innerHTML = editions.length > 1 ? editions.map(e => `<button data-ed="${e.file}" style="padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;${e.file === chosen.file ? "background:#8a5a1a;color:#fff;" : "background:transparent;color:#8a5a1a;"}">${e.label}</button>`).join("") : "";
+              edBox.innerHTML = editions.length > 1 ? editions.map(e => `<button data-ed="${e.file}" style="padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;${e.file === chosen.file ? "background:#8a5a1a;color:#fff;" : "background:transparent;color:#8a5a1a;"}">${e.label}</button>`).join("") : (editions.length === 1 && editions[0].label ? `<span style="padding:2px 9px;font-size:.8em;border-radius:12px;border:1px solid #8a5a1a;color:#8a5a1a;">${editions[0].label}</span>` : "");
               edBox.querySelectorAll("[data-ed]").forEach(b => b.addEventListener("click", () => { nissayaFile = b.dataset.ed; openNissaya(bookId, pageNum); }));
           }
           const htmlText = await fetchText(cdnUrl(`${DATA_FOLDER}/${chosen ? chosen.file : bookId}.html`));

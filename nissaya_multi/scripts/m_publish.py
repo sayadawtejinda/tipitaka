@@ -50,6 +50,9 @@ def publish(n, build=True, dry=False, log=print):
     try:                                                  # Pali pages this file covers: the reader shows an edition only on the pages it has (e.g. vol.1 and vol.2 of one book)
         nums = [int(x.translate(str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789'))) for x in re.findall(r'\[စာမျက်နှာ-([၀-၉]+)\]', open(src, encoding='utf-8').read())]
         if nums: ent['from'], ent['to'] = min(nums), max(nums)
+        if nums:                                          # 'ပြည် (ပ)' / 'ပခုက္ကူ (ဒု)' -> 'ပြည်မူ' / 'ပခုက္ကူမူ': the volume is told by its page range (the reader shows only the volume that has the page)
+            mm_ = re.match(r'^(.*?)\s*\([^)]*\)\s*$', edition)
+            if mm_ and mm_.group(1).strip(): ent['label'] = mm_.group(1).strip() if mm_.group(1).strip().endswith('မူ') else mm_.group(1).strip() + 'မူ'
     except Exception: pass
     lst.append(ent)
     editions[book] = lst

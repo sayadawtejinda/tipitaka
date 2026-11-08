@@ -59,13 +59,13 @@
    "file": "attha_di_01"
   },
   {
-   "label": "ပခုက္ကူ (ပ)",
+   "label": "ပခုက္ကူမူ",
    "file": "attha_di_01_sheet097",
    "from": 1,
    "to": 121
   },
   {
-   "label": "ပခုက္ကူ (ဒု)",
+   "label": "ပခုက္ကူမူ",
    "file": "attha_di_01_sheet098",
    "from": 122,
    "to": 338
@@ -77,13 +77,13 @@
    "file": "attha_di_02"
   },
   {
-   "label": "ပခုက္ကူ (ပ)",
+   "label": "ပခုက္ကူမူ",
    "file": "attha_di_02_sheet105",
    "from": 1,
    "to": 207
   },
   {
-   "label": "ပခုက္ကူ (ဒု)",
+   "label": "ပခုက္ကူမူ",
    "file": "attha_di_02_sheet106",
    "from": 208,
    "to": 403
@@ -95,7 +95,7 @@
    "file": "attha_di_03"
   },
   {
-   "label": "ပခုက္ကူ",
+   "label": "ပခုက္ကူမူ",
    "file": "attha_di_03_sheet110",
    "from": 1,
    "to": 251
@@ -103,10 +103,16 @@
  ],
  "annya_bi_01": [
   {
-   "label": "ပြည် (ပ)",
+   "label": "ပြည်မူ",
    "file": "annya_bi_01_sheet168",
    "from": 1,
    "to": 190
+  },
+  {
+   "label": "ပြည်မူ",
+   "file": "annya_bi_01_sheet169",
+   "from": 191,
+   "to": 370
   }
  ]
 }
