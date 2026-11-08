@@ -46,7 +46,12 @@ def publish(n, build=True, dry=False, log=print):
     orig = os.path.join(data, book + '.html')
     if os.path.exists(orig) and '[စာမျက်နှာ-' in open(orig, encoding='utf-8').read(200000 * 10) and not any(e['file'] == book for e in lst):
         lst.insert(0, {'label': 'မူလနိဿယ', 'file': book})
-    lst.append({'label': edition, 'file': fname})
+    ent = {'label': edition, 'file': fname}
+    try:                                                  # Pali pages this file covers: the reader shows an edition only on the pages it has (e.g. vol.1 and vol.2 of one book)
+        nums = [int(x.translate(str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789'))) for x in re.findall(r'\[စာမျက်နှာ-([၀-၉]+)\]', open(src, encoding='utf-8').read())]
+        if nums: ent['from'], ent['to'] = min(nums), max(nums)
+    except Exception: pass
+    lst.append(ent)
     editions[book] = lst
     json.dump(editions, open(ep, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     paths.append('data/nissaya_editions.json')

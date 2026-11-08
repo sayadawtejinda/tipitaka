@@ -2955,7 +2955,7 @@ let isRomanPali = false;
       contentEl.innerHTML = "<p class='tp-loading'>နိဿယ ဒေတာ ဆွဲယူနေပါသည်...</p>";
       
       try {
-          const editions = TP_NISSAYA_EDITIONS[bookId] || [];
+          const editions = (TP_NISSAYA_EDITIONS[bookId] || []).filter(e => !(e.from != null && (pageNum < e.from || pageNum > e.to)));       // မူတစ်ခုမှာ ဤစာမျက်နှာ မပါလျှင် (ဥပမာ ပထမတွဲ/ဒုတိယတွဲ) မပြ
           const chosen = editions.find(e => e.file === nissayaFile) || editions[0] || null;       // မူရွေးထားသည့်အတိုင်း (မရွေးရသေးလျှင် ပထမမူ)
           const edBox = document.getElementById("tp-nissaya-editions");
           if (edBox) {
