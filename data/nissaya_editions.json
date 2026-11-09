@@ -109,7 +109,7 @@
    "to": 190
   },
   {
-   "label": "ပြည် (ဒု)",
+   "label": "ပြည်မူ (ဒု)",
    "file": "annya_bi_01_sheet169",
    "from": 191,
    "to": 370
@@ -117,19 +117,19 @@
  ],
  "annya_bi_02": [
   {
-   "label": "ပြည် (တ)",
+   "label": "ပြည်မူ (တ)",
    "file": "annya_bi_02_sheet170",
    "from": 1,
    "to": 147
   },
   {
-   "label": "ပြည် (စ)",
+   "label": "ပြည်မူ (စ)",
    "file": "annya_bi_02_sheet171",
    "from": 148,
    "to": 221
   },
   {
-   "label": "ပြည် (မ)",
+   "label": "ပြည်မူ (မ)",
    "file": "annya_bi_02_sheet172",
    "from": 222,
    "to": 356
@@ -137,19 +137,19 @@
  ],
  "attha_bi_01": [
   {
-   "label": "ပြည် (ပ)",
+   "label": "ပြည်မူ (ပ)",
    "file": "attha_bi_01_sheet173",
    "from": 1,
    "to": 149
   },
   {
-   "label": "ပြည် (ဒု)",
+   "label": "ပြည်မူ (ဒု)",
    "file": "attha_bi_01_sheet174",
    "from": 150,
    "to": 289
   },
   {
-   "label": "ပြည် (တ)",
+   "label": "ပြည်မူ (တ)",
    "file": "attha_bi_01_sheet175",
    "from": 290,
    "to": 454
@@ -157,7 +157,7 @@
  ],
  "annya_sadda_07": [
   {
-   "label": "Z05 044 ဦးဗုဓ် (ပ)-ပဒမာလာ",
+   "label": "ဦးဗုဓ် (ပ)",
    "file": "annya_sadda_07_sheet404",
    "from": 1,
    "to": 222
