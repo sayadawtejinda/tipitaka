@@ -232,5 +232,17 @@
    "from": 1,
    "to": 352
   }
+ ],
+ "mula_sa_01": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_sa_01"
+  },
+  {
+   "label": "သာသနာရေးမူ",
+   "file": "mula_sa_01_sheet026",
+   "from": 1,
+   "to": 242
+  }
  ]
 }
