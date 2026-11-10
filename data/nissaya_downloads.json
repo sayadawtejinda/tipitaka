@@ -221,6 +221,17 @@
    "date": "2026-10-04"
   },
   {
+   "id": "mula_sa_01_sheet026",
+   "title": "သဂါထာဝဂ္ဂသံယုတ္တပါဠိ (သာသနာရေးမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 4146184,
+   "date": "2026-11-10",
+   "edition_of": "mula_sa_01"
+  },
+  {
    "id": "mula_sa_02",
    "title": "နိဒါနဝဂ္ဂသံယုတ္တပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1147,5 +1158,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 14
+ "n_editions": 15
 }
