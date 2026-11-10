@@ -208,5 +208,17 @@
    "from": 1,
    "to": 415
   }
+ ],
+ "mula_ma_02": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_ma_02"
+  },
+  {
+   "label": "သာသနာရေးမူ",
+   "file": "mula_ma_02_sheet024",
+   "from": 1,
+   "to": 439
+  }
  ]
 }
