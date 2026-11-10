@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-09",
+ "generated": "2026-11-10",
  "books": [
   {
    "id": "mula_vi_01",
@@ -177,6 +177,17 @@
    "cat_key": "ma",
    "size": 7419934,
    "date": "2026-10-02"
+  },
+  {
+   "id": "mula_ma_02_sheet024",
+   "title": "မဇ္ဈိမပဏ္ဏာသပါဠိ (သာသနာရေးမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 7161768,
+   "date": "2026-11-10",
+   "edition_of": "mula_ma_02"
   },
   {
    "id": "mula_ma_03",
@@ -1125,5 +1136,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 12
+ "n_editions": 13
 }
