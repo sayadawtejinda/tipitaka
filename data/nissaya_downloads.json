@@ -200,6 +200,17 @@
    "date": "2026-10-02"
   },
   {
+   "id": "mula_ma_03_sheet025",
+   "title": "ဥပရိပဏ္ဏာသပါဠိ (သာသနာရေးမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 5592080,
+   "date": "2026-11-10",
+   "edition_of": "mula_ma_03"
+  },
+  {
    "id": "mula_sa_01",
    "title": "သဂါထာဝဂ္ဂသံယုတ္တပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1136,5 +1147,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 13
+ "n_editions": 14
 }
