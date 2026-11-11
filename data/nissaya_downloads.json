@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-10",
+ "generated": "2026-11-11",
  "books": [
   {
    "id": "mula_vi_01",
@@ -869,6 +869,17 @@
    "date": "2026-10-28"
   },
   {
+   "id": "attha_ma_02_sheet115",
+   "title": "မဇ္ဈိမပဏ္ဏာသအဋ္ဌကထာ (မိုးထိမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 3462927,
+   "date": "2026-11-11",
+   "edition_of": "attha_ma_02"
+  },
+  {
    "id": "attha_ma_03",
    "title": "ဥပရိပဏ္ဏာသအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1180,5 +1191,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 17
+ "n_editions": 18
 }
