@@ -268,5 +268,17 @@
    "from": 1,
    "to": 235
   }
+ ],
+ "attha_ma_02": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_ma_02"
+  },
+  {
+   "label": "မိုးထိမူ (ပ)",
+   "file": "attha_ma_02_sheet115",
+   "from": 1,
+   "to": 153
+  }
  ]
 }
