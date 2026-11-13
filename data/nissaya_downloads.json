@@ -945,6 +945,17 @@
    "date": "2026-10-28"
   },
   {
+   "id": "attha_ma_03_sheet117",
+   "title": "ဥပရိပဏ္ဏာသအဋ္ဌကထာ (မိုးထိမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 2856783,
+   "date": "2026-11-12",
+   "edition_of": "attha_ma_03"
+  },
+  {
    "id": "attha_sa_01",
    "title": "သဂါထာဝဂ္ဂအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1246,5 +1257,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 23
+ "n_editions": 24
 }
