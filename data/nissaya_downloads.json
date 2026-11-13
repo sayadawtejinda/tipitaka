@@ -881,6 +881,17 @@
    "date": "2026-10-28"
   },
   {
+   "id": "attha_ma_01_02_sheet113",
+   "title": "မူလပဏ္ဏာသအဋ္ဌကထာ (ဒု) (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 1516829,
+   "date": "2026-11-12",
+   "edition_of": "attha_ma_01_02"
+  },
+  {
    "id": "attha_ma_02",
    "title": "မဇ္ဈိမပဏ္ဏာသအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1213,5 +1224,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 20
+ "n_editions": 21
 }
