@@ -2945,15 +2945,14 @@ let isRomanPali = false;
         });
       }
   }
-  // 📋 နိဿယ ကူးယူရန် panel - ပါဠိစာမျက်နှာ (သို့) နိဿယစာအုပ်ကိုယ်ပိုင်စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ရွေး၍ စာသားသက်သက်ကို clipboard ထဲ ကူးပေးသည်
+  // 📋 နိဿယ ကူးယူရန် panel (floating) - ပါဠိစာမျက်နှာ (သို့) နိဿယစာအုပ်ကိုယ်ပိုင်စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ရွေး၍ စာသားသက်သက်ကို clipboard ထဲ ကူးပေးသည်
   async function tp_nissayaCopyPanel(file, curPage, minP, maxP){
-      const contentEl = document.getElementById("tp-nissaya-content");
       let box = document.getElementById("tp-nsy-copybox");
       if (box) { box.remove(); return; }
       box = document.createElement("div"); box.id = "tp-nsy-copybox";
-      box.style.cssText = "border:1px solid #2a7a3a;border-radius:8px;padding:8px 10px;margin:0 0 10px;background:rgba(42,122,58,.07);font-size:.9em;line-height:2;";
+      box.style.cssText = "position:fixed;top:64px;right:14px;z-index:99999;max-width:min(92vw,420px);border:1px solid #2a7a3a;border-radius:10px;padding:10px 12px;background:#fffdf5;color:#222;box-shadow:0 4px 18px rgba(0,0,0,.28);font-size:.9em;line-height:2;";
       box.textContent = "ဆွဲယူနေသည်...";
-      contentEl.parentNode.insertBefore(box, contentEl);
+      document.body.appendChild(box);
       let html;
       try { html = await fetchText(cdnUrl(`${DATA_FOLDER}/${file}.html`)); } catch (e) { box.textContent = "မအောင်မြင်ပါ: " + e.message; return; }
       const reOwn = /<p[^>]*>\(နိဿယစာအုပ် စာမျက်နှာ ([၀-၉]+)\)<\/p>/g, rePali = /\[စာမျက်နှာ-([၀-၉]+)\]/g;
@@ -2961,11 +2960,13 @@ let isRomanPali = false;
       const hasOwn = own.length > 0;
       const ownNums = own.map(m => parseInt(fromMyanmarDigits(m[1]), 10)), ownMin = hasOwn ? Math.min(...ownNums) : 0, ownMax = hasOwn ? Math.max(...ownNums) : 0;
       const rng = (minP != null ? `ပါဠိစာမျက်နှာ ${toMyanmarDigits(minP)} မှ ${toMyanmarDigits(maxP)}` : "");
-      box.innerHTML = `${hasOwn ? `<label><input type="radio" name="tp-nsy-mode" value="pali" checked> ပါဠိစာမျက်နှာ</label> <label style="margin-left:10px"><input type="radio" name="tp-nsy-mode" value="own"> နိဿယစာအုပ်ကိုယ်ပိုင်စာမျက်နှာ (${toMyanmarDigits(ownMin)} မှ ${toMyanmarDigits(ownMax)})</label><br>` : `<span style="opacity:.7">ပါဠိစာမျက်နှာ ${rng}</span><br>`}
-        စာမျက်နှာ <input id="tp-nsy-from" type="number" min="1" value="${curPage}" style="width:5em"> မှ <input id="tp-nsy-to" type="number" min="1" value="${curPage}" style="width:5em"> ထိ <span id="tp-nsy-rng" style="opacity:.7">${rng}</span><br>
+      box.innerHTML = `<div style="text-align:right;margin:-4px 0 -6px"><button id="tp-nsy-x" title="ပိတ်မည်" style="border:none;background:transparent;cursor:pointer;font-size:1em;color:#555">✕</button></div>
+        ${hasOwn ? `<label><input type="radio" name="tp-nsy-mode" value="pali" checked> ပါဠိစာမျက်နှာ</label> <label style="margin-left:10px"><input type="radio" name="tp-nsy-mode" value="own"> နိဿယစာအုပ်စာမျက်နှာ (${toMyanmarDigits(ownMin)} မှ ${toMyanmarDigits(ownMax)})</label><br>` : `<span style="opacity:.7">ပါဠိစာမျက်နှာ ${rng}</span><br>`}
+        စာမျက်နှာ <input id="tp-nsy-from" type="number" min="1" value="${curPage}" style="width:5em"> မှ <input id="tp-nsy-to" type="number" min="1" value="${curPage}" style="width:5em"> ထိ <span id="tp-nsy-rng" style="opacity:.7;font-size:.85em">${rng}</span><br>
         <label><input id="tp-nsy-marks" type="checkbox" checked> စာမျက်နှာအမှတ်များ ပါမည်</label>
         <button id="tp-nsy-go" style="margin-left:8px;padding:2px 12px;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:#2a7a3a;color:#fff;">ကူးမည်</button>
         <span id="tp-nsy-msg" style="margin-left:8px"></span>`;
+      box.querySelector("#tp-nsy-x").addEventListener("click", () => box.remove());
       const msg = box.querySelector("#tp-nsy-msg");
       const modeOf = () => { const r = box.querySelector('input[name="tp-nsy-mode"]:checked'); return r ? r.value : "pali"; };
       box.querySelectorAll('input[name="tp-nsy-mode"]').forEach(r => r.addEventListener("change", () => {
@@ -2974,6 +2975,8 @@ let isRomanPali = false;
           box.querySelector("#tp-nsy-rng").textContent = o ? "" : rng;
       }));
       const toText = (seg) => { const d = document.createElement("div"); d.innerHTML = seg.replace(/<\/p>/gi, "</p>\n").replace(/<br\s*\/?>/gi, "\n"); return d.textContent; };
+      const key30 = (txt) => txt.replace(/[\s၊။]+/g, "").slice(0, 30);
+      // နိဿယစာအုပ် စာမျက်နှာတစ်ခုက ပါဠိစာမျက်နှာ အများအပြားအောက်မှာ ထပ်ပါနေတတ်သည် - ကူးသည့်အခါ တစ်ခါပဲ ကူးမည်
       box.querySelector("#tp-nsy-go").addEventListener("click", async () => {
           try {
               let a = parseInt(box.querySelector("#tp-nsy-from").value, 10), b = parseInt(box.querySelector("#tp-nsy-to").value, 10);
@@ -2982,29 +2985,42 @@ let isRomanPali = false;
               const withMarks = box.querySelector("#tp-nsy-marks").checked, isOwn = modeOf() === "own";
               const out = []; let got = 0;
               if (!isOwn) {
+                  const seen = new Set();
                   pali.forEach((m, i) => {
                       const pg = parseInt(fromMyanmarDigits(m[1]), 10);
                       if (pg < a || pg > b) return;
-                      let txt = toText(html.substring(m.index + m[0].length, i + 1 < pali.length ? pali[i + 1].index : html.length));
-                      if (!withMarks) txt = txt.replace(/^\s*\(နိဿယစာအုပ် စာမျက်နှာ[^)]*\)\s*$/gm, "");
+                      const seg = html.substring(m.index + m[0].length, i + 1 < pali.length ? pali[i + 1].index : html.length);
+                      const parts = seg.split(/<p[^>]*>\(နိဿယစာအုပ် စာမျက်နှာ ([၀-၉]+)\)<\/p>/);      // [before, N, chunk, N, chunk ...]
+                      let txt = toText(parts[0]);
+                      for (let j = 1; j < parts.length; j += 2) {
+                          const c = toText(parts[j + 1]), key = parts[j] + "|" + key30(c);
+                          if (seen.has(key)) continue;                      // ဤစာအုပ်စာမျက်နှာ ရှေ့မှာ ကူးပြီးသား
+                          seen.add(key);
+                          if (withMarks) txt += `\n(နိဿယစာအုပ် စာမျက်နှာ ${parts[j]})\n`;
+                          txt += c;
+                      }
                       txt = txt.replace(/\n{3,}/g, "\n\n").trim();
                       out.push(withMarks ? `[စာမျက်နှာ-${m[1]}]\n${txt}` : txt); got++;
                   });
               } else {
+                  const best = new Map(), order = [];                    // (နံပါတ်|စာသားအစ) → အရှည်ဆုံး
                   own.forEach((m, i) => {
                       const pg = ownNums[i];
                       if (pg < a || pg > b) return;
                       let txt = toText(html.substring(m.index + m[0].length, i + 1 < own.length ? own[i + 1].index : html.length));
                       if (!withMarks) txt = txt.replace(/^\s*\[စာမျက်နှာ-[၀-၉]+\]\s*$/gm, "");
                       txt = txt.replace(/\n{3,}/g, "\n\n").trim();
-                      out.push(withMarks ? `(နိဿယစာအုပ် စာမျက်နှာ ${m[1]})\n${txt}` : txt); got++;
+                      const key = m[1] + "|" + key30(txt);
+                      if (!best.has(key)) { best.set(key, { n: m[1], t: txt }); order.push(key); }
+                      else if (txt.length > best.get(key).t.length) best.get(key).t = txt;
                   });
+                  order.forEach(k => { const e = best.get(k); out.push(withMarks ? `(နိဿယစာအုပ် စာမျက်နှာ ${e.n})\n${e.t}` : e.t); got++; });
               }
               if (!got) { msg.textContent = "ဤအကွာအဝေးတွင် စာမျက်နှာ မတွေ့ပါ"; return; }
               const all = out.join("\n\n");
               try { await navigator.clipboard.writeText(all); }
               catch (e) { const ta = document.createElement("textarea"); ta.value = all; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); }
-              msg.textContent = `✔ စာမျက်နှာ ${got} မျက်နှာ ကူးပြီးပါပြီ`;
+              msg.textContent = `✔ ${got} မျက်နှာ ကူးပြီးပါပြီ`;
           } catch (e) { msg.textContent = "မအောင်မြင်ပါ: " + e.message; }
       });
   }
@@ -3028,7 +3044,7 @@ let isRomanPali = false;
           }
           if (edBox) {      // 📋 ကူးမည် - ဤမူမှ စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ကူးယူရန်
               const cb = document.createElement("button");
-              cb.textContent = "📋 ကူးမည်"; cb.title = "နိဿယကို စာမျက်နှာ အကွာအဝေးရွေး၍ ကူးယူမည်";
+              cb.textContent = "📋"; cb.title = "နိဿယကို စာမျက်နှာ အကွာအဝေးရွေး၍ ကူးယူမည်";
               cb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:transparent;color:#2a7a3a;";
               cb.addEventListener("click", () => tp_nissayaCopyPanel(chosen ? chosen.file : bookId, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null));
               edBox.appendChild(cb);
