@@ -3024,6 +3024,7 @@ let isRomanPali = false;
           } catch (e) { msg.textContent = "မအောင်မြင်ပါ: " + e.message; }
       });
   }
+  let nsyMmOnly = false;       // 🅰 နိဿယ - ပါဠိစာလုံးဖျောက်၍ မြန်မာအနက်သာ ပြရန်
   async function openNissaya(bookId, pageNum) {
       isMmSplitOpen = mmViaMm = false;
       isNissayaOpen = true; 
@@ -3048,6 +3049,11 @@ let isRomanPali = false;
               cb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:transparent;color:#2a7a3a;";
               cb.addEventListener("click", () => tp_nissayaCopyPanel(chosen ? chosen.file : bookId, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null));
               edBox.appendChild(cb);
+              const mb = document.createElement("button");
+              mb.textContent = nsyMmOnly ? "ပါဠိပြမည်" : "မြန်မာသာ"; mb.title = "ပါဠိစာလုံးများ ဖျောက်၍ မြန်မာအနက်သာ ပြမည် / ပြန်ပြမည်";
+              mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (nsyMmOnly ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
+              mb.addEventListener("click", () => { nsyMmOnly = !nsyMmOnly; openNissaya(bookId, pageNum); });
+              edBox.appendChild(mb);
           }
           const htmlText = await fetchText(cdnUrl(`${DATA_FOLDER}/${chosen ? chosen.file : bookId}.html`));
           const mmPageStr = toMyanmarDigits(pageNum);
@@ -3065,6 +3071,11 @@ let isRomanPali = false;
               }
               extractedHtml = extractedHtml.replace(startMarker, `<span class="tp-mm-highlight">${startMarker}</span>`);
               contentEl.innerHTML = await tp_nissayaLinkify(extractedHtml);
+              if (nsyMmOnly) contentEl.querySelectorAll("b").forEach(bt => {       // ပါဠိ (စာလုံးမည်း) ဖျောက်၊ နောက်က "၊" ဖယ်
+                const nx = bt.nextSibling;
+                if (nx && nx.nodeType === 3) nx.nodeValue = nx.nodeValue.replace(/^\s*၊\s*/, "");
+                bt.remove();
+              });
               contentEl.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", (e) => {
                 e.preventDefault();
                 if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); }
