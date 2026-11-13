@@ -101,8 +101,8 @@
    "basket_key": "mula",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 6729357,
-   "date": "2026-11-05",
+   "size": 6628683,
+   "date": "2026-11-12",
    "edition_of": "mula_di_01"
   },
   {
@@ -122,8 +122,8 @@
    "basket_key": "mula",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 7464331,
-   "date": "2026-11-06",
+   "size": 7394543,
+   "date": "2026-11-12",
    "edition_of": "mula_di_02"
   },
   {
@@ -143,8 +143,8 @@
    "basket_key": "mula",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 6219665,
-   "date": "2026-11-06",
+   "size": 6098788,
+   "date": "2026-11-12",
    "edition_of": "mula_di_03"
   },
   {
@@ -164,8 +164,8 @@
    "basket_key": "mula",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 6668590,
-   "date": "2026-11-09",
+   "size": 6371914,
+   "date": "2026-11-12",
    "edition_of": "mula_ma_01"
   },
   {
@@ -185,8 +185,8 @@
    "basket_key": "mula",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 7161768,
-   "date": "2026-11-10",
+   "size": 6868325,
+   "date": "2026-11-12",
    "edition_of": "mula_ma_02"
   },
   {
@@ -206,8 +206,8 @@
    "basket_key": "mula",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 5592080,
-   "date": "2026-11-10",
+   "size": 5392863,
+   "date": "2026-11-12",
    "edition_of": "mula_ma_03"
   },
   {
@@ -227,8 +227,8 @@
    "basket_key": "mula",
    "category": "သံယုတ်နိကာယ်",
    "cat_key": "sa",
-   "size": 4146184,
-   "date": "2026-11-10",
+   "size": 3952956,
+   "date": "2026-11-12",
    "edition_of": "mula_sa_01"
   },
   {
@@ -248,8 +248,8 @@
    "basket_key": "mula",
    "category": "သံယုတ်နိကာယ်",
    "cat_key": "sa",
-   "size": 3533974,
-   "date": "2026-11-10",
+   "size": 3357214,
+   "date": "2026-11-12",
    "edition_of": "mula_sa_02"
   },
   {
@@ -269,8 +269,8 @@
    "basket_key": "mula",
    "category": "သံယုတ်နိကာယ်",
    "cat_key": "sa",
-   "size": 3583668,
-   "date": "2026-11-10",
+   "size": 3374294,
+   "date": "2026-11-12",
    "edition_of": "mula_sa_03"
   },
   {
@@ -770,8 +770,8 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 5144527,
-   "date": "2026-11-07",
+   "size": 4789285,
+   "date": "2026-11-12",
    "edition_of": "attha_di_01"
   },
   {
@@ -781,8 +781,8 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 6589695,
-   "date": "2026-11-07",
+   "size": 6356159,
+   "date": "2026-11-12",
    "edition_of": "attha_di_01"
   },
   {
@@ -802,8 +802,8 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 6242720,
-   "date": "2026-11-08",
+   "size": 5991073,
+   "date": "2026-11-12",
    "edition_of": "attha_di_02"
   },
   {
@@ -813,8 +813,8 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 5206494,
-   "date": "2026-11-08",
+   "size": 5091189,
+   "date": "2026-11-12",
    "edition_of": "attha_di_02"
   },
   {
@@ -834,8 +834,8 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 6422117,
-   "date": "2026-11-08",
+   "size": 6229182,
+   "date": "2026-11-12",
    "edition_of": "attha_di_03"
   },
   {
@@ -855,8 +855,8 @@
    "basket_key": "attha",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 5075300,
-   "date": "2026-11-11",
+   "size": 4954801,
+   "date": "2026-11-12",
    "edition_of": "attha_ma_01_01"
   },
   {
@@ -866,7 +866,7 @@
    "basket_key": "attha",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 3546042,
+   "size": 3472280,
    "date": "2026-11-12",
    "edition_of": "attha_ma_01_01"
   },
@@ -887,7 +887,7 @@
    "basket_key": "attha",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 1516829,
+   "size": 1455373,
    "date": "2026-11-12",
    "edition_of": "attha_ma_01_02"
   },
@@ -898,7 +898,7 @@
    "basket_key": "attha",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 5348464,
+   "size": 5155840,
    "date": "2026-11-12",
    "edition_of": "attha_ma_01_02"
   },
@@ -919,8 +919,8 @@
    "basket_key": "attha",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 3462927,
-   "date": "2026-11-11",
+   "size": 3327426,
+   "date": "2026-11-12",
    "edition_of": "attha_ma_02"
   },
   {
@@ -930,7 +930,7 @@
    "basket_key": "attha",
    "category": "မဇ္ဈိမနိကာယ်",
    "cat_key": "ma",
-   "size": 3478150,
+   "size": 3308718,
    "date": "2026-11-12",
    "edition_of": "attha_ma_02"
   },
