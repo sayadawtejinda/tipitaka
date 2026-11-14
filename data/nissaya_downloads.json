@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-13",
+ "generated": "2026-11-14",
  "books": [
   {
    "id": "mula_vi_01",
@@ -1167,6 +1167,17 @@
    "date": "2026-10-26"
   },
   {
+   "id": "attha_ku_18_01_sheet164",
+   "title": "ပဋိသမ္ဘိဒါမဂ္ဂအဋ္ဌကထာ (ပ) (သာသနာရေးမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 8210729,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_18_01"
+  },
+  {
    "id": "attha_ku_18_02",
    "title": "ပဋိသမ္ဘိဒါမဂ္ဂအဋ္ဌကထာ (ဒု)",
    "basket": "အဋ္ဌကထာ",
@@ -1290,5 +1301,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 27
+ "n_editions": 28
 }
