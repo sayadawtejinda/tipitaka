@@ -25,15 +25,16 @@
   var toastEl = null, toastT = null;
   function toast(t) { if (!toastEl) { toastEl = document.createElement('div'); toastEl.id = 'tpa-toast'; document.body.appendChild(toastEl) } toastEl.textContent = t; toastEl.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(function () { toastEl.style.display = 'none' }, 3500) }
   function calc() {
-    TM = {};
+    TM = {}; var carry = 0;
     NK.groups.forEach(function (g) {
-      var t0 = NK.starts[g.fa], t1 = NK.starts[g.fb], cum = 0, W = function (x) { return MISS[x[0] + '|' + x[1]] ? 0 : x[2] }, tot = g.paras.reduce(function (a, x) { return a + W(x) }, 0) || 1;
+      var t0o = NK.starts[g.fa], t0 = Math.max(t0o, carry), t1 = Math.max(NK.starts[g.fb], t0 + 60), cum = 0, W = function (x) { return MISS[x[0] + '|' + x[1]] ? 0 : x[2] }, tot = g.paras.reduce(function (a, x) { return a + W(x) }, 0) || 1;
       var pts = [{c: 0, t: t0}];
-      g.paras.forEach(function (x) { var k = x[0] + '|' + x[1]; if (!MISS[k] && OV[k] !== undefined && cum > 0 && OV[k] >= t0 && OV[k] < t1) { var q = pts[pts.length - 1]; if (OV[k] > q.t && cum > q.c) pts.push({c: cum, t: OV[k]}) } cum += W(x) });
-      pts.push({c: tot, t: t1}); cum = 0; var j = 0;
+      g.paras.forEach(function (x) { var k = x[0] + '|' + x[1]; if (!MISS[k] && OV[k] !== undefined && cum > 0 && OV[k] >= t0o && OV[k] < t1 + 1800) { var q = pts[pts.length - 1]; if (OV[k] > q.t && cum > q.c) pts.push({c: cum, t: OV[k]}) } cum += W(x) });
+      var tE = t1; if (pts.length >= 3) { var m = Math.min(pts.length - 1, 8), p0 = pts[pts.length - 1 - m], p1 = pts[pts.length - 1]; if (p1.t > p0.t && p1.c > p0.c) { var ex = p1.t + (tot - p1.c) / ((p1.c - p0.c) / (p1.t - p0.t)); if (ex > tE) tE = ex } }      // the tail after the last mark runs at the rate the teacher's last marks show, even past the end of the files of this group
+      pts.push({c: tot, t: tE}); carry = tE > t1 ? tE : 0; cum = 0; var j = 0;
       g.paras.forEach(function (x) {
         var k = x[0] + '|' + x[1];
-        if (!MISS[k] && OV[k] !== undefined && cum === 0) pts[0].t = OV[k] >= t0 ? OV[k] : t0;
+        if (!MISS[k] && OV[k] !== undefined && cum === 0) pts[0].t = OV[k] >= t0o ? OV[k] : t0;
         while (j < pts.length - 2 && cum >= pts[j + 1].c) j++;
         var a = pts[j], b = pts[j + 1]; TM[k] = b.c > a.c ? a.t + (cum - a.c) / (b.c - a.c) * (b.t - a.t) : a.t;
         if (!MISS[k] && OV[k] !== undefined) TM[k] = OV[k]; cum += W(x);
