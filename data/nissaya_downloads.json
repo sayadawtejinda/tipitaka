@@ -1188,6 +1188,17 @@
    "date": "2026-10-26"
   },
   {
+   "id": "attha_ku_18_02_sheet165",
+   "title": "ပဋိသမ္ဘိဒါမဂ္ဂအဋ္ဌကထာ (ဒု) (သာသနာရေးမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 7021305,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_18_02"
+  },
+  {
    "id": "attha_ku_20",
    "title": "နေတ္တိပ္ပကရဏအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1301,5 +1312,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 28
+ "n_editions": 29
 }
