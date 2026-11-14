@@ -378,5 +378,13 @@
    "from": 1,
    "to": 37
   }
+ ],
+ "attha_ku_zat_07": [
+  {
+   "label": "ဒန့်တိုင်",
+   "file": "attha_ku_zat_07_sheet162",
+   "from": 241,
+   "to": 318
+  }
  ]
 }
