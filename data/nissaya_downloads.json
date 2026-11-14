@@ -1198,6 +1198,17 @@
    "edition_of": "attha_ku_20"
   },
   {
+   "id": "attha_ku_20_sheet167",
+   "title": "နေတ္တိပ္ပကရဏအဋ္ဌကထာ (ချောင်းကောက်မူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2870423,
+   "date": "2026-11-13",
+   "edition_of": "attha_ku_20"
+  },
+  {
    "id": "tika_vi_01",
    "title": "သာရတ္ထဒီပနီဋီကာ (ပ)",
    "basket": "ဋီကာ",
@@ -1279,5 +1290,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 26
+ "n_editions": 27
 }
