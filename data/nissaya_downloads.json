@@ -1108,6 +1108,17 @@
    "edition_of": "attha_ku_03"
   },
   {
+   "id": "attha_ku_03_sheet138",
+   "title": "ဥဒါနအဋ္ဌကထာ (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4035244,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_03"
+  },
+  {
    "id": "attha_ku_05_01",
    "title": "သုတ္တနိပါတအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -1323,5 +1334,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 30
+ "n_editions": 31
 }
