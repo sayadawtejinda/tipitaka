@@ -501,6 +501,24 @@
    "file": "attha_ku_05_01_sheet140",
    "from": 1,
    "to": 212
+  },
+  {
+   "label": "မိုးထိမူ (ဒု)",
+   "file": "attha_ku_05_01_sheet141",
+   "from": 213,
+   "to": 314
+  }
+ ],
+ "attha_ku_05_02": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_ku_05_02"
+  },
+  {
+   "label": "မိုးထိမူ (ဒု)",
+   "file": "attha_ku_05_02_sheet141",
+   "from": 1,
+   "to": 109
   }
  ]
 }
