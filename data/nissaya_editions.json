@@ -526,5 +526,17 @@
    "from": 110,
    "to": 324
   }
+ ],
+ "attha_ku_06": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_ku_06"
+  },
+  {
+   "label": "မိုးထိမူ (ပ)",
+   "file": "attha_ku_06_sheet143",
+   "from": 1,
+   "to": 160
+  }
  ]
 }
