@@ -1204,6 +1204,17 @@
    "edition_of": "attha_ku_06"
   },
   {
+   "id": "attha_ku_06_sheet144",
+   "title": "ဝိမာနဝတ္ထုအဋ္ဌကထာ (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2991173,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_06"
+  },
+  {
    "id": "attha_ku_10",
    "title": "အပဒါနအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -1389,5 +1400,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 36
+ "n_editions": 37
 }
