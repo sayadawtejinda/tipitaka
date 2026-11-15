@@ -1172,6 +1172,17 @@
    "edition_of": "attha_ku_05_02"
   },
   {
+   "id": "attha_ku_05_02_sheet142",
+   "title": "သုတ္တနိပါတအဋ္ဌကထာ (ဒု) (မိုးထိမူ (တ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4216477,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_05_02"
+  },
+  {
    "id": "attha_ku_06",
    "title": "ဝိမာနဝတ္ထုအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1367,5 +1378,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 34
+ "n_editions": 35
 }
