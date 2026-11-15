@@ -1140,6 +1140,17 @@
    "edition_of": "attha_ku_05_01"
   },
   {
+   "id": "attha_ku_05_01_sheet141",
+   "title": "သုတ္တနိပါတအဋ္ဌကထာ (ပ) (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2186653,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_05_01"
+  },
+  {
    "id": "attha_ku_05_02",
    "title": "သုတ္တနိပါတအဋ္ဌကထာ (ဒု)",
    "basket": "အဋ္ဌကထာ",
@@ -1148,6 +1159,17 @@
    "cat_key": "ku",
    "size": 3199639,
    "date": "2026-10-28"
+  },
+  {
+   "id": "attha_ku_05_02_sheet141",
+   "title": "သုတ္တနိပါတအဋ္ဌကထာ (ဒု) (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2261456,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_05_02"
   },
   {
    "id": "attha_ku_06",
@@ -1345,5 +1367,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 32
+ "n_editions": 34
 }
