@@ -1097,6 +1097,17 @@
    "date": "2026-10-29"
   },
   {
+   "id": "attha_ku_03_sheet137",
+   "title": "ဥဒါနအဋ္ဌကထာ (မိုးထိမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4076893,
+   "date": "2026-11-14",
+   "edition_of": "attha_ku_03"
+  },
+  {
    "id": "attha_ku_05_01",
    "title": "သုတ္တနိပါတအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -1312,5 +1323,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 29
+ "n_editions": 30
 }
