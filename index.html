@@ -3083,6 +3083,14 @@ let isRomanPali = false;
           } catch (e) { msg.textContent = "မအောင်မြင်ပါ: " + e.message; }
       });
   }
+  // မူအမည်ကို ဖုန်းအတွက် တိုအောင် ပြရန်: မူလနိဿယ→မူလ၊ ပခုက္ကူမူ (ပ)→ပခုက္ကူ (ပ)၊ ဘာသာဋီကာ-ဘေဒစိန္တာ→ဘာသာဋီကာ
+  function tp_edLabel(l){
+    l = String(l || "").trim();
+    if (l === "မူလနိဿယ") return "မူလ";
+    l = l.replace(/^(ဘာသာဋီကာ)-.+$/, "$1");
+    l = l.replace(/^(.+?)မူ(?=\s*(\(|$))/, "$1");
+    return l;
+  }
   let nsyMmOnly = false;       // 🅰 နိဿယ - ပါဠိစာလုံးဖျောက်၍ မြန်မာအနက်သာ ပြရန်
   async function openNissaya(bookId, pageNum) {
       isMmSplitOpen = mmViaMm = false;
@@ -3099,7 +3107,7 @@ let isRomanPali = false;
           const chosen = editions.find(e => e.file === nissayaFile) || editions[0] || null;       // မူရွေးထားသည့်အတိုင်း (မရွေးရသေးလျှင် ပထမမူ)
           const edBox = document.getElementById("tp-nissaya-editions");
           if (edBox) {
-              edBox.innerHTML = editions.length > 1 ? editions.map(e => `<button data-ed="${e.file}" style="padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;${e.file === chosen.file ? "background:#8a5a1a;color:#fff;" : "background:transparent;color:#8a5a1a;"}">${e.label}</button>`).join("") : (editions.length === 1 && editions[0].label ? `<span style="padding:2px 9px;font-size:.8em;border-radius:12px;border:1px solid #8a5a1a;color:#8a5a1a;">${editions[0].label}</span>` : "");
+              edBox.innerHTML = editions.length > 1 ? editions.map(e => `<button data-ed="${e.file}" style="padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;${e.file === chosen.file ? "background:#8a5a1a;color:#fff;" : "background:transparent;color:#8a5a1a;"}">${tp_edLabel(e.label)}</button>`).join("") : (editions.length === 1 && editions[0].label ? `<span style="padding:2px 9px;font-size:.8em;border-radius:12px;border:1px solid #8a5a1a;color:#8a5a1a;">${editions[0].label}</span>` : "");
               edBox.querySelectorAll("[data-ed]").forEach(b => b.addEventListener("click", () => { nissayaFile = b.dataset.ed; openNissaya(bookId, pageNum); }));
           }
           if (edBox) {      // 📋 ကူးမည် - ဤမူမှ စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ကူးယူရန်
