@@ -87,6 +87,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "mula_vi_03_bhasatika",
+   "title": "မဟာဝဂ္ဂပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4832290,
+   "date": "2026-11-16",
+   "edition_of": "mula_vi_03"
+  },
+  {
    "id": "mula_vi_04",
    "title": "စူဠဝဂ္ဂပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1422,5 +1433,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 39
+ "n_editions": 40
 }
