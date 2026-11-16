@@ -27,6 +27,12 @@
   {
    "label": "ဘုရားကြီးမူ",
    "file": "mula_vi_02_bhurakyi"
+  },
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "mula_vi_02_bhasatika",
+   "from": 1,
+   "to": 470
   }
  ],
  "mula_di_01": [
