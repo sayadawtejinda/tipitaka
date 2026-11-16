@@ -668,6 +668,17 @@
    "date": "2026-10-31"
   },
   {
+   "id": "mula_bi_01_bhasatika",
+   "title": "ဓမ္မသင်္ဂဏီပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2067943,
+   "date": "2026-11-16",
+   "edition_of": "mula_bi_01"
+  },
+  {
    "id": "mula_bi_02",
    "title": "ဝိဘင်္ဂပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1444,5 +1455,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 41
+ "n_editions": 42
 }
