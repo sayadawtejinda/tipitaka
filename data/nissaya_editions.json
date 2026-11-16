@@ -714,5 +714,17 @@
    "from": 190,
    "to": 357
   }
+ ],
+ "mula_vi_03": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_vi_03"
+  },
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "mula_vi_03_bhasatika",
+   "from": 1,
+   "to": 511
+  }
  ]
 }
