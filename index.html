@@ -802,8 +802,67 @@ let isRomanPali = false;
   }
 
   // #tp-content ပေါ်က စာလုံးတစ်ခုကို double-click နှိပ်လိုက်ရင် အဘိဓာန်ကို floating box အနေနှင့် (နှိပ်လိုက်တဲ့ နေရာအနီးတွင်) ပြရန်
+  // ပါဠိစာလုံးကို တစ်ချက်နှိပ်ရင် ဘေးက ဖွင့်ထားသော နိဿယထဲက အနက်ကို popup ပြရန် (သန္ဓိကွဲ၍ မကိုက်လျှင် အနီးစပ်ဆုံး)
+  let nsyEntries = [];
+  const tp_nsyNorm = (w) => String(w || "").replace(/[၊။]/g, "").replace(/[^\u1000-\u109F]/g, "");
+  function tp_nsyBuildEntries(root){
+    const out = [];
+    root.querySelectorAll("b").forEach(bt => {
+      let mean = "", n = bt.nextSibling;
+      while (n && !(n.nodeType === 1 && n.tagName === "B")) { mean += n.textContent; n = n.nextSibling; }
+      mean = mean.replace(/^\s*၊\s*/, "").replace(/\s+/g, " ").trim();
+      const pali = bt.textContent.trim();
+      if (pali && mean) out.push({ pali, mean, words: pali.split(/\s+/).map(tp_nsyNorm).filter(Boolean) });
+    });
+    return out;
+  }
+  function tp_nsyCommon(a, b){ let i = 0; while (i < a.length && i < b.length && a[i] === b[i]) i++; return i; }
+  function tp_nsyFind(word){
+    const w = tp_nsyNorm(word); if (!w) return { list: [], exact: false };
+    const exact = nsyEntries.filter(e => e.words.includes(w));
+    if (exact.length) return { list: exact, exact: true };
+    // အနီးစပ်ဆုံး - ရှေ့စာလုံးတူသော ပမာဏ မြင့်သည်ကို ရွေး (သန္ဓိ/ဝိဘတ် ကွဲလျှင်)
+    let best = 0, bl = [];
+    nsyEntries.forEach(e => e.words.forEach(x => {
+      const c = tp_nsyCommon(w, x), need = Math.max(3, Math.ceil(Math.min(w.length, x.length) * 0.7));
+      if (c >= need) { if (c > best) { best = c; bl = [e]; } else if (c === best && !bl.includes(e)) bl.push(e); }
+    }));
+    return { list: bl, exact: false };
+  }
+  function tp_nsyHidePop(){ const p = document.getElementById("tp-nsy-pop"); if (p) p.remove(); }
+  function tp_nsyShowPop(word, res, x, y){
+    tp_nsyHidePop();
+    const p = document.createElement("div"); p.id = "tp-nsy-pop";
+    p.style.cssText = "position:absolute;z-index:99998;max-width:340px;background:#fffbe8;color:#222;border:1px solid #b8860b;border-radius:8px;padding:8px 10px;font-size:.92em;line-height:1.6;box-shadow:0 3px 12px rgba(0,0,0,.25);";
+    const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    if (!res.list.length) p.innerHTML = `<b>${esc(word)}</b><br><span style="color:#888">နိဿယထဲတွင် မတွေ့ပါ</span>`;
+    else p.innerHTML = res.list.slice(0, 3).map(e => `<div style="margin:2px 0"><b style="color:#8a5a1a">${esc(e.pali)}</b>၊ ${esc(e.mean)}</div>`).join("") + (res.exact ? "" : `<div style="color:#999;font-size:.8em">(အနီးစပ်ဆုံး)</div>`);
+    document.body.appendChild(p);
+    let left = x + 8, top = y + 16;
+    left = Math.min(left, window.scrollX + window.innerWidth - p.offsetWidth - 8); left = Math.max(left, window.scrollX + 8);
+    p.style.left = left + "px"; p.style.top = top + "px";
+  }
+  document.addEventListener("click", (e) => { const p = document.getElementById("tp-nsy-pop"); if (p && !p.contains(e.target)) tp_nsyHidePop(); });
+  let tp_nsyTimer = null;
+  function attachNsyWordClick(containerEl){
+    if (!containerEl || containerEl._nsyClick) return; containerEl._nsyClick = true;
+    containerEl.addEventListener("click", (e) => {
+      if (e.detail > 1) { clearTimeout(tp_nsyTimer); return; }              // နှစ်ချက်နှိပ် = အဘိဓာန်
+      if (!isNissayaOpen || !nsyEntries.length) return;
+      if (e.target.closest && e.target.closest("a,button,input,select,textarea")) return;
+      const cx = e.clientX, cy = e.clientY, px = e.pageX, py = e.pageY;
+      clearTimeout(tp_nsyTimer);
+      tp_nsyTimer = setTimeout(() => {
+        const sel = window.getSelection && String(window.getSelection()).trim(); if (sel) return;
+        const word = tp_getWordAtPoint(cx, cy); if (!word) return;
+        tp_nsyShowPop(word, tp_nsyFind(word), px, py);
+      }, 300);
+    });
+  }
+
   function attachDictDblClick(containerEl){
     if(!containerEl) return;
+    attachNsyWordClick(containerEl);
     containerEl.addEventListener("dblclick", async (e) => {
       const word = tp_getWordAtPoint(e.clientX, e.clientY);
       if(!word) return;
@@ -3050,7 +3109,7 @@ let isRomanPali = false;
               cb.addEventListener("click", () => tp_nissayaCopyPanel(chosen ? chosen.file : bookId, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null));
               edBox.appendChild(cb);
               const mb = document.createElement("button");
-              mb.textContent = nsyMmOnly ? "ပါဠိပြမည်" : "မြန်မာသာ"; mb.title = "ပါဠိစာလုံးများ ဖျောက်၍ မြန်မာအနက်သာ ပြမည် / ပြန်ပြမည်";
+              mb.textContent = nsyMmOnly ? "မူရင်း" : "မြန်မာ"; mb.title = "ပါဠိစာလုံးများ ဖျောက်၍ မြန်မာအနက်သာ ပြမည် / ပြန်ပြမည်";
               mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (nsyMmOnly ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
               mb.addEventListener("click", () => { nsyMmOnly = !nsyMmOnly; openNissaya(bookId, pageNum); });
               edBox.appendChild(mb);
@@ -3071,6 +3130,7 @@ let isRomanPali = false;
               }
               extractedHtml = extractedHtml.replace(startMarker, `<span class="tp-mm-highlight">${startMarker}</span>`);
               contentEl.innerHTML = await tp_nissayaLinkify(extractedHtml);
+              nsyEntries = tp_nsyBuildEntries(contentEl);
               if (nsyMmOnly) contentEl.querySelectorAll("b").forEach(bt => {       // ပါဠိ (စာလုံးမည်း) ဖျောက်၊ နောက်က "၊" ဖယ်
                 const nx = bt.nextSibling;
                 if (nx && nx.nodeType === 3) nx.nodeValue = nx.nodeValue.replace(/^\s*၊\s*/, "");
