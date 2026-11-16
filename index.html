@@ -1652,6 +1652,59 @@ let isRomanPali = false;
     box.classList.add("tp-open");
     box.querySelector("iframe").src = target;
   }
+  // ဘာသာဋီကာ စာအုပ်တွေ web ပေါ် တင်ပြီးသားဆိုလျှင် PDF မဖွင့်ဘဲ web စာကိုပဲ စာမျက်နှာအလိုက် ပြမည် (📕 ခလုပ်ဖြင့် PDF ကို ကြည့်ချင်သူ ကြည့်နိုင်)
+  // delta = web ဖိုင်ထဲက "(နိဿယစာအုပ် စာမျက်နှာ N)" နံပါတ် − အဘိဓာန်ညွှန်းထားသော စာမျက်နှာ (ဝေါဟာရတွေနှင့် တိုက်စစ်၍ သေချာပြီးသား)
+  const TP_BT_WEB = {
+    "KCYN_BT.pdf":   { file: "annya_sadda_16_sheet424", delta: 4,  name: "ကစ္စာယန ဘာသာဋီကာ" },
+    "BDCT_BT.pdf":   { file: "annya_sadda_17_sheet421", delta: 12, name: "ဘေဒစိန္တာဋီကာ" },
+    "KK_AT_BT_01.pdf": { file: "annya_vi_01_02_sheet429", delta: 0, name: "ကင်္ခါဘာသာဋီကာ (ပတွဲ)" },
+    "KK_AT_BT_02.pdf": { file: "annya_vi_01_02_sheet430", delta: 0, name: "ကင်္ခါဘာသာဋီကာ (ဒုတွဲ)" }
+  };
+  const tp_btWebCache = {};
+  async function tp_btWebPages(file){
+    if(tp_btWebCache[file]) return tp_btWebCache[file];
+    const html = await fetchText(cdnUrl(`${DATA_FOLDER}/${file}.html`));
+    const re = /<p[^>]*>\(နိဿယစာအုပ် စာမျက်နှာ ([၀-၉]+)\)<\/p>/g, marks = [];
+    let m; while((m = re.exec(html))) marks.push({ n: parseInt(tp_btToArabic(m[1]), 10), s: m.index, e: re.lastIndex });
+    const pages = {};
+    marks.forEach((mk, i) => {
+      const chunk = html.substring(mk.e, i + 1 < marks.length ? marks[i + 1].s : html.length).replace(/\[စာမျက်နှာ-[၀-၉]+\]/g, "").trim();
+      const key = chunk.replace(/<[^>]+>/g, "").slice(0, 30);
+      (pages[mk.n] = pages[mk.n] || {});
+      if(!pages[mk.n][key] || pages[mk.n][key].length < chunk.length) pages[mk.n][key] = chunk;     // ပါဠိစာမျက်နှာ အမျိုးမျိုးအောက်မှာ ထပ်ပါသော စာကို တစ်ခါပဲ ထား
+    });
+    const out = {}; Object.keys(pages).forEach(n => out[n] = Object.values(pages[n]).join(""));
+    return tp_btWebCache[file] = out;
+  }
+  function tp_btWebBox(){
+    let box = document.getElementById("tp-btweb-box");
+    if(box) return box;
+    box = document.createElement("div"); box.id = "tp-btweb-box";
+    box.style.cssText = "position:fixed;top:64px;right:16px;width:min(560px,94vw);height:78vh;z-index:2052;display:none;flex-direction:column;background:#fffdf7;border:1px solid #b8a77a;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.3);";
+    box.innerHTML = `<div class="tbw-head" style="display:flex;align-items:center;justify-content:space-between;gap:6px;padding:6px 10px;background:#efe6cc;border-radius:10px 10px 0 0;font-size:14px;"><span class="tbw-title" style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span><span style="white-space:nowrap;"><span data-a="prev" title="ရှေ့စာမျက်နှာ" style="cursor:pointer;padding:0 7px;">◀</span><span data-a="next" title="နောက်စာမျက်နှာ" style="cursor:pointer;padding:0 7px;">▶</span><span data-a="pdf" title="PDF စာအုပ်ကို ဤစာမျက်နှာဖြင့် ဖွင့်ရန်" style="cursor:pointer;padding:0 7px;">📕</span><span data-a="close" title="ပိတ်ရန်" style="cursor:pointer;padding:0 7px;">✕</span></span></div><div class="tbw-body" style="flex:1;overflow-y:auto;padding:10px 14px;line-height:1.9;font-size:17px;"></div>`;
+    document.body.appendChild(box);
+    box.querySelector('[data-a="close"]').addEventListener("click", () => { box.style.display = "none"; });
+    return box;
+  }
+  async function tp_btOpenWeb(file, n){      // file = "KK_AT_BT_01.pdf", n = အဘိဓာန်ညွှန်းထားသော စာမျက်နှာ
+    const w = TP_BT_WEB[file], bk = TP_BT_BOOKS.find(b => b.file === file) || { page_offset: 0 };
+    const box = tp_btWebBox(), body = box.querySelector(".tbw-body");
+    tp_sayHideForPhone();
+    box.style.display = "flex";
+    const pdfUrl = (TP_BT_LOC[file] || TP_BT_BASE) + file + "#page=" + (n + (bk.page_offset || 0));
+    const title = w.name + " — စာမျက်နှာ " + n;
+    box.querySelector(".tbw-title").textContent = "📖 " + title;
+    box.querySelector('[data-a="pdf"]').onclick = () => tp_btOpenPdf(pdfUrl, title);
+    box.querySelector('[data-a="prev"]').onclick = () => { if(n > 1) tp_btOpenWeb(file, n - 1); };
+    box.querySelector('[data-a="next"]').onclick = () => tp_btOpenWeb(file, n + 1);
+    body.innerHTML = "<p style='color:#888'>ဖတ်နေသည်...</p>";
+    try{
+      const pages = await tp_btWebPages(w.file);
+      const html = pages[n + w.delta];
+      body.innerHTML = html ? html : "<p style='color:#a33'>ဤစာမျက်နှာကို web ပေါ် မတင်ရသေးပါ။ အပေါ်က 📕 ကို နှိပ်၍ PDF ဖြင့် ကြည့်နိုင်ပါသည်။</p>";
+      body.scrollTop = 0;
+    }catch(e){ body.innerHTML = "<p style='color:#a33'>ဖိုင်ဖတ်မရပါ (" + tp_sayEsc(e.message) + ")</p>"; }
+  }
   async function tp_btRun(q){
     const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
     if(!String(q).trim()){ status.textContent = ""; body.innerHTML = ""; return; }
@@ -1677,8 +1730,9 @@ let isRomanPali = false;
     body.querySelector(".tp-say-back").addEventListener("click", back);
     const avail = await tp_btAvail();
     const cards = entry.refs.map((r, i) => {
-      const can = r.url !== "#" && (!r.file || avail.has(r.file));
-      const note = r.url === "#" ? "[မှတ်တမ်း မပြည့်စုံ]" : (can ? "" : "[PDF မတင်ရသေးပါ]");
+      const web = r.file && TP_BT_WEB[r.file] && /\d/.test(tp_btToArabic(r.page));
+      const can = web || (r.url !== "#" && (!r.file || avail.has(r.file)));
+      const note = web ? "" : (r.url === "#" ? "[မှတ်တမ်း မပြည့်စုံ]" : (can ? "" : "[PDF မတင်ရသေးပါ]"));
       return `<div class="tp-say-item" data-i="${i}" style="${can ? "" : "opacity:.55;cursor:not-allowed;"}">
         <b>${tp_sayEsc(r.book)}</b> ${note ? `<span class="tp-say-note">${note}</span>` : ""}
         <div style="font-size:12.5px;color:#666;">စာမျက်နှာ: ${tp_sayEsc(r.page)} ${can ? "· 📖 ဖွင့်ရန်နှိပ်ပါ" : ""}</div></div>`;
@@ -1689,6 +1743,7 @@ let isRomanPali = false;
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-item").forEach(el => el.addEventListener("click", () => {
       const r = entry.refs[+el.dataset.i];
+      if(r.file && TP_BT_WEB[r.file]){ const nm = tp_btToArabic(r.page).match(/\d+/); if(nm){ tp_btOpenWeb(r.file, parseInt(nm[0], 10)); return; } }
       if(r.url === "#" || (r.file && !avail.has(r.file))) return;
       tp_btOpenPdf(r.url, r.book + " — စာမျက်နှာ " + r.page);
     }));
