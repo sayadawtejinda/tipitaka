@@ -34,6 +34,17 @@
    "edition_of": "mula_vi_01"
   },
   {
+   "id": "mula_vi_01_bhasatika",
+   "title": "ပါရာဇိကပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3831504,
+   "date": "2026-11-16",
+   "edition_of": "mula_vi_01"
+  },
+  {
    "id": "mula_vi_02",
    "title": "ပါစိတ္တိယပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1400,5 +1411,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 37
+ "n_editions": 38
 }
