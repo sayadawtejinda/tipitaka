@@ -11,6 +11,12 @@
   {
    "label": "ပခုက္ကူမူ",
    "file": "mula_vi_01_pakhokku"
+  },
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "mula_vi_01_bhasatika",
+   "from": 1,
+   "to": 381
   }
  ],
  "mula_vi_02": [
