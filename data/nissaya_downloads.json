@@ -108,6 +108,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "mula_vi_04_bhasatika",
+   "title": "စူဠဝဂ္ဂပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4884214,
+   "date": "2026-11-16",
+   "edition_of": "mula_vi_04"
+  },
+  {
    "id": "mula_vi_05",
    "title": "ပရိဝါရပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1433,5 +1444,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 40
+ "n_editions": 41
 }
