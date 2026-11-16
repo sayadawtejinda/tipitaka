@@ -619,6 +619,12 @@
    "file": "attha_bi_02_sheet180",
    "from": 1,
    "to": 117
+  },
+  {
+   "label": "ဘာဋီမူ (ဒု)",
+   "file": "attha_bi_02_sheet181",
+   "from": 118,
+   "to": 309
   }
  ]
 }
