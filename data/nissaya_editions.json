@@ -792,5 +792,17 @@
    "from": 1,
    "to": 390
   }
+ ],
+ "mula_bi_02": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_bi_02"
+  },
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "mula_bi_02_bhasatika",
+   "from": 1,
+   "to": 453
+  }
  ]
 }
