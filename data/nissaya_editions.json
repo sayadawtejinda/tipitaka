@@ -998,5 +998,21 @@
    "from": 1,
    "to": 456
   }
+ ],
+ "annya_bi_03": [
+  {
+   "label": "မဟာစည်",
+   "file": "annya_bi_03",
+   "from": 1,
+   "to": 461
+  }
+ ],
+ "annya_bi_04": [
+  {
+   "label": "မဟာစည်",
+   "file": "annya_bi_04",
+   "from": 1,
+   "to": 535
+  }
  ]
 }
