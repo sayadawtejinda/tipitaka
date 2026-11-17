@@ -3519,7 +3519,9 @@
    "nsy_id": "001",
    "books": [
     "annya_vi_01_01"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:001 ဦးဗုဓ် (consistency 0.73, 133 anchors)",
   "found": {
@@ -3731,7 +3733,9 @@
    "books": [
     "annya_vi_05_01",
     "annya_vi_06_01"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:004 ဦးဗုဓ် (consistency 0.65, 2181 anchors)",
   "found": {
@@ -3804,7 +3808,9 @@
    "books": [
     "annya_vi_05_01",
     "annya_vi_06_01"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:005 မေဒိနီ (consistency 0.65, 964 anchors)",
   "found": {
@@ -4064,7 +4070,9 @@
    "nsy_id": "017",
    "books": [
     "annya_bi_06"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:017 တောင်မြို့ (consistency 0.79, 2857 anchors)",
   "found": {
@@ -4133,7 +4141,9 @@
    "nsy_id": "022",
    "books": [
     "annya_sadda_01"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:022 ဘာသာဋီကာ (ပ) (consistency 0.56, 1455 anchors)",
   "found": {
@@ -4494,7 +4504,9 @@
    "nsy_id": "031",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:031 ဂဏ္ဌိ (ပ) (consistency 0.70, 1353 anchors)",
   "found": {
@@ -4563,7 +4575,9 @@
    "nsy_id": "032",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:032 ဂဏ္ဌိ (ဒု) (consistency 0.57, 2281 anchors)",
   "found": {
@@ -4632,7 +4646,9 @@
    "nsy_id": "033",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:033 ဘာသာဋီကာ (ပ) (consistency 0.68, 2579 anchors)",
   "found": {
@@ -4701,7 +4717,9 @@
    "nsy_id": "034",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)",
   "found": {
@@ -17309,7 +17327,9 @@
    "nsy_id": "035",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:035 စည်ရှင် (consistency 0.94, 787 anchors)",
   "found": {
@@ -17379,7 +17399,9 @@
    "nsy_id": "037",
    "books": [
     "annya_sadda_03"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "annya_nsy 037 chosen by name (မောဂ္ဂလ္လာန်-၁ = အဘယာရာမ (ပ))"
  },
@@ -17400,7 +17422,9 @@
    "nsy_id": "038",
    "books": [
     "annya_sadda_03"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:038 အဘယာရာမ (ဒု) (consistency 0.87, 460 anchors)",
   "found": {
@@ -17469,7 +17493,9 @@
    "nsy_id": "053",
    "books": [
     "annya_sadda_11"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "annya_nsy 053 chosen by name (တောင်ပေါက်-အဘိဓာန်)"
  }
