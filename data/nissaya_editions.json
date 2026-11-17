@@ -906,5 +906,17 @@
    "from": 1,
    "to": 136
   }
+ ],
+ "attha_vi_05": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_vi_05"
+  },
+  {
+   "label": "ဘာဋီ",
+   "file": "attha_vi_05_sheet090",
+   "from": 137,
+   "to": 265
+  }
  ]
 }
