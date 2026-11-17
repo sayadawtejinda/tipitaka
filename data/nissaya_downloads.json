@@ -12,17 +12,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "mula_vi_01_bhurakyi",
-   "title": "ပါရာဇိကပါဠိ (ဘုရားကြီးမူ)",
-   "basket": "ပါဠိတော်",
-   "basket_key": "mula",
-   "category": "ဝိနည်းပိဋက",
-   "cat_key": "vi",
-   "size": 3863413,
-   "date": "2026-11-02",
-   "edition_of": "mula_vi_01"
-  },
-  {
    "id": "mula_vi_01_pakhokku",
    "title": "ပါရာဇိကပါဠိ (ပခုက္ကူမူ)",
    "basket": "ပါဠိတော်",
@@ -42,6 +31,17 @@
    "cat_key": "vi",
    "size": 3831504,
    "date": "2026-11-16",
+   "edition_of": "mula_vi_01"
+  },
+  {
+   "id": "mula_vi_01_bhurakyi",
+   "title": "ပါရာဇိကပါဠိ (ဘုရားကြီးမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3837321,
+   "date": "2026-11-17",
    "edition_of": "mula_vi_01"
   },
   {
