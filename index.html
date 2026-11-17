@@ -374,7 +374,8 @@ let isMmSplitOpen = false, mmViaMm = false, mmSplitIndex = null, mmSplitCache = 
 // { "mula_vi_01": [ {"label":"မူလနိဿယ","file":"mula_vi_01"}, {"label":"ဘုရားကြီးမူ","file":"mula_vi_01_bhurakyi"} ], ... }   (file = data/ ထဲက .html ဖိုင်အမည်၊ .html မပါ)
 let TP_NISSAYA_EDITIONS = { "mula_vi_01": [ {label:"မူလနိဿယ", file:"mula_vi_01"}, {label:"ဘုရားကြီးမူ", file:"mula_vi_01_bhurakyi"} ] };   // ဖိုင်ဖတ်မရလျှင် သုံးမည့် အရန်
 let tpEditionsLoaded = false;
-let nsyBtPdf = null;      // ဘာသာဋီကာ split view ဖွင့်ထားစဉ် 📕 ခလုပ်အတွက် PDF လင့်
+let nsyBtScroll = null;   // ဘာသာဋီကာ split view ဖွင့်လျှင် ရွှေ့ရမည့် နိဿယစာအုပ်စာမျက်နှာ
+let nsyBtPdf = null;     // ဘာသာဋီကာ split view ဖွင့်ထားစဉ် 📕 ခလုပ်အတွက် PDF လင့်
 let nissayaFile = null;  // ရွေးထားသော မူ (null = ပုံမှန် bookId)
 const TP_NISSAYA_FALLBACK = ["annya_bi_03", "annya_bi_04", "attha_di_01", "attha_di_02", "attha_di_03", "attha_ku_02_01", "attha_ku_02_02", "attha_sa_03", "attha_vi_01_01", "attha_vi_01_02", "attha_vi_02", "attha_vi_03", "attha_vi_04", "attha_vi_05", "mula_di_01", "mula_di_02", "mula_di_03", "mula_ma_01", "mula_ma_02", "mula_ma_03", "mula_vi_01", "mula_vi_02", "mula_vi_03", "mula_vi_04", "mula_vi_05", "tika_di_01_02", "tika_di_01_03", "tika_vi_05", "tika_vi_06"];     // data/nissaya_books.json မရရင် သုံးမည့် စာရင်း
 let tpNissayaIds = null;
@@ -1709,6 +1710,7 @@ let isRomanPali = false;
           const pdfUrl2 = (TP_BT_LOC[file] || TP_BT_BASE) + file + "#page=" + (n + (bk.page_offset || 0));
           tp_sayHideForPhone();
           isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; nissayaFile = w.file;
+          nsyBtScroll = target;
           nsyBtPdf = { url: pdfUrl2, title: w.name + " — စာမျက်နှာ " + n };
           await tp_sayOpenRef(bookId, parseInt(tp_btToArabic(mm[1]), 10));
           return;
@@ -3234,6 +3236,11 @@ let isRomanPali = false;
                 if (nx && nx.nodeType === 3) nx.nodeValue = nx.nodeValue.replace(/^\s*၊\s*/, "");
                 bt.remove();
               });
+              if (nsyBtScroll != null) {      // ဘာသာဋီကာ - ဆိုင်ရာ နိဿယစာအုပ်စာမျက်နှာသို့ အလိုအလျောက် ရွှေ့
+                const tg = "(နိဿယစာအုပ် စာမျက်နှာ " + toMyanmarDigits(nsyBtScroll) + ")";
+                const el = [...contentEl.querySelectorAll("p")].find(p => p.textContent.trim() === tg);
+                if (el) { nsyBtScroll = null; el.style.background = "#fff3b0"; setTimeout(() => el.scrollIntoView({ block: "start" }), 60); }
+              }
               contentEl.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", (e) => {
                 e.preventDefault();
                 if(a.dataset.mmbook){ closeAllDropdowns(); mmBackContext = null; openBurmeseTranslation(a.dataset.mmbook, null, +a.dataset.mmpage); }
