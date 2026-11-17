@@ -341,7 +341,14 @@ if __name__ == '__main__':
     per, rep, P = build(n)
     os.makedirs(outdir, exist_ok=True)
     cat = json.load(open(os.path.join(ROOT, 'catalog.json'), encoding='utf-8'))
-    edition = [r.get('edition') for r in cat if r['n'] == n][0] or ('နိဿယ-%s' % n)
+    _r = [r for r in cat if r['n'] == n][0]; edition = _r.get('edition')
+    if not edition:                                             # no edition on the sheet -> the nissaya book name stored in the db (nsy_books.name), e.g. 011 -> 'အခြေပြု'
+        try:
+            import sqlite3; _f = _r.get('final') or {}
+            _c = sqlite3.connect(os.path.join(os.path.dirname(ROOT), '%s_nsy.db' % _f['db']))
+            _q = _c.execute('select name from nsy_books where id=?', (_f['nsy_id'],)).fetchone(); edition = _q[0] if _q else None
+        except Exception: edition = None
+    edition = edition or ('နိဿယ-%s' % n)
     for book in sorted({b for b, _ in per}):                    # a sheet that covers two books (e.g. 113: attha_ma_01_01 + attha_ma_01_02) gives one web file per book
         path, slug = write_web_html(n, per, book, edition, outdir)
         json.dump({'book': book, 'edition': edition, 'file': os.path.splitext(os.path.basename(path))[0], 'sheet': n}, open(os.path.join(outdir, '%s_%s.meta.json' % (book, slug)), 'w', encoding='utf-8'), ensure_ascii=False)
