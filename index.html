@@ -374,7 +374,8 @@ let isMmSplitOpen = false, mmViaMm = false, mmSplitIndex = null, mmSplitCache = 
 // { "mula_vi_01": [ {"label":"မူလနိဿယ","file":"mula_vi_01"}, {"label":"ဘုရားကြီးမူ","file":"mula_vi_01_bhurakyi"} ], ... }   (file = data/ ထဲက .html ဖိုင်အမည်၊ .html မပါ)
 let TP_NISSAYA_EDITIONS = { "mula_vi_01": [ {label:"မူလနိဿယ", file:"mula_vi_01"}, {label:"ဘုရားကြီးမူ", file:"mula_vi_01_bhurakyi"} ] };   // ဖိုင်ဖတ်မရလျှင် သုံးမည့် အရန်
 let tpEditionsLoaded = false;
-let nissayaFile = null;   // ရွေးထားသော မူ (null = ပုံမှန် bookId)
+let nsyBtPdf = null;      // ဘာသာဋီကာ split view ဖွင့်ထားစဉ် 📕 ခလုပ်အတွက် PDF လင့်
+let nissayaFile = null;  // ရွေးထားသော မူ (null = ပုံမှန် bookId)
 const TP_NISSAYA_FALLBACK = ["annya_bi_03", "annya_bi_04", "attha_di_01", "attha_di_02", "attha_di_03", "attha_ku_02_01", "attha_ku_02_02", "attha_sa_03", "attha_vi_01_01", "attha_vi_01_02", "attha_vi_02", "attha_vi_03", "attha_vi_04", "attha_vi_05", "mula_di_01", "mula_di_02", "mula_di_03", "mula_ma_01", "mula_ma_02", "mula_ma_03", "mula_vi_01", "mula_vi_02", "mula_vi_03", "mula_vi_04", "mula_vi_05", "tika_di_01_02", "tika_di_01_03", "tika_vi_05", "tika_vi_06"];     // data/nissaya_books.json မရရင် သုံးမည့် စာရင်း
 let tpNissayaIds = null;
 let isRomanPali = false;
@@ -1661,6 +1662,7 @@ let isRomanPali = false;
     "KK_AT_BT_02.pdf": { file: "annya_vi_01_02_sheet430", delta: 0, name: "ကင်္ခါဘာသာဋီကာ (ဒုတွဲ)" }
   };
   const tp_btWebCache = {};
+  function TP_BT_WEB_FILES(){ return new Set(Object.values(TP_BT_WEB).map(x => x.file)); }
   let tp_btWebMapP = null;       // data/bhasatika_web.json (scripts/bt_web_map.py က စာအုပ်အသစ် တင်ပြီးတိုင်း တိုက်စစ်ထုတ်ပေး) ကို ပေါင်းထည့်
   function tp_btWebLoad(){
     if(!tp_btWebMapP) tp_btWebMapP = fetchJson(cdnUrl(`${DATA_FOLDER}/bhasatika_web.json`)).then(j => { if(j && typeof j === "object") TP_BT_WEB = Object.assign({}, TP_BT_WEB, j); }).catch(() => {});
@@ -1693,6 +1695,26 @@ let isRomanPali = false;
   }
   async function tp_btOpenWeb(file, n){      // file = "KK_AT_BT_01.pdf", n = အဘိဓာန်ညွှန်းထားသော စာမျက်နှာ
     const w = TP_BT_WEB[file], bk = TP_BT_BOOKS.find(b => b.file === file) || { page_offset: 0 };
+    // ဘာသာဋီကာကို 📖 နိဿယ (Split View) ထဲမှာ ဖွင့်မည် - ဘယ်ဘက်မှာ ပါဠိ၊ ညာဘက်မှာ ဘာသာဋီကာ (ဤဘာသာဋီကာစာမျက်နှာ ပါဝင်သော ပါဠိစာမျက်နှာသို့ သွား)
+    try{
+      await tp_loadEditions();
+      let bookId = null;
+      for(const k of Object.keys(TP_NISSAYA_EDITIONS)) if((TP_NISSAYA_EDITIONS[k] || []).some(e => e.file === w.file)){ bookId = k; break; }
+      if(bookId){
+        const html = await fetchText(cdnUrl(`${DATA_FOLDER}/${w.file}.html`));
+        const target = n + w.delta, mk = html.search(new RegExp("\\(နိဿယစာအုပ် စာမျက်နှာ " + toMyanmarDigits(target) + "\\)"));
+        const pm = mk >= 0 ? html.lastIndexOf("[စာမျက်နှာ-", mk) : -1;
+        const mm = pm >= 0 ? html.substring(pm, pm + 30).match(/\[စာမျက်နှာ-([၀-၉]+)\]/) : null;
+        if(mm){
+          const pdfUrl2 = (TP_BT_LOC[file] || TP_BT_BASE) + file + "#page=" + (n + (bk.page_offset || 0));
+          tp_sayHideForPhone();
+          isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; nissayaFile = w.file;
+          nsyBtPdf = { url: pdfUrl2, title: w.name + " — စာမျက်နှာ " + n };
+          await tp_sayOpenRef(bookId, parseInt(tp_btToArabic(mm[1]), 10));
+          return;
+        }
+      }
+    }catch(e){ /* split view မရလျှင် အောက်က floating box ဖြင့် ပြမည် */ }
     const box = tp_btWebBox(), body = box.querySelector(".tbw-body");
     tp_sayHideForPhone();
     box.style.display = "flex";
@@ -3182,6 +3204,13 @@ let isRomanPali = false;
               mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (nsyMmOnly ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
               mb.addEventListener("click", () => { nsyMmOnly = !nsyMmOnly; openNissaya(bookId, pageNum); });
               edBox.appendChild(mb);
+              if (nsyBtPdf && chosen && TP_BT_WEB_FILES().has(chosen.file)) {      // ဘာသာဋီကာ - 📕 PDF ဖြင့် ဖွင့်ရန်
+                const pb = document.createElement("button");
+                pb.textContent = "📕"; pb.title = "PDF စာအုပ်ကို ဤစာမျက်နှာဖြင့် ဖွင့်ရန်";
+                pb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #a33;background:transparent;color:#a33;";
+                pb.addEventListener("click", () => tp_btOpenPdf(nsyBtPdf.url, nsyBtPdf.title));
+                edBox.appendChild(pb);
+              }
           }
           const htmlText = await fetchText(cdnUrl(`${DATA_FOLDER}/${chosen ? chosen.file : bookId}.html`));
           const mmPageStr = toMyanmarDigits(pageNum);
@@ -3655,7 +3684,7 @@ let isRomanPali = false;
                   closeAllDropdowns(); 
                   const opt = allOptions[item.dataset.idx];
                   if(opt.action === "nissaya") {
-                      nissayaFile = null;                                  // မီနူးမှ ဖွင့်လျှင် ပထမမူ (မူလနိဿယ) ကို အရင်ပြ၊ မူပြောင်းရန် နိဿယအပိုင်း အပေါ်ဘက် ခလုပ်များ
+                      nissayaFile = null; nsyBtPdf = null;                 // မီနူးမှ ဖွင့်လျှင် ပထမမူ (မူလနိဿယ) ကို အရင်ပြ၊ မူပြောင်းရန် နိဿယအပိုင်း အပေါ်ဘက် ခလုပ်များ
                       openNissaya(bookId, pageNum);
                   } else if(opt.action === "mmsplit") {
                       mmViaMm = false;
