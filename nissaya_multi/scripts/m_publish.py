@@ -19,26 +19,34 @@ def git(*args, check=True, log=print):
     return r
 
 
-def publish(n, build=True, dry=False, log=print):
-    if build:
-        log('web ဖိုင် ထုတ်နေသည် (m_final)...')
-        r = subprocess.run([sys.executable, os.path.join(HERE, 'm_final.py'), str(n)], cwd=os.path.dirname(REPO) if False else REPO, capture_output=True, text=True, encoding='utf-8', errors='replace',
-                           env=dict(os.environ, PYTHONIOENCODING='utf-8'))
-        if r.returncode: raise RuntimeError('m_final failed: ' + (r.stderr or r.stdout)[-600:])
-        log((r.stdout.strip().splitlines() or [''])[-1])
-    metas = [f for f in os.listdir(os.path.join(ROOT, 'web')) if f.endswith('.meta.json')]
-    meta = None
-    for f in metas:
-        m = json.load(open(os.path.join(ROOT, 'web', f), encoding='utf-8'))
-        if m['sheet'] == n: meta = m
-    if not meta: raise RuntimeError('no web file for sheet %d - build it first' % n)
-    book, edition, fname = meta['book'], meta['edition'], meta['file']
+
+def nice_label(edition):
+    """label shown in the reader:  'Z05 044 ဦးဗုဓ် (ပ)-ပဒမာလာ' -> 'ဦးဗုဓ် (ပ)'  (the sheet code and the book title after the volume are dropped);  'ပြည် (ပ)' -> 'ပြည်မူ (ပ)' (edition + volume)"""
+    e = edition.strip(); e2 = re.sub(r'^Z\d+\s+\d+\s+', '', e).strip(); z = e2 != e
+    e2 = re.sub(r'^(.*?\([^)]*\))\s*[-–—].*$', lambda m_: m_.group(1), e2)
+    mm = re.match(r'^(.*?)\s*(\([^)]*\))\s*$', e2)
+    if mm and mm.group(1).strip():
+        b = mm.group(1).strip()
+        return (b if (z or b.endswith('မူ')) else b + 'မူ') + ' ' + mm.group(2)
+    return e2
+
+def _put_one(n, meta, dry, log):
+    data = os.path.join(REPO, 'data')
+    book, fname = meta['book'], meta['file']
+    edition = meta.get('edition') or ('နိဿယ-%s' % n)          # sheets without an edition name (347+) get a plain label
     src = os.path.join(ROOT, 'web', fname + '.html')
     if not os.path.exists(src): raise RuntimeError('missing ' + src)
-    data = os.path.join(REPO, 'data')
     dst = os.path.join(data, fname + '.html')
     shutil.copy2(src, dst)
     paths = ['data/%s.html' % fname]
+    if not dry:                                           # a copy of everything that goes to the web is kept in Downloads/Nissaya_Final/published_multi/ (the user's one home for the final files)
+        try:
+            keep = os.path.join(os.path.expanduser('~'), 'Downloads', 'Nissaya_Final', 'published_multi'); os.makedirs(keep, exist_ok=True)
+            shutil.copy2(src, os.path.join(keep, fname + '.html'))
+            mp = os.path.join(ROOT, 'web', fname + '.meta.json')
+            if os.path.exists(mp): shutil.copy2(mp, os.path.join(keep, fname + '.meta.json'))
+            log('final ဖိုင် သိမ်းပြီး: ' + os.path.join(keep, fname + '.html'))
+        except Exception as e: log('(final ဖိုင် မသိမ်းနိုင်ပါ: %s)' % e)
     # editions of this book offered by the web page
     ep = os.path.join(data, 'nissaya_editions.json')
     editions = json.load(open(ep, encoding='utf-8')) if os.path.exists(ep) else {}
@@ -50,10 +58,8 @@ def publish(n, build=True, dry=False, log=print):
     try:                                                  # Pali pages this file covers: the reader shows an edition only on the pages it has (e.g. vol.1 and vol.2 of one book)
         nums = [int(x.translate(str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789'))) for x in re.findall(r'\[စာမျက်နှာ-([၀-၉]+)\]', open(src, encoding='utf-8').read())]
         if nums: ent['from'], ent['to'] = min(nums), max(nums)
-        if nums:                                          # 'ပြည် (ပ)' -> 'ပြည်မူ (ပ)' (edition + volume; the reader shows only the volume that has the page)
-            mm_ = re.match(r'^(.*?)\s*(\([^)]*\))\s*$', edition)
-            if mm_ and mm_.group(1).strip(): b_ = mm_.group(1).strip(); ent['label'] = (b_ if b_.endswith('မူ') else b_ + 'မူ') + ' ' + mm_.group(2)
     except Exception: pass
+    ent['label'] = nice_label(edition)
     lst.append(ent)
     editions[book] = lst
     json.dump(editions, open(ep, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
@@ -66,6 +72,26 @@ def publish(n, build=True, dry=False, log=print):
         json.dump(books if isinstance(books, list) else books, open(bp, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
         paths.append('data/nissaya_books.json')
     log('web သို့ တင်မည့် ဖိုင်: ' + ', '.join(paths) + '  [မူ: ' + ' / '.join(e['label'] for e in lst) + ']')
+    return paths, lst
+
+
+def publish(n, build=True, dry=False, log=print, only_books=None):
+    if build:
+        log('web ဖိုင် ထုတ်နေသည် (m_final)...')
+        r = subprocess.run([sys.executable, os.path.join(HERE, 'm_final.py'), str(n)], cwd=os.path.dirname(REPO) if False else REPO, capture_output=True, text=True, encoding='utf-8', errors='replace',
+                           env=dict(os.environ, PYTHONIOENCODING='utf-8'))
+        if r.returncode: raise RuntimeError('m_final failed: ' + (r.stderr or r.stdout)[-600:])
+        log((r.stdout.strip().splitlines() or [''])[-1])
+    metas = [f for f in os.listdir(os.path.join(ROOT, 'web')) if f.endswith('.meta.json')]
+    mlist = []
+    for f in metas:
+        m = json.load(open(os.path.join(ROOT, 'web', f), encoding='utf-8'))
+        if m['sheet'] == n and (not only_books or m['book'] in only_books): mlist.append(m)
+    if not mlist: raise RuntimeError('no web file for sheet %d - build it first' % n)
+    paths = []; lst = []
+    for meta in mlist:                                    # one web file per book of the sheet
+        p_, l_ = _put_one(n, meta, dry, log); paths += [x for x in p_ if x not in paths]; lst += l_
+    book = '+'.join(m['book'] for m in mlist); fname = '+'.join(m['file'] for m in mlist)         # for the commit message
     if dry: log('(dry run - commit / push မလုပ်ပါ)'); return paths
     st = git('status', '--porcelain', '--', *paths).stdout.strip()
     if not st: log('ပြောင်းလဲမှု မရှိ - web ပေါ်မှာ အတူတူပင် ရှိပြီးသား'); return paths
