@@ -2378,6 +2378,17 @@
    "edition_of": "annya_sadda_01"
   },
   {
+   "id": "annya_sadda_01_sheet356",
+   "title": "ကစ္စာယနဗျာကရဏံ (ဘာသာဋီကာမူ (ဒု))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "သဒ္ဒါဆိုင်ရာ",
+   "cat_key": "sadda",
+   "size": 4215734,
+   "date": "2026-11-17",
+   "edition_of": "annya_sadda_01"
+  },
+  {
    "id": "annya_sadda_02_sheet362",
    "title": "ပဒရူပသိဒ္ဓိ (ဘာသာဋီကာမူ (ပ))",
    "basket": "အည",
@@ -2500,5 +2511,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 137
+ "n_editions": 138
 }
