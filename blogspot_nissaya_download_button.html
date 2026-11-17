@@ -16,8 +16,8 @@
     f.style.cssText = "position:absolute;top:0;left:0;width:100%;height:100%;border:0";
     f.setAttribute("allow", "autoplay; downloads");
     var x = document.createElement("button");
-    x.type = "button"; x.textContent = "✕ ပိတ်မည်";
-    x.style.cssText = "position:absolute;top:8px;right:8px;z-index:2;padding:6px 12px;border:1px solid #888;background:#fff;color:#222;border-radius:8px;font-size:15px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.3)";
+    x.type = "button"; x.textContent = "🏡"; x.title = "ပိတ်မည်"; x.setAttribute("aria-label", "ပိတ်မည်");
+    x.style.cssText = "position:absolute;top:8px;right:8px;z-index:2;padding:6px 12px;line-height:1;border:1px solid #888;background:#fff;color:#222;border-radius:8px;font-size:22px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.3)";
     x.addEventListener("click", close);
     box.appendChild(f); box.appendChild(x);
     document.body.appendChild(box); document.body.style.overflow = "hidden";
