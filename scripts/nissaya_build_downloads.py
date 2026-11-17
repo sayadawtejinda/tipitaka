@@ -7,6 +7,11 @@ every book that is on the web as a nissaya (data/nissaya_books.json) with its ti
 nissaya_publish.py runs this after every publish, so the page always lists new books and shows the new date of re-published ones.
 """
 import json, os, subprocess, sys, time
+if os.name == 'nt':                                   # no black console window flashing for each of the git calls below (it runs hundreds of them)
+    class _NoWinPopen(subprocess.Popen):
+        def __init__(self, *a, **k):
+            k.setdefault('creationflags', 0x08000000); super().__init__(*a, **k)
+    subprocess.Popen = _NoWinPopen
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 sys.stdout.reconfigure(encoding="utf-8")
 def J(p): return json.load(open(os.path.join(ROOT, p), encoding="utf-8"))
@@ -36,7 +41,13 @@ ed = J("data/nissaya_editions.json") if os.path.exists(os.path.join(ROOT, "data"
 by_id = {x["id"]: x for x in out}
 for book, eds in ed.items():
     base = by_id.get(book)
-    if not base: continue
+    if not base:                                      # a book that has only edition files (no original data/<book>.html), e.g. annya_bi_05_sheet353
+        m = meta.get(book)
+        if not m: continue
+        parts = book.split("_"); basket, cat = parts[0], parts[1] if len(parts) > 1 else ""
+        base = {"id": book, "title": m.get("name") or book, "basket": BASKET.get(basket, basket), "basket_key": basket,
+                "category": CAT.get(m.get("category", cat), CAT.get(cat, cat)), "cat_key": cat, "size": 0, "date": "",
+                "order": [list(BASKET).index(basket) if basket in BASKET else 9, ORDER.get(cat, 9), book]}
     for e in eds:
         f = e["file"]
         if f == book or f in by_id: continue
