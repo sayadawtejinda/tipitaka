@@ -2182,6 +2182,17 @@
    "edition_of": "tika_bi_03"
   },
   {
+   "id": "tika_bi_03_sheet212",
+   "title": "ပဉ္စပကရဏမူလဋီကာ (ဘာဋီမူ (ပ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 943213,
+   "date": "2026-11-17",
+   "edition_of": "tika_bi_03"
+  },
+  {
    "id": "annya_vi_01_02_sheet429",
    "title": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ (ဘာသာဋီကာ (ပ))",
    "basket": "အည",
@@ -2445,5 +2456,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 132
+ "n_editions": 133
 }
