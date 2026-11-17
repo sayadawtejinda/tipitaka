@@ -1654,13 +1654,18 @@ let isRomanPali = false;
   }
   // ဘာသာဋီကာ စာအုပ်တွေ web ပေါ် တင်ပြီးသားဆိုလျှင် PDF မဖွင့်ဘဲ web စာကိုပဲ စာမျက်နှာအလိုက် ပြမည် (📕 ခလုပ်ဖြင့် PDF ကို ကြည့်ချင်သူ ကြည့်နိုင်)
   // delta = web ဖိုင်ထဲက "(နိဿယစာအုပ် စာမျက်နှာ N)" နံပါတ် − အဘိဓာန်ညွှန်းထားသော စာမျက်နှာ (ဝေါဟာရတွေနှင့် တိုက်စစ်၍ သေချာပြီးသား)
-  const TP_BT_WEB = {
+  let TP_BT_WEB = {
     "KCYN_BT.pdf":   { file: "annya_sadda_16_sheet424", delta: 4,  name: "ကစ္စာယန ဘာသာဋီကာ" },
     "BDCT_BT.pdf":   { file: "annya_sadda_17_sheet421", delta: 12, name: "ဘေဒစိန္တာဋီကာ" },
     "KK_AT_BT_01.pdf": { file: "annya_vi_01_02_sheet429", delta: 0, name: "ကင်္ခါဘာသာဋီကာ (ပတွဲ)" },
     "KK_AT_BT_02.pdf": { file: "annya_vi_01_02_sheet430", delta: 0, name: "ကင်္ခါဘာသာဋီကာ (ဒုတွဲ)" }
   };
   const tp_btWebCache = {};
+  let tp_btWebMapP = null;       // data/bhasatika_web.json (scripts/bt_web_map.py က စာအုပ်အသစ် တင်ပြီးတိုင်း တိုက်စစ်ထုတ်ပေး) ကို ပေါင်းထည့်
+  function tp_btWebLoad(){
+    if(!tp_btWebMapP) tp_btWebMapP = fetchJson(cdnUrl(`${DATA_FOLDER}/bhasatika_web.json`)).then(j => { if(j && typeof j === "object") TP_BT_WEB = Object.assign({}, TP_BT_WEB, j); }).catch(() => {});
+    return tp_btWebMapP;
+  }
   async function tp_btWebPages(file){
     if(tp_btWebCache[file]) return tp_btWebCache[file];
     const html = await fetchText(cdnUrl(`${DATA_FOLDER}/${file}.html`));
@@ -1729,6 +1734,7 @@ let isRomanPali = false;
     body.innerHTML = `<div class="tp-say-back">← ဝေါဟာရများသို့ ပြန်မည်</div><div class="tp-say-detail-title">${tp_sayEsc(entry.keyword)}</div><div class="tp-fts-status">ဖတ်နေသည်...</div>`;
     body.querySelector(".tp-say-back").addEventListener("click", back);
     const avail = await tp_btAvail();
+    await tp_btWebLoad();
     const cards = entry.refs.map((r, i) => {
       const web = r.file && TP_BT_WEB[r.file] && /\d/.test(tp_btToArabic(r.page));
       const can = web || (r.url !== "#" && (!r.file || avail.has(r.file)));

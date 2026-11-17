@@ -1,0 +1,114 @@
+{
+ "KCYN_BT.pdf": {
+  "file": "annya_sadda_16_sheet424",
+  "delta": 4,
+  "name": "ကစ္စာယန ဘာသာဋီကာ",
+  "fit": "33/40",
+  "pages": "5-113"
+ },
+ "BDCT_BT.pdf": {
+  "file": "annya_sadda_17_sheet421",
+  "delta": 12,
+  "name": "ဘေဒစိန္တာဋီကာ",
+  "fit": "26/47",
+  "pages": "13-382"
+ },
+ "KK_AT_BT_01.pdf": {
+  "file": "annya_vi_01_02_sheet429",
+  "delta": 0,
+  "name": "ကင်္ခါဘာသာဋီကာ (ပတွဲ)",
+  "fit": "235/269",
+  "pages": "1-469"
+ },
+ "KK_AT_BT_02.pdf": {
+  "file": "annya_vi_01_02_sheet430",
+  "delta": 0,
+  "name": "ကင်္ခါဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "144/158",
+  "pages": "1-410"
+ },
+ "ATSLN_BT_01.pdf": {
+  "file": "attha_bi_01_sheet176",
+  "delta": 0,
+  "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "224/258",
+  "pages": "1-382"
+ },
+ "ATSLN_BT_02.pdf": {
+  "file": "attha_bi_01_sheet177",
+  "delta": 0,
+  "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "140/154",
+  "pages": "1-501"
+ },
+ "ATSLN_BT_03.pdf": {
+  "file": "attha_bi_01_sheet178",
+  "delta": 0,
+  "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (တ တွဲ)",
+  "fit": "113/131",
+  "pages": "1-426"
+ },
+ "ATSLN_BT_04.pdf": {
+  "file": "attha_bi_01_sheet179",
+  "delta": 0,
+  "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (စ တွဲ)",
+  "fit": "133/149",
+  "pages": "1-331"
+ },
+ "SMH_AT_BT_01.pdf": {
+  "file": "attha_bi_02_sheet180",
+  "delta": 0,
+  "name": "သမ္မောဟဝိနောဒနီ ဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "66/86",
+  "pages": "1-347"
+ },
+ "SMH_AT_BT_02.pdf": {
+  "file": "attha_bi_02_sheet181",
+  "delta": 0,
+  "name": "သမ္မောဟဝိနောဒနီ ဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "51/65",
+  "pages": "1-516"
+ },
+ "SMH_AT_BT_03.pdf": {
+  "file": "attha_bi_02_sheet182",
+  "delta": 0,
+  "name": "သမ္မောဟဝိနောဒနီ ဘာသာဋီကာ (တ တွဲ)",
+  "fit": "54/72",
+  "pages": "1-458"
+ },
+ "DTKT_AT_BT.pdf": {
+  "file": "attha_bi_03_sheet183",
+  "delta": 0,
+  "name": "ဓာတုကထာ/ပုဂ္ဂလပညတ္တိအဋ္ဌကထာဘာသာဋီကာ",
+  "fit": "41/48",
+  "pages": "1-286"
+ },
+ "KTVT_AT_BT_01.pdf": {
+  "file": "attha_bi_03_sheet184",
+  "delta": -2,
+  "name": "ကထာဝတ္ထုအဋ္ဌကထာ ဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "14/17",
+  "pages": "1-276"
+ },
+ "KTVT_AT_BT_02.pdf": {
+  "file": "attha_bi_03_sheet185",
+  "delta": -2,
+  "name": "ကထာဝတ္ထုအဋ္ဌကထာ ဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "7/8",
+  "pages": "1-186"
+ },
+ "YMK_AT_BT.pdf": {
+  "file": "attha_bi_03_sheet186",
+  "delta": -2,
+  "name": "ယမကအဋ္ဌကထာဘာသာဋီကာ",
+  "fit": "6/9",
+  "pages": "1-162"
+ },
+ "PHT_AT_BT.pdf": {
+  "file": "attha_bi_03_sheet187",
+  "delta": -2,
+  "name": "ပဋ္ဌာနအဋ္ဌကထာဘာသာဋီကာ",
+  "fit": "7/8",
+  "pages": "1-386"
+ }
+}
