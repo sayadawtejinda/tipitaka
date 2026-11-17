@@ -3401,5 +3401,292 @@
    ]
   },
   "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)"
+ },
+ "502": {
+  "n": 502,
+  "sheet": "ဇာ၊ဋ္ဌ၊၇",
+  "pali_guess": [
+   "attha_ku_zat_07",
+   "attha_ku_zat_06"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "105",
+   "name": "ဒန့်တိုင်",
+   "category": "ဇာတက (၇)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_07"
+   ],
+   "offset": null,
+   "share": 0,
+   "samples": 0,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "106",
+   "name": "ဒန့်တိုင်",
+   "category": "ဇာတက (၇)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_07"
+   ],
+   "offset": null,
+   "share": 0,
+   "samples": 0,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id"
+ },
+ "503": {
+  "n": 503,
+  "sheet": "Sheet140",
+  "pali_guess": [
+   "attha_ku_zat_06",
+   "attha_ku_zat_04"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "098",
+   "name": "ဒန့်တိုင်",
+   "category": "ဇာတက (၆)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_06"
+   ],
+   "offset": null,
+   "share": 0,
+   "samples": 0,
+   "name_match": false,
+   "rule_offset": 1
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "099",
+   "name": "ဒန့်တိုင်",
+   "category": "ဇာတက (၆)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_06"
+   ],
+   "offset": null,
+   "share": 0,
+   "samples": 0,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 7,
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id"
+ },
+ "504": {
+  "n": 504,
+  "sheet": "Sheet141",
+  "pali_guess": [
+   "annya_bi_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "122",
+   "name": "ပြည် (ပ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": null,
+   "share": 0,
+   "samples": 0,
+   "name_match": false,
+   "rule_offset": 171
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "123",
+   "name": "ပြည် (ဒု)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": null,
+   "share": 0,
+   "samples": 0,
+   "name_match": false,
+   "rule_offset": 41
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id"
+ },
+ "505": {
+  "n": 505,
+  "sheet": "Sheet95",
+  "pali_guess": [
+   "annya_vi_10",
+   "tika_vi_04"
+  ],
+  "ok": false,
+  "best": null,
+  "second": null,
+  "tried": 0,
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id"
+ },
+ "506": {
+  "n": 506,
+  "sheet": "စည်ရှင်-ရူပသိဒ္ဓိ",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_06"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "035",
+   "name": "စည်ရှင်",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -1,
+   "share": 0.94,
+   "samples": 787,
+   "name_match": true,
+   "rule_offset": 11
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "033",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 86,
+   "share": 0.16,
+   "samples": 364,
+   "name_match": false,
+   "rule_offset": 20
+  },
+  "tried": 5,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "035",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:035 စည်ရှင် (consistency 0.94, 787 anchors)"
+ },
+ "507": {
+  "n": 507,
+  "sheet": "မောဂ္ဂလ္လာန်-၁",
+  "pali_guess": [
+   "annya_sadda_10",
+   "annya_sadda_06"
+  ],
+  "ok": false,
+  "best": null,
+  "second": null,
+  "tried": 0,
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id"
+ },
+ "508": {
+  "n": 508,
+  "sheet": "မောဂ္ဂလ္လာန်-၂",
+  "pali_guess": [
+   "annya_sadda_03",
+   "annya_sadda_10"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "038",
+   "name": "အဘယာရာမ (ဒု)",
+   "category": "မောဂ္ဂလ္လာန်",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_03"
+   ],
+   "offset": 0,
+   "share": 0.87,
+   "samples": 460,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "039",
+   "name": "အရိယဝံသ",
+   "category": "မောဂ္ဂလ္လာန်",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_03"
+   ],
+   "offset": 127,
+   "share": 0.2,
+   "samples": 5,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "tried": 4,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "038",
+   "books": [
+    "annya_sadda_03"
+   ]
+  },
+  "check": "id found by content: annya:038 အဘယာရာမ (ဒု) (consistency 0.87, 460 anchors)"
+ },
+ "509": {
+  "n": 509,
+  "sheet": "တောင်ပေါက်-အဘိဓာန်",
+  "pali_guess": [
+   "annya_sadda_11",
+   "annya_sadda_12"
+  ],
+  "ok": false,
+  "best": {
+   "db": "annya",
+   "nsy_id": "053",
+   "name": "တောင်ပေါက်",
+   "category": "အဘိဓာန်",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_11"
+   ],
+   "offset": -1,
+   "share": 0.33,
+   "samples": 660,
+   "name_match": true,
+   "rule_offset": 2
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "051",
+   "name": "ကျော်အောင်စံထား",
+   "category": "အဘိဓာန်",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_11"
+   ],
+   "offset": 141,
+   "share": 0.1,
+   "samples": 660,
+   "name_match": false,
+   "rule_offset": 158
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 0.33) - please tell me the id"
  }
 }

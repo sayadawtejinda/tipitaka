@@ -13,6 +13,4764 @@
   "check": "UNKNOWN"
  },
  {
+  "n": 400,
+  "file": "400.json",
+  "sheet": "Z01 039 အရိယဝံသ-မောဂ္ဂလ္လာန်-၁",
+  "rows": 358,
+  "edition": "Z01 039 အရိယဝံသ-မောဂ္ဂလ္လာန်-၁",
+  "sid": "039",
+  "excel_pages": 358,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "039",
+    "name": "အရိယဝံသ",
+    "category": "မောဂ္ဂလ္လာန်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_03",
+      "maprows": 53,
+      "pali_pages": [
+       1,
+       53
+      ],
+      "nsy_pages": [
+       24,
+       350
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "01",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "039",
+   "books": [
+    "annya_sadda_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 401,
+  "file": "401.json",
+  "sheet": "Z02 040 အရိယဝံသ-မောဂ္ဂလ္လာန်-၂",
+  "rows": 706,
+  "edition": "Z02 040 အရိယဝံသ-မောဂ္ဂလ္လာန်-၂",
+  "sid": "040",
+  "excel_pages": 706,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "040",
+    "name": "အရိယဝံသ",
+    "category": "မောဂ္ဂလ္လာန်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_03",
+      "maprows": 239,
+      "pali_pages": [
+       54,
+       292
+      ],
+      "nsy_pages": [
+       13,
+       661
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "02",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "040",
+   "books": [
+    "annya_sadda_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 402,
+  "file": "402.json",
+  "sheet": "Z03 041အဘယာရာမ-မောဂ္ဂလ္လာနပဉ္စိ",
+  "rows": 702,
+  "edition": "Z03 041အဘယာရာမ-မောဂ္ဂလ္လာနပဉ္စိ",
+  "sid": "041",
+  "excel_pages": 702,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "041",
+    "name": "အဘယာရာမ",
+    "category": "မောဂ္ဂလ္လာနပဉ္စိကာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_05",
+      "maprows": 286,
+      "pali_pages": [
+       1,
+       286
+      ],
+      "nsy_pages": [
+       0,
+       693
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "03",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "041",
+   "books": [
+    "annya_sadda_05"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 403,
+  "file": "403.json",
+  "sheet": "Z04 042 ဗန်းမော်-ပယောဂသိဒ္ဓိ",
+  "rows": 638,
+  "edition": "Z04 042 ဗန်းမော်-ပယောဂသိဒ္ဓိ",
+  "sid": "042",
+  "excel_pages": 638,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "042",
+    "name": "ဗန်းမော်",
+    "category": "ပယောဂသိဒ္ဓိ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_06",
+      "maprows": 304,
+      "pali_pages": [
+       1,
+       304
+      ],
+      "nsy_pages": [
+       0,
+       633
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "04",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "042",
+   "books": [
+    "annya_sadda_06"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 404,
+  "file": "404.json",
+  "sheet": "Z05 044 ဦးဗုဓ် (ပ)-ပဒမာလာ",
+  "rows": 644,
+  "edition": "Z05 044 ဦးဗုဓ် (ပ)-ပဒမာလာ",
+  "sid": "044",
+  "excel_pages": 644,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "044",
+    "name": "ဦးဗုဓ် (ပ)",
+    "category": "ပဒမာလာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_07",
+      "maprows": 222,
+      "pali_pages": [
+       1,
+       222
+      ],
+      "nsy_pages": [
+       81,
+       559
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "05",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "044",
+   "books": [
+    "annya_sadda_07"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 405,
+  "file": "405.json",
+  "sheet": "Z06 045 ဦးဗုဓ် (ဒု)-ပဒမာလာ",
+  "rows": 498,
+  "edition": "Z06 045 ဦးဗုဓ် (ဒု)-ပဒမာလာ",
+  "sid": "045",
+  "excel_pages": 498,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "045",
+    "name": "ဦးဗုဓ် (ဒု)",
+    "category": "ပဒမာလာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_07",
+      "maprows": 196,
+      "pali_pages": [
+       223,
+       418
+      ],
+      "nsy_pages": [
+       30,
+       225
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "06",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "045",
+   "books": [
+    "annya_sadda_07"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 406,
+  "file": "406.json",
+  "sheet": "Z07 046 ဦးဗုဓ် (ပ)-ဓာတုမာလာ",
+  "rows": 571,
+  "edition": "Z07 046 ဦးဗုဓ် (ပ)-ဓာတုမာလာ",
+  "sid": "046",
+  "excel_pages": 571,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "046",
+    "name": "ဦးဗုဓ် (ပ)",
+    "category": "ဓာတုမာလာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_08",
+      "maprows": 212,
+      "pali_pages": [
+       1,
+       212
+      ],
+      "nsy_pages": [
+       42,
+       520
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "07",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "046",
+   "books": [
+    "annya_sadda_08"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 407,
+  "file": "407.json",
+  "sheet": "Z08 047 ဦးဗုဓ် (ဒု)-ဓာတုမာလာ",
+  "rows": 439,
+  "edition": "Z08 047 ဦးဗုဓ် (ဒု)-ဓာတုမာလာ",
+  "sid": "047",
+  "excel_pages": 439,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "047",
+    "name": "ဦးဗုဓ် (ဒု)",
+    "category": "ဓာတုမာလာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_08",
+      "maprows": 180,
+      "pali_pages": [
+       212,
+       391
+      ],
+      "nsy_pages": [
+       33,
+       385
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "08",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "047",
+   "books": [
+    "annya_sadda_08"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 408,
+  "file": "408.json",
+  "sheet": "Z09 048 ဦးဗုဓ် (ပ)-သုတ္တမာလာ",
+  "rows": 455,
+  "edition": "Z09 048 ဦးဗုဓ် (ပ)-သုတ္တမာလာ",
+  "sid": "048",
+  "excel_pages": 455,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "048",
+    "name": "ဦးဗုဓ် (ပ)",
+    "category": "သုတ္တမာလာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_09",
+      "maprows": 230,
+      "pali_pages": [
+       1,
+       230
+      ],
+      "nsy_pages": [
+       3,
+       454
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "09",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "048",
+   "books": [
+    "annya_sadda_09"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 409,
+  "file": "409.json",
+  "sheet": "Z10 049 ဦးဗုဓ် (ဒု)-သုတ္တမာလာ",
+  "rows": 331,
+  "edition": "Z10 049 ဦးဗုဓ် (ဒု)-သုတ္တမာလာ",
+  "sid": "049",
+  "excel_pages": 331,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "049",
+    "name": "ဦးဗုဓ် (ဒု)",
+    "category": "သုတ္တမာလာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_09",
+      "maprows": 259,
+      "pali_pages": [
+       230,
+       488
+      ],
+      "nsy_pages": [
+       3,
+       360
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "10",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "049",
+   "books": [
+    "annya_sadda_09"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 410,
+  "file": "410.json",
+  "sheet": "Z11 051 ကျော်အောင်စံထား-အဘိဓာန်",
+  "rows": 689,
+  "edition": "Z11 051 ကျော်အောင်စံထား-အဘိဓာန်",
+  "sid": "051",
+  "excel_pages": 689,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "051",
+    "name": "ကျော်အောင်စံထား",
+    "category": "အဘိဓာန်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_11",
+      "maprows": 151,
+      "pali_pages": [
+       1,
+       151
+      ],
+      "nsy_pages": [
+       159,
+       675
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "11",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "051",
+   "books": [
+    "annya_sadda_11"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 411,
+  "file": "411.json",
+  "sheet": "Z12 052 အဘယာရာမ-အဘိဓာန်",
+  "rows": 497,
+  "edition": "Z12 052 အဘယာရာမ-အဘိဓာန်",
+  "sid": "052",
+  "excel_pages": 497,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "052",
+    "name": "အဘယာရာမ",
+    "category": "အဘိဓာန်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_11",
+      "maprows": 151,
+      "pali_pages": [
+       1,
+       151
+      ],
+      "nsy_pages": [
+       18,
+       422
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "12",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "052",
+   "books": [
+    "annya_sadda_11"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 412,
+  "file": "412.json",
+  "sheet": "Z13 054 ပခုက္ကူ-အဘိဓာန်",
+  "rows": 885,
+  "edition": "Z13 054 ပခုက္ကူ-အဘိဓာန်",
+  "sid": "054",
+  "excel_pages": 885,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "054",
+    "name": "ပခုက္ကူ",
+    "category": "အဘိဓာန်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_11",
+      "maprows": 151,
+      "pali_pages": [
+       1,
+       151
+      ],
+      "nsy_pages": [
+       37,
+       758
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "13",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "054",
+   "books": [
+    "annya_sadda_11"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 413,
+  "file": "413.json",
+  "sheet": "Z14 055 မောင်းထောင် (ပ)-အဘိဓာန်",
+  "rows": 568,
+  "edition": "Z14 055 မောင်းထောင် (ပ)-အဘိဓာန်",
+  "sid": "055",
+  "excel_pages": 568,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "055",
+    "name": "မောင်းထောင် (ပ)",
+    "category": "အဘိဓာန်ဋီကာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_12",
+      "maprows": 282,
+      "pali_pages": [
+       1,
+       282
+      ],
+      "nsy_pages": [
+       5,
+       565
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "14",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "055",
+   "books": [
+    "annya_sadda_12"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 414,
+  "file": "414.json",
+  "sheet": "Z15 056 မောင်းထောင် (ဒု)-အဘိဓာန",
+  "rows": 599,
+  "edition": "Z15 056 မောင်းထောင် (ဒု)-အဘိဓာန",
+  "sid": "056",
+  "excel_pages": 599,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "056",
+    "name": "မောင်းထောင် (ဒု)",
+    "category": "အဘိဓာန်ဋီကာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_12",
+      "maprows": 339,
+      "pali_pages": [
+       283,
+       621
+      ],
+      "nsy_pages": [
+       5,
+       575
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "15",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "056",
+   "books": [
+    "annya_sadda_12"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 415,
+  "file": "415.json",
+  "sheet": "Z16 061 ဦးဗုဓ်-ဆန်း",
+  "rows": 124,
+  "edition": "Z16 061 ဦးဗုဓ်-ဆန်း",
+  "sid": "061",
+  "excel_pages": 124,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "061",
+    "name": "ဦးဗုဓ်",
+    "category": "ဆန်း",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_13",
+      "maprows": 35,
+      "pali_pages": [
+       1,
+       35
+      ],
+      "nsy_pages": [
+       5,
+       106
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "16",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "061",
+   "books": [
+    "annya_sadda_13"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 416,
+  "file": "416.json",
+  "sheet": "Z17 062 သိရီကုမာရ-ဆန်း",
+  "rows": 213,
+  "edition": "Z17 062 သိရီကုမာရ-ဆန်း",
+  "sid": "062",
+  "excel_pages": 213,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "062",
+    "name": "သိရီကုမာရ",
+    "category": "ဆန်း",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_13",
+      "maprows": 35,
+      "pali_pages": [
+       1,
+       35
+      ],
+      "nsy_pages": [
+       32,
+       198
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "17",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "062",
+   "books": [
+    "annya_sadda_13"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 417,
+  "file": "417.json",
+  "sheet": "Z18 063 မေဒနီ-ဆန်း",
+  "rows": 275,
+  "edition": "Z18 063 မေဒနီ-ဆန်း",
+  "sid": "063",
+  "excel_pages": 275,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "063",
+    "name": "မေဒနီ",
+    "category": "ဆန်း",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_13",
+      "maprows": 35,
+      "pali_pages": [
+       1,
+       35
+      ],
+      "nsy_pages": [
+       22,
+       236
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "18",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "063",
+   "books": [
+    "annya_sadda_13"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 418,
+  "file": "418.json",
+  "sheet": "Z19 071 ဘာသာဋီကာ-အလင်္ကာ",
+  "rows": 614,
+  "edition": "Z19 071 ဘာသာဋီကာ-အလင်္ကာ",
+  "sid": "071",
+  "excel_pages": 614,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "071",
+    "name": "ဘာသာဋီကာ",
+    "category": "အလင်္ကာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_14",
+      "maprows": 77,
+      "pali_pages": [
+       1,
+       77
+      ],
+      "nsy_pages": [
+       39,
+       600
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "19",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "071",
+   "books": [
+    "annya_sadda_14"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 419,
+  "file": "419.json",
+  "sheet": "Z20 072 ပန်းကုံး-အလင်္ကာ",
+  "rows": 500,
+  "edition": "Z20 072 ပန်းကုံး-အလင်္ကာ",
+  "sid": "072",
+  "excel_pages": 500,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "072",
+    "name": "ပန်းကုံး",
+    "category": "အလင်္ကာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_14",
+      "maprows": 77,
+      "pali_pages": [
+       1,
+       77
+      ],
+      "nsy_pages": [
+       26,
+       435
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "20",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "072",
+   "books": [
+    "annya_sadda_14"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 420,
+  "file": "420.json",
+  "sheet": "Z21 073 မေဒနီ-အလင်္ကာ",
+  "rows": 470,
+  "edition": "Z21 073 မေဒနီ-အလင်္ကာ",
+  "sid": "073",
+  "excel_pages": 470,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "073",
+    "name": "မေဒနီ",
+    "category": "အလင်္ကာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_14",
+      "maprows": 77,
+      "pali_pages": [
+       1,
+       77
+      ],
+      "nsy_pages": [
+       9,
+       442
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "21",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "073",
+   "books": [
+    "annya_sadda_14"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 421,
+  "file": "421.json",
+  "sheet": "Z22 081 ဘာသာဋီကာ-ဘေဒစိန္တာ",
+  "rows": 384,
+  "edition": "Z22 081 ဘာသာဋီကာ-ဘေဒစိန္တာ",
+  "sid": "081",
+  "excel_pages": 384,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "081",
+    "name": "ဘာသာဋီကာ",
+    "category": "ဘေဒစိန္တာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_17",
+      "maprows": 80,
+      "pali_pages": [
+       1,
+       80
+      ],
+      "nsy_pages": [
+       13,
+       380
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "22",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "081",
+   "books": [
+    "annya_sadda_17"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 422,
+  "file": "422.json",
+  "sheet": "Z23 082 အဝဗောဓိ-ဘေဒစိန္တာ",
+  "rows": 329,
+  "edition": "Z23 082 အဝဗောဓိ-ဘေဒစိန္တာ",
+  "sid": "082",
+  "excel_pages": 329,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "082",
+    "name": "အဝဗောဓိ",
+    "category": "ဘေဒစိန္တာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_17",
+      "maprows": 80,
+      "pali_pages": [
+       1,
+       80
+      ],
+      "nsy_pages": [
+       18,
+       325
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "23",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "082",
+   "books": [
+    "annya_sadda_17"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 423,
+  "file": "423.json",
+  "sheet": "Z24 083 မစိုးရိမ်-ဘေဒစိန္တာ",
+  "rows": 300,
+  "edition": "Z24 083 မစိုးရိမ်-ဘေဒစိန္တာ",
+  "sid": "083",
+  "excel_pages": 300,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "083",
+    "name": "မစိုးရိမ်",
+    "category": "ဘေဒစိန္တာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_17",
+      "maprows": 80,
+      "pali_pages": [
+       1,
+       80
+      ],
+      "nsy_pages": [
+       3,
+       301
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "24",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "083",
+   "books": [
+    "annya_sadda_17"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 424,
+  "file": "424.json",
+  "sheet": "Z25 085 ဘာသာဋီကာ-ကစ္စာယနသာရ",
+  "rows": 114,
+  "edition": "Z25 085 ဘာသာဋီကာ-ကစ္စာယနသာရ",
+  "sid": "085",
+  "excel_pages": 114,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "085",
+    "name": "ဘာသာဋီကာ",
+    "category": "ကစ္စာယနသာရ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_16",
+      "maprows": 15,
+      "pali_pages": [
+       1,
+       15
+      ],
+      "nsy_pages": [
+       5,
+       111
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "25",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "085",
+   "books": [
+    "annya_sadda_16"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 425,
+  "file": "425.json",
+  "sheet": "Z26 091 ဆင်တဲ (ပ)-နျာသ",
+  "rows": 395,
+  "edition": "Z26 091 ဆင်တဲ (ပ)-နျာသ",
+  "sid": "091",
+  "excel_pages": 395,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "091",
+    "name": "ဆင်တဲ (ပ)",
+    "category": "နျာသ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_18",
+      "maprows": 193,
+      "pali_pages": [
+       1,
+       193
+      ],
+      "nsy_pages": [
+       0,
+       394
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "26",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "091",
+   "books": [
+    "annya_sadda_18"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 426,
+  "file": "426.json",
+  "sheet": "Z27 092 ဆင်တဲ (ဒု)-နျာသ",
+  "rows": 537,
+  "edition": "Z27 092 ဆင်တဲ (ဒု)-နျာသ",
+  "sid": "092",
+  "excel_pages": 537,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "092",
+    "name": "ဆင်တဲ (ဒု)",
+    "category": "နျာသ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_18",
+      "maprows": 270,
+      "pali_pages": [
+       194,
+       463
+      ],
+      "nsy_pages": [
+       0,
+       533
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "27",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "092",
+   "books": [
+    "annya_sadda_18"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 427,
+  "file": "427.json",
+  "sheet": "Z28 108 ကျောင်းတောင်တောရ-ဝိနယာလ",
+  "rows": 799,
+  "edition": "Z28 108 ကျောင်းတောင်တောရ-ဝိနယာလ",
+  "sid": "108",
+  "excel_pages": 799,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "108",
+    "name": "ကျောင်းတောင်တောရ",
+    "category": "ဝိနယာလင်္ကာရ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_07",
+      "maprows": 424,
+      "pali_pages": [
+       1,
+       424
+      ],
+      "nsy_pages": [
+       19,
+       796
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "28",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "108",
+   "books": [
+    "annya_vi_07"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 428,
+  "file": "428.json",
+  "sheet": "Z29 109 ကျောင်းတောင်တောရ-ဝိနယာလ",
+  "rows": 715,
+  "edition": "Z29 109 ကျောင်းတောင်တောရ-ဝိနယာလ",
+  "sid": "109",
+  "excel_pages": 715,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "109",
+    "name": "ကျောင်းတောင်တောရ",
+    "category": "ဝိနယာလင်္ကာရ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_08",
+      "maprows": 431,
+      "pali_pages": [
+       1,
+       431
+      ],
+      "nsy_pages": [
+       11,
+       699
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "29",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "109",
+   "books": [
+    "annya_vi_08"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 429,
+  "file": "429.json",
+  "sheet": "Z30 111 ဘာသာဋီကာ(ပ)-ကင်္ခါအဋ္ဌက",
+  "rows": 469,
+  "edition": "Z30 111 ဘာသာဋီကာ(ပ)-ကင်္ခါအဋ္ဌက",
+  "sid": "111",
+  "excel_pages": 469,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "111",
+    "name": "ဘာသာဋီကာ(ပ)",
+    "category": "ကင်္ခါအဋ္ဌကထာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_01_02",
+      "maprows": 107,
+      "pali_pages": [
+       83,
+       189
+      ],
+      "nsy_pages": [
+       1,
+       468
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "30",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "111",
+   "books": [
+    "annya_vi_01_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 430,
+  "file": "430.json",
+  "sheet": "Z31 112 ဘာသာဋီကာ(ဒု)-ကင်္ခါအဋ္ဌ",
+  "rows": 415,
+  "edition": "Z31 112 ဘာသာဋီကာ(ဒု)-ကင်္ခါအဋ္ဌ",
+  "sid": "112",
+  "excel_pages": 415,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "112",
+    "name": "ဘာသာဋီကာ(ဒု)",
+    "category": "ကင်္ခါအဋ္ဌကထာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_01_02",
+      "maprows": 168,
+      "pali_pages": [
+       190,
+       357
+      ],
+      "nsy_pages": [
+       1,
+       408
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "31",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "112",
+   "books": [
+    "annya_vi_01_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 431,
+  "file": "431.json",
+  "sheet": "Z32 113 ရေစကြို (ပ)-ကင်္ခါအဋ္ဌက",
+  "rows": 542,
+  "edition": "Z32 113 ရေစကြို (ပ)-ကင်္ခါအဋ္ဌက",
+  "sid": "113",
+  "excel_pages": 542,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "113",
+    "name": "ရေစကြို (ပ)",
+    "category": "ကင်္ခါအဋ္ဌကထာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_01_02",
+      "maprows": 67,
+      "pali_pages": [
+       83,
+       149
+      ],
+      "nsy_pages": [
+       1,
+       542
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "32",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "113",
+   "books": [
+    "annya_vi_01_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 432,
+  "file": "432.json",
+  "sheet": "Z33 114 ရေစကြို (ဒု)-ကင်္ခါအဋ္ဌ",
+  "rows": 619,
+  "edition": "Z33 114 ရေစကြို (ဒု)-ကင်္ခါအဋ္ဌ",
+  "sid": "114",
+  "excel_pages": 619,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "114",
+    "name": "ရေစကြို (ဒု)",
+    "category": "ကင်္ခါအဋ္ဌကထာ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_01_02",
+      "maprows": 143,
+      "pali_pages": [
+       150,
+       292
+      ],
+      "nsy_pages": [
+       1,
+       617
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "33",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "114",
+   "books": [
+    "annya_vi_01_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 433,
+  "file": "433.json",
+  "sheet": "Z34 115 မလှိုင်ဆရာတော် (ပ)-ဝိနယ",
+  "rows": 552,
+  "edition": "Z34 115 မလှိုင်ဆရာတော် (ပ)-ဝိနယ",
+  "sid": "115",
+  "excel_pages": 552,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "115",
+    "name": "မလှိုင်ဆရာတော် (ပ)",
+    "category": "ဝိနယသင်္ဂဟ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_02",
+      "maprows": 199,
+      "pali_pages": [
+       1,
+       199
+      ],
+      "nsy_pages": [
+       1,
+       550
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "34",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "115",
+   "books": [
+    "annya_vi_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 434,
+  "file": "434.json",
+  "sheet": "Z35 116 မလှိုင်ဆရာတော် (ဒု)-ဝိန",
+  "rows": 538,
+  "edition": "Z35 116 မလှိုင်ဆရာတော် (ဒု)-ဝိန",
+  "sid": "116",
+  "excel_pages": 538,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "116",
+    "name": "မလှိုင်ဆရာတော် (ဒု)",
+    "category": "ဝိနယသင်္ဂဟ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_02",
+      "maprows": 269,
+      "pali_pages": [
+       200,
+       468
+      ],
+      "nsy_pages": [
+       3,
+       538
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "35",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "116",
+   "books": [
+    "annya_vi_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 435,
+  "file": "435.json",
+  "sheet": "Z36 117 ပခုက္ကူ (ပ)-ကင်္ခါဋီသစ်",
+  "rows": 544,
+  "edition": "Z36 117 ပခုက္ကူ (ပ)-ကင်္ခါဋီသစ်",
+  "sid": "117",
+  "excel_pages": 544,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "117",
+    "name": "ပခုက္ကူ (ပ)",
+    "category": "ကင်္ခါဋီသစ်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_01_04",
+      "maprows": 174,
+      "pali_pages": [
+       119,
+       292
+      ],
+      "nsy_pages": [
+       0,
+       542
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "36",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "117",
+   "books": [
+    "annya_vi_01_04"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 436,
+  "file": "436.json",
+  "sheet": "Z37 118 ပခုက္ကူ (ဒု)-ကင်္ခါဋီသစ",
+  "rows": 464,
+  "edition": "Z37 118 ပခုက္ကူ (ဒု)-ကင်္ခါဋီသစ",
+  "sid": "118",
+  "excel_pages": 464,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "118",
+    "name": "ပခုက္ကူ (ဒု)",
+    "category": "ကင်္ခါဋီသစ်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_01_04",
+      "maprows": 197,
+      "pali_pages": [
+       293,
+       489
+      ],
+      "nsy_pages": [
+       0,
+       460
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "37",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "118",
+   "books": [
+    "annya_vi_01_04"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 437,
+  "file": "437.json",
+  "sheet": "Z38 119 အရှင်ပညာဓိက-ကင်္ခါဋီဟော",
+  "rows": 454,
+  "edition": "Z38 119 အရှင်ပညာဓိက-ကင်္ခါဋီဟော",
+  "sid": "119",
+  "excel_pages": 454,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "119",
+    "name": "အရှင်ပညာဓိက",
+    "category": "ကင်္ခါဋီဟောင်း",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_vi_01_03",
+      "maprows": 117,
+      "pali_pages": [
+       1,
+       117
+      ],
+      "nsy_pages": [
+       12,
+       434
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "zbook": "38",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "119",
+   "books": [
+    "annya_vi_01_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 300,
+  "file": "300.json",
+  "sheet": "သုတ်သီလက္ခန်-ဋ္ဌ(ဒု)",
+  "rows": 440,
+  "edition": "သုတ်သီလက္ခန်အဋ္ဌကထာနိသျ (ဒု)",
+  "sid": null,
+  "excel_pages": 440,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_01"
+   ]
+  },
+  "check": "content guess attha_di_01 (0.37); database said -"
+ },
+ {
+  "n": 301,
+  "file": "301.json",
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(ပ)",
+  "rows": 298,
+  "edition": "\nသုတ်မဟာဝါအဌကထာနိသျ။\nဥ္စမတွဲ\n15\nနမောတဿဘဂဝတောအရဟတော\nသမ္မာသမ္ဗုဒ္ဓဿ။\nရတနတ္တယံပင်ဏ၁မမ\nမဟာ ကာရုဏိကော နာထော၊ သတ္တေသု ပဋိ ကညံ့။ ဟိတွာ အစ္စန္တိအဿာဒံ အနုဿာသကရာဩ၁၁။ (ဝတ္တဂါထ၁သ၁မည်။\nလောကနိတ္ထရဏတ္ထာယ။ သုက္ကရံကရိတွာန။ ပတ္တော သမ္ဗောဓိ မောရ။ဝန္ဒေဝိဘဝပါပေ။\n(၎င်းဝတ္တဂါထာသ၁မည်။)\nကိလေသဝံသကံဓမ္မ။သမ္မ၁ရိဿံရက္ခကံးသမ္ဗုဒ္ဓေနသုအက္ခခံထံ။\nရွှေသမ္ဗုဒ္ဓပူဇိတံ။\n(ပတျာဝတ္တ။)\n့ရကာမုတ္တံ၊ သဒ္ဓမ္မဝံသပါလကံ။ သိလာဒိဂုဏသမ္ပန္နံ။ ဝန္ဒေ\nသမ္ဗုဒ္ဓဩရသီ။\n(ပဌမသကာရဝိပုလာ။)",
+  "sid": null,
+  "excel_pages": 298,
+  "status": "",
+  "cand": [],
+  "label": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ပ)",
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_02"
+   ]
+  },
+  "check": "content guess attha_di_02 (0.42); database said -"
+ },
+ {
+  "n": 302,
+  "file": "302.json",
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(ဒု)",
+  "rows": 491,
+  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ဒု)",
+  "sid": null,
+  "excel_pages": 491,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_02"
+   ]
+  },
+  "check": "content guess attha_di_02 (0.69); database said -"
+ },
+ {
+  "n": 303,
+  "file": "303.json",
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(တ)",
+  "rows": 303,
+  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (တ)",
+  "sid": null,
+  "excel_pages": 303,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_02"
+   ]
+  },
+  "check": "content guess attha_di_02 (0.44); database said -"
+ },
+ {
+  "n": 304,
+  "file": "304.json",
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(စ)",
+  "rows": 300,
+  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (စ)",
+  "sid": null,
+  "excel_pages": 300,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_02"
+   ]
+  },
+  "check": "content guess attha_di_02 (0.37); database said -"
+ },
+ {
+  "n": 305,
+  "file": "305.json",
+  "sheet": "မဟာဝါ-ဋ္ဌ(ပ)",
+  "rows": 570,
+  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ပ)",
+  "sid": null,
+  "excel_pages": 570,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_02"
+   ]
+  },
+  "check": "content guess attha_di_02 (0.40); database said -"
+ },
+ {
+  "n": 306,
+  "file": "306.json",
+  "sheet": "မဟာဝါ-ဋ္ဌ(ဒု)",
+  "rows": 508,
+  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ဒု)",
+  "sid": null,
+  "excel_pages": 508,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_02"
+   ]
+  },
+  "check": "content guess attha_di_02 (0.40); database said -"
+ },
+ {
+  "n": 307,
+  "file": "307.json",
+  "sheet": "သုတ်ပါထေယျ-ဋ္ဌ",
+  "rows": 637,
+  "edition": "သုတ်ပါထေယျအဋ္ဌကထာနိသျ",
+  "sid": null,
+  "excel_pages": 637,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_di_03"
+   ]
+  },
+  "check": "content guess attha_di_03 (0.37); database said -"
+ },
+ {
+  "n": 308,
+  "file": "308.json",
+  "sheet": "ဓမ္မ-ဋ္ဌသစ်",
+  "rows": 466,
+  "edition": "ဓမ္မပဒအဋ္ဌကထာနိဿယသစ်",
+  "sid": null,
+  "excel_pages": 466,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_ku_02_01"
+   ]
+  },
+  "check": "content guess attha_ku_02_01 (0.81); database said -"
+ },
+ {
+  "n": 309,
+  "file": "309.json",
+  "sheet": "ပေဋကဋ္ဌ(ပ)",
+  "rows": 424,
+  "edition": "ပေဋကောပဒေသအဋ္ဌကထာနိသျ (ပ)",
+  "sid": null,
+  "excel_pages": 424,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_ku_20"
+   ]
+  },
+  "check": "content guess attha_ku_20 (0.18); database said -"
+ },
+ {
+  "n": 310,
+  "file": "310.json",
+  "sheet": "ဝိသုဒ္ဓဋ္ဌ(ပ)",
+  "rows": 514,
+  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (ပ)",
+  "sid": null,
+  "excel_pages": 514,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_01"
+   ]
+  },
+  "check": "content guess annya_bi_01 (0.66); database said -"
+ },
+ {
+  "n": 311,
+  "file": "311.json",
+  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(ဒု)",
+  "rows": 516,
+  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (ဒု)",
+  "sid": null,
+  "excel_pages": 516,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_01"
+   ]
+  },
+  "check": "content guess annya_bi_01 (0.68); database said -"
+ },
+ {
+  "n": 312,
+  "file": "312.json",
+  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(တ)",
+  "rows": 364,
+  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (တ)",
+  "sid": null,
+  "excel_pages": 364,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_02"
+   ]
+  },
+  "check": "content guess annya_bi_02 (0.58); database said -"
+ },
+ {
+  "n": 313,
+  "file": "313.json",
+  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(စ)",
+  "rows": 512,
+  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (စ)",
+  "sid": null,
+  "excel_pages": 512,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_02"
+   ]
+  },
+  "check": "content guess annya_bi_02 (0.67); database said -"
+ },
+ {
+  "n": 314,
+  "file": "314.json",
+  "sheet": "ဝိသုဒ္ဓိသစ်(ပ)",
+  "rows": 439,
+  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိဿယသစ် (ပ)",
+  "sid": null,
+  "excel_pages": 439,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_01"
+   ]
+  },
+  "check": "content guess annya_bi_01 (0.48); database said -"
+ },
+ {
+  "n": 315,
+  "file": "315.json",
+  "sheet": "ဝိသုဒ္ဓိသစ်(ဒု)",
+  "rows": 431,
+  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိဿယသစ် (ဒု)",
+  "sid": null,
+  "excel_pages": 431,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_01"
+   ]
+  },
+  "check": "content guess annya_bi_01 (0.39); database said -"
+ },
+ {
+  "n": 316,
+  "file": "316.json",
+  "sheet": "ဝိသုဒ္ဓိ(ပ)",
+  "rows": 528,
+  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (ပ)",
+  "sid": null,
+  "excel_pages": 528,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_01"
+   ]
+  },
+  "check": "content guess annya_bi_01 (0.43); database said -"
+ },
+ {
+  "n": 317,
+  "file": "317.json",
+  "sheet": "ဝိသုဒ္ဓိ(ဒု)",
+  "rows": 508,
+  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (ဒု)",
+  "sid": null,
+  "excel_pages": 508,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_01"
+   ]
+  },
+  "check": "content guess annya_bi_01 (0.38); database said -"
+ },
+ {
+  "n": 318,
+  "file": "318.json",
+  "sheet": "ဝိသုဒ္ဓိ(တ)",
+  "rows": 627,
+  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (တ)",
+  "sid": null,
+  "excel_pages": 627,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_02"
+   ]
+  },
+  "check": "content guess annya_bi_02 (0.39); database said -"
+ },
+ {
+  "n": 319,
+  "file": "319.json",
+  "sheet": "ဝိသုဒ္ဓိ(စ)",
+  "rows": 358,
+  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (စ)",
+  "sid": null,
+  "excel_pages": 358,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_02"
+   ]
+  },
+  "check": "content guess annya_bi_02 (0.40); database said -"
+ },
+ {
+  "n": 320,
+  "file": "320.json",
+  "sheet": "သမ္မောဟဋ္ဌ(ပ)",
+  "rows": 331,
+  "edition": "သမ္မောဟဝိနောဒနီအဋ္ဌကထာနိသျ (ပ)",
+  "sid": null,
+  "excel_pages": 331,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_bi_02"
+   ]
+  },
+  "check": "content guess attha_bi_02 (0.34); database said -"
+ },
+ {
+  "n": 321,
+  "file": "321.json",
+  "sheet": "သမ္မောဟဋ္ဌ(ဒု)",
+  "rows": 471,
+  "edition": "သမ္မောဟဝိနောဒနီအဋ္ဌကထာနိသျ (ဒု)",
+  "sid": null,
+  "excel_pages": 471,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_bi_02"
+   ]
+  },
+  "check": "content guess attha_bi_02 (0.39); database said -"
+ },
+ {
+  "n": 322,
+  "file": "322.json",
+  "sheet": "သမ္မောဟဋ္ဌ(တ)",
+  "rows": 505,
+  "edition": "သမ္မောဟဝိနောဒနီအဋ္ဌကထာနိသျ (တ)",
+  "sid": null,
+  "excel_pages": 505,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_bi_02"
+   ]
+  },
+  "check": "content guess attha_bi_02 (0.40); database said -"
+ },
+ {
+  "n": 323,
+  "file": "323.json",
+  "sheet": "ပဉ္စကြိုက်(ပ)",
+  "rows": 443,
+  "edition": "ပဉ္စပကြိုဏ်အဋ္ဌကထာနိသျ (ပ)",
+  "sid": null,
+  "excel_pages": 443,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_bi_03"
+   ]
+  },
+  "check": "content guess attha_bi_03 (0.37); database said -"
+ },
+ {
+  "n": 324,
+  "file": "324.json",
+  "sheet": "ပဉ္စကြိုက်(ဒု)",
+  "rows": 495,
+  "edition": "ပဉ္စပကြိုဏ်အဋ္ဌကထာနိသျ (ဒု)",
+  "sid": null,
+  "excel_pages": 495,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_bi_03"
+   ]
+  },
+  "check": "content guess attha_bi_03 (0.40); database said -"
+ },
+ {
+  "n": 325,
+  "file": "325.json",
+  "sheet": "ပဉ္စကြိုက်(တ)",
+  "rows": 489,
+  "edition": "ပဉ္စပကြိုဏ်အဋ္ဌကထာနိသျ (တ)",
+  "sid": null,
+  "excel_pages": 489,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_bi_03"
+   ]
+  },
+  "check": "content guess attha_bi_03 (0.43); database said -"
+ },
+ {
+  "n": 326,
+  "file": "326.json",
+  "sheet": "သင်္ခေပဋ္ဌ",
+  "rows": 88,
+  "edition": "သစ္စ_သင်္ခေပအဋ္ဌကထာနိဿယ",
+  "sid": null,
+  "excel_pages": 88,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_bi_07"
+   ]
+  },
+  "check": "content guess annya_bi_07 (0.29); database said -"
+ },
+ {
+  "n": 327,
+  "file": "327.json",
+  "sheet": "ကင်္ခါသစ်",
+  "rows": 764,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "117",
+   "books": [
+    "annya_vi_01_04"
+   ],
+   "offset": 0,
+   "as_is": true
+  },
+  "check": "NO RELIABLE ID (best share 0.17) - please tell me the id",
+  "found": {
+   "n": 327,
+   "sheet": "ကင်္ခါသစ်",
+   "pali_guess": [
+    "annya_vi_01_04",
+    "tika_vi_04"
+   ],
+   "ok": false,
+   "best": {
+    "db": "annya",
+    "nsy_id": "117",
+    "name": "ပခုက္ကူ (ပ)",
+    "category": "ကင်္ခါဋီသစ်",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_04"
+    ],
+    "offset": 8,
+    "share": 0.17,
+    "samples": 156,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "118",
+    "name": "ပခုက္ကူ (ဒု)",
+    "category": "ကင်္ခါဋီသစ်",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_04"
+    ],
+    "offset": -392,
+    "share": 0.08,
+    "samples": 118,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "tried": 2,
+   "check": "NO RELIABLE ID (best share 0.17) - please tell me the id",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "117",
+    "books": [
+     "annya_vi_01_04"
+    ],
+    "offset": 0,
+    "as_is": true
+   }
+  }
+ },
+ {
+  "n": 328,
+  "file": "328.json",
+  "sheet": "မူလဋီ(ပ)",
+  "rows": 378,
+  "edition": "ဓမ္မသင်္ဂဏီမူလဋီကာနိဿယ (ပ) ကူကြီး",
+  "sid": null,
+  "excel_pages": 378,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "046",
+   "books": [
+    "tika_bi_01"
+   ]
+  },
+  "check": "id found by content: tika:046 ဂူကြီး (consistency 0.73, 11 anchors)",
+  "found": {
+   "n": 328,
+   "sheet": "မူလဋီ(ပ)",
+   "pali_guess": [
+    "tika_bi_01",
+    "annya_bi_07"
+   ],
+   "ok": true,
+   "best": {
+    "db": "tika",
+    "nsy_id": "046",
+    "name": "ဂူကြီး",
+    "category": "ဏီ မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_01"
+    ],
+    "offset": -1,
+    "share": 0.73,
+    "samples": 11,
+    "name_match": false,
+    "rule_offset": 1
+   },
+   "second": {
+    "db": "tika",
+    "nsy_id": "021",
+    "name": "ဘာဋီ (ဒု)",
+    "category": "နီ မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_01"
+    ],
+    "offset": -280,
+    "share": 0.75,
+    "samples": 4,
+    "name_match": false,
+    "rule_offset": 2
+   },
+   "tried": 7,
+   "final": {
+    "mode": "db",
+    "db": "tika",
+    "nsy_id": "046",
+    "books": [
+     "tika_bi_01"
+    ]
+   },
+   "check": "id found by content: tika:046 ဂူကြီး (consistency 0.73, 11 anchors)"
+  }
+ },
+ {
+  "n": 329,
+  "file": "329.json",
+  "sheet": "မူလဋီ(ဒု)",
+  "rows": 382,
+  "edition": "ဓမ္မသင်္ဂဏီမူလဋီကာနိဿယ (ဒု) ကူကြီး",
+  "sid": null,
+  "excel_pages": 382,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "047",
+   "books": [
+    "tika_bi_01"
+   ]
+  },
+  "check": "id found by content: tika:047 ဂူကြီး (consistency 0.84, 38 anchors)",
+  "found": {
+   "n": 329,
+   "sheet": "မူလဋီ(ဒု)",
+   "pali_guess": [
+    "tika_bi_01",
+    "annya_bi_07"
+   ],
+   "ok": true,
+   "best": {
+    "db": "tika",
+    "nsy_id": "047",
+    "name": "ဂူကြီး",
+    "category": "ဏီ မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_01"
+    ],
+    "offset": 0,
+    "share": 0.84,
+    "samples": 38,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "second": {
+    "db": "tika",
+    "nsy_id": "022",
+    "name": "ဘာဋီ (တ)",
+    "category": "နီ မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_01"
+    ],
+    "offset": -59,
+    "share": 0.58,
+    "samples": 12,
+    "name_match": false,
+    "rule_offset": 2
+   },
+   "tried": 7,
+   "final": {
+    "mode": "db",
+    "db": "tika",
+    "nsy_id": "047",
+    "books": [
+     "tika_bi_01"
+    ]
+   },
+   "check": "id found by content: tika:047 ဂူကြီး (consistency 0.84, 38 anchors)"
+  }
+ },
+ {
+  "n": 330,
+  "file": "330.json",
+  "sheet": "မူလဋီ(တ)",
+  "rows": 383,
+  "edition": "ဝိဘင်း မူလဋီကာနိသျ (တ ကူကြီး)",
+  "sid": null,
+  "excel_pages": 383,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "048",
+   "books": [
+    "tika_bi_02_01"
+   ]
+  },
+  "check": "id found by content: tika:048 ဂူကြီး (consistency 0.94, 32 anchors)",
+  "found": {
+   "n": 330,
+   "sheet": "မူလဋီ(တ)",
+   "pali_guess": [
+    "tika_bi_02_01",
+    "annya_bi_04"
+   ],
+   "ok": true,
+   "best": {
+    "db": "tika",
+    "nsy_id": "048",
+    "name": "ဂူကြီး",
+    "category": "ဝိဘင်း မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_02_01"
+    ],
+    "offset": 0,
+    "share": 0.94,
+    "samples": 32,
+    "name_match": false,
+    "rule_offset": 2
+   },
+   "second": {
+    "db": "tika",
+    "nsy_id": "027",
+    "name": "ဘာဋီ (ဒု)",
+    "category": "ဝိဘင်း မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_02_01"
+    ],
+    "offset": -262,
+    "share": 0.43,
+    "samples": 7,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "tried": 5,
+   "final": {
+    "mode": "db",
+    "db": "tika",
+    "nsy_id": "048",
+    "books": [
+     "tika_bi_02_01"
+    ]
+   },
+   "check": "id found by content: tika:048 ဂူကြီး (consistency 0.94, 32 anchors)"
+  }
+ },
+ {
+  "n": 331,
+  "file": "331.json",
+  "sheet": "မူလဋီ(စ)",
+  "rows": 352,
+  "edition": "ဝိဘင်း မူလဋီကာနိသျ (စ) ကူကြီး",
+  "sid": null,
+  "excel_pages": 352,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "049",
+   "books": [
+    "tika_bi_02_01"
+   ]
+  },
+  "check": "id found by content: tika:049 ဂူကြီး (consistency 0.81, 32 anchors)",
+  "found": {
+   "n": 331,
+   "sheet": "မူလဋီ(စ)",
+   "pali_guess": [
+    "tika_bi_02_01",
+    "annya_bi_04"
+   ],
+   "ok": true,
+   "best": {
+    "db": "tika",
+    "nsy_id": "049",
+    "name": "ဂူကြီး",
+    "category": "ဝိဘင်း မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_02_01"
+    ],
+    "offset": 0,
+    "share": 0.81,
+    "samples": 32,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "second": {
+    "db": "tika",
+    "nsy_id": "028",
+    "name": "ဘာဋီ (တ)",
+    "category": "ဝိဘင်း မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_02_01"
+    ],
+    "offset": -178,
+    "share": 0.61,
+    "samples": 18,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "tried": 5,
+   "final": {
+    "mode": "db",
+    "db": "tika",
+    "nsy_id": "049",
+    "books": [
+     "tika_bi_02_01"
+    ]
+   },
+   "check": "id found by content: tika:049 ဂူကြီး (consistency 0.81, 32 anchors)"
+  }
+ },
+ {
+  "n": 332,
+  "file": "332.json",
+  "sheet": "မူလဋီ(မ)",
+  "rows": 322,
+  "edition": "ပဉ္စပကြိုဏ်ပဌမ မူလဋီကာနိသျ (မ) ကူကြီး",
+  "sid": null,
+  "excel_pages": 322,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "050",
+   "books": [
+    "tika_bi_03"
+   ]
+  },
+  "check": "id found by content: tika:050 ဂူကြီး (consistency 0.81, 31 anchors)",
+  "found": {
+   "n": 332,
+   "sheet": "မူလဋီ(မ)",
+   "pali_guess": [
+    "tika_bi_03",
+    "tika_bi_05"
+   ],
+   "ok": true,
+   "best": {
+    "db": "tika",
+    "nsy_id": "050",
+    "name": "ဂူကြီး",
+    "category": "ဓာ+ပု+ကထာ မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_03"
+    ],
+    "offset": 0,
+    "share": 0.81,
+    "samples": 31,
+    "name_match": false,
+    "rule_offset": 1
+   },
+   "second": {
+    "db": "tika",
+    "nsy_id": "035",
+    "name": "ဘာဋီ",
+    "category": "ပဋ္ဌာန မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_03"
+    ],
+    "offset": 134,
+    "share": 1.0,
+    "samples": 1,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "tried": 8,
+   "final": {
+    "mode": "db",
+    "db": "tika",
+    "nsy_id": "050",
+    "books": [
+     "tika_bi_03"
+    ]
+   },
+   "check": "id found by content: tika:050 ဂူကြီး (consistency 0.81, 31 anchors)"
+  }
+ },
+ {
+  "n": 333,
+  "file": "333.json",
+  "sheet": "ပဉ္စပကြိုက်မူလဋီ(ဒု)",
+  "rows": 472,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "051",
+   "books": [
+    "tika_bi_03"
+   ]
+  },
+  "check": "id found by content: tika:051 ဂူကြီး (consistency 0.75, 20 anchors)",
+  "found": {
+   "n": 333,
+   "sheet": "ပဉ္စပကြိုက်မူလဋီ(ဒု)",
+   "pali_guess": [
+    "tika_bi_03",
+    "tika_bi_05"
+   ],
+   "ok": true,
+   "best": {
+    "db": "tika",
+    "nsy_id": "051",
+    "name": "ဂူကြီး",
+    "category": "ယမိုက်+ပဋ္ဌာန်း မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_03"
+    ],
+    "offset": 0,
+    "share": 0.75,
+    "samples": 20,
+    "name_match": false,
+    "rule_offset": 2
+   },
+   "second": {
+    "db": "tika",
+    "nsy_id": "058",
+    "name": "ကြာခံ",
+    "category": "ဓာ မူဋီ",
+    "pagecount": null,
+    "books": [
+     "tika_bi_03"
+    ],
+    "offset": -72,
+    "share": 1.0,
+    "samples": 3,
+    "name_match": false,
+    "rule_offset": 8
+   },
+   "tried": 8,
+   "final": {
+    "mode": "db",
+    "db": "tika",
+    "nsy_id": "051",
+    "books": [
+     "tika_bi_03"
+    ]
+   },
+   "check": "id found by content: tika:051 ဂူကြီး (consistency 0.75, 20 anchors)"
+  }
+ },
+ {
+  "n": 334,
+  "file": "334.json",
+  "sheet": "ထေရီဋ္ဌ",
+  "rows": 695,
+  "edition": "ထေရီဂါထာ အဋ္ဌကထာ နိဿယ\n",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "206",
+   "books": [
+    "attha_ku_09"
+   ]
+  },
+  "check": "id found by content: attha:206 သကျဓီတာ (consistency 0.98, 7477 anchors)",
+  "found": {
+   "n": 334,
+   "sheet": "ထေရီဋ္ဌ",
+   "pali_guess": [
+    "attha_ku_09",
+    "mula_ku_11"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "206",
+    "name": "သကျဓီတာ",
+    "category": "ထေရီ",
+    "pagecount": null,
+    "books": [
+     "attha_ku_09"
+    ],
+    "offset": 0,
+    "share": 0.98,
+    "samples": 7477,
+    "name_match": false,
+    "rule_offset": 24
+   },
+   "second": null,
+   "tried": 1,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "206",
+    "books": [
+     "attha_ku_09"
+    ]
+   },
+   "check": "id found by content: attha:206 သကျဓီတာ (consistency 0.98, 7477 anchors)"
+  }
+ },
+ {
+  "n": 335,
+  "file": "335.json",
+  "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ပ)",
+  "rows": 532,
+  "edition": "ဗုဒ္ဓဝသအဋ္ဌကထာ နိဿယ (ပထမတွဲ)",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "209",
+   "books": [
+    "attha_ku_12"
+   ]
+  },
+  "check": "id found by content: attha:209 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 6929 anchors)",
+  "found": {
+   "n": 335,
+   "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ပ)",
+   "pali_guess": [
+    "attha_ku_12",
+    "tika_ku_zat_01"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "209",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဗုဒ္ဓဝံသ",
+    "pagecount": null,
+    "books": [
+     "attha_ku_12"
+    ],
+    "offset": 0,
+    "share": 0.88,
+    "samples": 6929,
+    "name_match": false,
+    "rule_offset": 6
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "210",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဗုဒ္ဓဝံသ",
+    "pagecount": null,
+    "books": [
+     "attha_ku_12"
+    ],
+    "offset": 399,
+    "share": 0.13,
+    "samples": 39,
+    "name_match": false,
+    "rule_offset": 6
+   },
+   "tried": 2,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "209",
+    "books": [
+     "attha_ku_12"
+    ]
+   },
+   "check": "id found by content: attha:209 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 6929 anchors)"
+  }
+ },
+ {
+  "n": 336,
+  "file": "336.json",
+  "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ဒု)",
+  "rows": 506,
+  "edition": "\nရန်ကုန်တိုင်းဒေသကြီး၊ လှည်းကူးမြို့\nမဟာဇေယျမင်းကျောင်း၊ ပရိယတ္တိစာသင်တိုက် သာသနပါလဓမ္မာစရိယ သာသနာသိရီပဝရဓမ္မာစရိယ၊ တိပိဋက ဒီဃဘာဏက၊ ဒီဃနိကာယကောဝိဒ နိကာယုဇ္ဇောတကဓမ္မတ္ထဝိသာရဒ ဒီဃဘာဏက၊ ဝိနယဓရ၊ ပရိယတ္တိသာသနဟိတဝိနယဝ ပိဋကာရ (ပိဋကနှစ်ပုံ အာဂုံဆောင်)\nအဂ္ဂမဟာဂန္ထဝါစကပဏ္ဍိတ၊ အဂ္ဂမဟာပဏ္ဍိတ\nC\nဆရာတော် ဘဒ္ဒန္တ ကောင်ါဘိဝံသ\nဗုဒ္ဓဝသအဋ္ဌကထာ နိဿယ (ဒုတိယတွဲ)\n၂၅၆၁\nalalalala\nကာရာ\nခရစ် ၂၀၁၇\n၁၃၇၉",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "210",
+   "books": [
+    "attha_ku_12"
+   ]
+  },
+  "check": "id found by content: attha:210 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 5719 anchors)",
+  "found": {
+   "n": 336,
+   "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ဒု)",
+   "pali_guess": [
+    "attha_ku_12",
+    "tika_ku_zat_01"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "210",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဗုဒ္ဓဝံသ",
+    "pagecount": null,
+    "books": [
+     "attha_ku_12"
+    ],
+    "offset": 0,
+    "share": 0.88,
+    "samples": 5719,
+    "name_match": true,
+    "rule_offset": 6
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "209",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဗုဒ္ဓဝံသ",
+    "pagecount": null,
+    "books": [
+     "attha_ku_12"
+    ],
+    "offset": 4,
+    "share": 0.22,
+    "samples": 23,
+    "name_match": true,
+    "rule_offset": 6
+   },
+   "tried": 2,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "210",
+    "books": [
+     "attha_ku_12"
+    ]
+   },
+   "check": "id found by content: attha:210 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 5719 anchors)"
+  }
+ },
+ {
+  "n": 337,
+  "file": "337.json",
+  "sheet": "ဇာတ်ဋ္ဌ-၁",
+  "rows": 769,
+  "edition": "မန္တလေးမြို့\nမိုးကောင်းကျောင်းတိုက် ၊ ဇယဝတီကျောင်း\nဆရာတော် ဘဒ္ဒန္တသုဇနာဘိဝံသ\nရေးသားစီရင်တော်မူအပ်သော\nဇာတ်အဋ္ဌကထာ နိဿယ ( ဧကကနိပါတ်)\n(ဇာ၊ဋ္ဌ၊၁။၁-၂၇၉)\nသာသနာ ၂၅၅၈ ခုနှစ်\nကောဇာ\n၁၃၇၆ ခုနှစ်\nခရစ်\n၂ဝ၁၄ ခုနှစ်။",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "211",
+   "books": [
+    "attha_ku_zat_01"
+   ]
+  },
+  "check": "id found by content: attha:211 ဇယဝတီ (ပ) (consistency 0.97, 11392 anchors)",
+  "found": {
+   "n": 337,
+   "sheet": "ဇာတ်ဋ္ဌ-၁",
+   "pali_guess": [
+    "attha_ku_zat_01",
+    "attha_ku_10"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "211",
+    "name": "ဇယဝတီ (ပ)",
+    "category": "ဇာတ် (ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_01"
+    ],
+    "offset": 0,
+    "share": 0.97,
+    "samples": 11392,
+    "name_match": false,
+    "rule_offset": 9
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "212",
+    "name": "ဇယဝတီ (ဒု)",
+    "category": "ဇာတ် (ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_01"
+    ],
+    "offset": -736,
+    "share": 0.22,
+    "samples": 27,
+    "name_match": false,
+    "rule_offset": 9
+   },
+   "tried": 2,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "211",
+    "books": [
+     "attha_ku_zat_01"
+    ]
+   },
+   "check": "id found by content: attha:211 ဇယဝတီ (ပ) (consistency 0.97, 11392 anchors)"
+  }
+ },
+ {
+  "n": 338,
+  "file": "338.json",
+  "sheet": "ဇာတ်ဋ္ဌ-ဧက",
+  "rows": 688,
+  "edition": "ဇာတ်အဋ္ဌကထာ နိုဿယ (ဧကကနိပါတ်)",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "212",
+   "books": [
+    "attha_ku_zat_01"
+   ]
+  },
+  "check": "id found by content: attha:212 ဇယဝတီ (ဒု) (consistency 0.98, 10282 anchors)",
+  "found": {
+   "n": 338,
+   "sheet": "ဇာတ်ဋ္ဌ-ဧက",
+   "pali_guess": [
+    "attha_ku_zat_01",
+    "tika_ku_zat_01"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "212",
+    "name": "ဇယဝတီ (ဒု)",
+    "category": "ဇာတ် (ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_01"
+    ],
+    "offset": 0,
+    "share": 0.98,
+    "samples": 10282,
+    "name_match": false,
+    "rule_offset": 9
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "211",
+    "name": "ဇယဝတီ (ပ)",
+    "category": "ဇာတ် (ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_01"
+    ],
+    "offset": 0,
+    "share": 0.19,
+    "samples": 27,
+    "name_match": false,
+    "rule_offset": 9
+   },
+   "tried": 2,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "212",
+    "books": [
+     "attha_ku_zat_01"
+    ]
+   },
+   "check": "id found by content: attha:212 ဇယဝတီ (ဒု) (consistency 0.98, 10282 anchors)"
+  }
+ },
+ {
+  "n": 339,
+  "file": "339.json",
+  "sheet": "ဇာဋ္ဌ-ဒု",
+  "rows": 720,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "213",
+   "books": [
+    "attha_ku_zat_02"
+   ]
+  },
+  "check": "id found by content: attha:213 မဟာဇေယျမင်းကျောင်း (consistency 0.95, 8545 anchors)",
+  "found": {
+   "n": 339,
+   "sheet": "ဇာဋ္ဌ-ဒု",
+   "pali_guess": [
+    "attha_ku_zat_02",
+    "tika_ku_zat_02"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "213",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဇာတ် (ဒုက -၂)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_02"
+    ],
+    "offset": 0,
+    "share": 0.95,
+    "samples": 8545,
+    "name_match": false,
+    "rule_offset": 12
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "214",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဇာတ် (တိက - ၂)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_02"
+    ],
+    "offset": -82,
+    "share": 0.17,
+    "samples": 18,
+    "name_match": false,
+    "rule_offset": 7
+   },
+   "tried": 2,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "213",
+    "books": [
+     "attha_ku_zat_02"
+    ]
+   },
+   "check": "id found by content: attha:213 မဟာဇေယျမင်းကျောင်း (consistency 0.95, 8545 anchors)"
+  }
+ },
+ {
+  "n": 340,
+  "file": "340.json",
+  "sheet": "ဇာဋ္ဌ-တိံသ",
+  "rows": 708,
+  "edition": "အရှင်ကေသရ (မော်ကွန်းထိန်း) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(မန္တလေး) အရှင်ပညာနန္ဒ (ပိဋကတ်တိုက်မှူး) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nပူးတွဲပြုစုအပ်သော\nဇာတ်အဋ္ဌကထာနိဿယ တိသနိပါတ်မှ ပဏ္ဏာသနိပါတ်အထိ\nတော် ပရိယတ္တိ သာသနာ့ တက္က\nနိုင်ငံတော်\nသဗ္ဗဒါန\nဓမ္မဒါန\nဇိနာတိ\nတက္ကသိုလ်\nသာသနာ\nမန္တလေးမြို့\n၁၂၅၃၀၊ ကောဇာ ၁၃၄၈\nဘာသာပြန်နှင့် ပုံနှိပ်ထုတ်ဝေရေးဌာန နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် မန္တလေးမြို့\nဗုဒ္ဓဝ - ၂၅၅၆\nမရမ္မဝ-၁၃၇၄\nခရစ္စဝ - ၂ဝ၁၂",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "221",
+   "books": [
+    "attha_ku_zat_05"
+   ]
+  },
+  "check": "id found by content: attha:221 နပသ (consistency 0.96, 7858 anchors)",
+  "found": {
+   "n": 340,
+   "sheet": "ဇာဋ္ဌ-တိံသ",
+   "pali_guess": [
+    "attha_ku_zat_05",
+    "attha_ku_zat_04"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "221",
+    "name": "နပသ",
+    "category": "(မန်း+ရန်ကုန်) (တိံသာဒိ - ၅)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_05"
+    ],
+    "offset": 0,
+    "share": 0.96,
+    "samples": 7858,
+    "name_match": false,
+    "rule_offset": 25
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "222",
+    "name": "နပသ",
+    "category": "(မန်း+ရန်ကုန်) (သတ္တတျာဒိ - ၅)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_05"
+    ],
+    "offset": -471,
+    "share": 0.4,
+    "samples": 5,
+    "name_match": false,
+    "rule_offset": 9
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "221",
+    "books": [
+     "attha_ku_zat_05"
+    ]
+   },
+   "check": "id found by content: attha:221 နပသ (consistency 0.96, 7858 anchors)"
+  }
+ },
+ {
+  "n": 341,
+  "file": "341.json",
+  "sheet": "သဋ္ဌိနိပါတ်",
+  "rows": 321,
+  "edition": "J\nအရှင်ကေသရ (မော်ကွန်းထိန်း) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(မန္တလေး) အရှင်ပညာနန္ဒ (ပိဋကတ်တိုက်မှူး) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်) ပူးတွဲပြုစုအပ်သော\nဇာတ်အဋ္ဌကထာနိုဿယ\nသ\nသန္နိပါတ်နှင့် သတ္တနိပါတ်\nတော် ပရိယတ္တိ သာသနာ့ တက္က\nသဗ္ဗဒါန\nဓမ္မ\nဇိနာတိ\nဇွဲလေး\nခုန် - မန္တ\nရန်ကု\nသာသနာ\n' ကောဇာ ၁၃၄\n၂၅၃ဝ၊\nဘာသာပြန်နှင့် ပုံနှိပ်ထုတ်ဝေရေးဌာန နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် ရန်ကုန်-မန္တလေး\nဗုဒ္ဓဿ - ၂၅၅၉\nမရမ္မဝ-၁၃၇၇\nခရစ္စ - ၂၀၁၅",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "222",
+   "books": [
+    "attha_ku_zat_05"
+   ]
+  },
+  "check": "id found by content: attha:222 နပသ (consistency 0.91, 3127 anchors)",
+  "found": {
+   "n": 341,
+   "sheet": "သဋ္ဌိနိပါတ်",
+   "pali_guess": [
+    "attha_ku_zat_05",
+    "mula_ku_15"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "222",
+    "name": "နပသ",
+    "category": "(မန်း+ရန်ကုန်) (သတ္တတျာဒိ - ၅)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_05"
+    ],
+    "offset": 0,
+    "share": 0.91,
+    "samples": 3127,
+    "name_match": false,
+    "rule_offset": 9
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "223",
+    "name": "နပသ",
+    "category": "(မန်း+ရန်ကုန်) (အသီတိ - ၅)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_zat_05"
+    ],
+    "offset": -203,
+    "share": 0.43,
+    "samples": 7,
+    "name_match": false,
+    "rule_offset": 10
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "222",
+    "books": [
+     "attha_ku_zat_05"
+    ]
+   },
+   "check": "id found by content: attha:222 နပသ (consistency 0.91, 3127 anchors)"
+  }
+ },
+ {
+  "n": 342,
+  "file": "342.json",
+  "sheet": "အပဋ္ဌ-ပ-ပ",
+  "rows": 435,
+  "edition": "\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် (ရန်ကုန်)\nအရှင်ပါမောက္ခ\nဝိနယဝိဒူ၊ သာသနဓဇဓမ္မာစရိယ\nသာသနတက္ကသီလဓမ္မာစရိယ [B.A (Buddhism)]\nသာသနတက္ကသီလမဟာဓမ္မာစရိယ [M.A (Buddhism)]\nစီရင်ရေးသားတော်မူအပ်သော\nအပဒါနအဋ္ဌကထာနိဿယ (ပထမတွဲ၊ ပထမပိုင်း)\n(အပ၊ ဋ္ဌ၊ ၁။ ၁-၁၄၂။)\nင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသို\nသဗ္ဗဒါန\nဓမ္မဒါနံ\nဇိနာတ\nသာသနာ၂၅၆၆\nΣ\nကေ\n၂၅၃ဝ၊ ရန်ကုန်မြို့\nသုတေသနဘာသာပြန်နှင့် စာအုပ်ထုတ်ဝေရေးဌာန\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nကောဇာ ၁၃၈၄\nခရစ်၂ဝ၂၃",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "231",
+   "books": [
+    "attha_ku_10"
+   ]
+  },
+  "check": "id found by content: attha:231 နပသ(ရန်ကုန်) (ပ) (consistency 0.92, 4406 anchors)",
+  "found": {
+   "n": 342,
+   "sheet": "အပဋ္ဌ-ပ-ပ",
+   "pali_guess": [
+    "attha_ku_10",
+    "attha_ku_zat_01"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "231",
+    "name": "နပသ(ရန်ကုန်) (ပ)",
+    "category": "အပါဒါန(ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_10"
+    ],
+    "offset": 0,
+    "share": 0.92,
+    "samples": 4406,
+    "name_match": false,
+    "rule_offset": 10
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "232",
+    "name": "နပသ(ရန်ကုန်) (ဒု)",
+    "category": "အပါဒါန(ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_10"
+    ],
+    "offset": 19,
+    "share": 0.29,
+    "samples": 7,
+    "name_match": false,
+    "rule_offset": 4
+   },
+   "tried": 2,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "231",
+    "books": [
+     "attha_ku_10"
+    ]
+   },
+   "check": "id found by content: attha:231 နပသ(ရန်ကုန်) (ပ) (consistency 0.92, 4406 anchors)"
+  }
+ },
+ {
+  "n": 343,
+  "file": "343.json",
+  "sheet": "အပဋ္ဌ-ပ-ဒု",
+  "rows": 662,
+  "edition": "\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် (ရန်ကုန်)\nအရှင်ပါမောက္ခ\nဝိနယဝိဒူ၊ သာသနဓဇဓမ္မာစရိယ\nသာသနတက္ကသီလဓမ္မာစရိယ [B.A (Buddhism)]\nသာသနတက္ကသီလမဟာဓမ္မာစရိယ [M.A (Buddhism)]\nစီရင်ရေးသားတော်မူအပ်သော\nအပဒါနအဋ္ဌကထာနိဿယ (ပထမတွဲ၊ဒုတိယပိုင်း)\n(အပ၊ ဋ္ဌ၊ ၁။ ၁၄၂ - ၃၅၂။)\nသာသနာ၂၅၆၆\nနိုင်ငံတော်ပရိ\nသဗ္ဗဒါ\nသ\nဓမ္မဒါနံ\nနာ့တက္ကသို၈\nဇိနာတိ\n၂၅၁၊ ကောဇာ- ရန်ကုန်မြို့\nသုတေသနဘာသာပြန်နှင့် စာအုပ်ထုတ်ဝေရေးဌာန\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nကောဇာ၁၃၈၄\nခရစ်၂ဝ၂၃",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "232",
+   "books": [
+    "attha_ku_10"
+   ]
+  },
+  "check": "id found by content: attha:232 နပသ(ရန်ကုန်) (ဒု) (consistency 0.94, 6932 anchors)",
+  "found": {
+   "n": 343,
+   "sheet": "အပဋ္ဌ-ပ-ဒု",
+   "pali_guess": [
+    "attha_ku_10",
+    "attha_ku_05_01"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "232",
+    "name": "နပသ(ရန်ကုန်) (ဒု)",
+    "category": "အပါဒါန(ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_10"
+    ],
+    "offset": 0,
+    "share": 0.94,
+    "samples": 6932,
+    "name_match": false,
+    "rule_offset": 4
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "231",
+    "name": "နပသ(ရန်ကုန်) (ပ)",
+    "category": "အပါဒါန(ပ)",
+    "pagecount": null,
+    "books": [
+     "attha_ku_10"
+    ],
+    "offset": -275,
+    "share": 0.4,
+    "samples": 5,
+    "name_match": false,
+    "rule_offset": 10
+   },
+   "tried": 2,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "232",
+    "books": [
+     "attha_ku_10"
+    ]
+   },
+   "check": "id found by content: attha:232 နပသ(ရန်ကုန်) (ဒု) (consistency 0.94, 6932 anchors)"
+  }
+ },
+ {
+  "n": 344,
+  "file": "344.json",
+  "sheet": "စရိယဋ္ဌ-ပ",
+  "rows": 636,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "239",
+   "books": [
+    "attha_ku_13"
+   ]
+  },
+  "check": "id found by content: attha:239 နပသ(ရန်ကုန်) (ပ) (consistency 0.88, 6052 anchors)",
+  "found": {
+   "n": 344,
+   "sheet": "စရိယဋ္ဌ-ပ",
+   "pali_guess": [
+    "attha_ku_13",
+    "attha_ku_zat_04"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "239",
+    "name": "နပသ(ရန်ကုန်) (ပ)",
+    "category": "စရိယာပိဋက",
+    "pagecount": null,
+    "books": [
+     "attha_ku_13"
+    ],
+    "offset": 0,
+    "share": 0.88,
+    "samples": 6052,
+    "name_match": false,
+    "rule_offset": 30
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "097",
+    "name": "ရှေးဆရာတော်",
+    "category": "စရိယာပိဋက",
+    "pagecount": null,
+    "books": [
+     "attha_ku_13"
+    ],
+    "offset": -61,
+    "share": 0.2,
+    "samples": 5116,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "239",
+    "books": [
+     "attha_ku_13"
+    ]
+   },
+   "check": "id found by content: attha:239 နပသ(ရန်ကုန်) (ပ) (consistency 0.88, 6052 anchors)"
+  }
+ },
+ {
+  "n": 345,
+  "file": "345.json",
+  "sheet": "စရိယဋ္ဌ-ဒု",
+  "rows": 548,
+  "edition": "\nသန်လျင်မြို့၊ အောင်သုခဒီပါအေးပရိယတ္တိစာသင်တိုက်ကြီး၏\nဦးစီးပဓာနနာယက နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nအဘိဓမ္မပိဋကမဟာဌာန၊ ပါမောက္ခ/ဌာနမှူးဆရာတော်\nဒေါက်တာအzmz\n၏\n301\nစရိယာပိဋကအဋ္ဌကထာနိဿယသစ်[ဒုတိယတွဲ)\n(စရိယာပိဋကပါဠိတော်နိဿယသစ်ပူးတွဲပါဝင်သည်။)\nသဗ္ဗဒါန\n“သာသနာ\nသနာ့တက္ကသို၈\nဇိနာတိ\nဓမ္မဒါန\nobdc-coccus\n၂၅၃ဝ၊\nရန်ကုန်မြို့\nသုတေသန ဘာသာပြန်နှင့် စာအုပ်ထုတ်ဝေရေးဌာန နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nသာသနာ ၂၅၆၃\nကောဇာ ၁၃၈၁\nခရစ် ၂၀၁၉",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "240",
+   "books": [
+    "attha_ku_13"
+   ]
+  },
+  "check": "id found by content: attha:240 နပသ(ရန်ကုန်) (ဒု) (consistency 0.87, 5414 anchors)",
+  "found": {
+   "n": 345,
+   "sheet": "စရိယဋ္ဌ-ဒု",
+   "pali_guess": [
+    "attha_ku_13",
+    "tika_di_01_02"
+   ],
+   "ok": true,
+   "best": {
+    "db": "attha",
+    "nsy_id": "240",
+    "name": "နပသ(ရန်ကုန်) (ဒု)",
+    "category": "စရိယာပိဋက",
+    "pagecount": null,
+    "books": [
+     "attha_ku_13"
+    ],
+    "offset": 0,
+    "share": 0.87,
+    "samples": 5414,
+    "name_match": false,
+    "rule_offset": 12
+   },
+   "second": {
+    "db": "attha",
+    "nsy_id": "097",
+    "name": "ရှေးဆရာတော်",
+    "category": "စရိယာပိဋက",
+    "pagecount": null,
+    "books": [
+     "attha_ku_13"
+    ],
+    "offset": 171,
+    "share": 0.5,
+    "samples": 4,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "240",
+    "books": [
+     "attha_ku_13"
+    ]
+   },
+   "check": "id found by content: attha:240 နပသ(ရန်ကုန်) (ဒု) (consistency 0.87, 5414 anchors)"
+  }
+ },
+ {
+  "n": 346,
+  "file": "346.json",
+  "sheet": "ဒွေမာတိ",
+  "rows": 185,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "001",
+   "books": [
+    "annya_vi_01_01"
+   ]
+  },
+  "check": "id found by content: annya:001 ဦးဗုဓ် (consistency 0.73, 133 anchors)",
+  "found": {
+   "n": 346,
+   "sheet": "ဒွေမာတိ",
+   "pali_guess": [
+    "annya_vi_01_01",
+    "mula_vi_02"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "001",
+    "name": "ဦးဗုဓ်",
+    "category": "ဒွေမာတိကာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": 0,
+    "share": 0.73,
+    "samples": 133,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "002",
+    "name": "ဘာသာဋီကာ",
+    "category": "ဒွေမာတိကာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": 171,
+    "share": 0.09,
+    "samples": 133,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "001",
+    "books": [
+     "annya_vi_01_01"
+    ]
+   },
+   "check": "id found by content: annya:001 ဦးဗုဓ် (consistency 0.73, 133 anchors)"
+  }
+ },
+ {
+  "n": 347,
+  "file": "347.json",
+  "sheet": "ပါတိမောက်",
+  "rows": 527,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "002",
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 0
+  },
+  "check": "id chosen: annya:002 ဘာသာဋီကာ (clear winner: share 0.43 vs 0.08)",
+  "found": {
+   "n": 347,
+   "sheet": "ပါတိမောက်",
+   "pali_guess": [
+    "annya_vi_01_01",
+    "annya_vi_01_02"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "002",
+    "name": "ဘာသာဋီကာ",
+    "category": "ဒွေမာတိကာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": 0,
+    "share": 0.43,
+    "samples": 345,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "003",
+    "name": "မေဒိနီ",
+    "category": "ဒွေမာတိကာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": 60,
+    "share": 0.08,
+    "samples": 345,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "tried": 3,
+   "check": "id chosen: annya:002 ဘာသာဋီကာ (clear winner: share 0.43 vs 0.08)",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "002",
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": 0
+   }
+  }
+ },
+ {
+  "n": 348,
+  "file": "348.json",
+  "sheet": "ပါတိမောက္ခ",
+  "rows": 703,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "003",
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 0
+  },
+  "check": "id chosen: annya:003 မေဒိနီ (clear winner: share 0.36 vs 0.07)",
+  "found": {
+   "n": 348,
+   "sheet": "ပါတိမောက္ခ",
+   "pali_guess": [
+    "annya_vi_01_01",
+    "annya_vi_01_02"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "003",
+    "name": "မေဒိနီ",
+    "category": "ဒွေမာတိကာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": -2,
+    "share": 0.36,
+    "samples": 389,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "002",
+    "name": "ဘာသာဋီကာ",
+    "category": "ဒွေမာတိကာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": -103,
+    "share": 0.07,
+    "samples": 389,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "tried": 3,
+   "check": "id chosen: annya:003 မေဒိနီ (clear winner: share 0.36 vs 0.07)",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "003",
+    "books": [
+     "annya_vi_01_01"
+    ],
+    "offset": 0
+   }
+  }
+ },
+ {
+  "n": 349,
+  "file": "349.json",
+  "sheet": "ခုဒ္ဒမူလသိက္ခာ",
+  "rows": 306,
+  "edition": "စက္ကိန္ဒာဘိ သိရိသဒ္ဓမ္မဓဇ မဟာဓမ္မရာဇာဓိရာဇဂုရု သွ န် း ပြု ခ တ် နှိ ပ် တံ ဆိ ပ် တ ၌ ရ\nဆရာ တ\nတ ာ် ဦးဗုဓ်\nနှင့်\nمرض\nနေရင်းရွာ ဇာတိ မဏိရတနာပုံတိုက် အရှင်အရိယာလင်္ကာရမထေရ်\nအ န က် မြ န် မ ာ ပြ န် ဆို အ ပ် သော\nခုဒ္ဒသိက္ခာ မူလသိက္ခာ နိဿယ\nဦးခင် စိုးအ မှူးရှိ သော ပါဠိ\nပါဠိ ဆ ရာ များ\nကြ ပ် မ ကြ ည့် ရှု ပြ င် ဆ င် သ ည် ။ B\nရ န် ကု န် မြို့\nဟံ သာ ဝ တီ ပိဋ က တ် ပုံ နှိ ပ် တို က်\n၁ ၉ ၅ ၇\nH 866—A ဟံသာဝတီ",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "004",
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ]
+  },
+  "check": "id found by content: annya:004 ဦးဗုဓ် (consistency 0.65, 2181 anchors)",
+  "found": {
+   "n": 349,
+   "sheet": "ခုဒ္ဒမူလသိက္ခာ",
+   "pali_guess": [
+    "annya_vi_05_01",
+    "annya_vi_05_03"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "004",
+    "name": "ဦးဗုဓ်",
+    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_05_01",
+     "annya_vi_06_01"
+    ],
+    "offset": 0,
+    "share": 0.65,
+    "samples": 2181,
+    "name_match": false,
+    "rule_offset": 6
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "005",
+    "name": "မေဒိနီ",
+    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_05_01",
+     "annya_vi_06_01"
+    ],
+    "offset": 14,
+    "share": 0.09,
+    "samples": 2181,
+    "name_match": false,
+    "rule_offset": 11
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "004",
+    "books": [
+     "annya_vi_05_01",
+     "annya_vi_06_01"
+    ]
+   },
+   "check": "id found by content: annya:004 ဦးဗုဓ် (consistency 0.65, 2181 anchors)"
+  }
+ },
+ {
+  "n": 350,
+  "file": "350.json",
+  "sheet": "ခုဒ္ဒသိက္ခာ",
+  "rows": 335,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "005",
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ]
+  },
+  "check": "id found by content: annya:005 မေဒိနီ (consistency 0.65, 964 anchors)",
+  "found": {
+   "n": 350,
+   "sheet": "ခုဒ္ဒသိက္ခာ",
+   "pali_guess": [
+    "annya_vi_05_01",
+    "annya_vi_05_03"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "005",
+    "name": "မေဒိနီ",
+    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_05_01",
+     "annya_vi_06_01"
+    ],
+    "offset": 0,
+    "share": 0.65,
+    "samples": 964,
+    "name_match": false,
+    "rule_offset": 11
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "004",
+    "name": "ဦးဗုဓ်",
+    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_05_01",
+     "annya_vi_06_01"
+    ],
+    "offset": -58,
+    "share": 0.07,
+    "samples": 964,
+    "name_match": false,
+    "rule_offset": 6
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "005",
+    "books": [
+     "annya_vi_05_01",
+     "annya_vi_06_01"
+    ]
+   },
+   "check": "id found by content: annya:005 မေဒိနီ (consistency 0.65, 964 anchors)"
+  }
+ },
+ {
+  "n": 351,
+  "file": "351.json",
+  "sheet": "ခုဒ္ဒဘာဋီ",
+  "rows": 610,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "006",
+   "books": [
+    "annya_vi_05_01"
+   ],
+   "offset": 0
+  },
+  "check": "id chosen: annya:006 ဘာသာဋီကာ (clear winner: share 0.30 vs 0.03)",
+  "found": {
+   "n": 351,
+   "sheet": "ခုဒ္ဒဘာဋီ",
+   "pali_guess": [
+    "annya_vi_05_01",
+    "annya_vi_05_03"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "006",
+    "name": "ဘာသာဋီကာ",
+    "category": "ခုဒ္ဒသိက္ခာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_05_01"
+    ],
+    "offset": 0,
+    "share": 0.3,
+    "samples": 1206,
+    "name_match": false,
+    "rule_offset": 1
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "004",
+    "name": "ဦးဗုဓ်",
+    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+    "pagecount": null,
+    "books": [
+     "annya_vi_05_01",
+     "annya_vi_06_01"
+    ],
+    "offset": -307,
+    "share": 0.03,
+    "samples": 1185,
+    "name_match": false,
+    "rule_offset": 6
+   },
+   "tried": 3,
+   "check": "id chosen: annya:006 ဘာသာဋီကာ (clear winner: share 0.30 vs 0.03)",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "006",
+    "books": [
+     "annya_vi_05_01"
+    ],
+    "offset": 0
+   }
+  }
+ },
+ {
+  "n": 352,
+  "file": "352.json",
+  "sheet": "အဘိဓမ္မတ္ထ",
+  "rows": 427,
+  "edition": "ခ\nပဌမ ဗားကရာ ဆရာတော်ဘုရားကြီး\nစီရင်ရေးသားသော\nယ\nအဘိဓမ္မတ္ထသင်္ဂဟ ပါဌ်နိဿယ\nမော\n၁င်စု မြန်မာနိုင်ငံ\nဗုဒ္ဓသား\nမြန်မာနိုင်ငံ ဗုဒ္ဓသာသနာအဖွဲ့\nပုံနှိပ်တိုက်၌ ရိုက်နှိပ်သည်\nကောဇာ ၁၃၃၂\nဧပြီလ ၁၉၇၁\nသာသနာ ၂၅၁၄",
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "010",
+   "books": [
+    "annya_bi_05"
+   ]
+  },
+  "check": "id found by content: annya:010 ဗားကရာ (consistency 0.79, 1635 anchors)",
+  "found": {
+   "n": 352,
+   "sheet": "အဘိဓမ္မတ္ထ",
+   "pali_guess": [
+    "annya_bi_05",
+    "annya_bi_07"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "010",
+    "name": "ဗားကရာ",
+    "category": "သင်္ဂဟ",
+    "pagecount": null,
+    "books": [
+     "annya_bi_05"
+    ],
+    "offset": 0,
+    "share": 0.79,
+    "samples": 1635,
+    "name_match": true,
+    "rule_offset": 60
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "012",
+    "name": "ဘာသာဋီကာ",
+    "category": "သင်္ဂဟ",
+    "pagecount": null,
+    "books": [
+     "annya_bi_05"
+    ],
+    "offset": 86,
+    "share": 0.07,
+    "samples": 1635,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "010",
+    "books": [
+     "annya_bi_05"
+    ]
+   },
+   "check": "id found by content: annya:010 ဗားကရာ (consistency 0.79, 1635 anchors)"
+  }
+ },
+ {
+  "n": 353,
+  "file": "353.json",
+  "sheet": "အခြေပြုသင်္ဂြိုလ်",
+  "rows": 656,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "011",
+   "books": [
+    "annya_bi_05"
+   ],
+   "offset": 0,
+   "as_is": true
+  },
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id",
+  "found": {
+   "n": 353,
+   "sheet": "အခြေပြုသင်္ဂြိုလ်",
+   "pali_guess": [
+    "annya_bi_07",
+    "annya_bi_05"
+   ],
+   "ok": false,
+   "best": null,
+   "second": null,
+   "tried": 0,
+   "check": "NO RELIABLE ID (best share 0.00) - please tell me the id",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "011",
+    "books": [
+     "annya_bi_05"
+    ],
+    "offset": 0,
+    "as_is": true
+   }
+  }
+ },
+ {
+  "n": 354,
+  "file": "354.json",
+  "sheet": "ဋီကာကျော်",
+  "rows": 664,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "017",
+   "books": [
+    "annya_bi_06"
+   ]
+  },
+  "check": "id found by content: annya:017 တောင်မြို့ (consistency 0.79, 2857 anchors)",
+  "found": {
+   "n": 354,
+   "sheet": "ဋီကာကျော်",
+   "pali_guess": [
+    "annya_bi_06",
+    "annya_bi_07"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "017",
+    "name": "တောင်မြို့",
+    "category": "ဋီကာကျော်",
+    "pagecount": null,
+    "books": [
+     "annya_bi_06"
+    ],
+    "offset": 0,
+    "share": 0.79,
+    "samples": 2857,
+    "name_match": false,
+    "rule_offset": 10
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "018",
+    "name": "မေဒိနီ",
+    "category": "ဋီကာကျော်",
+    "pagecount": null,
+    "books": [
+     "annya_bi_06"
+    ],
+    "offset": -31,
+    "share": 0.32,
+    "samples": 1200,
+    "name_match": false,
+    "rule_offset": 16
+   },
+   "tried": 3,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "017",
+    "books": [
+     "annya_bi_06"
+    ]
+   },
+   "check": "id found by content: annya:017 တောင်မြို့ (consistency 0.79, 2857 anchors)"
+  }
+ },
+ {
+  "n": 355,
+  "file": "355.json",
+  "sheet": "ကစ္စည်းဘာဋီ",
+  "rows": 555,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "022",
+   "books": [
+    "annya_sadda_01"
+   ]
+  },
+  "check": "id found by content: annya:022 ဘာသာဋီကာ (ပ) (consistency 0.56, 1455 anchors)",
+  "found": {
+   "n": 355,
+   "sheet": "ကစ္စည်းဘာဋီ",
+   "pali_guess": [
+    "annya_sadda_01",
+    "annya_sadda_02"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "022",
+    "name": "ဘာသာဋီကာ (ပ)",
+    "category": "ကစ္စည်း",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_01"
+    ],
+    "offset": 0,
+    "share": 0.56,
+    "samples": 1455,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "026",
+    "name": "သပြေကန် (တ)",
+    "category": "ကစ္စည်း",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_01"
+    ],
+    "offset": -80,
+    "share": 0.75,
+    "samples": 4,
+    "name_match": false,
+    "rule_offset": 17
+   },
+   "tried": 6,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "022",
+    "books": [
+     "annya_sadda_01"
+    ]
+   },
+   "check": "id found by content: annya:022 ဘာသာဋီကာ (ပ) (consistency 0.56, 1455 anchors)"
+  }
+ },
+ {
+  "n": 356,
+  "file": "356.json",
+  "sheet": "ကစ္စည်းဘာဋီ-ဒု",
+  "rows": 615,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "023",
+   "books": [
+    "annya_sadda_01"
+   ],
+   "offset": 0,
+   "as_is": true
+  },
+  "check": "NO RELIABLE ID (best share 0.18) - please tell me the id",
+  "found": {
+   "n": 356,
+   "sheet": "ကစ္စည်းဘာဋီ-ဒု",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_01"
+   ],
+   "ok": false,
+   "best": {
+    "db": "annya",
+    "nsy_id": "033",
+    "name": "ဘာသာဋီကာ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -153,
+    "share": 0.18,
+    "samples": 34,
+    "name_match": false,
+    "rule_offset": 20
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "031",
+    "name": "ဂဏ္ဌိ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -123,
+    "share": 0.14,
+    "samples": 44,
+    "name_match": false,
+    "rule_offset": 23
+   },
+   "tried": 5,
+   "check": "NO RELIABLE ID (best share 0.18) - please tell me the id",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "023",
+    "books": [
+     "annya_sadda_01"
+    ],
+    "offset": 0,
+    "as_is": true
+   }
+  }
+ },
+ {
+  "n": 357,
+  "file": "357.json",
+  "sheet": "သဒ္ဒါကြီး-၁",
+  "rows": 689,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "024",
+   "books": [
+    "annya_sadda_01"
+   ],
+   "offset": 0,
+   "as_is": true
+  },
+  "check": "NO RELIABLE ID (best share 0.43) - please tell me the id",
+  "found": {
+   "n": 357,
+   "sheet": "သဒ္ဒါကြီး-၁",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_10"
+   ],
+   "ok": false,
+   "best": {
+    "db": "annya",
+    "nsy_id": "034",
+    "name": "ဘာသာဋီကာ (ဒု)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -416,
+    "share": 0.43,
+    "samples": 7,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "032",
+    "name": "ဂဏ္ဌိ (ဒု)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -476,
+    "share": 0.43,
+    "samples": 7,
+    "name_match": false,
+    "rule_offset": 25
+   },
+   "tried": 5,
+   "check": "NO RELIABLE ID (best share 0.43) - please tell me the id",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "024",
+    "books": [
+     "annya_sadda_01"
+    ],
+    "offset": 0,
+    "as_is": true
+   }
+  }
+ },
+ {
+  "n": 358,
+  "file": "358.json",
+  "sheet": "သဒ္ဒါကြီး-၂",
+  "rows": 591,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "025",
+   "books": [
+    "annya_sadda_01"
+   ],
+   "offset": 0,
+   "as_is": true
+  },
+  "check": "NO RELIABLE ID (best share 0.28) - please tell me the id",
+  "found": {
+   "n": 358,
+   "sheet": "သဒ္ဒါကြီး-၂",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_10"
+   ],
+   "ok": false,
+   "best": {
+    "db": "annya",
+    "nsy_id": "033",
+    "name": "ဘာသာဋီကာ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": 533,
+    "share": 0.28,
+    "samples": 18,
+    "name_match": false,
+    "rule_offset": 20
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "031",
+    "name": "ဂဏ္ဌိ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": 618,
+    "share": 0.16,
+    "samples": 31,
+    "name_match": false,
+    "rule_offset": 23
+   },
+   "tried": 5,
+   "check": "NO RELIABLE ID (best share 0.28) - please tell me the id",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "025",
+    "books": [
+     "annya_sadda_01"
+    ],
+    "offset": 0,
+    "as_is": true
+   }
+  }
+ },
+ {
+  "n": 359,
+  "file": "359.json",
+  "sheet": "သဒ္ဒါကြီး-၃",
+  "rows": 280,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "026",
+   "books": [
+    "annya_sadda_01"
+   ],
+   "offset": 0,
+   "as_is": true
+  },
+  "check": "NO RELIABLE ID (best share 0.44) - please tell me the id",
+  "found": {
+   "n": 359,
+   "sheet": "သဒ္ဒါကြီး-၃",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_01"
+   ],
+   "ok": false,
+   "best": {
+    "db": "annya",
+    "nsy_id": "033",
+    "name": "ဘာသာဋီကာ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -116,
+    "share": 0.44,
+    "samples": 9,
+    "name_match": false,
+    "rule_offset": 20
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "031",
+    "name": "ဂဏ္ဌိ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -98,
+    "share": 0.44,
+    "samples": 9,
+    "name_match": false,
+    "rule_offset": 23
+   },
+   "tried": 5,
+   "check": "NO RELIABLE ID (best share 0.44) - please tell me the id",
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "026",
+    "books": [
+     "annya_sadda_01"
+    ],
+    "offset": 0,
+    "as_is": true
+   }
+  }
+ },
+ {
+  "n": 360,
+  "file": "360.json",
+  "sheet": "ရူပသဒ္ဓိ-၁",
+  "rows": 810,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "031",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:031 ဂဏ္ဌိ (ပ) (consistency 0.70, 1353 anchors)",
+  "found": {
+   "n": 360,
+   "sheet": "ရူပသဒ္ဓိ-၁",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_06"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "031",
+    "name": "ဂဏ္ဌိ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": 0,
+    "share": 0.7,
+    "samples": 1353,
+    "name_match": false,
+    "rule_offset": 23
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "032",
+    "name": "ဂဏ္ဌိ (ဒု)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -540,
+    "share": 0.29,
+    "samples": 17,
+    "name_match": false,
+    "rule_offset": 25
+   },
+   "tried": 5,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "031",
+    "books": [
+     "annya_sadda_02"
+    ]
+   },
+   "check": "id found by content: annya:031 ဂဏ္ဌိ (ပ) (consistency 0.70, 1353 anchors)"
+  }
+ },
+ {
+  "n": 361,
+  "file": "361.json",
+  "sheet": "ရူပသဒ္ဓိ-၂",
+  "rows": 674,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "032",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:032 ဂဏ္ဌိ (ဒု) (consistency 0.57, 2281 anchors)",
+  "found": {
+   "n": 361,
+   "sheet": "ရူပသဒ္ဓိ-၂",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_10"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "032",
+    "name": "ဂဏ္ဌိ (ဒု)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -2,
+    "share": 0.57,
+    "samples": 2281,
+    "name_match": false,
+    "rule_offset": 25
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "033",
+    "name": "ဘာသာဋီကာ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": 187,
+    "share": 0.26,
+    "samples": 27,
+    "name_match": false,
+    "rule_offset": 20
+   },
+   "tried": 5,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "032",
+    "books": [
+     "annya_sadda_02"
+    ]
+   },
+   "check": "id found by content: annya:032 ဂဏ္ဌိ (ဒု) (consistency 0.57, 2281 anchors)"
+  }
+ },
+ {
+  "n": 362,
+  "file": "362.json",
+  "sheet": "ရူပသဒ္ဓိဘာဋီ-၁",
+  "rows": 635,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:033 ဘာသာဋီကာ (ပ) (consistency 0.68, 2579 anchors)",
+  "found": {
+   "n": 362,
+   "sheet": "ရူပသဒ္ဓိဘာဋီ-၁",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_06"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "033",
+    "name": "ဘာသာဋီကာ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": 0,
+    "share": 0.68,
+    "samples": 2579,
+    "name_match": false,
+    "rule_offset": 20
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "032",
+    "name": "ဂဏ္ဌိ (ဒု)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": -42,
+    "share": 0.25,
+    "samples": 12,
+    "name_match": false,
+    "rule_offset": 25
+   },
+   "tried": 5,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "033",
+    "books": [
+     "annya_sadda_02"
+    ]
+   },
+   "check": "id found by content: annya:033 ဘာသာဋီကာ (ပ) (consistency 0.68, 2579 anchors)"
+  }
+ },
+ {
+  "n": 363,
+  "file": "363.json",
+  "sheet": "ရူပသဒ္ဓိဘာဋီ-၂",
+  "rows": 602,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "034",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)",
+  "found": {
+   "n": 363,
+   "sheet": "ရူပသဒ္ဓိဘာဋီ-၂",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_10"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "034",
+    "name": "ဘာသာဋီကာ (ဒု)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": 0,
+    "share": 0.74,
+    "samples": 2945,
+    "name_match": false,
+    "rule_offset": 0
+   },
+   "second": {
+    "db": "annya",
+    "nsy_id": "033",
+    "name": "ဘာသာဋီကာ (ပ)",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_02"
+    ],
+    "offset": 633,
+    "share": 0.53,
+    "samples": 53,
+    "name_match": false,
+    "rule_offset": 20
+   },
+   "tried": 5,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "034",
+    "books": [
+     "annya_sadda_02"
+    ]
+   },
+   "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)"
+  }
+ },
+ {
+  "n": 500,
+  "file": "500.json",
+  "sheet": "မာတိကာ",
+  "rows": 231,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_sadda_11"
+   ]
+  },
+  "check": "content guess annya_sadda_11 (0.30); database said -"
+ },
+ {
   "n": 1,
   "file": "001.json",
   "sheet": "ဝိ၁,ဘုရား",
@@ -5051,94 +9809,6 @@
   "check": "db+content agree"
  },
  {
-  "n": 98,
-  "file": "098.json",
-  "sheet": "သီလ,ပခု(ဒု)",
-  "rows": 652,
-  "edition": "ပခုက္ကူ (ဒု)",
-  "sid": "34",
-  "excel_pages": 652,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "attha",
-    "nsy_id": "034",
-    "name": "ပခုက္ကူ (ဒု)",
-    "category": "သီလက္ခန်",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "attha_di_01",
-      "maprows": 217,
-      "pali_pages": [
-       122,
-       338
-      ],
-      "nsy_pages": [
-       6,
-       656
-      ]
-     }
-    ],
-    "score": 3
-   },
-   {
-    "db": "tika",
-    "nsy_id": "034",
-    "name": "ဘာဋီ",
-    "category": "ယမက မူဋီ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "tika_bi_03",
-      "maprows": 48,
-      "pali_pages": [
-       117,
-       164
-      ],
-      "nsy_pages": [
-       1,
-       228
-      ]
-     }
-    ],
-    "score": 0
-   },
-   {
-    "db": "annya",
-    "nsy_id": "034",
-    "name": "ဘာသာဋီကာ (ဒု)",
-    "category": "ရူပသိဒ္ဓိ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_02",
-      "maprows": 225,
-      "pali_pages": [
-       197,
-       421
-      ],
-      "nsy_pages": [
-       1,
-       591
-      ]
-     }
-    ],
-    "score": 0
-   }
-  ],
-  "label": "သီလက္ခန်",
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "034",
-   "books": [
-    "attha_di_01"
-   ]
-  },
-  "check": "db+content agree"
- },
- {
   "n": 99,
   "file": "099.json",
   "sheet": "သီလ,နေရင်း(ပ)",
@@ -5841,6 +10511,19 @@
    ]
   },
   "check": "db+content agree"
+ },
+ {
+  "n": 501,
+  "file": "501.json",
+  "sheet": "အမှိုက်ရလဒ်",
+  "rows": 4,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "skip",
+  "cand": [],
+  "final": null,
+  "check": "UNKNOWN"
  },
  {
   "n": 107,
@@ -12453,2764 +17136,202 @@
   "check": "content guess attha_di_01 (0.38); database said -"
  },
  {
-  "n": 300,
-  "file": "300.json",
-  "sheet": "သုတ်သီလက္ခန်-ဋ္ဌ(ဒု)",
-  "rows": 440,
-  "edition": "သုတ်သီလက္ခန်အဋ္ဌကထာနိသျ (ဒု)",
-  "sid": null,
-  "excel_pages": 440,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_01"
-   ]
-  },
-  "check": "content guess attha_di_01 (0.37); database said -"
- },
- {
-  "n": 301,
-  "file": "301.json",
-  "sheet": "သုတ်မဟာဝါဋ္ဌ(ပ)",
-  "rows": 298,
-  "edition": "\nသုတ်မဟာဝါအဌကထာနိသျ။\nဥ္စမတွဲ\n15\nနမောတဿဘဂဝတောအရဟတော\nသမ္မာသမ္ဗုဒ္ဓဿ။\nရတနတ္တယံပင်ဏ၁မမ\nမဟာ ကာရုဏိကော နာထော၊ သတ္တေသု ပဋိ ကညံ့။ ဟိတွာ အစ္စန္တိအဿာဒံ အနုဿာသကရာဩ၁၁။ (ဝတ္တဂါထ၁သ၁မည်။\nလောကနိတ္ထရဏတ္ထာယ။ သုက္ကရံကရိတွာန။ ပတ္တော သမ္ဗောဓိ မောရ။ဝန္ဒေဝိဘဝပါပေ။\n(၎င်းဝတ္တဂါထာသ၁မည်။)\nကိလေသဝံသကံဓမ္မ။သမ္မ၁ရိဿံရက္ခကံးသမ္ဗုဒ္ဓေနသုအက္ခခံထံ။\nရွှေသမ္ဗုဒ္ဓပူဇိတံ။\n(ပတျာဝတ္တ။)\n့ရကာမုတ္တံ၊ သဒ္ဓမ္မဝံသပါလကံ။ သိလာဒိဂုဏသမ္ပန္နံ။ ဝန္ဒေ\nသမ္ဗုဒ္ဓဩရသီ။\n(ပဌမသကာရဝိပုလာ။)",
-  "sid": null,
-  "excel_pages": 298,
-  "status": "",
-  "cand": [],
-  "label": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ပ)",
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_02"
-   ]
-  },
-  "check": "content guess attha_di_02 (0.42); database said -"
- },
- {
-  "n": 302,
-  "file": "302.json",
-  "sheet": "သုတ်မဟာဝါဋ္ဌ(ဒု)",
-  "rows": 491,
-  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ဒု)",
-  "sid": null,
-  "excel_pages": 491,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_02"
-   ]
-  },
-  "check": "content guess attha_di_02 (0.69); database said -"
- },
- {
-  "n": 303,
-  "file": "303.json",
-  "sheet": "သုတ်မဟာဝါဋ္ဌ(တ)",
-  "rows": 303,
-  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (တ)",
-  "sid": null,
-  "excel_pages": 303,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_02"
-   ]
-  },
-  "check": "content guess attha_di_02 (0.44); database said -"
- },
- {
-  "n": 304,
-  "file": "304.json",
-  "sheet": "သုတ်မဟာဝါဋ္ဌ(စ)",
-  "rows": 300,
-  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (စ)",
-  "sid": null,
-  "excel_pages": 300,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_02"
-   ]
-  },
-  "check": "content guess attha_di_02 (0.37); database said -"
- },
- {
-  "n": 305,
-  "file": "305.json",
-  "sheet": "မဟာဝါ-ဋ္ဌ(ပ)",
-  "rows": 570,
-  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ပ)",
-  "sid": null,
-  "excel_pages": 570,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_02"
-   ]
-  },
-  "check": "content guess attha_di_02 (0.40); database said -"
- },
- {
-  "n": 306,
-  "file": "306.json",
-  "sheet": "မဟာဝါ-ဋ္ဌ(ဒု)",
-  "rows": 508,
-  "edition": "သုတ်မဟာဝါအဋ္ဌကထာနိသျ (ဒု)",
-  "sid": null,
-  "excel_pages": 508,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_02"
-   ]
-  },
-  "check": "content guess attha_di_02 (0.40); database said -"
- },
- {
-  "n": 307,
-  "file": "307.json",
-  "sheet": "သုတ်ပါထေယျ-ဋ္ဌ",
-  "rows": 637,
-  "edition": "သုတ်ပါထေယျအဋ္ဌကထာနိသျ",
-  "sid": null,
-  "excel_pages": 637,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_di_03"
-   ]
-  },
-  "check": "content guess attha_di_03 (0.37); database said -"
- },
- {
-  "n": 308,
-  "file": "308.json",
-  "sheet": "ဓမ္မ-ဋ္ဌသစ်",
-  "rows": 466,
-  "edition": "ဓမ္မပဒအဋ္ဌကထာနိဿယသစ်",
-  "sid": null,
-  "excel_pages": 466,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_ku_02_01"
-   ]
-  },
-  "check": "content guess attha_ku_02_01 (0.81); database said -"
- },
- {
-  "n": 309,
-  "file": "309.json",
-  "sheet": "ပေဋကဋ္ဌ(ပ)",
-  "rows": 424,
-  "edition": "ပေဋကောပဒေသအဋ္ဌကထာနိသျ (ပ)",
-  "sid": null,
-  "excel_pages": 424,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_ku_20"
-   ]
-  },
-  "check": "content guess attha_ku_20 (0.18); database said -"
- },
- {
-  "n": 310,
-  "file": "310.json",
-  "sheet": "ဝိသုဒ္ဓဋ္ဌ(ပ)",
-  "rows": 514,
-  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (ပ)",
-  "sid": null,
-  "excel_pages": 514,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_01"
-   ]
-  },
-  "check": "content guess annya_bi_01 (0.66); database said -"
- },
- {
-  "n": 311,
-  "file": "311.json",
-  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(ဒု)",
-  "rows": 516,
-  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (ဒု)",
-  "sid": null,
-  "excel_pages": 516,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_01"
-   ]
-  },
-  "check": "content guess annya_bi_01 (0.68); database said -"
- },
- {
-  "n": 312,
-  "file": "312.json",
-  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(တ)",
-  "rows": 364,
-  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (တ)",
-  "sid": null,
-  "excel_pages": 364,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_02"
-   ]
-  },
-  "check": "content guess annya_bi_02 (0.58); database said -"
- },
- {
-  "n": 313,
-  "file": "313.json",
-  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(စ)",
-  "rows": 512,
-  "edition": "ဝိသုဒ္ဓိမဂ်နိဿယသစ် (စ)",
-  "sid": null,
-  "excel_pages": 512,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_02"
-   ]
-  },
-  "check": "content guess annya_bi_02 (0.67); database said -"
- },
- {
-  "n": 314,
-  "file": "314.json",
-  "sheet": "ဝိသုဒ္ဓိသစ်(ပ)",
-  "rows": 439,
-  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိဿယသစ် (ပ)",
-  "sid": null,
-  "excel_pages": 439,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_01"
-   ]
-  },
-  "check": "content guess annya_bi_01 (0.48); database said -"
- },
- {
-  "n": 315,
-  "file": "315.json",
-  "sheet": "ဝိသုဒ္ဓိသစ်(ဒု)",
-  "rows": 431,
-  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိဿယသစ် (ဒု)",
-  "sid": null,
-  "excel_pages": 431,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_01"
-   ]
-  },
-  "check": "content guess annya_bi_01 (0.39); database said -"
- },
- {
-  "n": 316,
-  "file": "316.json",
-  "sheet": "ဝိသုဒ္ဓိ(ပ)",
-  "rows": 528,
-  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (ပ)",
-  "sid": null,
-  "excel_pages": 528,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_01"
-   ]
-  },
-  "check": "content guess annya_bi_01 (0.43); database said -"
- },
- {
-  "n": 317,
-  "file": "317.json",
-  "sheet": "ဝိသုဒ္ဓိ(ဒု)",
-  "rows": 508,
-  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (ဒု)",
-  "sid": null,
-  "excel_pages": 508,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_01"
-   ]
-  },
-  "check": "content guess annya_bi_01 (0.38); database said -"
- },
- {
-  "n": 318,
-  "file": "318.json",
-  "sheet": "ဝိသုဒ္ဓိ(တ)",
-  "rows": 627,
-  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (တ)",
-  "sid": null,
-  "excel_pages": 627,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_02"
-   ]
-  },
-  "check": "content guess annya_bi_02 (0.39); database said -"
- },
- {
-  "n": 319,
-  "file": "319.json",
-  "sheet": "ဝိသုဒ္ဓိ(စ)",
-  "rows": 358,
-  "edition": "ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျ (စ)",
-  "sid": null,
-  "excel_pages": 358,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_02"
-   ]
-  },
-  "check": "content guess annya_bi_02 (0.40); database said -"
- },
- {
-  "n": 320,
-  "file": "320.json",
-  "sheet": "သမ္မောဟဋ္ဌ(ပ)",
-  "rows": 331,
-  "edition": "သမ္မောဟဝိနောဒနီအဋ္ဌကထာနိသျ (ပ)",
-  "sid": null,
-  "excel_pages": 331,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_bi_02"
-   ]
-  },
-  "check": "content guess attha_bi_02 (0.34); database said -"
- },
- {
-  "n": 321,
-  "file": "321.json",
-  "sheet": "သမ္မောဟဋ္ဌ(ဒု)",
-  "rows": 471,
-  "edition": "သမ္မောဟဝိနောဒနီအဋ္ဌကထာနိသျ (ဒု)",
-  "sid": null,
-  "excel_pages": 471,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_bi_02"
-   ]
-  },
-  "check": "content guess attha_bi_02 (0.39); database said -"
- },
- {
-  "n": 322,
-  "file": "322.json",
-  "sheet": "သမ္မောဟဋ္ဌ(တ)",
-  "rows": 505,
-  "edition": "သမ္မောဟဝိနောဒနီအဋ္ဌကထာနိသျ (တ)",
-  "sid": null,
-  "excel_pages": 505,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_bi_02"
-   ]
-  },
-  "check": "content guess attha_bi_02 (0.40); database said -"
- },
- {
-  "n": 323,
-  "file": "323.json",
-  "sheet": "ပဉ္စကြိုက်(ပ)",
-  "rows": 443,
-  "edition": "ပဉ္စပကြိုဏ်အဋ္ဌကထာနိသျ (ပ)",
-  "sid": null,
-  "excel_pages": 443,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_bi_03"
-   ]
-  },
-  "check": "content guess attha_bi_03 (0.37); database said -"
- },
- {
-  "n": 324,
-  "file": "324.json",
-  "sheet": "ပဉ္စကြိုက်(ဒု)",
-  "rows": 495,
-  "edition": "ပဉ္စပကြိုဏ်အဋ္ဌကထာနိသျ (ဒု)",
-  "sid": null,
-  "excel_pages": 495,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_bi_03"
-   ]
-  },
-  "check": "content guess attha_bi_03 (0.40); database said -"
- },
- {
-  "n": 325,
-  "file": "325.json",
-  "sheet": "ပဉ္စကြိုက်(တ)",
-  "rows": 489,
-  "edition": "ပဉ္စပကြိုဏ်အဋ္ဌကထာနိသျ (တ)",
-  "sid": null,
-  "excel_pages": 489,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "attha_bi_03"
-   ]
-  },
-  "check": "content guess attha_bi_03 (0.43); database said -"
- },
- {
-  "n": 326,
-  "file": "326.json",
-  "sheet": "သင်္ခေပဋ္ဌ",
-  "rows": 88,
-  "edition": "သစ္စ_သင်္ခေပအဋ္ဌကထာနိဿယ",
-  "sid": null,
-  "excel_pages": 88,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "content",
-   "books": [
-    "annya_bi_07"
-   ]
-  },
-  "check": "content guess annya_bi_07 (0.29); database said -"
- },
- {
-  "n": 327,
-  "file": "327.json",
-  "sheet": "ကင်္ခါသစ်",
-  "rows": 764,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "117",
-   "books": [
-    "annya_vi_01_04"
-   ],
-   "offset": 0,
-   "as_is": true
-  },
-  "check": "db map used as is (best candidate annya:117 ပခုက္ကူ (ပ), content share 0.17 - not verified)"
- },
- {
-  "n": 328,
-  "file": "328.json",
-  "sheet": "မူလဋီ(ပ)",
-  "rows": 378,
-  "edition": "ဓမ္မသင်္ဂဏီမူလဋီကာနိဿယ (ပ) ကူကြီး",
-  "sid": null,
-  "excel_pages": 378,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "046",
-   "books": [
-    "tika_bi_01"
-   ]
-  },
-  "check": "id found by content: tika:046 ဂူကြီး (consistency 0.73, 11 anchors)",
-  "found": {
-   "n": 328,
-   "sheet": "မူလဋီ(ပ)",
-   "pali_guess": [
-    "tika_bi_01",
-    "annya_bi_07"
-   ],
-   "ok": true,
-   "best": {
-    "db": "tika",
-    "nsy_id": "046",
-    "name": "ဂူကြီး",
-    "category": "ဏီ မူဋီ",
+  "n": 98,
+  "file": "098.json",
+  "sheet": "သီလ,ပခု(ဒု)",
+  "rows": 652,
+  "edition": "ပခုက္ကူ (ဒု)",
+  "sid": "34",
+  "excel_pages": 652,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "attha",
+    "nsy_id": "034",
+    "name": "ပခုက္ကူ (ဒု)",
+    "category": "သီလက္ခန်",
     "pagecount": null,
-    "books": [
-     "tika_bi_01"
+    "pali": [
+     {
+      "book": "attha_di_01",
+      "maprows": 217,
+      "pali_pages": [
+       122,
+       338
+      ],
+      "nsy_pages": [
+       6,
+       656
+      ]
+     }
     ],
-    "offset": -1,
-    "share": 0.73,
-    "samples": 11,
-    "name_match": false,
-    "rule_offset": 1
+    "score": 3
    },
-   "second": {
+   {
     "db": "tika",
-    "nsy_id": "021",
-    "name": "ဘာဋီ (ဒု)",
-    "category": "နီ မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_01"
-    ],
-    "offset": -280,
-    "share": 0.75,
-    "samples": 4,
-    "name_match": false,
-    "rule_offset": 2
-   },
-   "tried": 7,
-   "final": {
-    "mode": "db",
-    "db": "tika",
-    "nsy_id": "046",
-    "books": [
-     "tika_bi_01"
-    ]
-   },
-   "check": "id found by content: tika:046 ဂူကြီး (consistency 0.73, 11 anchors)"
-  }
- },
- {
-  "n": 329,
-  "file": "329.json",
-  "sheet": "မူလဋီ(ဒု)",
-  "rows": 382,
-  "edition": "ဓမ္မသင်္ဂဏီမူလဋီကာနိဿယ (ဒု) ကူကြီး",
-  "sid": null,
-  "excel_pages": 382,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "047",
-   "books": [
-    "tika_bi_01"
-   ]
-  },
-  "check": "id found by content: tika:047 ဂူကြီး (consistency 0.84, 38 anchors)",
-  "found": {
-   "n": 329,
-   "sheet": "မူလဋီ(ဒု)",
-   "pali_guess": [
-    "tika_bi_01",
-    "annya_bi_07"
-   ],
-   "ok": true,
-   "best": {
-    "db": "tika",
-    "nsy_id": "047",
-    "name": "ဂူကြီး",
-    "category": "ဏီ မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_01"
-    ],
-    "offset": 0,
-    "share": 0.84,
-    "samples": 38,
-    "name_match": false,
-    "rule_offset": 0
-   },
-   "second": {
-    "db": "tika",
-    "nsy_id": "022",
-    "name": "ဘာဋီ (တ)",
-    "category": "နီ မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_01"
-    ],
-    "offset": -59,
-    "share": 0.58,
-    "samples": 12,
-    "name_match": false,
-    "rule_offset": 2
-   },
-   "tried": 7,
-   "final": {
-    "mode": "db",
-    "db": "tika",
-    "nsy_id": "047",
-    "books": [
-     "tika_bi_01"
-    ]
-   },
-   "check": "id found by content: tika:047 ဂူကြီး (consistency 0.84, 38 anchors)"
-  }
- },
- {
-  "n": 330,
-  "file": "330.json",
-  "sheet": "မူလဋီ(တ)",
-  "rows": 383,
-  "edition": "ဝိဘင်း မူလဋီကာနိသျ (တ ကူကြီး)",
-  "sid": null,
-  "excel_pages": 383,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "048",
-   "books": [
-    "tika_bi_02_01"
-   ]
-  },
-  "check": "id found by content: tika:048 ဂူကြီး (consistency 0.94, 32 anchors)",
-  "found": {
-   "n": 330,
-   "sheet": "မူလဋီ(တ)",
-   "pali_guess": [
-    "tika_bi_02_01",
-    "annya_bi_04"
-   ],
-   "ok": true,
-   "best": {
-    "db": "tika",
-    "nsy_id": "048",
-    "name": "ဂူကြီး",
-    "category": "ဝိဘင်း မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_02_01"
-    ],
-    "offset": 0,
-    "share": 0.94,
-    "samples": 32,
-    "name_match": false,
-    "rule_offset": 2
-   },
-   "second": {
-    "db": "tika",
-    "nsy_id": "027",
-    "name": "ဘာဋီ (ဒု)",
-    "category": "ဝိဘင်း မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_02_01"
-    ],
-    "offset": -262,
-    "share": 0.43,
-    "samples": 7,
-    "name_match": false,
-    "rule_offset": 0
-   },
-   "tried": 5,
-   "final": {
-    "mode": "db",
-    "db": "tika",
-    "nsy_id": "048",
-    "books": [
-     "tika_bi_02_01"
-    ]
-   },
-   "check": "id found by content: tika:048 ဂူကြီး (consistency 0.94, 32 anchors)"
-  }
- },
- {
-  "n": 331,
-  "file": "331.json",
-  "sheet": "မူလဋီ(စ)",
-  "rows": 352,
-  "edition": "ဝိဘင်း မူလဋီကာနိသျ (စ) ကူကြီး",
-  "sid": null,
-  "excel_pages": 352,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "049",
-   "books": [
-    "tika_bi_02_01"
-   ]
-  },
-  "check": "id found by content: tika:049 ဂူကြီး (consistency 0.81, 32 anchors)",
-  "found": {
-   "n": 331,
-   "sheet": "မူလဋီ(စ)",
-   "pali_guess": [
-    "tika_bi_02_01",
-    "annya_bi_04"
-   ],
-   "ok": true,
-   "best": {
-    "db": "tika",
-    "nsy_id": "049",
-    "name": "ဂူကြီး",
-    "category": "ဝိဘင်း မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_02_01"
-    ],
-    "offset": 0,
-    "share": 0.81,
-    "samples": 32,
-    "name_match": false,
-    "rule_offset": 0
-   },
-   "second": {
-    "db": "tika",
-    "nsy_id": "028",
-    "name": "ဘာဋီ (တ)",
-    "category": "ဝိဘင်း မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_02_01"
-    ],
-    "offset": -178,
-    "share": 0.61,
-    "samples": 18,
-    "name_match": false,
-    "rule_offset": 0
-   },
-   "tried": 5,
-   "final": {
-    "mode": "db",
-    "db": "tika",
-    "nsy_id": "049",
-    "books": [
-     "tika_bi_02_01"
-    ]
-   },
-   "check": "id found by content: tika:049 ဂူကြီး (consistency 0.81, 32 anchors)"
-  }
- },
- {
-  "n": 332,
-  "file": "332.json",
-  "sheet": "မူလဋီ(မ)",
-  "rows": 322,
-  "edition": "ပဉ္စပကြိုဏ်ပဌမ မူလဋီကာနိသျ (မ) ကူကြီး",
-  "sid": null,
-  "excel_pages": 322,
-  "status": "",
-  "cand": [],
-  "label": null,
-  "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "050",
-   "books": [
-    "tika_bi_03"
-   ]
-  },
-  "check": "id found by content: tika:050 ဂူကြီး (consistency 0.81, 31 anchors)",
-  "found": {
-   "n": 332,
-   "sheet": "မူလဋီ(မ)",
-   "pali_guess": [
-    "tika_bi_03",
-    "tika_bi_05"
-   ],
-   "ok": true,
-   "best": {
-    "db": "tika",
-    "nsy_id": "050",
-    "name": "ဂူကြီး",
-    "category": "ဓာ+ပု+ကထာ မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_03"
-    ],
-    "offset": 0,
-    "share": 0.81,
-    "samples": 31,
-    "name_match": false,
-    "rule_offset": 1
-   },
-   "second": {
-    "db": "tika",
-    "nsy_id": "035",
+    "nsy_id": "034",
     "name": "ဘာဋီ",
-    "category": "ပဋ္ဌာန မူဋီ",
+    "category": "ယမက မူဋီ",
     "pagecount": null,
-    "books": [
-     "tika_bi_03"
+    "pali": [
+     {
+      "book": "tika_bi_03",
+      "maprows": 48,
+      "pali_pages": [
+       117,
+       164
+      ],
+      "nsy_pages": [
+       1,
+       228
+      ]
+     }
     ],
-    "offset": 134,
-    "share": 1.0,
-    "samples": 1,
-    "name_match": false,
-    "rule_offset": 0
+    "score": 0
    },
-   "tried": 8,
-   "final": {
-    "mode": "db",
-    "db": "tika",
-    "nsy_id": "050",
-    "books": [
-     "tika_bi_03"
-    ]
-   },
-   "check": "id found by content: tika:050 ဂူကြီး (consistency 0.81, 31 anchors)"
-  }
- },
- {
-  "n": 333,
-  "file": "333.json",
-  "sheet": "ပဉ္စပကြိုက်မူလဋီ(ဒု)",
-  "rows": 472,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "051",
-   "books": [
-    "tika_bi_03"
-   ]
-  },
-  "check": "id found by content: tika:051 ဂူကြီး (consistency 0.75, 20 anchors)",
-  "found": {
-   "n": 333,
-   "sheet": "ပဉ္စပကြိုက်မူလဋီ(ဒု)",
-   "pali_guess": [
-    "tika_bi_03",
-    "tika_bi_05"
-   ],
-   "ok": true,
-   "best": {
-    "db": "tika",
-    "nsy_id": "051",
-    "name": "ဂူကြီး",
-    "category": "ယမိုက်+ပဋ္ဌာန်း မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_03"
-    ],
-    "offset": 0,
-    "share": 0.75,
-    "samples": 20,
-    "name_match": false,
-    "rule_offset": 2
-   },
-   "second": {
-    "db": "tika",
-    "nsy_id": "058",
-    "name": "ကြာခံ",
-    "category": "ဓာ မူဋီ",
-    "pagecount": null,
-    "books": [
-     "tika_bi_03"
-    ],
-    "offset": -72,
-    "share": 1.0,
-    "samples": 3,
-    "name_match": false,
-    "rule_offset": 8
-   },
-   "tried": 8,
-   "final": {
-    "mode": "db",
-    "db": "tika",
-    "nsy_id": "051",
-    "books": [
-     "tika_bi_03"
-    ]
-   },
-   "check": "id found by content: tika:051 ဂူကြီး (consistency 0.75, 20 anchors)"
-  }
- },
- {
-  "n": 334,
-  "file": "334.json",
-  "sheet": "ထေရီဋ္ဌ",
-  "rows": 695,
-  "edition": "ထေရီဂါထာ အဋ္ဌကထာ နိဿယ\n",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "206",
-   "books": [
-    "attha_ku_09"
-   ]
-  },
-  "check": "id found by content: attha:206 သကျဓီတာ (consistency 0.98, 7477 anchors)",
-  "found": {
-   "n": 334,
-   "sheet": "ထေရီဋ္ဌ",
-   "pali_guess": [
-    "attha_ku_09",
-    "mula_ku_11"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "206",
-    "name": "သကျဓီတာ",
-    "category": "ထေရီ",
-    "pagecount": null,
-    "books": [
-     "attha_ku_09"
-    ],
-    "offset": 0,
-    "share": 0.98,
-    "samples": 7477,
-    "name_match": false,
-    "rule_offset": 24
-   },
-   "second": null,
-   "tried": 1,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "206",
-    "books": [
-     "attha_ku_09"
-    ]
-   },
-   "check": "id found by content: attha:206 သကျဓီတာ (consistency 0.98, 7477 anchors)"
-  }
- },
- {
-  "n": 335,
-  "file": "335.json",
-  "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ပ)",
-  "rows": 532,
-  "edition": "ဗုဒ္ဓဝသအဋ္ဌကထာ နိဿယ (ပထမတွဲ)",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "209",
-   "books": [
-    "attha_ku_12"
-   ]
-  },
-  "check": "id found by content: attha:209 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 6929 anchors)",
-  "found": {
-   "n": 335,
-   "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ပ)",
-   "pali_guess": [
-    "attha_ku_12",
-    "tika_ku_zat_01"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "209",
-    "name": "မဟာဇေယျမင်းကျောင်း",
-    "category": "ဗုဒ္ဓဝံသ",
-    "pagecount": null,
-    "books": [
-     "attha_ku_12"
-    ],
-    "offset": 0,
-    "share": 0.88,
-    "samples": 6929,
-    "name_match": false,
-    "rule_offset": 6
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "210",
-    "name": "မဟာဇေယျမင်းကျောင်း",
-    "category": "ဗုဒ္ဓဝံသ",
-    "pagecount": null,
-    "books": [
-     "attha_ku_12"
-    ],
-    "offset": 399,
-    "share": 0.13,
-    "samples": 39,
-    "name_match": false,
-    "rule_offset": 6
-   },
-   "tried": 2,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "209",
-    "books": [
-     "attha_ku_12"
-    ]
-   },
-   "check": "id found by content: attha:209 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 6929 anchors)"
-  }
- },
- {
-  "n": 336,
-  "file": "336.json",
-  "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ဒု)",
-  "rows": 506,
-  "edition": "\nရန်ကုန်တိုင်းဒေသကြီး၊ လှည်းကူးမြို့\nမဟာဇေယျမင်းကျောင်း၊ ပရိယတ္တိစာသင်တိုက် သာသနပါလဓမ္မာစရိယ သာသနာသိရီပဝရဓမ္မာစရိယ၊ တိပိဋက ဒီဃဘာဏက၊ ဒီဃနိကာယကောဝိဒ နိကာယုဇ္ဇောတကဓမ္မတ္ထဝိသာရဒ ဒီဃဘာဏက၊ ဝိနယဓရ၊ ပရိယတ္တိသာသနဟိတဝိနယဝ ပိဋကာရ (ပိဋကနှစ်ပုံ အာဂုံဆောင်)\nအဂ္ဂမဟာဂန္ထဝါစကပဏ္ဍိတ၊ အဂ္ဂမဟာပဏ္ဍိတ\nC\nဆရာတော် ဘဒ္ဒန္တ ကောင်ါဘိဝံသ\nဗုဒ္ဓဝသအဋ္ဌကထာ နိဿယ (ဒုတိယတွဲ)\n၂၅၆၁\nalalalala\nကာရာ\nခရစ် ၂၀၁၇\n၁၃၇၉",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "210",
-   "books": [
-    "attha_ku_12"
-   ]
-  },
-  "check": "id found by content: attha:210 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 5719 anchors)",
-  "found": {
-   "n": 336,
-   "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ဒု)",
-   "pali_guess": [
-    "attha_ku_12",
-    "tika_ku_zat_01"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "210",
-    "name": "မဟာဇေယျမင်းကျောင်း",
-    "category": "ဗုဒ္ဓဝံသ",
-    "pagecount": null,
-    "books": [
-     "attha_ku_12"
-    ],
-    "offset": 0,
-    "share": 0.88,
-    "samples": 5719,
-    "name_match": true,
-    "rule_offset": 6
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "209",
-    "name": "မဟာဇေယျမင်းကျောင်း",
-    "category": "ဗုဒ္ဓဝံသ",
-    "pagecount": null,
-    "books": [
-     "attha_ku_12"
-    ],
-    "offset": 4,
-    "share": 0.22,
-    "samples": 23,
-    "name_match": true,
-    "rule_offset": 6
-   },
-   "tried": 2,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "210",
-    "books": [
-     "attha_ku_12"
-    ]
-   },
-   "check": "id found by content: attha:210 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 5719 anchors)"
-  }
- },
- {
-  "n": 337,
-  "file": "337.json",
-  "sheet": "ဇာတ်ဋ္ဌ-၁",
-  "rows": 769,
-  "edition": "မန္တလေးမြို့\nမိုးကောင်းကျောင်းတိုက် ၊ ဇယဝတီကျောင်း\nဆရာတော် ဘဒ္ဒန္တသုဇနာဘိဝံသ\nရေးသားစီရင်တော်မူအပ်သော\nဇာတ်အဋ္ဌကထာ နိဿယ ( ဧကကနိပါတ်)\n(ဇာ၊ဋ္ဌ၊၁။၁-၂၇၉)\nသာသနာ ၂၅၅၈ ခုနှစ်\nကောဇာ\n၁၃၇၆ ခုနှစ်\nခရစ်\n၂ဝ၁၄ ခုနှစ်။",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "211",
-   "books": [
-    "attha_ku_zat_01"
-   ]
-  },
-  "check": "id found by content: attha:211 ဇယဝတီ (ပ) (consistency 0.97, 11392 anchors)",
-  "found": {
-   "n": 337,
-   "sheet": "ဇာတ်ဋ္ဌ-၁",
-   "pali_guess": [
-    "attha_ku_zat_01",
-    "attha_ku_10"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "211",
-    "name": "ဇယဝတီ (ပ)",
-    "category": "ဇာတ် (ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_01"
-    ],
-    "offset": 0,
-    "share": 0.97,
-    "samples": 11392,
-    "name_match": false,
-    "rule_offset": 9
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "212",
-    "name": "ဇယဝတီ (ဒု)",
-    "category": "ဇာတ် (ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_01"
-    ],
-    "offset": -736,
-    "share": 0.22,
-    "samples": 27,
-    "name_match": false,
-    "rule_offset": 9
-   },
-   "tried": 2,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "211",
-    "books": [
-     "attha_ku_zat_01"
-    ]
-   },
-   "check": "id found by content: attha:211 ဇယဝတီ (ပ) (consistency 0.97, 11392 anchors)"
-  }
- },
- {
-  "n": 338,
-  "file": "338.json",
-  "sheet": "ဇာတ်ဋ္ဌ-ဧက",
-  "rows": 688,
-  "edition": "ဇာတ်အဋ္ဌကထာ နိုဿယ (ဧကကနိပါတ်)",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "212",
-   "books": [
-    "attha_ku_zat_01"
-   ]
-  },
-  "check": "id found by content: attha:212 ဇယဝတီ (ဒု) (consistency 0.98, 10282 anchors)",
-  "found": {
-   "n": 338,
-   "sheet": "ဇာတ်ဋ္ဌ-ဧက",
-   "pali_guess": [
-    "attha_ku_zat_01",
-    "tika_ku_zat_01"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "212",
-    "name": "ဇယဝတီ (ဒု)",
-    "category": "ဇာတ် (ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_01"
-    ],
-    "offset": 0,
-    "share": 0.98,
-    "samples": 10282,
-    "name_match": false,
-    "rule_offset": 9
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "211",
-    "name": "ဇယဝတီ (ပ)",
-    "category": "ဇာတ် (ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_01"
-    ],
-    "offset": 0,
-    "share": 0.19,
-    "samples": 27,
-    "name_match": false,
-    "rule_offset": 9
-   },
-   "tried": 2,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "212",
-    "books": [
-     "attha_ku_zat_01"
-    ]
-   },
-   "check": "id found by content: attha:212 ဇယဝတီ (ဒု) (consistency 0.98, 10282 anchors)"
-  }
- },
- {
-  "n": 339,
-  "file": "339.json",
-  "sheet": "ဇာဋ္ဌ-ဒု",
-  "rows": 720,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "213",
-   "books": [
-    "attha_ku_zat_02"
-   ]
-  },
-  "check": "id found by content: attha:213 မဟာဇေယျမင်းကျောင်း (consistency 0.95, 8545 anchors)",
-  "found": {
-   "n": 339,
-   "sheet": "ဇာဋ္ဌ-ဒု",
-   "pali_guess": [
-    "attha_ku_zat_02",
-    "tika_ku_zat_02"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "213",
-    "name": "မဟာဇေယျမင်းကျောင်း",
-    "category": "ဇာတ် (ဒုက -၂)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_02"
-    ],
-    "offset": 0,
-    "share": 0.95,
-    "samples": 8545,
-    "name_match": false,
-    "rule_offset": 12
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "214",
-    "name": "မဟာဇေယျမင်းကျောင်း",
-    "category": "ဇာတ် (တိက - ၂)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_02"
-    ],
-    "offset": -82,
-    "share": 0.17,
-    "samples": 18,
-    "name_match": false,
-    "rule_offset": 7
-   },
-   "tried": 2,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "213",
-    "books": [
-     "attha_ku_zat_02"
-    ]
-   },
-   "check": "id found by content: attha:213 မဟာဇေယျမင်းကျောင်း (consistency 0.95, 8545 anchors)"
-  }
- },
- {
-  "n": 340,
-  "file": "340.json",
-  "sheet": "ဇာဋ္ဌ-တိံသ",
-  "rows": 708,
-  "edition": "အရှင်ကေသရ (မော်ကွန်းထိန်း) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(မန္တလေး) အရှင်ပညာနန္ဒ (ပိဋကတ်တိုက်မှူး) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nပူးတွဲပြုစုအပ်သော\nဇာတ်အဋ္ဌကထာနိဿယ တိသနိပါတ်မှ ပဏ္ဏာသနိပါတ်အထိ\nတော် ပရိယတ္တိ သာသနာ့ တက္က\nနိုင်ငံတော်\nသဗ္ဗဒါန\nဓမ္မဒါန\nဇိနာတိ\nတက္ကသိုလ်\nသာသနာ\nမန္တလေးမြို့\n၁၂၅၃၀၊ ကောဇာ ၁၃၄၈\nဘာသာပြန်နှင့် ပုံနှိပ်ထုတ်ဝေရေးဌာန နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် မန္တလေးမြို့\nဗုဒ္ဓဝ - ၂၅၅၆\nမရမ္မဝ-၁၃၇၄\nခရစ္စဝ - ၂ဝ၁၂",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "221",
-   "books": [
-    "attha_ku_zat_05"
-   ]
-  },
-  "check": "id found by content: attha:221 နပသ (consistency 0.96, 7858 anchors)",
-  "found": {
-   "n": 340,
-   "sheet": "ဇာဋ္ဌ-တိံသ",
-   "pali_guess": [
-    "attha_ku_zat_05",
-    "attha_ku_zat_04"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "221",
-    "name": "နပသ",
-    "category": "(မန်း+ရန်ကုန်) (တိံသာဒိ - ၅)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_05"
-    ],
-    "offset": 0,
-    "share": 0.96,
-    "samples": 7858,
-    "name_match": false,
-    "rule_offset": 25
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "222",
-    "name": "နပသ",
-    "category": "(မန်း+ရန်ကုန်) (သတ္တတျာဒိ - ၅)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_05"
-    ],
-    "offset": -471,
-    "share": 0.4,
-    "samples": 5,
-    "name_match": false,
-    "rule_offset": 9
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "221",
-    "books": [
-     "attha_ku_zat_05"
-    ]
-   },
-   "check": "id found by content: attha:221 နပသ (consistency 0.96, 7858 anchors)"
-  }
- },
- {
-  "n": 341,
-  "file": "341.json",
-  "sheet": "သဋ္ဌိနိပါတ်",
-  "rows": 321,
-  "edition": "J\nအရှင်ကေသရ (မော်ကွန်းထိန်း) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(မန္တလေး) အရှင်ပညာနန္ဒ (ပိဋကတ်တိုက်မှူး) နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်) ပူးတွဲပြုစုအပ်သော\nဇာတ်အဋ္ဌကထာနိုဿယ\nသ\nသန္နိပါတ်နှင့် သတ္တနိပါတ်\nတော် ပရိယတ္တိ သာသနာ့ တက္က\nသဗ္ဗဒါန\nဓမ္မ\nဇိနာတိ\nဇွဲလေး\nခုန် - မန္တ\nရန်ကု\nသာသနာ\n' ကောဇာ ၁၃၄\n၂၅၃ဝ၊\nဘာသာပြန်နှင့် ပုံနှိပ်ထုတ်ဝေရေးဌာန နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် ရန်ကုန်-မန္တလေး\nဗုဒ္ဓဿ - ၂၅၅၉\nမရမ္မဝ-၁၃၇၇\nခရစ္စ - ၂၀၁၅",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "222",
-   "books": [
-    "attha_ku_zat_05"
-   ]
-  },
-  "check": "id found by content: attha:222 နပသ (consistency 0.91, 3127 anchors)",
-  "found": {
-   "n": 341,
-   "sheet": "သဋ္ဌိနိပါတ်",
-   "pali_guess": [
-    "attha_ku_zat_05",
-    "mula_ku_15"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "222",
-    "name": "နပသ",
-    "category": "(မန်း+ရန်ကုန်) (သတ္တတျာဒိ - ၅)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_05"
-    ],
-    "offset": 0,
-    "share": 0.91,
-    "samples": 3127,
-    "name_match": false,
-    "rule_offset": 9
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "223",
-    "name": "နပသ",
-    "category": "(မန်း+ရန်ကုန်) (အသီတိ - ၅)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_zat_05"
-    ],
-    "offset": -203,
-    "share": 0.43,
-    "samples": 7,
-    "name_match": false,
-    "rule_offset": 10
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "222",
-    "books": [
-     "attha_ku_zat_05"
-    ]
-   },
-   "check": "id found by content: attha:222 နပသ (consistency 0.91, 3127 anchors)"
-  }
- },
- {
-  "n": 342,
-  "file": "342.json",
-  "sheet": "အပဋ္ဌ-ပ-ပ",
-  "rows": 435,
-  "edition": "\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် (ရန်ကုန်)\nအရှင်ပါမောက္ခ\nဝိနယဝိဒူ၊ သာသနဓဇဓမ္မာစရိယ\nသာသနတက္ကသီလဓမ္မာစရိယ [B.A (Buddhism)]\nသာသနတက္ကသီလမဟာဓမ္မာစရိယ [M.A (Buddhism)]\nစီရင်ရေးသားတော်မူအပ်သော\nအပဒါနအဋ္ဌကထာနိဿယ (ပထမတွဲ၊ ပထမပိုင်း)\n(အပ၊ ဋ္ဌ၊ ၁။ ၁-၁၄၂။)\nင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသို\nသဗ္ဗဒါန\nဓမ္မဒါနံ\nဇိနာတ\nသာသနာ၂၅၆၆\nΣ\nကေ\n၂၅၃ဝ၊ ရန်ကုန်မြို့\nသုတေသနဘာသာပြန်နှင့် စာအုပ်ထုတ်ဝေရေးဌာန\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nကောဇာ ၁၃၈၄\nခရစ်၂ဝ၂၃",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "231",
-   "books": [
-    "attha_ku_10"
-   ]
-  },
-  "check": "id found by content: attha:231 နပသ(ရန်ကုန်) (ပ) (consistency 0.92, 4406 anchors)",
-  "found": {
-   "n": 342,
-   "sheet": "အပဋ္ဌ-ပ-ပ",
-   "pali_guess": [
-    "attha_ku_10",
-    "attha_ku_zat_01"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "231",
-    "name": "နပသ(ရန်ကုန်) (ပ)",
-    "category": "အပါဒါန(ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_10"
-    ],
-    "offset": 0,
-    "share": 0.92,
-    "samples": 4406,
-    "name_match": false,
-    "rule_offset": 10
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "232",
-    "name": "နပသ(ရန်ကုန်) (ဒု)",
-    "category": "အပါဒါန(ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_10"
-    ],
-    "offset": 19,
-    "share": 0.29,
-    "samples": 7,
-    "name_match": false,
-    "rule_offset": 4
-   },
-   "tried": 2,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "231",
-    "books": [
-     "attha_ku_10"
-    ]
-   },
-   "check": "id found by content: attha:231 နပသ(ရန်ကုန်) (ပ) (consistency 0.92, 4406 anchors)"
-  }
- },
- {
-  "n": 343,
-  "file": "343.json",
-  "sheet": "အပဋ္ဌ-ပ-ဒု",
-  "rows": 662,
-  "edition": "\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ် (ရန်ကုန်)\nအရှင်ပါမောက္ခ\nဝိနယဝိဒူ၊ သာသနဓဇဓမ္မာစရိယ\nသာသနတက္ကသီလဓမ္မာစရိယ [B.A (Buddhism)]\nသာသနတက္ကသီလမဟာဓမ္မာစရိယ [M.A (Buddhism)]\nစီရင်ရေးသားတော်မူအပ်သော\nအပဒါနအဋ္ဌကထာနိဿယ (ပထမတွဲ၊ဒုတိယပိုင်း)\n(အပ၊ ဋ္ဌ၊ ၁။ ၁၄၂ - ၃၅၂။)\nသာသနာ၂၅၆၆\nနိုင်ငံတော်ပရိ\nသဗ္ဗဒါ\nသ\nဓမ္မဒါနံ\nနာ့တက္ကသို၈\nဇိနာတိ\n၂၅၁၊ ကောဇာ- ရန်ကုန်မြို့\nသုတေသနဘာသာပြန်နှင့် စာအုပ်ထုတ်ဝေရေးဌာန\nနိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nကောဇာ၁၃၈၄\nခရစ်၂ဝ၂၃",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "232",
-   "books": [
-    "attha_ku_10"
-   ]
-  },
-  "check": "id found by content: attha:232 နပသ(ရန်ကုန်) (ဒု) (consistency 0.94, 6932 anchors)",
-  "found": {
-   "n": 343,
-   "sheet": "အပဋ္ဌ-ပ-ဒု",
-   "pali_guess": [
-    "attha_ku_10",
-    "attha_ku_05_01"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "232",
-    "name": "နပသ(ရန်ကုန်) (ဒု)",
-    "category": "အပါဒါန(ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_10"
-    ],
-    "offset": 0,
-    "share": 0.94,
-    "samples": 6932,
-    "name_match": false,
-    "rule_offset": 4
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "231",
-    "name": "နပသ(ရန်ကုန်) (ပ)",
-    "category": "အပါဒါန(ပ)",
-    "pagecount": null,
-    "books": [
-     "attha_ku_10"
-    ],
-    "offset": -275,
-    "share": 0.4,
-    "samples": 5,
-    "name_match": false,
-    "rule_offset": 10
-   },
-   "tried": 2,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "232",
-    "books": [
-     "attha_ku_10"
-    ]
-   },
-   "check": "id found by content: attha:232 နပသ(ရန်ကုန်) (ဒု) (consistency 0.94, 6932 anchors)"
-  }
- },
- {
-  "n": 344,
-  "file": "344.json",
-  "sheet": "စရိယဋ္ဌ-ပ",
-  "rows": 636,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "239",
-   "books": [
-    "attha_ku_13"
-   ]
-  },
-  "check": "id found by content: attha:239 နပသ(ရန်ကုန်) (ပ) (consistency 0.88, 6052 anchors)",
-  "found": {
-   "n": 344,
-   "sheet": "စရိယဋ္ဌ-ပ",
-   "pali_guess": [
-    "attha_ku_13",
-    "attha_ku_zat_04"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "239",
-    "name": "နပသ(ရန်ကုန်) (ပ)",
-    "category": "စရိယာပိဋက",
-    "pagecount": null,
-    "books": [
-     "attha_ku_13"
-    ],
-    "offset": 0,
-    "share": 0.88,
-    "samples": 6052,
-    "name_match": false,
-    "rule_offset": 30
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "097",
-    "name": "ရှေးဆရာတော်",
-    "category": "စရိယာပိဋက",
-    "pagecount": null,
-    "books": [
-     "attha_ku_13"
-    ],
-    "offset": -61,
-    "share": 0.2,
-    "samples": 5116,
-    "name_match": false,
-    "rule_offset": 0
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "239",
-    "books": [
-     "attha_ku_13"
-    ]
-   },
-   "check": "id found by content: attha:239 နပသ(ရန်ကုန်) (ပ) (consistency 0.88, 6052 anchors)"
-  }
- },
- {
-  "n": 345,
-  "file": "345.json",
-  "sheet": "စရိယဋ္ဌ-ဒု",
-  "rows": 548,
-  "edition": "\nသန်လျင်မြို့၊ အောင်သုခဒီပါအေးပရိယတ္တိစာသင်တိုက်ကြီး၏\nဦးစီးပဓာနနာယက နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nအဘိဓမ္မပိဋကမဟာဌာန၊ ပါမောက္ခ/ဌာနမှူးဆရာတော်\nဒေါက်တာအzmz\n၏\n301\nစရိယာပိဋကအဋ္ဌကထာနိဿယသစ်[ဒုတိယတွဲ)\n(စရိယာပိဋကပါဠိတော်နိဿယသစ်ပူးတွဲပါဝင်သည်။)\nသဗ္ဗဒါန\n“သာသနာ\nသနာ့တက္ကသို၈\nဇိနာတိ\nဓမ္မဒါန\nobdc-coccus\n၂၅၃ဝ၊\nရန်ကုန်မြို့\nသုတေသန ဘာသာပြန်နှင့် စာအုပ်ထုတ်ဝေရေးဌာန နိုင်ငံတော်ပရိယတ္တိသာသနာ့တက္ကသိုလ်(ရန်ကုန်)\nသာသနာ ၂၅၆၃\nကောဇာ ၁၃၈၁\nခရစ် ၂၀၁၉",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "attha",
-   "nsy_id": "240",
-   "books": [
-    "attha_ku_13"
-   ]
-  },
-  "check": "id found by content: attha:240 နပသ(ရန်ကုန်) (ဒု) (consistency 0.87, 5414 anchors)",
-  "found": {
-   "n": 345,
-   "sheet": "စရိယဋ္ဌ-ဒု",
-   "pali_guess": [
-    "attha_ku_13",
-    "tika_di_01_02"
-   ],
-   "ok": true,
-   "best": {
-    "db": "attha",
-    "nsy_id": "240",
-    "name": "နပသ(ရန်ကုန်) (ဒု)",
-    "category": "စရိယာပိဋက",
-    "pagecount": null,
-    "books": [
-     "attha_ku_13"
-    ],
-    "offset": 0,
-    "share": 0.87,
-    "samples": 5414,
-    "name_match": false,
-    "rule_offset": 12
-   },
-   "second": {
-    "db": "attha",
-    "nsy_id": "097",
-    "name": "ရှေးဆရာတော်",
-    "category": "စရိယာပိဋက",
-    "pagecount": null,
-    "books": [
-     "attha_ku_13"
-    ],
-    "offset": 171,
-    "share": 0.5,
-    "samples": 4,
-    "name_match": false,
-    "rule_offset": 0
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "240",
-    "books": [
-     "attha_ku_13"
-    ]
-   },
-   "check": "id found by content: attha:240 နပသ(ရန်ကုန်) (ဒု) (consistency 0.87, 5414 anchors)"
-  }
- },
- {
-  "n": 346,
-  "file": "346.json",
-  "sheet": "ဒွေမာတိ",
-  "rows": 185,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "001",
-   "books": [
-    "annya_vi_01_01"
-   ]
-  },
-  "check": "id found by content: annya:001 ဦးဗုဓ် (consistency 0.73, 133 anchors)",
-  "found": {
-   "n": 346,
-   "sheet": "ဒွေမာတိ",
-   "pali_guess": [
-    "annya_vi_01_01",
-    "mula_vi_02"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "001",
-    "name": "ဦးဗုဓ်",
-    "category": "ဒွေမာတိကာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_01_01"
-    ],
-    "offset": 0,
-    "share": 0.73,
-    "samples": 133,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "002",
-    "name": "ဘာသာဋီကာ",
-    "category": "ဒွေမာတိကာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_01_01"
-    ],
-    "offset": 171,
-    "share": 0.09,
-    "samples": 133,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "001",
-    "books": [
-     "annya_vi_01_01"
-    ]
-   },
-   "check": "id found by content: annya:001 ဦးဗုဓ် (consistency 0.73, 133 anchors)"
-  }
- },
- {
-  "n": 347,
-  "file": "347.json",
-  "sheet": "ပါတိမောက်",
-  "rows": 527,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "002",
-   "books": [
-    "annya_vi_01_01"
-   ],
-   "offset": 0
-  },
-  "check": "id chosen: annya:002 ဘာသာဋီကာ (clear winner: share 0.43 vs 0.08)",
-  "found": {
-   "n": 347,
-   "sheet": "ပါတိမောက်",
-   "pali_guess": [
-    "annya_vi_01_01",
-    "annya_vi_01_02"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "002",
-    "name": "ဘာသာဋီကာ",
-    "category": "ဒွေမာတိကာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_01_01"
-    ],
-    "offset": 0,
-    "share": 0.43,
-    "samples": 345,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "003",
-    "name": "မေဒိနီ",
-    "category": "ဒွေမာတိကာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_01_01"
-    ],
-    "offset": 60,
-    "share": 0.08,
-    "samples": 345,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "tried": 3,
-   "check": "id chosen: annya:002 ဘာသာဋီကာ (clear winner: share 0.43 vs 0.08)",
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "002",
-    "books": [
-     "annya_vi_01_01"
-    ]
-   }
-  }
- },
- {
-  "n": 348,
-  "file": "348.json",
-  "sheet": "ပါတိမောက္ခ",
-  "rows": 703,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "003",
-   "books": [
-    "annya_vi_01_01"
-   ],
-   "offset": 0
-  },
-  "check": "id chosen: annya:003 မေဒိနီ (clear winner: share 0.36 vs 0.07)",
-  "found": {
-   "n": 348,
-   "sheet": "ပါတိမောက္ခ",
-   "pali_guess": [
-    "annya_vi_01_01",
-    "annya_vi_01_02"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "003",
-    "name": "မေဒိနီ",
-    "category": "ဒွေမာတိကာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_01_01"
-    ],
-    "offset": -2,
-    "share": 0.36,
-    "samples": 389,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "002",
-    "name": "ဘာသာဋီကာ",
-    "category": "ဒွေမာတိကာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_01_01"
-    ],
-    "offset": -103,
-    "share": 0.07,
-    "samples": 389,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "tried": 3,
-   "check": "id chosen: annya:003 မေဒိနီ (clear winner: share 0.36 vs 0.07)",
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "003",
-    "books": [
-     "annya_vi_01_01"
-    ]
-   }
-  }
- },
- {
-  "n": 349,
-  "file": "349.json",
-  "sheet": "ခုဒ္ဒမူလသိက္ခာ",
-  "rows": 306,
-  "edition": "စက္ကိန္ဒာဘိ သိရိသဒ္ဓမ္မဓဇ မဟာဓမ္မရာဇာဓိရာဇဂုရု သွ န် း ပြု ခ တ် နှိ ပ် တံ ဆိ ပ် တ ၌ ရ\nဆရာ တ\nတ ာ် ဦးဗုဓ်\nနှင့်\nمرض\nနေရင်းရွာ ဇာတိ မဏိရတနာပုံတိုက် အရှင်အရိယာလင်္ကာရမထေရ်\nအ န က် မြ န် မ ာ ပြ န် ဆို အ ပ် သော\nခုဒ္ဒသိက္ခာ မူလသိက္ခာ နိဿယ\nဦးခင် စိုးအ မှူးရှိ သော ပါဠိ\nပါဠိ ဆ ရာ များ\nကြ ပ် မ ကြ ည့် ရှု ပြ င် ဆ င် သ ည် ။ B\nရ န် ကု န် မြို့\nဟံ သာ ဝ တီ ပိဋ က တ် ပုံ နှိ ပ် တို က်\n၁ ၉ ၅ ၇\nH 866—A ဟံသာဝတီ",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "004",
-   "books": [
-    "annya_vi_05_01",
-    "annya_vi_06_01"
-   ]
-  },
-  "check": "id found by content: annya:004 ဦးဗုဓ် (consistency 0.65, 2181 anchors)",
-  "found": {
-   "n": 349,
-   "sheet": "ခုဒ္ဒမူလသိက္ခာ",
-   "pali_guess": [
-    "annya_vi_05_01",
-    "annya_vi_05_03"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "004",
-    "name": "ဦးဗုဓ်",
-    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_05_01",
-     "annya_vi_06_01"
-    ],
-    "offset": 0,
-    "share": 0.65,
-    "samples": 2181,
-    "name_match": false,
-    "rule_offset": 6
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "005",
-    "name": "မေဒိနီ",
-    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_05_01",
-     "annya_vi_06_01"
-    ],
-    "offset": 14,
-    "share": 0.09,
-    "samples": 2181,
-    "name_match": false,
-    "rule_offset": 11
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "004",
-    "books": [
-     "annya_vi_05_01",
-     "annya_vi_06_01"
-    ]
-   },
-   "check": "id found by content: annya:004 ဦးဗုဓ် (consistency 0.65, 2181 anchors)"
-  }
- },
- {
-  "n": 350,
-  "file": "350.json",
-  "sheet": "ခုဒ္ဒသိက္ခာ",
-  "rows": 335,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "005",
-   "books": [
-    "annya_vi_05_01",
-    "annya_vi_06_01"
-   ]
-  },
-  "check": "id found by content: annya:005 မေဒိနီ (consistency 0.65, 964 anchors)",
-  "found": {
-   "n": 350,
-   "sheet": "ခုဒ္ဒသိက္ခာ",
-   "pali_guess": [
-    "annya_vi_05_01",
-    "annya_vi_05_03"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "005",
-    "name": "မေဒိနီ",
-    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_05_01",
-     "annya_vi_06_01"
-    ],
-    "offset": 0,
-    "share": 0.65,
-    "samples": 964,
-    "name_match": false,
-    "rule_offset": 11
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "004",
-    "name": "ဦးဗုဓ်",
-    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_05_01",
-     "annya_vi_06_01"
-    ],
-    "offset": -58,
-    "share": 0.07,
-    "samples": 964,
-    "name_match": false,
-    "rule_offset": 6
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "005",
-    "books": [
-     "annya_vi_05_01",
-     "annya_vi_06_01"
-    ]
-   },
-   "check": "id found by content: annya:005 မေဒိနီ (consistency 0.65, 964 anchors)"
-  }
- },
- {
-  "n": 351,
-  "file": "351.json",
-  "sheet": "ခုဒ္ဒဘာဋီ",
-  "rows": 610,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "006",
-   "books": [
-    "annya_vi_05_01"
-   ],
-   "offset": 0
-  },
-  "check": "id chosen: annya:006 ဘာသာဋီကာ (clear winner: share 0.30 vs 0.03)",
-  "found": {
-   "n": 351,
-   "sheet": "ခုဒ္ဒဘာဋီ",
-   "pali_guess": [
-    "annya_vi_05_01",
-    "annya_vi_05_03"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "006",
-    "name": "ဘာသာဋီကာ",
-    "category": "ခုဒ္ဒသိက္ခာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_05_01"
-    ],
-    "offset": 0,
-    "share": 0.3,
-    "samples": 1206,
-    "name_match": false,
-    "rule_offset": 1
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "004",
-    "name": "ဦးဗုဓ်",
-    "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
-    "pagecount": null,
-    "books": [
-     "annya_vi_05_01",
-     "annya_vi_06_01"
-    ],
-    "offset": -307,
-    "share": 0.03,
-    "samples": 1185,
-    "name_match": false,
-    "rule_offset": 6
-   },
-   "tried": 3,
-   "check": "id chosen: annya:006 ဘာသာဋီကာ (clear winner: share 0.30 vs 0.03)",
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "006",
-    "books": [
-     "annya_vi_05_01"
-    ]
-   }
-  }
- },
- {
-  "n": 352,
-  "file": "352.json",
-  "sheet": "အဘိဓမ္မတ္ထ",
-  "rows": 427,
-  "edition": "ခ\nပဌမ ဗားကရာ ဆရာတော်ဘုရားကြီး\nစီရင်ရေးသားသော\nယ\nအဘိဓမ္မတ္ထသင်္ဂဟ ပါဌ်နိဿယ\nမော\n၁င်စု မြန်မာနိုင်ငံ\nဗုဒ္ဓသား\nမြန်မာနိုင်ငံ ဗုဒ္ဓသာသနာအဖွဲ့\nပုံနှိပ်တိုက်၌ ရိုက်နှိပ်သည်\nကောဇာ ၁၃၃၂\nဧပြီလ ၁၉၇၁\nသာသနာ ၂၅၁၄",
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "010",
-   "books": [
-    "annya_bi_05"
-   ]
-  },
-  "check": "id found by content: annya:010 ဗားကရာ (consistency 0.79, 1635 anchors)",
-  "found": {
-   "n": 352,
-   "sheet": "အဘိဓမ္မတ္ထ",
-   "pali_guess": [
-    "annya_bi_05",
-    "annya_bi_07"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "010",
-    "name": "ဗားကရာ",
-    "category": "သင်္ဂဟ",
-    "pagecount": null,
-    "books": [
-     "annya_bi_05"
-    ],
-    "offset": 0,
-    "share": 0.79,
-    "samples": 1635,
-    "name_match": true,
-    "rule_offset": 60
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "012",
-    "name": "ဘာသာဋီကာ",
-    "category": "သင်္ဂဟ",
-    "pagecount": null,
-    "books": [
-     "annya_bi_05"
-    ],
-    "offset": 86,
-    "share": 0.07,
-    "samples": 1635,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "010",
-    "books": [
-     "annya_bi_05"
-    ]
-   },
-   "check": "id found by content: annya:010 ဗားကရာ (consistency 0.79, 1635 anchors)"
-  }
- },
- {
-  "n": 353,
-  "file": "353.json",
-  "sheet": "အခြေပြုသင်္ဂြိုလ်",
-  "rows": 656,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "011",
-   "books": [
-    "annya_bi_05"
-   ],
-   "offset": 0,
-   "as_is": true
-  },
-  "check": "annya_nsy 011 chosen by the user (name match), map used as is, offset 0"
- },
- {
-  "n": 354,
-  "file": "354.json",
-  "sheet": "ဋီကာကျော်",
-  "rows": 664,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "017",
-   "books": [
-    "annya_bi_06"
-   ]
-  },
-  "check": "id found by content: annya:017 တောင်မြို့ (consistency 0.79, 2857 anchors)",
-  "found": {
-   "n": 354,
-   "sheet": "ဋီကာကျော်",
-   "pali_guess": [
-    "annya_bi_06",
-    "annya_bi_07"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "017",
-    "name": "တောင်မြို့",
-    "category": "ဋီကာကျော်",
-    "pagecount": null,
-    "books": [
-     "annya_bi_06"
-    ],
-    "offset": 0,
-    "share": 0.79,
-    "samples": 2857,
-    "name_match": false,
-    "rule_offset": 10
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "018",
-    "name": "မေဒိနီ",
-    "category": "ဋီကာကျော်",
-    "pagecount": null,
-    "books": [
-     "annya_bi_06"
-    ],
-    "offset": -31,
-    "share": 0.32,
-    "samples": 1200,
-    "name_match": false,
-    "rule_offset": 16
-   },
-   "tried": 3,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "017",
-    "books": [
-     "annya_bi_06"
-    ]
-   },
-   "check": "id found by content: annya:017 တောင်မြို့ (consistency 0.79, 2857 anchors)"
-  }
- },
- {
-  "n": 355,
-  "file": "355.json",
-  "sheet": "ကစ္စည်းဘာဋီ",
-  "rows": 555,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "022",
-   "books": [
-    "annya_sadda_01"
-   ]
-  },
-  "check": "id found by content: annya:022 ဘာသာဋီကာ (ပ) (consistency 0.56, 1455 anchors)",
-  "found": {
-   "n": 355,
-   "sheet": "ကစ္စည်းဘာဋီ",
-   "pali_guess": [
-    "annya_sadda_01",
-    "annya_sadda_02"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "022",
-    "name": "ဘာသာဋီကာ (ပ)",
-    "category": "ကစ္စည်း",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_01"
-    ],
-    "offset": 0,
-    "share": 0.56,
-    "samples": 1455,
-    "name_match": false,
-    "rule_offset": -1
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "026",
-    "name": "သပြေကန် (တ)",
-    "category": "ကစ္စည်း",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_01"
-    ],
-    "offset": -80,
-    "share": 0.75,
-    "samples": 4,
-    "name_match": false,
-    "rule_offset": 17
-   },
-   "tried": 6,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "022",
-    "books": [
-     "annya_sadda_01"
-    ]
-   },
-   "check": "id found by content: annya:022 ဘာသာဋီကာ (ပ) (consistency 0.56, 1455 anchors)"
-  }
- },
- {
-  "n": 356,
-  "file": "356.json",
-  "sheet": "ကစ္စည်းဘာဋီ-ဒု",
-  "rows": 615,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "023",
-   "books": [
-    "annya_sadda_01"
-   ],
-   "offset": 0,
-   "as_is": true
-  },
-  "check": "annya_nsy 023 chosen by the user (name match), map used as is, offset 0"
- },
- {
-  "n": 357,
-  "file": "357.json",
-  "sheet": "သဒ္ဒါကြီး-၁",
-  "rows": 689,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "024",
-   "books": [
-    "annya_sadda_01"
-   ],
-   "offset": 0,
-   "as_is": true
-  },
-  "check": "annya_nsy 024 chosen by the user (name match), map used as is, offset 0"
- },
- {
-  "n": 358,
-  "file": "358.json",
-  "sheet": "သဒ္ဒါကြီး-၂",
-  "rows": 591,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "025",
-   "books": [
-    "annya_sadda_01"
-   ],
-   "offset": 0,
-   "as_is": true
-  },
-  "check": "annya_nsy 025 chosen by the user (name match), map used as is, offset 0"
- },
- {
-  "n": 359,
-  "file": "359.json",
-  "sheet": "သဒ္ဒါကြီး-၃",
-  "rows": 280,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "026",
-   "books": [
-    "annya_sadda_01"
-   ],
-   "offset": 0,
-   "as_is": true
-  },
-  "check": "annya_nsy 026 chosen by the user (name match), map used as is, offset 0"
- },
- {
-  "n": 360,
-  "file": "360.json",
-  "sheet": "ရူပသဒ္ဓိ-၁",
-  "rows": 810,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "031",
-   "books": [
-    "annya_sadda_02"
-   ]
-  },
-  "check": "id found by content: annya:031 ဂဏ္ဌိ (ပ) (consistency 0.70, 1353 anchors)",
-  "found": {
-   "n": 360,
-   "sheet": "ရူပသဒ္ဓိ-၁",
-   "pali_guess": [
-    "annya_sadda_02",
-    "annya_sadda_06"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "031",
-    "name": "ဂဏ္ဌိ (ပ)",
-    "category": "ရူပသိဒ္ဓိ",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_02"
-    ],
-    "offset": 0,
-    "share": 0.7,
-    "samples": 1353,
-    "name_match": false,
-    "rule_offset": 23
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "032",
-    "name": "ဂဏ္ဌိ (ဒု)",
-    "category": "ရူပသိဒ္ဓိ",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_02"
-    ],
-    "offset": -540,
-    "share": 0.29,
-    "samples": 17,
-    "name_match": false,
-    "rule_offset": 25
-   },
-   "tried": 5,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "031",
-    "books": [
-     "annya_sadda_02"
-    ]
-   },
-   "check": "id found by content: annya:031 ဂဏ္ဌိ (ပ) (consistency 0.70, 1353 anchors)"
-  }
- },
- {
-  "n": 361,
-  "file": "361.json",
-  "sheet": "ရူပသဒ္ဓိ-၂",
-  "rows": 674,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "032",
-   "books": [
-    "annya_sadda_02"
-   ]
-  },
-  "check": "id found by content: annya:032 ဂဏ္ဌိ (ဒု) (consistency 0.57, 2281 anchors)",
-  "found": {
-   "n": 361,
-   "sheet": "ရူပသဒ္ဓိ-၂",
-   "pali_guess": [
-    "annya_sadda_02",
-    "annya_sadda_10"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "032",
-    "name": "ဂဏ္ဌိ (ဒု)",
-    "category": "ရူပသိဒ္ဓိ",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_02"
-    ],
-    "offset": -2,
-    "share": 0.57,
-    "samples": 2281,
-    "name_match": false,
-    "rule_offset": 25
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "033",
-    "name": "ဘာသာဋီကာ (ပ)",
-    "category": "ရူပသိဒ္ဓိ",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_02"
-    ],
-    "offset": 187,
-    "share": 0.26,
-    "samples": 27,
-    "name_match": false,
-    "rule_offset": 20
-   },
-   "tried": 5,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "032",
-    "books": [
-     "annya_sadda_02"
-    ]
-   },
-   "check": "id found by content: annya:032 ဂဏ္ဌိ (ဒု) (consistency 0.57, 2281 anchors)"
-  }
- },
- {
-  "n": 362,
-  "file": "362.json",
-  "sheet": "ရူပသဒ္ဓိဘာဋီ-၁",
-  "rows": 635,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "033",
-   "books": [
-    "annya_sadda_02"
-   ]
-  },
-  "check": "id found by content: annya:033 ဘာသာဋီကာ (ပ) (consistency 0.68, 2579 anchors)",
-  "found": {
-   "n": 362,
-   "sheet": "ရူပသဒ္ဓိဘာဋီ-၁",
-   "pali_guess": [
-    "annya_sadda_02",
-    "annya_sadda_06"
-   ],
-   "ok": true,
-   "best": {
-    "db": "annya",
-    "nsy_id": "033",
-    "name": "ဘာသာဋီကာ (ပ)",
-    "category": "ရူပသိဒ္ဓိ",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_02"
-    ],
-    "offset": 0,
-    "share": 0.68,
-    "samples": 2579,
-    "name_match": false,
-    "rule_offset": 20
-   },
-   "second": {
-    "db": "annya",
-    "nsy_id": "032",
-    "name": "ဂဏ္ဌိ (ဒု)",
-    "category": "ရူပသိဒ္ဓိ",
-    "pagecount": null,
-    "books": [
-     "annya_sadda_02"
-    ],
-    "offset": -42,
-    "share": 0.25,
-    "samples": 12,
-    "name_match": false,
-    "rule_offset": 25
-   },
-   "tried": 5,
-   "final": {
-    "mode": "db",
-    "db": "annya",
-    "nsy_id": "033",
-    "books": [
-     "annya_sadda_02"
-    ]
-   },
-   "check": "id found by content: annya:033 ဘာသာဋီကာ (ပ) (consistency 0.68, 2579 anchors)"
-  }
- },
- {
-  "n": 363,
-  "file": "363.json",
-  "sheet": "ရူပသဒ္ဓိဘာဋီ-၂",
-  "rows": 602,
-  "edition": null,
-  "sid": null,
-  "excel_pages": null,
-  "status": "no-id",
-  "cand": [],
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "034",
-   "books": [
-    "annya_sadda_02"
-   ]
-  },
-  "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)",
-  "found": {
-   "n": 363,
-   "sheet": "ရူပသဒ္ဓိဘာဋီ-၂",
-   "pali_guess": [
-    "annya_sadda_02",
-    "annya_sadda_10"
-   ],
-   "ok": true,
-   "best": {
+   {
     "db": "annya",
     "nsy_id": "034",
     "name": "ဘာသာဋီကာ (ဒု)",
     "category": "ရူပသိဒ္ဓိ",
     "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_02",
+      "maprows": 225,
+      "pali_pages": [
+       197,
+       421
+      ],
+      "nsy_pages": [
+       1,
+       591
+      ]
+     }
+    ],
+    "score": 0
+   }
+  ],
+  "label": "သီလက္ခန်",
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "034",
+   "books": [
+    "attha_di_01"
+   ]
+  },
+  "check": "db+content agree"
+ },
+ {
+  "n": 502,
+  "file": "502.json",
+  "sheet": "ဇာ၊ဋ္ဌ၊၇",
+  "rows": 3043,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_ku_zat_07"
+   ]
+  },
+  "check": "content guess attha_ku_zat_07 (0.49); database said -"
+ },
+ {
+  "n": 503,
+  "file": "503.json",
+  "sheet": "Sheet140",
+  "rows": 819,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "content",
+   "books": [
+    "attha_ku_zat_06"
+   ]
+  },
+  "check": "content guess attha_ku_zat_06 (0.78); database said -"
+ },
+ {
+  "n": 504,
+  "file": "504.json",
+  "sheet": "Sheet141",
+  "rows": 3776,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": null,
+  "check": "UNKNOWN"
+ },
+ {
+  "n": 505,
+  "file": "505.json",
+  "sheet": "Sheet95",
+  "rows": 4460,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
+  "final": {
+   "mode": "content",
+   "books": [
+    "annya_vi_10"
+   ]
+  },
+  "check": "content guess annya_vi_10 (0.20); database said -"
+ },
+ {
+  "n": 506,
+  "file": "506.json",
+  "sheet": "စည်ရှင်-ရူပသိဒ္ဓိ",
+  "rows": 614,
+  "edition": null,
+  "sid": null,
+  "excel_pages": 35,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "035",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:035 စည်ရှင် (consistency 0.94, 787 anchors)",
+  "found": {
+   "n": 506,
+   "sheet": "စည်ရှင်-ရူပသိဒ္ဓိ",
+   "pali_guess": [
+    "annya_sadda_02",
+    "annya_sadda_06"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "035",
+    "name": "စည်ရှင်",
+    "category": "ရူပသိဒ္ဓိ",
+    "pagecount": null,
     "books": [
      "annya_sadda_02"
     ],
-    "offset": 0,
-    "share": 0.74,
-    "samples": 2945,
-    "name_match": false,
-    "rule_offset": 0
+    "offset": -1,
+    "share": 0.94,
+    "samples": 787,
+    "name_match": true,
+    "rule_offset": 11
    },
    "second": {
     "db": "annya",
@@ -15221,9 +17342,9 @@
     "books": [
      "annya_sadda_02"
     ],
-    "offset": 633,
-    "share": 0.53,
-    "samples": 53,
+    "offset": 86,
+    "share": 0.16,
+    "samples": 364,
     "name_match": false,
     "rule_offset": 20
    },
@@ -15231,1684 +17352,123 @@
    "final": {
     "mode": "db",
     "db": "annya",
-    "nsy_id": "034",
+    "nsy_id": "035",
     "books": [
      "annya_sadda_02"
     ]
    },
-   "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)"
+   "check": "id found by content: annya:035 စည်ရှင် (consistency 0.94, 787 anchors)"
   }
  },
  {
-  "n": 400,
-  "file": "400.json",
-  "sheet": "Z01 039 အရိယဝံသ-မောဂ္ဂလ္လာန်-၁",
-  "rows": 358,
-  "edition": "Z01 039 အရိယဝံသ-မောဂ္ဂလ္လာန်-၁",
-  "sid": "039",
-  "excel_pages": 358,
-  "status": "ok",
-  "cand": [
-   {
+  "n": 507,
+  "file": "507.json",
+  "sheet": "မောဂ္ဂလ္လာန်-၁",
+  "rows": 609,
+  "edition": null,
+  "sid": null,
+  "excel_pages": 37,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "037",
+   "books": [
+    "annya_sadda_03"
+   ]
+  },
+  "check": "annya_nsy 037 chosen by name (မောဂ္ဂလ္လာန်-၁ = အဘယာရာမ (ပ))"
+ },
+ {
+  "n": 508,
+  "file": "508.json",
+  "sheet": "မောဂ္ဂလ္လာန်-၂",
+  "rows": 572,
+  "edition": null,
+  "sid": null,
+  "excel_pages": 38,
+  "status": "",
+  "cand": [],
+  "label": null,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "038",
+   "books": [
+    "annya_sadda_03"
+   ]
+  },
+  "check": "id found by content: annya:038 အဘယာရာမ (ဒု) (consistency 0.87, 460 anchors)",
+  "found": {
+   "n": 508,
+   "sheet": "မောဂ္ဂလ္လာန်-၂",
+   "pali_guess": [
+    "annya_sadda_03",
+    "annya_sadda_10"
+   ],
+   "ok": true,
+   "best": {
+    "db": "annya",
+    "nsy_id": "038",
+    "name": "အဘယာရာမ (ဒု)",
+    "category": "မောဂ္ဂလ္လာန်",
+    "pagecount": null,
+    "books": [
+     "annya_sadda_03"
+    ],
+    "offset": 0,
+    "share": 0.87,
+    "samples": 460,
+    "name_match": false,
+    "rule_offset": -1
+   },
+   "second": {
     "db": "annya",
     "nsy_id": "039",
     "name": "အရိယဝံသ",
     "category": "မောဂ္ဂလ္လာန်",
     "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_03",
-      "maprows": 53,
-      "pali_pages": [
-       1,
-       53
-      ],
-      "nsy_pages": [
-       24,
-       350
-      ]
-     }
+    "books": [
+     "annya_sadda_03"
     ],
-    "score": 5
-   }
-  ],
-  "zbook": "01",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "039",
-   "books": [
-    "annya_sadda_03"
-   ]
-  },
-  "check": "db only"
+    "offset": 127,
+    "share": 0.2,
+    "samples": 5,
+    "name_match": false,
+    "rule_offset": 23
+   },
+   "tried": 4,
+   "final": {
+    "mode": "db",
+    "db": "annya",
+    "nsy_id": "038",
+    "books": [
+     "annya_sadda_03"
+    ]
+   },
+   "check": "id found by content: annya:038 အဘယာရာမ (ဒု) (consistency 0.87, 460 anchors)"
+  }
  },
  {
-  "n": 401,
-  "file": "401.json",
-  "sheet": "Z02 040 အရိယဝံသ-မောဂ္ဂလ္လာန်-၂",
-  "rows": 706,
-  "edition": "Z02 040 အရိယဝံသ-မောဂ္ဂလ္လာန်-၂",
-  "sid": "040",
-  "excel_pages": 706,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "040",
-    "name": "အရိယဝံသ",
-    "category": "မောဂ္ဂလ္လာန်",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_03",
-      "maprows": 239,
-      "pali_pages": [
-       54,
-       292
-      ],
-      "nsy_pages": [
-       13,
-       661
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "02",
+  "n": 509,
+  "file": "509.json",
+  "sheet": "တောင်ပေါက်-အဘိဓာန်",
+  "rows": 738,
+  "edition": null,
+  "sid": null,
+  "excel_pages": null,
+  "status": "no-id",
+  "cand": [],
   "final": {
    "mode": "db",
    "db": "annya",
-   "nsy_id": "040",
-   "books": [
-    "annya_sadda_03"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 402,
-  "file": "402.json",
-  "sheet": "Z03 041အဘယာရာမ-မောဂ္ဂလ္လာနပဉ္စိ",
-  "rows": 702,
-  "edition": "Z03 041အဘယာရာမ-မောဂ္ဂလ္လာနပဉ္စိ",
-  "sid": "041",
-  "excel_pages": 702,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "041",
-    "name": "အဘယာရာမ",
-    "category": "မောဂ္ဂလ္လာနပဉ္စိကာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_05",
-      "maprows": 286,
-      "pali_pages": [
-       1,
-       286
-      ],
-      "nsy_pages": [
-       0,
-       693
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "03",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "041",
-   "books": [
-    "annya_sadda_05"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 403,
-  "file": "403.json",
-  "sheet": "Z04 042 ဗန်းမော်-ပယောဂသိဒ္ဓိ",
-  "rows": 638,
-  "edition": "Z04 042 ဗန်းမော်-ပယောဂသိဒ္ဓိ",
-  "sid": "042",
-  "excel_pages": 638,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "042",
-    "name": "ဗန်းမော်",
-    "category": "ပယောဂသိဒ္ဓိ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_06",
-      "maprows": 304,
-      "pali_pages": [
-       1,
-       304
-      ],
-      "nsy_pages": [
-       0,
-       633
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "04",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "042",
-   "books": [
-    "annya_sadda_06"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 404,
-  "file": "404.json",
-  "sheet": "Z05 044 ဦးဗုဓ် (ပ)-ပဒမာလာ",
-  "rows": 644,
-  "edition": "Z05 044 ဦးဗုဓ် (ပ)-ပဒမာလာ",
-  "sid": "044",
-  "excel_pages": 644,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "044",
-    "name": "ဦးဗုဓ် (ပ)",
-    "category": "ပဒမာလာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_07",
-      "maprows": 222,
-      "pali_pages": [
-       1,
-       222
-      ],
-      "nsy_pages": [
-       81,
-       559
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "05",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "044",
-   "books": [
-    "annya_sadda_07"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 405,
-  "file": "405.json",
-  "sheet": "Z06 045 ဦးဗုဓ် (ဒု)-ပဒမာလာ",
-  "rows": 498,
-  "edition": "Z06 045 ဦးဗုဓ် (ဒု)-ပဒမာလာ",
-  "sid": "045",
-  "excel_pages": 498,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "045",
-    "name": "ဦးဗုဓ် (ဒု)",
-    "category": "ပဒမာလာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_07",
-      "maprows": 196,
-      "pali_pages": [
-       223,
-       418
-      ],
-      "nsy_pages": [
-       30,
-       225
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "06",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "045",
-   "books": [
-    "annya_sadda_07"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 406,
-  "file": "406.json",
-  "sheet": "Z07 046 ဦးဗုဓ် (ပ)-ဓာတုမာလာ",
-  "rows": 571,
-  "edition": "Z07 046 ဦးဗုဓ် (ပ)-ဓာတုမာလာ",
-  "sid": "046",
-  "excel_pages": 571,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "046",
-    "name": "ဦးဗုဓ် (ပ)",
-    "category": "ဓာတုမာလာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_08",
-      "maprows": 212,
-      "pali_pages": [
-       1,
-       212
-      ],
-      "nsy_pages": [
-       42,
-       520
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "07",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "046",
-   "books": [
-    "annya_sadda_08"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 407,
-  "file": "407.json",
-  "sheet": "Z08 047 ဦးဗုဓ် (ဒု)-ဓာတုမာလာ",
-  "rows": 439,
-  "edition": "Z08 047 ဦးဗုဓ် (ဒု)-ဓာတုမာလာ",
-  "sid": "047",
-  "excel_pages": 439,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "047",
-    "name": "ဦးဗုဓ် (ဒု)",
-    "category": "ဓာတုမာလာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_08",
-      "maprows": 180,
-      "pali_pages": [
-       212,
-       391
-      ],
-      "nsy_pages": [
-       33,
-       385
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "08",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "047",
-   "books": [
-    "annya_sadda_08"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 408,
-  "file": "408.json",
-  "sheet": "Z09 048 ဦးဗုဓ် (ပ)-သုတ္တမာလာ",
-  "rows": 455,
-  "edition": "Z09 048 ဦးဗုဓ် (ပ)-သုတ္တမာလာ",
-  "sid": "048",
-  "excel_pages": 455,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "048",
-    "name": "ဦးဗုဓ် (ပ)",
-    "category": "သုတ္တမာလာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_09",
-      "maprows": 230,
-      "pali_pages": [
-       1,
-       230
-      ],
-      "nsy_pages": [
-       3,
-       454
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "09",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "048",
-   "books": [
-    "annya_sadda_09"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 409,
-  "file": "409.json",
-  "sheet": "Z10 049 ဦးဗုဓ် (ဒု)-သုတ္တမာလာ",
-  "rows": 331,
-  "edition": "Z10 049 ဦးဗုဓ် (ဒု)-သုတ္တမာလာ",
-  "sid": "049",
-  "excel_pages": 331,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "049",
-    "name": "ဦးဗုဓ် (ဒု)",
-    "category": "သုတ္တမာလာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_09",
-      "maprows": 259,
-      "pali_pages": [
-       230,
-       488
-      ],
-      "nsy_pages": [
-       3,
-       360
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "10",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "049",
-   "books": [
-    "annya_sadda_09"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 410,
-  "file": "410.json",
-  "sheet": "Z11 051 ကျော်အောင်စံထား-အဘိဓာန်",
-  "rows": 689,
-  "edition": "Z11 051 ကျော်အောင်စံထား-အဘိဓာန်",
-  "sid": "051",
-  "excel_pages": 689,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "051",
-    "name": "ကျော်အောင်စံထား",
-    "category": "အဘိဓာန်",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_11",
-      "maprows": 151,
-      "pali_pages": [
-       1,
-       151
-      ],
-      "nsy_pages": [
-       159,
-       675
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "11",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "051",
+   "nsy_id": "053",
    "books": [
     "annya_sadda_11"
    ]
   },
-  "check": "db only"
- },
- {
-  "n": 411,
-  "file": "411.json",
-  "sheet": "Z12 052 အဘယာရာမ-အဘိဓာန်",
-  "rows": 497,
-  "edition": "Z12 052 အဘယာရာမ-အဘိဓာန်",
-  "sid": "052",
-  "excel_pages": 497,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "052",
-    "name": "အဘယာရာမ",
-    "category": "အဘိဓာန်",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_11",
-      "maprows": 151,
-      "pali_pages": [
-       1,
-       151
-      ],
-      "nsy_pages": [
-       18,
-       422
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "12",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "052",
-   "books": [
-    "annya_sadda_11"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 412,
-  "file": "412.json",
-  "sheet": "Z13 054 ပခုက္ကူ-အဘိဓာန်",
-  "rows": 885,
-  "edition": "Z13 054 ပခုက္ကူ-အဘိဓာန်",
-  "sid": "054",
-  "excel_pages": 885,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "054",
-    "name": "ပခုက္ကူ",
-    "category": "အဘိဓာန်",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_11",
-      "maprows": 151,
-      "pali_pages": [
-       1,
-       151
-      ],
-      "nsy_pages": [
-       37,
-       758
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "13",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "054",
-   "books": [
-    "annya_sadda_11"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 413,
-  "file": "413.json",
-  "sheet": "Z14 055 မောင်းထောင် (ပ)-အဘိဓာန်",
-  "rows": 568,
-  "edition": "Z14 055 မောင်းထောင် (ပ)-အဘိဓာန်",
-  "sid": "055",
-  "excel_pages": 568,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "055",
-    "name": "မောင်းထောင် (ပ)",
-    "category": "အဘိဓာန်ဋီကာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_12",
-      "maprows": 282,
-      "pali_pages": [
-       1,
-       282
-      ],
-      "nsy_pages": [
-       5,
-       565
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "14",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "055",
-   "books": [
-    "annya_sadda_12"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 414,
-  "file": "414.json",
-  "sheet": "Z15 056 မောင်းထောင် (ဒု)-အဘိဓာန",
-  "rows": 599,
-  "edition": "Z15 056 မောင်းထောင် (ဒု)-အဘိဓာန",
-  "sid": "056",
-  "excel_pages": 599,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "056",
-    "name": "မောင်းထောင် (ဒု)",
-    "category": "အဘိဓာန်ဋီကာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_12",
-      "maprows": 339,
-      "pali_pages": [
-       283,
-       621
-      ],
-      "nsy_pages": [
-       5,
-       575
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "15",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "056",
-   "books": [
-    "annya_sadda_12"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 415,
-  "file": "415.json",
-  "sheet": "Z16 061 ဦးဗုဓ်-ဆန်း",
-  "rows": 124,
-  "edition": "Z16 061 ဦးဗုဓ်-ဆန်း",
-  "sid": "061",
-  "excel_pages": 124,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "061",
-    "name": "ဦးဗုဓ်",
-    "category": "ဆန်း",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_13",
-      "maprows": 35,
-      "pali_pages": [
-       1,
-       35
-      ],
-      "nsy_pages": [
-       5,
-       106
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "16",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "061",
-   "books": [
-    "annya_sadda_13"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 416,
-  "file": "416.json",
-  "sheet": "Z17 062 သိရီကုမာရ-ဆန်း",
-  "rows": 213,
-  "edition": "Z17 062 သိရီကုမာရ-ဆန်း",
-  "sid": "062",
-  "excel_pages": 213,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "062",
-    "name": "သိရီကုမာရ",
-    "category": "ဆန်း",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_13",
-      "maprows": 35,
-      "pali_pages": [
-       1,
-       35
-      ],
-      "nsy_pages": [
-       32,
-       198
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "17",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "062",
-   "books": [
-    "annya_sadda_13"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 417,
-  "file": "417.json",
-  "sheet": "Z18 063 မေဒနီ-ဆန်း",
-  "rows": 275,
-  "edition": "Z18 063 မေဒနီ-ဆန်း",
-  "sid": "063",
-  "excel_pages": 275,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "063",
-    "name": "မေဒနီ",
-    "category": "ဆန်း",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_13",
-      "maprows": 35,
-      "pali_pages": [
-       1,
-       35
-      ],
-      "nsy_pages": [
-       22,
-       236
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "18",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "063",
-   "books": [
-    "annya_sadda_13"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 418,
-  "file": "418.json",
-  "sheet": "Z19 071 ဘာသာဋီကာ-အလင်္ကာ",
-  "rows": 614,
-  "edition": "Z19 071 ဘာသာဋီကာ-အလင်္ကာ",
-  "sid": "071",
-  "excel_pages": 614,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "071",
-    "name": "ဘာသာဋီကာ",
-    "category": "အလင်္ကာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_14",
-      "maprows": 77,
-      "pali_pages": [
-       1,
-       77
-      ],
-      "nsy_pages": [
-       39,
-       600
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "19",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "071",
-   "books": [
-    "annya_sadda_14"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 419,
-  "file": "419.json",
-  "sheet": "Z20 072 ပန်းကုံး-အလင်္ကာ",
-  "rows": 500,
-  "edition": "Z20 072 ပန်းကုံး-အလင်္ကာ",
-  "sid": "072",
-  "excel_pages": 500,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "072",
-    "name": "ပန်းကုံး",
-    "category": "အလင်္ကာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_14",
-      "maprows": 77,
-      "pali_pages": [
-       1,
-       77
-      ],
-      "nsy_pages": [
-       26,
-       435
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "20",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "072",
-   "books": [
-    "annya_sadda_14"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 420,
-  "file": "420.json",
-  "sheet": "Z21 073 မေဒနီ-အလင်္ကာ",
-  "rows": 470,
-  "edition": "Z21 073 မေဒနီ-အလင်္ကာ",
-  "sid": "073",
-  "excel_pages": 470,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "073",
-    "name": "မေဒနီ",
-    "category": "အလင်္ကာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_14",
-      "maprows": 77,
-      "pali_pages": [
-       1,
-       77
-      ],
-      "nsy_pages": [
-       9,
-       442
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "21",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "073",
-   "books": [
-    "annya_sadda_14"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 421,
-  "file": "421.json",
-  "sheet": "Z22 081 ဘာသာဋီကာ-ဘေဒစိန္တာ",
-  "rows": 384,
-  "edition": "Z22 081 ဘာသာဋီကာ-ဘေဒစိန္တာ",
-  "sid": "081",
-  "excel_pages": 384,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "081",
-    "name": "ဘာသာဋီကာ",
-    "category": "ဘေဒစိန္တာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_17",
-      "maprows": 80,
-      "pali_pages": [
-       1,
-       80
-      ],
-      "nsy_pages": [
-       13,
-       380
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "22",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "081",
-   "books": [
-    "annya_sadda_17"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 422,
-  "file": "422.json",
-  "sheet": "Z23 082 အဝဗောဓိ-ဘေဒစိန္တာ",
-  "rows": 329,
-  "edition": "Z23 082 အဝဗောဓိ-ဘေဒစိန္တာ",
-  "sid": "082",
-  "excel_pages": 329,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "082",
-    "name": "အဝဗောဓိ",
-    "category": "ဘေဒစိန္တာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_17",
-      "maprows": 80,
-      "pali_pages": [
-       1,
-       80
-      ],
-      "nsy_pages": [
-       18,
-       325
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "23",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "082",
-   "books": [
-    "annya_sadda_17"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 423,
-  "file": "423.json",
-  "sheet": "Z24 083 မစိုးရိမ်-ဘေဒစိန္တာ",
-  "rows": 300,
-  "edition": "Z24 083 မစိုးရိမ်-ဘေဒစိန္တာ",
-  "sid": "083",
-  "excel_pages": 300,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "083",
-    "name": "မစိုးရိမ်",
-    "category": "ဘေဒစိန္တာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_17",
-      "maprows": 80,
-      "pali_pages": [
-       1,
-       80
-      ],
-      "nsy_pages": [
-       3,
-       301
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "24",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "083",
-   "books": [
-    "annya_sadda_17"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 424,
-  "file": "424.json",
-  "sheet": "Z25 085 ဘာသာဋီကာ-ကစ္စာယနသာရ",
-  "rows": 114,
-  "edition": "Z25 085 ဘာသာဋီကာ-ကစ္စာယနသာရ",
-  "sid": "085",
-  "excel_pages": 114,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "085",
-    "name": "ဘာသာဋီကာ",
-    "category": "ကစ္စာယနသာရ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_16",
-      "maprows": 15,
-      "pali_pages": [
-       1,
-       15
-      ],
-      "nsy_pages": [
-       5,
-       111
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "25",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "085",
-   "books": [
-    "annya_sadda_16"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 425,
-  "file": "425.json",
-  "sheet": "Z26 091 ဆင်တဲ (ပ)-နျာသ",
-  "rows": 395,
-  "edition": "Z26 091 ဆင်တဲ (ပ)-နျာသ",
-  "sid": "091",
-  "excel_pages": 395,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "091",
-    "name": "ဆင်တဲ (ပ)",
-    "category": "နျာသ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_18",
-      "maprows": 193,
-      "pali_pages": [
-       1,
-       193
-      ],
-      "nsy_pages": [
-       0,
-       394
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "26",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "091",
-   "books": [
-    "annya_sadda_18"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 426,
-  "file": "426.json",
-  "sheet": "Z27 092 ဆင်တဲ (ဒု)-နျာသ",
-  "rows": 537,
-  "edition": "Z27 092 ဆင်တဲ (ဒု)-နျာသ",
-  "sid": "092",
-  "excel_pages": 537,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "092",
-    "name": "ဆင်တဲ (ဒု)",
-    "category": "နျာသ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_sadda_18",
-      "maprows": 270,
-      "pali_pages": [
-       194,
-       463
-      ],
-      "nsy_pages": [
-       0,
-       533
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "27",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "092",
-   "books": [
-    "annya_sadda_18"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 427,
-  "file": "427.json",
-  "sheet": "Z28 108 ကျောင်းတောင်တောရ-ဝိနယာလ",
-  "rows": 799,
-  "edition": "Z28 108 ကျောင်းတောင်တောရ-ဝိနယာလ",
-  "sid": "108",
-  "excel_pages": 799,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "108",
-    "name": "ကျောင်းတောင်တောရ",
-    "category": "ဝိနယာလင်္ကာရ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_07",
-      "maprows": 424,
-      "pali_pages": [
-       1,
-       424
-      ],
-      "nsy_pages": [
-       19,
-       796
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "28",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "108",
-   "books": [
-    "annya_vi_07"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 428,
-  "file": "428.json",
-  "sheet": "Z29 109 ကျောင်းတောင်တောရ-ဝိနယာလ",
-  "rows": 715,
-  "edition": "Z29 109 ကျောင်းတောင်တောရ-ဝိနယာလ",
-  "sid": "109",
-  "excel_pages": 715,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "109",
-    "name": "ကျောင်းတောင်တောရ",
-    "category": "ဝိနယာလင်္ကာရ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_08",
-      "maprows": 431,
-      "pali_pages": [
-       1,
-       431
-      ],
-      "nsy_pages": [
-       11,
-       699
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "29",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "109",
-   "books": [
-    "annya_vi_08"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 429,
-  "file": "429.json",
-  "sheet": "Z30 111 ဘာသာဋီကာ(ပ)-ကင်္ခါအဋ္ဌက",
-  "rows": 469,
-  "edition": "Z30 111 ဘာသာဋီကာ(ပ)-ကင်္ခါအဋ္ဌက",
-  "sid": "111",
-  "excel_pages": 469,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "111",
-    "name": "ဘာသာဋီကာ(ပ)",
-    "category": "ကင်္ခါအဋ္ဌကထာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_01_02",
-      "maprows": 107,
-      "pali_pages": [
-       83,
-       189
-      ],
-      "nsy_pages": [
-       1,
-       468
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "30",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "111",
-   "books": [
-    "annya_vi_01_02"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 430,
-  "file": "430.json",
-  "sheet": "Z31 112 ဘာသာဋီကာ(ဒု)-ကင်္ခါအဋ္ဌ",
-  "rows": 415,
-  "edition": "Z31 112 ဘာသာဋီကာ(ဒု)-ကင်္ခါအဋ္ဌ",
-  "sid": "112",
-  "excel_pages": 415,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "112",
-    "name": "ဘာသာဋီကာ(ဒု)",
-    "category": "ကင်္ခါအဋ္ဌကထာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_01_02",
-      "maprows": 168,
-      "pali_pages": [
-       190,
-       357
-      ],
-      "nsy_pages": [
-       1,
-       408
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "31",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "112",
-   "books": [
-    "annya_vi_01_02"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 431,
-  "file": "431.json",
-  "sheet": "Z32 113 ရေစကြို (ပ)-ကင်္ခါအဋ္ဌက",
-  "rows": 542,
-  "edition": "Z32 113 ရေစကြို (ပ)-ကင်္ခါအဋ္ဌက",
-  "sid": "113",
-  "excel_pages": 542,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "113",
-    "name": "ရေစကြို (ပ)",
-    "category": "ကင်္ခါအဋ္ဌကထာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_01_02",
-      "maprows": 67,
-      "pali_pages": [
-       83,
-       149
-      ],
-      "nsy_pages": [
-       1,
-       542
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "32",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "113",
-   "books": [
-    "annya_vi_01_02"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 432,
-  "file": "432.json",
-  "sheet": "Z33 114 ရေစကြို (ဒု)-ကင်္ခါအဋ္ဌ",
-  "rows": 619,
-  "edition": "Z33 114 ရေစကြို (ဒု)-ကင်္ခါအဋ္ဌ",
-  "sid": "114",
-  "excel_pages": 619,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "114",
-    "name": "ရေစကြို (ဒု)",
-    "category": "ကင်္ခါအဋ္ဌကထာ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_01_02",
-      "maprows": 143,
-      "pali_pages": [
-       150,
-       292
-      ],
-      "nsy_pages": [
-       1,
-       617
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "33",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "114",
-   "books": [
-    "annya_vi_01_02"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 433,
-  "file": "433.json",
-  "sheet": "Z34 115 မလှိုင်ဆရာတော် (ပ)-ဝိနယ",
-  "rows": 552,
-  "edition": "Z34 115 မလှိုင်ဆရာတော် (ပ)-ဝိနယ",
-  "sid": "115",
-  "excel_pages": 552,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "115",
-    "name": "မလှိုင်ဆရာတော် (ပ)",
-    "category": "ဝိနယသင်္ဂဟ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_02",
-      "maprows": 199,
-      "pali_pages": [
-       1,
-       199
-      ],
-      "nsy_pages": [
-       1,
-       550
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "34",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "115",
-   "books": [
-    "annya_vi_02"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 434,
-  "file": "434.json",
-  "sheet": "Z35 116 မလှိုင်ဆရာတော် (ဒု)-ဝိန",
-  "rows": 538,
-  "edition": "Z35 116 မလှိုင်ဆရာတော် (ဒု)-ဝိန",
-  "sid": "116",
-  "excel_pages": 538,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "116",
-    "name": "မလှိုင်ဆရာတော် (ဒု)",
-    "category": "ဝိနယသင်္ဂဟ",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_02",
-      "maprows": 269,
-      "pali_pages": [
-       200,
-       468
-      ],
-      "nsy_pages": [
-       3,
-       538
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "35",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "116",
-   "books": [
-    "annya_vi_02"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 435,
-  "file": "435.json",
-  "sheet": "Z36 117 ပခုက္ကူ (ပ)-ကင်္ခါဋီသစ်",
-  "rows": 544,
-  "edition": "Z36 117 ပခုက္ကူ (ပ)-ကင်္ခါဋီသစ်",
-  "sid": "117",
-  "excel_pages": 544,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "117",
-    "name": "ပခုက္ကူ (ပ)",
-    "category": "ကင်္ခါဋီသစ်",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_01_04",
-      "maprows": 174,
-      "pali_pages": [
-       119,
-       292
-      ],
-      "nsy_pages": [
-       0,
-       542
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "36",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "117",
-   "books": [
-    "annya_vi_01_04"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 436,
-  "file": "436.json",
-  "sheet": "Z37 118 ပခုက္ကူ (ဒု)-ကင်္ခါဋီသစ",
-  "rows": 464,
-  "edition": "Z37 118 ပခုက္ကူ (ဒု)-ကင်္ခါဋီသစ",
-  "sid": "118",
-  "excel_pages": 464,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "118",
-    "name": "ပခုက္ကူ (ဒု)",
-    "category": "ကင်္ခါဋီသစ်",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_01_04",
-      "maprows": 197,
-      "pali_pages": [
-       293,
-       489
-      ],
-      "nsy_pages": [
-       0,
-       460
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "37",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "118",
-   "books": [
-    "annya_vi_01_04"
-   ]
-  },
-  "check": "db only"
- },
- {
-  "n": 437,
-  "file": "437.json",
-  "sheet": "Z38 119 အရှင်ပညာဓိက-ကင်္ခါဋီဟော",
-  "rows": 454,
-  "edition": "Z38 119 အရှင်ပညာဓိက-ကင်္ခါဋီဟော",
-  "sid": "119",
-  "excel_pages": 454,
-  "status": "ok",
-  "cand": [
-   {
-    "db": "annya",
-    "nsy_id": "119",
-    "name": "အရှင်ပညာဓိက",
-    "category": "ကင်္ခါဋီဟောင်း",
-    "pagecount": null,
-    "pali": [
-     {
-      "book": "annya_vi_01_03",
-      "maprows": 117,
-      "pali_pages": [
-       1,
-       117
-      ],
-      "nsy_pages": [
-       12,
-       434
-      ]
-     }
-    ],
-    "score": 5
-   }
-  ],
-  "zbook": "38",
-  "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "119",
-   "books": [
-    "annya_vi_01_03"
-   ]
-  },
-  "check": "db only"
+  "check": "annya_nsy 053 chosen by name (တောင်ပေါက်-အဘိဓာန်)"
  }
 ]
