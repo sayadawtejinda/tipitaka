@@ -964,6 +964,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "attha_vi_04_sheet089",
+   "title": "စူဠဝဂ္ဂအဋ္ဌကထာ (ဘာဋီ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3801363,
+   "date": "2026-11-17",
+   "edition_of": "attha_vi_04"
+  },
+  {
    "id": "attha_vi_05",
    "title": "ပရိဝါရအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1620,5 +1631,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 57
+ "n_editions": 58
 }
