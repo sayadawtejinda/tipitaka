@@ -1158,6 +1158,17 @@
    "edition_of": "attha_di_03"
   },
   {
+   "id": "attha_di_03_sheet111",
+   "title": "ပါထိကဝဂ္ဂဋ္ဌကထာ (ဘာဋီ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3156868,
+   "date": "2026-11-17",
+   "edition_of": "attha_di_03"
+  },
+  {
    "id": "attha_ma_01_01",
    "title": "မူလပဏ္ဏာသအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -1719,5 +1730,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 66
+ "n_editions": 67
 }
