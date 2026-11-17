@@ -734,6 +734,17 @@
    "edition_of": "mula_bi_01"
   },
   {
+   "id": "mula_bi_01_sheet062",
+   "title": "ဓမ္မသင်္ဂဏီပါဠိ (ထနောင်းဝန်းမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 3490005,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_01"
+  },
+  {
    "id": "mula_bi_02",
    "title": "ဝိဘင်္ဂပါဠိ",
    "basket": "ပါဠိတော်",
@@ -2467,5 +2478,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 134
+ "n_editions": 135
 }
