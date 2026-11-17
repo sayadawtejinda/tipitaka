@@ -766,6 +766,17 @@
    "edition_of": "mula_bi_02"
   },
   {
+   "id": "mula_bi_02_sheet064",
+   "title": "ဝိဘင်္ဂပါဠိ (ရာဇဂုရုမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 3857866,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_02"
+  },
+  {
    "id": "mula_bi_03",
    "title": "ဓာတုကထာပါဠိ",
    "basket": "ပါဠိတော်",
@@ -2511,5 +2522,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 138
+ "n_editions": 139
 }
