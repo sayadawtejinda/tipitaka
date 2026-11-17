@@ -672,6 +672,17 @@
    "date": "2026-10-15"
   },
   {
+   "id": "mula_ku_18_sheet057",
+   "title": "ပဋိသမ္ဘိဒါမဂ္ဂပါဠိ (သာသနာရေးမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 6233333,
+   "date": "2026-11-17",
+   "edition_of": "mula_ku_18"
+  },
+  {
    "id": "mula_ku_19",
    "title": "မိလိန္ဒပဉှပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1741,5 +1752,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 68
+ "n_editions": 69
 }
