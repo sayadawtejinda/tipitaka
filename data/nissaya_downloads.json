@@ -150,6 +150,17 @@
    "edition_of": "mula_di_01"
   },
   {
+   "id": "mula_di_01_bhasatika",
+   "title": "သီလက္ခန္ဓဝဂ္ဂပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3986088,
+   "date": "2026-11-16",
+   "edition_of": "mula_di_01"
+  },
+  {
    "id": "mula_di_02",
    "title": "မဟာဝဂ္ဂပါဠိ(သုတ်)",
    "basket": "ပါဠိတော်",
@@ -1477,5 +1488,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 44
+ "n_editions": 45
 }
