@@ -3948,7 +3948,9 @@
    "nsy_id": "010",
    "books": [
     "annya_bi_05"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "id found by content: annya:010 ဗားကရာ (consistency 0.79, 1635 anchors)",
   "found": {
