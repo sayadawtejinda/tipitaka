@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-16",
+ "generated": "2026-11-17",
  "books": [
   {
    "id": "mula_vi_01",
@@ -943,6 +943,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "attha_vi_03_sheet087",
+   "title": "မဟာဝဂ္ဂအဋ္ဌကထာ (ဘာဋီမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3310850,
+   "date": "2026-11-17",
+   "edition_of": "attha_vi_03"
+  },
+  {
    "id": "attha_vi_04",
    "title": "စူဠဝဂ္ဂအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1609,5 +1620,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 56
+ "n_editions": 57
 }
