@@ -129,6 +129,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "mula_vi_05_bhasatika",
+   "title": "ပရိဝါရပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3432152,
+   "date": "2026-11-16",
+   "edition_of": "mula_vi_05"
+  },
+  {
    "id": "mula_di_01",
    "title": "သီလက္ခန္ဓဝဂ္ဂပါဠိ",
    "basket": "ပါဠိတော်",
@@ -1488,5 +1499,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 45
+ "n_editions": 46
 }
