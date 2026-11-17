@@ -342,6 +342,7 @@ if __name__ == '__main__':
     os.makedirs(outdir, exist_ok=True)
     cat = json.load(open(os.path.join(ROOT, 'catalog.json'), encoding='utf-8'))
     _r = [r for r in cat if r['n'] == n][0]; edition = _r.get('edition')
+    if edition and not re.match(r'^Z\d+\s', edition.strip()) and (chr(10) in edition or len(edition) > 30): edition = None     # cover-page text / a whole title, not an edition name
     if not edition:                                             # no edition on the sheet -> the nissaya book name stored in the db (nsy_books.name), e.g. 011 -> 'အခြေပြု'
         try:
             import sqlite3; _f = _r.get('final') or {}
