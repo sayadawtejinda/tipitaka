@@ -858,6 +858,17 @@
    "edition_of": "attha_vi_01_01"
   },
   {
+   "id": "attha_vi_01_01_sheet082",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (ဘာဋီမူ (တ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 1229809,
+   "date": "2026-11-16",
+   "edition_of": "attha_vi_01_01"
+  },
+  {
    "id": "attha_vi_01_02",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု)",
    "basket": "အဋ္ဌကထာ",
@@ -875,6 +886,17 @@
    "category": "ဝိနည်းပိဋက",
    "cat_key": "vi",
    "size": 3583548,
+   "date": "2026-11-16",
+   "edition_of": "attha_vi_01_02"
+  },
+  {
+   "id": "attha_vi_01_02_sheet082",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု) (ဘာဋီမူ (တ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3696270,
    "date": "2026-11-16",
    "edition_of": "attha_vi_01_02"
   },
@@ -1565,5 +1587,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 52
+ "n_editions": 54
 }
