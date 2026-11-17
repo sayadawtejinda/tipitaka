@@ -1,0 +1,3345 @@
+{
+ "300": {
+  "n": 300,
+  "sheet": "သုတ်သီလက္ခန်-ဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_di_01",
+   "tika_di_01_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "033",
+   "name": "ပခုက္ကူ (ပ)",
+   "category": "သီလက္ခန်",
+   "pagecount": null,
+   "books": [
+    "attha_di_01"
+   ],
+   "offset": 4,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 16
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "037",
+   "name": "နေရင်း (ပ)",
+   "category": "သီလက္ခန်",
+   "pagecount": null,
+   "books": [
+    "attha_di_01"
+   ],
+   "offset": -41,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "tried": 8,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "301": {
+  "n": 301,
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_di_02",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "048",
+   "name": "ပခုက္ကူ (ပ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 27,
+   "share": 0.19,
+   "samples": 129,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "050",
+   "name": "ဘာဋီ (ပ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 28,
+   "share": 0.12,
+   "samples": 129,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.19) - please tell me the id"
+ },
+ "305": {
+  "n": 305,
+  "sheet": "မဟာဝါ-ဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_di_02"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "048",
+   "name": "ပခုက္ကူ (ပ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 55,
+   "share": 0.25,
+   "samples": 116,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "051",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": -275,
+   "share": 0.24,
+   "samples": 54,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.25) - please tell me the id"
+ },
+ "216": {
+  "n": 216,
+  "sheet": "ပါရာ-ဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_vi_01_01",
+   "tika_vi_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "009",
+   "name": "မအူ (တ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01"
+   ],
+   "offset": -264,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 2
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "013",
+   "name": "ဘာဋီ (တ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01",
+    "attha_vi_01_02"
+   ],
+   "offset": -279,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 13
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "217": {
+  "n": 217,
+  "sheet": "ပါရာ-ဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_vi_01_01",
+   "tika_vi_02"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "001",
+   "name": "မအူ (ပ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01"
+   ],
+   "offset": 8,
+   "share": 0.83,
+   "samples": 6,
+   "name_match": false,
+   "rule_offset": 8
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "005",
+   "name": "ဘာဋီ (ပ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01"
+   ],
+   "offset": 17,
+   "share": 0.71,
+   "samples": 7,
+   "name_match": false,
+   "rule_offset": 17
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 0.83) - please tell me the id"
+ },
+ "218": {
+  "n": 218,
+  "sheet": "ပါရာဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_vi_01_01",
+   "tika_vi_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "002",
+   "name": "မအူ (ဒု)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01"
+   ],
+   "offset": -166,
+   "share": 0.19,
+   "samples": 32,
+   "name_match": false,
+   "rule_offset": 2
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "001",
+   "name": "မအူ (ပ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01"
+   ],
+   "offset": 281,
+   "share": 0.18,
+   "samples": 17,
+   "name_match": false,
+   "rule_offset": 8
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 0.19) - please tell me the id"
+ },
+ "219": {
+  "n": 219,
+  "sheet": "ပါရာဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_vi_01_01",
+   "attha_vi_01_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "009",
+   "name": "မအူ (တ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01"
+   ],
+   "offset": 237,
+   "share": 0.53,
+   "samples": 75,
+   "name_match": false,
+   "rule_offset": 2
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "006",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01"
+   ],
+   "offset": 450,
+   "share": 0.29,
+   "samples": 38,
+   "name_match": false,
+   "rule_offset": 14
+  },
+  "tried": 6,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "009",
+   "books": [
+    "attha_vi_01_01"
+   ]
+  },
+  "check": "id found by content: attha:009 မအူ (တ) (consistency 0.53, 75 anchors)"
+ },
+ "220": {
+  "n": 220,
+  "sheet": "ပါရာဋ္ဌ(တ)",
+  "pali_guess": [
+   "attha_vi_01_02",
+   "tika_vi_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "010",
+   "name": "မအူ (စ)",
+   "category": "ပါရာ (ဒု)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_02"
+   ],
+   "offset": -11,
+   "share": 0.56,
+   "samples": 790,
+   "name_match": false,
+   "rule_offset": 1
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "013",
+   "name": "ဘာဋီ (တ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01",
+    "attha_vi_01_02"
+   ],
+   "offset": 184,
+   "share": 0.39,
+   "samples": 749,
+   "name_match": false,
+   "rule_offset": 13
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "010",
+   "books": [
+    "attha_vi_01_02"
+   ]
+  },
+  "check": "id found by content: attha:010 မအူ (စ) (consistency 0.56, 790 anchors)"
+ },
+ "221": {
+  "n": 221,
+  "sheet": "ပါရာဋ္ဌ(စ)",
+  "pali_guess": [
+   "attha_vi_01_02",
+   "annya_vi_02"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "013",
+   "name": "ဘာဋီ (တ)",
+   "category": "ပါရာ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_01",
+    "attha_vi_01_02"
+   ],
+   "offset": 499,
+   "share": 0.31,
+   "samples": 284,
+   "name_match": false,
+   "rule_offset": 13
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "010",
+   "name": "မအူ (စ)",
+   "category": "ပါရာ (ဒု)",
+   "pagecount": null,
+   "books": [
+    "attha_vi_01_02"
+   ],
+   "offset": 298,
+   "share": 0.16,
+   "samples": 1491,
+   "name_match": false,
+   "rule_offset": 1
+  },
+  "tried": 3,
+  "check": "NO RELIABLE ID (best share 0.31) - please tell me the id"
+ },
+ "222": {
+  "n": 222,
+  "sheet": "ပါစိတျာ-ဋ္ဌ",
+  "pali_guess": [
+   "attha_vi_02",
+   "annya_vi_12"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "016",
+   "name": "ဘာဋီ (ပ)",
+   "category": "ပါစိတ်",
+   "pagecount": null,
+   "books": [
+    "attha_vi_02"
+   ],
+   "offset": 16,
+   "share": 0.34,
+   "samples": 120,
+   "name_match": false,
+   "rule_offset": 4
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "017",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "ပါစိတ်",
+   "pagecount": null,
+   "books": [
+    "attha_vi_02"
+   ],
+   "offset": -292,
+   "share": 0.25,
+   "samples": 83,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 2,
+  "check": "NO RELIABLE ID (best share 0.34) - please tell me the id"
+ },
+ "223": {
+  "n": 223,
+  "sheet": "မဟာဝါ-ဋ္ဌ",
+  "pali_guess": [
+   "attha_vi_03",
+   "annya_vi_02"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "018",
+   "name": "မအူ",
+   "category": "မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_vi_03"
+   ],
+   "offset": 3,
+   "share": 0.31,
+   "samples": 202,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "021",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_vi_03"
+   ],
+   "offset": -115,
+   "share": 0.19,
+   "samples": 98,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 3,
+  "check": "NO RELIABLE ID (best share 0.31) - please tell me the id"
+ },
+ "224": {
+  "n": 224,
+  "sheet": "စူဠဝါ-ဋ္ဌ",
+  "pali_guess": [
+   "attha_vi_04",
+   "annya_vi_02"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "023",
+   "name": "ဘာဋီ",
+   "category": "စူဠဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_vi_04"
+   ],
+   "offset": 18,
+   "share": 0.17,
+   "samples": 816,
+   "name_match": false,
+   "rule_offset": 13
+  },
+  "second": null,
+  "tried": 1,
+  "check": "NO RELIABLE ID (best share 0.17) - please tell me the id"
+ },
+ "225": {
+  "n": 225,
+  "sheet": "ပရိဝါ-ဋ္ဌ",
+  "pali_guess": [
+   "attha_vi_05",
+   "annya_vi_12"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "025",
+   "name": "ဘာဋီ",
+   "category": "ပရိဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_vi_05"
+   ],
+   "offset": 35,
+   "share": 0.07,
+   "samples": 1173,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": null,
+  "tried": 1,
+  "check": "NO RELIABLE ID (best share 0.07) - please tell me the id"
+ },
+ "226": {
+  "n": 226,
+  "sheet": "ကင်္ခါ-ဋ္ဌ",
+  "pali_guess": [
+   "annya_vi_01_02",
+   "annya_vi_01_04"
+  ],
+  "ok": false,
+  "best": {
+   "db": "annya",
+   "nsy_id": "112",
+   "name": "ဘာသာဋီကာ(ဒု)",
+   "category": "ကင်္ခါအဋ္ဌကထာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_02"
+   ],
+   "offset": -198,
+   "share": 0.19,
+   "samples": 1668,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "114",
+   "name": "ရေစကြို (ဒု)",
+   "category": "ကင်္ခါအဋ္ဌကထာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_02"
+   ],
+   "offset": 0,
+   "share": 0.05,
+   "samples": 1902,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 0.19) - please tell me the id"
+ },
+ "227": {
+  "n": 227,
+  "sheet": "သီလက္ခန်-ဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_di_01",
+   "tika_di_01_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "042",
+   "name": "ဘာဋီ (စ)",
+   "category": "သီလက္ခန်",
+   "pagecount": null,
+   "books": [
+    "attha_di_01"
+   ],
+   "offset": -46,
+   "share": 0.62,
+   "samples": 13,
+   "name_match": false,
+   "rule_offset": 7
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "034",
+   "name": "ပခုက္ကူ (ဒု)",
+   "category": "သီလက္ခန်",
+   "pagecount": null,
+   "books": [
+    "attha_di_01"
+   ],
+   "offset": 349,
+   "share": 0.47,
+   "samples": 17,
+   "name_match": false,
+   "rule_offset": 5
+  },
+  "tried": 8,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "042",
+   "books": [
+    "attha_di_01"
+   ]
+  },
+  "check": "id found by content: attha:042 ဘာဋီ (စ) (consistency 0.62, 13 anchors)"
+ },
+ "228": {
+  "n": 228,
+  "sheet": "သီလက္ခန်-ဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_di_01",
+   "tika_di_01_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "033",
+   "name": "ပခုက္ကူ (ပ)",
+   "category": "သီလက္ခန်",
+   "pagecount": null,
+   "books": [
+    "attha_di_01"
+   ],
+   "offset": 181,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 16
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "037",
+   "name": "နေရင်း (ပ)",
+   "category": "သီလက္ခန်",
+   "pagecount": null,
+   "books": [
+    "attha_di_01"
+   ],
+   "offset": 38,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "tried": 8,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "302": {
+  "n": 302,
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_di_02",
+   "attha_ma_01_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "048",
+   "name": "ပခုက္ကူ (ပ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 25,
+   "share": 0.45,
+   "samples": 11,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "050",
+   "name": "ဘာဋီ (ပ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 23,
+   "share": 0.45,
+   "samples": 11,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.45) - please tell me the id"
+ },
+ "303": {
+  "n": 303,
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(တ)",
+  "pali_guess": [
+   "attha_di_02"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "052",
+   "name": "ဘာဋီ (တ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 13,
+   "share": 0.32,
+   "samples": 72,
+   "name_match": false,
+   "rule_offset": 27
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "049",
+   "name": "ပခုက္ကူ (ဒု)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": -33,
+   "share": 0.15,
+   "samples": 72,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.32) - please tell me the id"
+ },
+ "304": {
+  "n": 304,
+  "sheet": "သုတ်မဟာဝါဋ္ဌ(စ)",
+  "pali_guess": [
+   "attha_di_02",
+   "attha_ma_01_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "052",
+   "name": "ဘာဋီ (တ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 482,
+   "share": 0.3,
+   "samples": 43,
+   "name_match": false,
+   "rule_offset": 27
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "049",
+   "name": "ပခုက္ကူ (ဒု)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 260,
+   "share": 0.12,
+   "samples": 43,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.30) - please tell me the id"
+ },
+ "306": {
+  "n": 306,
+  "sheet": "မဟာဝါ-ဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_di_02",
+   "attha_ma_01_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "050",
+   "name": "ဘာဋီ (ပ)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 123,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "051",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "သုတ်မဟာဝါ",
+   "pagecount": null,
+   "books": [
+    "attha_di_02"
+   ],
+   "offset": 156,
+   "share": 0.5,
+   "samples": 2,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "307": {
+  "n": 307,
+  "sheet": "သုတ်ပါထေယျ-ဋ္ဌ",
+  "pali_guess": [
+   "attha_di_03",
+   "tika_di_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "056",
+   "name": "ဘာဋီ",
+   "category": "သုတ်ပါထေယျ",
+   "pagecount": null,
+   "books": [
+    "attha_di_03"
+   ],
+   "offset": 70,
+   "share": 0.13,
+   "samples": 55,
+   "name_match": false,
+   "rule_offset": 7
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "055",
+   "name": "ပခုက္ကူ",
+   "category": "သုတ်ပါထေယျ",
+   "pagecount": null,
+   "books": [
+    "attha_di_03"
+   ],
+   "offset": 33,
+   "share": 0.12,
+   "samples": 101,
+   "name_match": false,
+   "rule_offset": 8
+  },
+  "tried": 2,
+  "check": "NO RELIABLE ID (best share 0.13) - please tell me the id"
+ },
+ "308": {
+  "n": 308,
+  "sheet": "ဓမ္မ-ဋ္ဌသစ်",
+  "pali_guess": [
+   "attha_ku_02_01",
+   "attha_ku_zat_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "203",
+   "name": "ဘာဋီ (တ)",
+   "category": "ဓမ္မပဒ (ပ+ဒု)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_02_01",
+    "attha_ku_02_02"
+   ],
+   "offset": 51,
+   "share": 0.4,
+   "samples": 5,
+   "name_match": false,
+   "rule_offset": 6
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "202",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "ဓမ္မပဒ (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_02_01"
+   ],
+   "offset": 194,
+   "share": 0.25,
+   "samples": 12,
+   "name_match": false,
+   "rule_offset": 5
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.40) - please tell me the id"
+ },
+ "309": {
+  "n": 309,
+  "sheet": "ပေဋကဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_ku_20",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "113",
+   "name": "ချောင်းကောက် (ပ)",
+   "category": "နေတ္တိ",
+   "pagecount": null,
+   "books": [
+    "attha_ku_20"
+   ],
+   "offset": -163,
+   "share": 0.33,
+   "samples": 9,
+   "name_match": false,
+   "rule_offset": 22
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "114",
+   "name": "ချောင်းကောက် (ဒု)",
+   "category": "နေတ္တိ",
+   "pagecount": null,
+   "books": [
+    "attha_ku_20"
+   ],
+   "offset": 121,
+   "share": 0.32,
+   "samples": 19,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 2,
+  "check": "NO RELIABLE ID (best share 0.33) - please tell me the id"
+ },
+ "310": {
+  "n": 310,
+  "sheet": "ဝိသုဒ္ဓဋ္ဌ(ပ)",
+  "pali_guess": [
+   "annya_bi_01",
+   "annya_bi_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "123",
+   "name": "ပြည် (ဒု)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 203,
+   "share": 0.33,
+   "samples": 3,
+   "name_match": false,
+   "rule_offset": 41
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "123",
+   "name": "ပြည်ဆရာတော် (ဒု)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 203,
+   "share": 0.33,
+   "samples": 3,
+   "name_match": false,
+   "rule_offset": 41
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 0.33) - please tell me the id"
+ },
+ "311": {
+  "n": 311,
+  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "annya_bi_01",
+   "annya_bi_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "122",
+   "name": "ပြည် (ပ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 47,
+   "share": 0.25,
+   "samples": 4,
+   "name_match": false,
+   "rule_offset": 171
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "122",
+   "name": "ပြည်ဆရာတော် (ပ)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 47,
+   "share": 0.25,
+   "samples": 4,
+   "name_match": false,
+   "rule_offset": 171
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 0.25) - please tell me the id"
+ },
+ "312": {
+  "n": 312,
+  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(တ)",
+  "pali_guess": [
+   "annya_bi_02",
+   "attha_ku_18_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "125",
+   "name": "ပြည် (စ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ဒု)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": -196,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 27
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "125",
+   "name": "ပြည်ဆရာတော် (စ)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": -196,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 27
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "313": {
+  "n": 313,
+  "sheet": "ဝိသုဒ္ဓိဋ္ဌ(စ)",
+  "pali_guess": [
+   "annya_bi_02",
+   "annya_bi_04"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "124",
+   "name": "ပြည် (တ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ဒု)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": 64,
+   "share": 0.31,
+   "samples": 16,
+   "name_match": false,
+   "rule_offset": 64
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "124",
+   "name": "ပြည်ဆရာတော် (တ)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": 64,
+   "share": 0.31,
+   "samples": 16,
+   "name_match": false,
+   "rule_offset": 64
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 0.31) - please tell me the id"
+ },
+ "314": {
+  "n": 314,
+  "sheet": "ဝိသုဒ္ဓိသစ်(ပ)",
+  "pali_guess": [
+   "annya_bi_01",
+   "annya_bi_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "123",
+   "name": "ပြည် (ဒု)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 150,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 41
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "123",
+   "name": "ပြည်ဆရာတော် (ဒု)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 150,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 41
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "315": {
+  "n": 315,
+  "sheet": "ဝိသုဒ္ဓိသစ်(ဒု)",
+  "pali_guess": [
+   "annya_bi_01",
+   "annya_bi_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "123",
+   "name": "ပြည် (ဒု)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": -252,
+   "share": 0.18,
+   "samples": 328,
+   "name_match": false,
+   "rule_offset": 41
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "123",
+   "name": "ပြည်ဆရာတော် (ဒု)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": -252,
+   "share": 0.18,
+   "samples": 328,
+   "name_match": false,
+   "rule_offset": 41
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 0.18) - please tell me the id"
+ },
+ "316": {
+  "n": 316,
+  "sheet": "ဝိသုဒ္ဓိ(ပ)",
+  "pali_guess": [
+   "annya_bi_01",
+   "annya_bi_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "122",
+   "name": "ပြည် (ပ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 161,
+   "share": 0.22,
+   "samples": 187,
+   "name_match": false,
+   "rule_offset": 171
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "122",
+   "name": "ပြည်ဆရာတော် (ပ)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 161,
+   "share": 0.22,
+   "samples": 187,
+   "name_match": false,
+   "rule_offset": 171
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 0.22) - please tell me the id"
+ },
+ "317": {
+  "n": 317,
+  "sheet": "ဝိသုဒ္ဓိ(ဒု)",
+  "pali_guess": [
+   "annya_bi_01",
+   "annya_bi_03"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "122",
+   "name": "ပြည် (ပ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 163,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 171
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "122",
+   "name": "ပြည်ဆရာတော် (ပ)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_01"
+   ],
+   "offset": 163,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 171
+  },
+  "tried": 4,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "318": {
+  "n": 318,
+  "sheet": "ဝိသုဒ္ဓိ(တ)",
+  "pali_guess": [
+   "annya_bi_02",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "124",
+   "name": "ပြည် (တ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ဒု)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": 63,
+   "share": 0.27,
+   "samples": 108,
+   "name_match": false,
+   "rule_offset": 64
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "124",
+   "name": "ပြည်ဆရာတော် (တ)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": 63,
+   "share": 0.27,
+   "samples": 108,
+   "name_match": false,
+   "rule_offset": 64
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 0.27) - please tell me the id"
+ },
+ "319": {
+  "n": 319,
+  "sheet": "ဝိသုဒ္ဓိ(စ)",
+  "pali_guess": [
+   "annya_bi_02",
+   "annya_bi_04"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "124",
+   "name": "ပြည် (တ)",
+   "category": "ဝိသုဒ္ဓိမဂ် (ဒု)",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": 274,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 64
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "124",
+   "name": "ပြည်ဆရာတော် (တ)",
+   "category": "ဝိသုဒ္ဓိမဂ်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_02"
+   ],
+   "offset": 274,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 64
+  },
+  "tried": 6,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "320": {
+  "n": 320,
+  "sheet": "သမ္မောဟဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_bi_02",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "139",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "ဝိဘင်း",
+   "pagecount": null,
+   "books": [
+    "attha_bi_02"
+   ],
+   "offset": -303,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 14
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "138",
+   "name": "ဘာဋီ (ပ)",
+   "category": "ဝိဘင်း",
+   "pagecount": null,
+   "books": [
+    "attha_bi_02"
+   ],
+   "offset": 41,
+   "share": 0.3,
+   "samples": 30,
+   "name_match": false,
+   "rule_offset": 26
+  },
+  "tried": 3,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "321": {
+  "n": 321,
+  "sheet": "သမ္မောဟဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_bi_02",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "138",
+   "name": "ဘာဋီ (ပ)",
+   "category": "ဝိဘင်း",
+   "pagecount": null,
+   "books": [
+    "attha_bi_02"
+   ],
+   "offset": -130,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 26
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "140",
+   "name": "ဘာဋီ (တ)",
+   "category": "ဝိဘင်း",
+   "pagecount": null,
+   "books": [
+    "attha_bi_02"
+   ],
+   "offset": -176,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 14
+  },
+  "tried": 3,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "322": {
+  "n": 322,
+  "sheet": "သမ္မောဟဋ္ဌ(တ)",
+  "pali_guess": [
+   "attha_bi_02",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "139",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "ဝိဘင်း",
+   "pagecount": null,
+   "books": [
+    "attha_bi_02"
+   ],
+   "offset": 284,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 14
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "140",
+   "name": "ဘာဋီ (တ)",
+   "category": "ဝိဘင်း",
+   "pagecount": null,
+   "books": [
+    "attha_bi_02"
+   ],
+   "offset": -32,
+   "share": 0.24,
+   "samples": 86,
+   "name_match": false,
+   "rule_offset": 14
+  },
+  "tried": 3,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "323": {
+  "n": 323,
+  "sheet": "ပဉ္စကြိုက်(ပ)",
+  "pali_guess": [
+   "attha_bi_03",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "146",
+   "name": "ဘာဋီ",
+   "category": "ကထာဝထ္ထု",
+   "pagecount": null,
+   "books": [
+    "attha_bi_03"
+   ],
+   "offset": 132,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 66
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "147",
+   "name": "ဘာဋီ",
+   "category": "ယမက",
+   "pagecount": null,
+   "books": [
+    "attha_bi_03"
+   ],
+   "offset": -190,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 8
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "324": {
+  "n": 324,
+  "sheet": "ပဉ္စကြိုက်(ဒု)",
+  "pali_guess": [
+   "attha_bi_03",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "148",
+   "name": "ဘာဋီ",
+   "category": "ပဋ္ဌာန",
+   "pagecount": null,
+   "books": [
+    "attha_bi_03"
+   ],
+   "offset": 82,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 90
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "147",
+   "name": "ဘာဋီ",
+   "category": "ယမက",
+   "pagecount": null,
+   "books": [
+    "attha_bi_03"
+   ],
+   "offset": -335,
+   "share": 0.4,
+   "samples": 30,
+   "name_match": false,
+   "rule_offset": 8
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "325": {
+  "n": 325,
+  "sheet": "ပဉ္စကြိုက်(တ)",
+  "pali_guess": [
+   "attha_bi_03",
+   "annya_bi_07"
+  ],
+  "ok": false,
+  "best": {
+   "db": "attha",
+   "nsy_id": "145",
+   "name": "ဘာဋီ",
+   "category": "ကထာဝထ္ထု",
+   "pagecount": null,
+   "books": [
+    "attha_bi_03"
+   ],
+   "offset": -134,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 70
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "148",
+   "name": "ဘာဋီ",
+   "category": "ပဋ္ဌာန",
+   "pagecount": null,
+   "books": [
+    "attha_bi_03"
+   ],
+   "offset": 39,
+   "share": 0.1,
+   "samples": 80,
+   "name_match": false,
+   "rule_offset": 90
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 1.00) - please tell me the id"
+ },
+ "326": {
+  "n": 326,
+  "sheet": "သင်္ခေပဋ္ဌ",
+  "pali_guess": [
+   "annya_bi_07",
+   "annya_bi_04"
+  ],
+  "ok": false,
+  "best": null,
+  "second": null,
+  "tried": 0,
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id"
+ },
+ "327": {
+  "n": 327,
+  "sheet": "ကင်္ခါသစ်",
+  "pali_guess": [
+   "annya_vi_01_04",
+   "tika_vi_04"
+  ],
+  "ok": false,
+  "best": {
+   "db": "annya",
+   "nsy_id": "117",
+   "name": "ပခုက္ကူ (ပ)",
+   "category": "ကင်္ခါဋီသစ်",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_04"
+   ],
+   "offset": 8,
+   "share": 0.17,
+   "samples": 156,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "118",
+   "name": "ပခုက္ကူ (ဒု)",
+   "category": "ကင်္ခါဋီသစ်",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_04"
+   ],
+   "offset": -392,
+   "share": 0.08,
+   "samples": 118,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "tried": 2,
+  "check": "NO RELIABLE ID (best share 0.17) - please tell me the id"
+ },
+ "328": {
+  "n": 328,
+  "sheet": "မူလဋီ(ပ)",
+  "pali_guess": [
+   "tika_bi_01",
+   "annya_bi_07"
+  ],
+  "ok": true,
+  "best": {
+   "db": "tika",
+   "nsy_id": "046",
+   "name": "ဂူကြီး",
+   "category": "ဏီ မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_01"
+   ],
+   "offset": -1,
+   "share": 0.73,
+   "samples": 11,
+   "name_match": false,
+   "rule_offset": 1
+  },
+  "second": {
+   "db": "tika",
+   "nsy_id": "021",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "နီ မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_01"
+   ],
+   "offset": -280,
+   "share": 0.75,
+   "samples": 4,
+   "name_match": false,
+   "rule_offset": 2
+  },
+  "tried": 7,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "046",
+   "books": [
+    "tika_bi_01"
+   ]
+  },
+  "check": "id found by content: tika:046 ဂူကြီး (consistency 0.73, 11 anchors)"
+ },
+ "329": {
+  "n": 329,
+  "sheet": "မူလဋီ(ဒု)",
+  "pali_guess": [
+   "tika_bi_01",
+   "annya_bi_07"
+  ],
+  "ok": true,
+  "best": {
+   "db": "tika",
+   "nsy_id": "047",
+   "name": "ဂူကြီး",
+   "category": "ဏီ မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_01"
+   ],
+   "offset": 0,
+   "share": 0.84,
+   "samples": 38,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": {
+   "db": "tika",
+   "nsy_id": "022",
+   "name": "ဘာဋီ (တ)",
+   "category": "နီ မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_01"
+   ],
+   "offset": -59,
+   "share": 0.58,
+   "samples": 12,
+   "name_match": false,
+   "rule_offset": 2
+  },
+  "tried": 7,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "047",
+   "books": [
+    "tika_bi_01"
+   ]
+  },
+  "check": "id found by content: tika:047 ဂူကြီး (consistency 0.84, 38 anchors)"
+ },
+ "330": {
+  "n": 330,
+  "sheet": "မူလဋီ(တ)",
+  "pali_guess": [
+   "tika_bi_02_01",
+   "annya_bi_04"
+  ],
+  "ok": true,
+  "best": {
+   "db": "tika",
+   "nsy_id": "048",
+   "name": "ဂူကြီး",
+   "category": "ဝိဘင်း မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_02_01"
+   ],
+   "offset": 0,
+   "share": 0.94,
+   "samples": 32,
+   "name_match": false,
+   "rule_offset": 2
+  },
+  "second": {
+   "db": "tika",
+   "nsy_id": "027",
+   "name": "ဘာဋီ (ဒု)",
+   "category": "ဝိဘင်း မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_02_01"
+   ],
+   "offset": -262,
+   "share": 0.43,
+   "samples": 7,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 5,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "048",
+   "books": [
+    "tika_bi_02_01"
+   ]
+  },
+  "check": "id found by content: tika:048 ဂူကြီး (consistency 0.94, 32 anchors)"
+ },
+ "331": {
+  "n": 331,
+  "sheet": "မူလဋီ(စ)",
+  "pali_guess": [
+   "tika_bi_02_01",
+   "annya_bi_04"
+  ],
+  "ok": true,
+  "best": {
+   "db": "tika",
+   "nsy_id": "049",
+   "name": "ဂူကြီး",
+   "category": "ဝိဘင်း မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_02_01"
+   ],
+   "offset": 0,
+   "share": 0.81,
+   "samples": 32,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": {
+   "db": "tika",
+   "nsy_id": "028",
+   "name": "ဘာဋီ (တ)",
+   "category": "ဝိဘင်း မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_02_01"
+   ],
+   "offset": -178,
+   "share": 0.61,
+   "samples": 18,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 5,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "049",
+   "books": [
+    "tika_bi_02_01"
+   ]
+  },
+  "check": "id found by content: tika:049 ဂူကြီး (consistency 0.81, 32 anchors)"
+ },
+ "332": {
+  "n": 332,
+  "sheet": "မူလဋီ(မ)",
+  "pali_guess": [
+   "tika_bi_03",
+   "tika_bi_05"
+  ],
+  "ok": true,
+  "best": {
+   "db": "tika",
+   "nsy_id": "050",
+   "name": "ဂူကြီး",
+   "category": "ဓာ+ပု+ကထာ မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_03"
+   ],
+   "offset": 0,
+   "share": 0.81,
+   "samples": 31,
+   "name_match": false,
+   "rule_offset": 1
+  },
+  "second": {
+   "db": "tika",
+   "nsy_id": "035",
+   "name": "ဘာဋီ",
+   "category": "ပဋ္ဌာန မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_03"
+   ],
+   "offset": 134,
+   "share": 1.0,
+   "samples": 1,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 8,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "050",
+   "books": [
+    "tika_bi_03"
+   ]
+  },
+  "check": "id found by content: tika:050 ဂူကြီး (consistency 0.81, 31 anchors)"
+ },
+ "333": {
+  "n": 333,
+  "sheet": "ပဉ္စပကြိုက်မူလဋီ(ဒု)",
+  "pali_guess": [
+   "tika_bi_03",
+   "tika_bi_05"
+  ],
+  "ok": true,
+  "best": {
+   "db": "tika",
+   "nsy_id": "051",
+   "name": "ဂူကြီး",
+   "category": "ယမိုက်+ပဋ္ဌာန်း မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_03"
+   ],
+   "offset": 0,
+   "share": 0.75,
+   "samples": 20,
+   "name_match": false,
+   "rule_offset": 2
+  },
+  "second": {
+   "db": "tika",
+   "nsy_id": "058",
+   "name": "ကြာခံ",
+   "category": "ဓာ မူဋီ",
+   "pagecount": null,
+   "books": [
+    "tika_bi_03"
+   ],
+   "offset": -72,
+   "share": 1.0,
+   "samples": 3,
+   "name_match": false,
+   "rule_offset": 8
+  },
+  "tried": 8,
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "051",
+   "books": [
+    "tika_bi_03"
+   ]
+  },
+  "check": "id found by content: tika:051 ဂူကြီး (consistency 0.75, 20 anchors)"
+ },
+ "334": {
+  "n": 334,
+  "sheet": "ထေရီဋ္ဌ",
+  "pali_guess": [
+   "attha_ku_09",
+   "mula_ku_11"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "206",
+   "name": "သကျဓီတာ",
+   "category": "ထေရီ",
+   "pagecount": null,
+   "books": [
+    "attha_ku_09"
+   ],
+   "offset": 0,
+   "share": 0.98,
+   "samples": 7477,
+   "name_match": false,
+   "rule_offset": 24
+  },
+  "second": null,
+  "tried": 1,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "206",
+   "books": [
+    "attha_ku_09"
+   ]
+  },
+  "check": "id found by content: attha:206 သကျဓီတာ (consistency 0.98, 7477 anchors)"
+ },
+ "335": {
+  "n": 335,
+  "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ပ)",
+  "pali_guess": [
+   "attha_ku_12",
+   "tika_ku_zat_01"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "209",
+   "name": "မဟာဇေယျမင်းကျောင်း",
+   "category": "ဗုဒ္ဓဝံသ",
+   "pagecount": null,
+   "books": [
+    "attha_ku_12"
+   ],
+   "offset": 0,
+   "share": 0.88,
+   "samples": 6929,
+   "name_match": false,
+   "rule_offset": 6
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "210",
+   "name": "မဟာဇေယျမင်းကျောင်း",
+   "category": "ဗုဒ္ဓဝံသ",
+   "pagecount": null,
+   "books": [
+    "attha_ku_12"
+   ],
+   "offset": 399,
+   "share": 0.13,
+   "samples": 39,
+   "name_match": false,
+   "rule_offset": 6
+  },
+  "tried": 2,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "209",
+   "books": [
+    "attha_ku_12"
+   ]
+  },
+  "check": "id found by content: attha:209 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 6929 anchors)"
+ },
+ "336": {
+  "n": 336,
+  "sheet": "ဗုဒ္ဓဝံဋ္ဌ(ဒု)",
+  "pali_guess": [
+   "attha_ku_12",
+   "tika_ku_zat_01"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "210",
+   "name": "မဟာဇေယျမင်းကျောင်း",
+   "category": "ဗုဒ္ဓဝံသ",
+   "pagecount": null,
+   "books": [
+    "attha_ku_12"
+   ],
+   "offset": 0,
+   "share": 0.88,
+   "samples": 5719,
+   "name_match": true,
+   "rule_offset": 6
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "209",
+   "name": "မဟာဇေယျမင်းကျောင်း",
+   "category": "ဗုဒ္ဓဝံသ",
+   "pagecount": null,
+   "books": [
+    "attha_ku_12"
+   ],
+   "offset": 4,
+   "share": 0.22,
+   "samples": 23,
+   "name_match": true,
+   "rule_offset": 6
+  },
+  "tried": 2,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "210",
+   "books": [
+    "attha_ku_12"
+   ]
+  },
+  "check": "id found by content: attha:210 မဟာဇေယျမင်းကျောင်း (consistency 0.88, 5719 anchors)"
+ },
+ "337": {
+  "n": 337,
+  "sheet": "ဇာတ်ဋ္ဌ-၁",
+  "pali_guess": [
+   "attha_ku_zat_01",
+   "attha_ku_10"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "211",
+   "name": "ဇယဝတီ (ပ)",
+   "category": "ဇာတ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_01"
+   ],
+   "offset": 0,
+   "share": 0.97,
+   "samples": 11392,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "212",
+   "name": "ဇယဝတီ (ဒု)",
+   "category": "ဇာတ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_01"
+   ],
+   "offset": -736,
+   "share": 0.22,
+   "samples": 27,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "tried": 2,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "211",
+   "books": [
+    "attha_ku_zat_01"
+   ]
+  },
+  "check": "id found by content: attha:211 ဇယဝတီ (ပ) (consistency 0.97, 11392 anchors)"
+ },
+ "338": {
+  "n": 338,
+  "sheet": "ဇာတ်ဋ္ဌ-ဧက",
+  "pali_guess": [
+   "attha_ku_zat_01",
+   "tika_ku_zat_01"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "212",
+   "name": "ဇယဝတီ (ဒု)",
+   "category": "ဇာတ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_01"
+   ],
+   "offset": 0,
+   "share": 0.98,
+   "samples": 10282,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "211",
+   "name": "ဇယဝတီ (ပ)",
+   "category": "ဇာတ် (ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_01"
+   ],
+   "offset": 0,
+   "share": 0.19,
+   "samples": 27,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "tried": 2,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "212",
+   "books": [
+    "attha_ku_zat_01"
+   ]
+  },
+  "check": "id found by content: attha:212 ဇယဝတီ (ဒု) (consistency 0.98, 10282 anchors)"
+ },
+ "339": {
+  "n": 339,
+  "sheet": "ဇာဋ္ဌ-ဒု",
+  "pali_guess": [
+   "attha_ku_zat_02",
+   "tika_ku_zat_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "213",
+   "name": "မဟာဇေယျမင်းကျောင်း",
+   "category": "ဇာတ် (ဒုက -၂)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_02"
+   ],
+   "offset": 0,
+   "share": 0.95,
+   "samples": 8545,
+   "name_match": false,
+   "rule_offset": 12
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "214",
+   "name": "မဟာဇေယျမင်းကျောင်း",
+   "category": "ဇာတ် (တိက - ၂)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_02"
+   ],
+   "offset": -82,
+   "share": 0.17,
+   "samples": 18,
+   "name_match": false,
+   "rule_offset": 7
+  },
+  "tried": 2,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "213",
+   "books": [
+    "attha_ku_zat_02"
+   ]
+  },
+  "check": "id found by content: attha:213 မဟာဇေယျမင်းကျောင်း (consistency 0.95, 8545 anchors)"
+ },
+ "340": {
+  "n": 340,
+  "sheet": "ဇာဋ္ဌ-တိံသ",
+  "pali_guess": [
+   "attha_ku_zat_05",
+   "attha_ku_zat_04"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "221",
+   "name": "နပသ",
+   "category": "(မန်း+ရန်ကုန်) (တိံသာဒိ - ၅)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_05"
+   ],
+   "offset": 0,
+   "share": 0.96,
+   "samples": 7858,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "222",
+   "name": "နပသ",
+   "category": "(မန်း+ရန်ကုန်) (သတ္တတျာဒိ - ၅)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_05"
+   ],
+   "offset": -471,
+   "share": 0.4,
+   "samples": 5,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "221",
+   "books": [
+    "attha_ku_zat_05"
+   ]
+  },
+  "check": "id found by content: attha:221 နပသ (consistency 0.96, 7858 anchors)"
+ },
+ "341": {
+  "n": 341,
+  "sheet": "သဋ္ဌိနိပါတ်",
+  "pali_guess": [
+   "attha_ku_zat_05",
+   "mula_ku_15"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "222",
+   "name": "နပသ",
+   "category": "(မန်း+ရန်ကုန်) (သတ္တတျာဒိ - ၅)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_05"
+   ],
+   "offset": 0,
+   "share": 0.91,
+   "samples": 3127,
+   "name_match": false,
+   "rule_offset": 9
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "223",
+   "name": "နပသ",
+   "category": "(မန်း+ရန်ကုန်) (အသီတိ - ၅)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_zat_05"
+   ],
+   "offset": -203,
+   "share": 0.43,
+   "samples": 7,
+   "name_match": false,
+   "rule_offset": 10
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "222",
+   "books": [
+    "attha_ku_zat_05"
+   ]
+  },
+  "check": "id found by content: attha:222 နပသ (consistency 0.91, 3127 anchors)"
+ },
+ "342": {
+  "n": 342,
+  "sheet": "အပဋ္ဌ-ပ-ပ",
+  "pali_guess": [
+   "attha_ku_10",
+   "attha_ku_zat_01"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "231",
+   "name": "နပသ(ရန်ကုန်) (ပ)",
+   "category": "အပါဒါန(ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_10"
+   ],
+   "offset": 0,
+   "share": 0.92,
+   "samples": 4406,
+   "name_match": false,
+   "rule_offset": 10
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "232",
+   "name": "နပသ(ရန်ကုန်) (ဒု)",
+   "category": "အပါဒါန(ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_10"
+   ],
+   "offset": 19,
+   "share": 0.29,
+   "samples": 7,
+   "name_match": false,
+   "rule_offset": 4
+  },
+  "tried": 2,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "231",
+   "books": [
+    "attha_ku_10"
+   ]
+  },
+  "check": "id found by content: attha:231 နပသ(ရန်ကုန်) (ပ) (consistency 0.92, 4406 anchors)"
+ },
+ "343": {
+  "n": 343,
+  "sheet": "အပဋ္ဌ-ပ-ဒု",
+  "pali_guess": [
+   "attha_ku_10",
+   "attha_ku_05_01"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "232",
+   "name": "နပသ(ရန်ကုန်) (ဒု)",
+   "category": "အပါဒါန(ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_10"
+   ],
+   "offset": 0,
+   "share": 0.94,
+   "samples": 6932,
+   "name_match": false,
+   "rule_offset": 4
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "231",
+   "name": "နပသ(ရန်ကုန်) (ပ)",
+   "category": "အပါဒါန(ပ)",
+   "pagecount": null,
+   "books": [
+    "attha_ku_10"
+   ],
+   "offset": -275,
+   "share": 0.4,
+   "samples": 5,
+   "name_match": false,
+   "rule_offset": 10
+  },
+  "tried": 2,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "232",
+   "books": [
+    "attha_ku_10"
+   ]
+  },
+  "check": "id found by content: attha:232 နပသ(ရန်ကုန်) (ဒု) (consistency 0.94, 6932 anchors)"
+ },
+ "344": {
+  "n": 344,
+  "sheet": "စရိယဋ္ဌ-ပ",
+  "pali_guess": [
+   "attha_ku_13",
+   "attha_ku_zat_04"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "239",
+   "name": "နပသ(ရန်ကုန်) (ပ)",
+   "category": "စရိယာပိဋက",
+   "pagecount": null,
+   "books": [
+    "attha_ku_13"
+   ],
+   "offset": 0,
+   "share": 0.88,
+   "samples": 6052,
+   "name_match": false,
+   "rule_offset": 30
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "097",
+   "name": "ရှေးဆရာတော်",
+   "category": "စရိယာပိဋက",
+   "pagecount": null,
+   "books": [
+    "attha_ku_13"
+   ],
+   "offset": -61,
+   "share": 0.2,
+   "samples": 5116,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "239",
+   "books": [
+    "attha_ku_13"
+   ]
+  },
+  "check": "id found by content: attha:239 နပသ(ရန်ကုန်) (ပ) (consistency 0.88, 6052 anchors)"
+ },
+ "345": {
+  "n": 345,
+  "sheet": "စရိယဋ္ဌ-ဒု",
+  "pali_guess": [
+   "attha_ku_13",
+   "tika_di_01_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "attha",
+   "nsy_id": "240",
+   "name": "နပသ(ရန်ကုန်) (ဒု)",
+   "category": "စရိယာပိဋက",
+   "pagecount": null,
+   "books": [
+    "attha_ku_13"
+   ],
+   "offset": 0,
+   "share": 0.87,
+   "samples": 5414,
+   "name_match": false,
+   "rule_offset": 12
+  },
+  "second": {
+   "db": "attha",
+   "nsy_id": "097",
+   "name": "ရှေးဆရာတော်",
+   "category": "စရိယာပိဋက",
+   "pagecount": null,
+   "books": [
+    "attha_ku_13"
+   ],
+   "offset": 171,
+   "share": 0.5,
+   "samples": 4,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "240",
+   "books": [
+    "attha_ku_13"
+   ]
+  },
+  "check": "id found by content: attha:240 နပသ(ရန်ကုန်) (ဒု) (consistency 0.87, 5414 anchors)"
+ },
+ "346": {
+  "n": 346,
+  "sheet": "ဒွေမာတိ",
+  "pali_guess": [
+   "annya_vi_01_01",
+   "mula_vi_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "001",
+   "name": "ဦးဗုဓ်",
+   "category": "ဒွေမာတိကာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 0,
+   "share": 0.73,
+   "samples": 133,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "002",
+   "name": "ဘာသာဋီကာ",
+   "category": "ဒွေမာတိကာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 171,
+   "share": 0.09,
+   "samples": 133,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "001",
+   "books": [
+    "annya_vi_01_01"
+   ]
+  },
+  "check": "id found by content: annya:001 ဦးဗုဓ် (consistency 0.73, 133 anchors)"
+ },
+ "347": {
+  "n": 347,
+  "sheet": "ပါတိမောက်",
+  "pali_guess": [
+   "annya_vi_01_01",
+   "annya_vi_01_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "002",
+   "name": "ဘာသာဋီကာ",
+   "category": "ဒွေမာတိကာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 0,
+   "share": 0.43,
+   "samples": 345,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "003",
+   "name": "မေဒိနီ",
+   "category": "ဒွေမာတိကာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 60,
+   "share": 0.08,
+   "samples": 345,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "tried": 3,
+  "check": "id chosen: annya:002 ဘာသာဋီကာ (clear winner: share 0.43 vs 0.08)",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "002",
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 0
+  }
+ },
+ "348": {
+  "n": 348,
+  "sheet": "ပါတိမောက္ခ",
+  "pali_guess": [
+   "annya_vi_01_01",
+   "annya_vi_01_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "003",
+   "name": "မေဒိနီ",
+   "category": "ဒွေမာတိကာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": -2,
+   "share": 0.36,
+   "samples": 389,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "002",
+   "name": "ဘာသာဋီကာ",
+   "category": "ဒွေမာတိကာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": -103,
+   "share": 0.07,
+   "samples": 389,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "tried": 3,
+  "check": "id chosen: annya:003 မေဒိနီ (clear winner: share 0.36 vs 0.07)",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "003",
+   "books": [
+    "annya_vi_01_01"
+   ],
+   "offset": 0
+  }
+ },
+ "349": {
+  "n": 349,
+  "sheet": "ခုဒ္ဒမူလသိက္ခာ",
+  "pali_guess": [
+   "annya_vi_05_01",
+   "annya_vi_05_03"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "004",
+   "name": "ဦးဗုဓ်",
+   "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ],
+   "offset": 0,
+   "share": 0.65,
+   "samples": 2181,
+   "name_match": false,
+   "rule_offset": 6
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "005",
+   "name": "မေဒိနီ",
+   "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ],
+   "offset": 14,
+   "share": 0.09,
+   "samples": 2181,
+   "name_match": false,
+   "rule_offset": 11
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "004",
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ]
+  },
+  "check": "id found by content: annya:004 ဦးဗုဓ် (consistency 0.65, 2181 anchors)"
+ },
+ "350": {
+  "n": 350,
+  "sheet": "ခုဒ္ဒသိက္ခာ",
+  "pali_guess": [
+   "annya_vi_05_01",
+   "annya_vi_05_03"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "005",
+   "name": "မေဒိနီ",
+   "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ],
+   "offset": 0,
+   "share": 0.65,
+   "samples": 964,
+   "name_match": false,
+   "rule_offset": 11
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "004",
+   "name": "ဦးဗုဓ်",
+   "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ],
+   "offset": -58,
+   "share": 0.07,
+   "samples": 964,
+   "name_match": false,
+   "rule_offset": 6
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "005",
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ]
+  },
+  "check": "id found by content: annya:005 မေဒိနီ (consistency 0.65, 964 anchors)"
+ },
+ "351": {
+  "n": 351,
+  "sheet": "ခုဒ္ဒဘာဋီ",
+  "pali_guess": [
+   "annya_vi_05_01",
+   "annya_vi_05_03"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "006",
+   "name": "ဘာသာဋီကာ",
+   "category": "ခုဒ္ဒသိက္ခာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_05_01"
+   ],
+   "offset": 0,
+   "share": 0.3,
+   "samples": 1206,
+   "name_match": false,
+   "rule_offset": 1
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "004",
+   "name": "ဦးဗုဓ်",
+   "category": "ခုဒ္ဒသိက္ခာ မူလသိက္ခာ",
+   "pagecount": null,
+   "books": [
+    "annya_vi_05_01",
+    "annya_vi_06_01"
+   ],
+   "offset": -307,
+   "share": 0.03,
+   "samples": 1185,
+   "name_match": false,
+   "rule_offset": 6
+  },
+  "tried": 3,
+  "check": "id chosen: annya:006 ဘာသာဋီကာ (clear winner: share 0.30 vs 0.03)",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "006",
+   "books": [
+    "annya_vi_05_01"
+   ],
+   "offset": 0
+  }
+ },
+ "352": {
+  "n": 352,
+  "sheet": "အဘိဓမ္မတ္ထ",
+  "pali_guess": [
+   "annya_bi_05",
+   "annya_bi_07"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "010",
+   "name": "ဗားကရာ",
+   "category": "သင်္ဂဟ",
+   "pagecount": null,
+   "books": [
+    "annya_bi_05"
+   ],
+   "offset": 0,
+   "share": 0.79,
+   "samples": 1635,
+   "name_match": true,
+   "rule_offset": 60
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "012",
+   "name": "ဘာသာဋီကာ",
+   "category": "သင်္ဂဟ",
+   "pagecount": null,
+   "books": [
+    "annya_bi_05"
+   ],
+   "offset": 86,
+   "share": 0.07,
+   "samples": 1635,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "010",
+   "books": [
+    "annya_bi_05"
+   ]
+  },
+  "check": "id found by content: annya:010 ဗားကရာ (consistency 0.79, 1635 anchors)"
+ },
+ "353": {
+  "n": 353,
+  "sheet": "အခြေပြုသင်္ဂြိုလ်",
+  "pali_guess": [
+   "annya_bi_07",
+   "annya_bi_05"
+  ],
+  "ok": false,
+  "best": null,
+  "second": null,
+  "tried": 0,
+  "check": "NO RELIABLE ID (best share 0.00) - please tell me the id"
+ },
+ "354": {
+  "n": 354,
+  "sheet": "ဋီကာကျော်",
+  "pali_guess": [
+   "annya_bi_06",
+   "annya_bi_07"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "017",
+   "name": "တောင်မြို့",
+   "category": "ဋီကာကျော်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_06"
+   ],
+   "offset": 0,
+   "share": 0.79,
+   "samples": 2857,
+   "name_match": false,
+   "rule_offset": 10
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "018",
+   "name": "မေဒိနီ",
+   "category": "ဋီကာကျော်",
+   "pagecount": null,
+   "books": [
+    "annya_bi_06"
+   ],
+   "offset": -31,
+   "share": 0.32,
+   "samples": 1200,
+   "name_match": false,
+   "rule_offset": 16
+  },
+  "tried": 3,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "017",
+   "books": [
+    "annya_bi_06"
+   ]
+  },
+  "check": "id found by content: annya:017 တောင်မြို့ (consistency 0.79, 2857 anchors)"
+ },
+ "355": {
+  "n": 355,
+  "sheet": "ကစ္စည်းဘာဋီ",
+  "pali_guess": [
+   "annya_sadda_01",
+   "annya_sadda_02"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "022",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ကစ္စည်း",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_01"
+   ],
+   "offset": 0,
+   "share": 0.56,
+   "samples": 1455,
+   "name_match": false,
+   "rule_offset": -1
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "026",
+   "name": "သပြေကန် (တ)",
+   "category": "ကစ္စည်း",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_01"
+   ],
+   "offset": -80,
+   "share": 0.75,
+   "samples": 4,
+   "name_match": false,
+   "rule_offset": 17
+  },
+  "tried": 6,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "022",
+   "books": [
+    "annya_sadda_01"
+   ]
+  },
+  "check": "id found by content: annya:022 ဘာသာဋီကာ (ပ) (consistency 0.56, 1455 anchors)"
+ },
+ "356": {
+  "n": 356,
+  "sheet": "ကစ္စည်းဘာဋီ-ဒု",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "annya",
+   "nsy_id": "033",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -153,
+   "share": 0.18,
+   "samples": 34,
+   "name_match": false,
+   "rule_offset": 20
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "031",
+   "name": "ဂဏ္ဌိ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -123,
+   "share": 0.14,
+   "samples": 44,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.18) - please tell me the id"
+ },
+ "357": {
+  "n": 357,
+  "sheet": "သဒ္ဒါကြီး-၁",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_10"
+  ],
+  "ok": false,
+  "best": {
+   "db": "annya",
+   "nsy_id": "034",
+   "name": "ဘာသာဋီကာ (ဒု)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -416,
+   "share": 0.43,
+   "samples": 7,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "032",
+   "name": "ဂဏ္ဌိ (ဒု)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -476,
+   "share": 0.43,
+   "samples": 7,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.43) - please tell me the id"
+ },
+ "358": {
+  "n": 358,
+  "sheet": "သဒ္ဒါကြီး-၂",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_10"
+  ],
+  "ok": false,
+  "best": {
+   "db": "annya",
+   "nsy_id": "033",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 533,
+   "share": 0.28,
+   "samples": 18,
+   "name_match": false,
+   "rule_offset": 20
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "031",
+   "name": "ဂဏ္ဌိ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 618,
+   "share": 0.16,
+   "samples": 31,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.28) - please tell me the id"
+ },
+ "359": {
+  "n": 359,
+  "sheet": "သဒ္ဒါကြီး-၃",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_01"
+  ],
+  "ok": false,
+  "best": {
+   "db": "annya",
+   "nsy_id": "033",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -116,
+   "share": 0.44,
+   "samples": 9,
+   "name_match": false,
+   "rule_offset": 20
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "031",
+   "name": "ဂဏ္ဌိ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -98,
+   "share": 0.44,
+   "samples": 9,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "tried": 5,
+  "check": "NO RELIABLE ID (best share 0.44) - please tell me the id"
+ },
+ "360": {
+  "n": 360,
+  "sheet": "ရူပသဒ္ဓိ-၁",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_06"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "031",
+   "name": "ဂဏ္ဌိ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 0,
+   "share": 0.7,
+   "samples": 1353,
+   "name_match": false,
+   "rule_offset": 23
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "032",
+   "name": "ဂဏ္ဌိ (ဒု)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -540,
+   "share": 0.29,
+   "samples": 17,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "tried": 5,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "031",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:031 ဂဏ္ဌိ (ပ) (consistency 0.70, 1353 anchors)"
+ },
+ "361": {
+  "n": 361,
+  "sheet": "ရူပသဒ္ဓိ-၂",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_10"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "032",
+   "name": "ဂဏ္ဌိ (ဒု)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -2,
+   "share": 0.57,
+   "samples": 2281,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "033",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 187,
+   "share": 0.26,
+   "samples": 27,
+   "name_match": false,
+   "rule_offset": 20
+  },
+  "tried": 5,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "032",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:032 ဂဏ္ဌိ (ဒု) (consistency 0.57, 2281 anchors)"
+ },
+ "362": {
+  "n": 362,
+  "sheet": "ရူပသဒ္ဓိဘာဋီ-၁",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_06"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "033",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 0,
+   "share": 0.68,
+   "samples": 2579,
+   "name_match": false,
+   "rule_offset": 20
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "032",
+   "name": "ဂဏ္ဌိ (ဒု)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": -42,
+   "share": 0.25,
+   "samples": 12,
+   "name_match": false,
+   "rule_offset": 25
+  },
+  "tried": 5,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:033 ဘာသာဋီကာ (ပ) (consistency 0.68, 2579 anchors)"
+ },
+ "363": {
+  "n": 363,
+  "sheet": "ရူပသဒ္ဓိဘာဋီ-၂",
+  "pali_guess": [
+   "annya_sadda_02",
+   "annya_sadda_10"
+  ],
+  "ok": true,
+  "best": {
+   "db": "annya",
+   "nsy_id": "034",
+   "name": "ဘာသာဋီကာ (ဒု)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 0,
+   "share": 0.74,
+   "samples": 2945,
+   "name_match": false,
+   "rule_offset": 0
+  },
+  "second": {
+   "db": "annya",
+   "nsy_id": "033",
+   "name": "ဘာသာဋီကာ (ပ)",
+   "category": "ရူပသိဒ္ဓိ",
+   "pagecount": null,
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 633,
+   "share": 0.53,
+   "samples": 53,
+   "name_match": false,
+   "rule_offset": 20
+  },
+  "tried": 5,
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "034",
+   "books": [
+    "annya_sadda_02"
+   ]
+  },
+  "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)"
+ }
+}

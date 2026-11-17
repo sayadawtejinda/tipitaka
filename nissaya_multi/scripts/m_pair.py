@@ -33,7 +33,8 @@ def load_catalog(n):
 
 def page_map(db, nsy_id):
     c = sqlite3.connect(os.path.join(TIP, DB_FILE[db]))
-    return c.execute("select pali_book_id,pali_book_page_number,nsy_book_page_number from pali_nsy_page_map where nsy_book_id=? order by nsy_book_page_number,pali_book_page_number", (nsy_id,)).fetchall()
+    rows = c.execute("select pali_book_id,pali_book_page_number,nsy_book_page_number from pali_nsy_page_map where nsy_book_id=? order by nsy_book_page_number,pali_book_page_number", (nsy_id,)).fetchall()
+    return [r for r in rows if isinstance(r[1], int) and isinstance(r[2], int)]       # (a few database rows hold text such as '#VALUE!' instead of a page number)
 
 def pali_for(books, page_ranges):
     """concatenated blocks of the Pali books, each restricted to its page range; returns blocks (with 'book') """
@@ -400,6 +401,7 @@ def run(n, pali_override=None, verbose=True, _fin=None, _off=None):
     if pmap:
         det, share, top, _tot = probe_offset(pages, pmap, books)
         rule = 0 if n >= 400 else min(r[2] for r in pmap) - 1  # databases trusted. 'OCR Books (auto)' (sheet >= 400): 0001.jpg = PDF page 1, so sheet page = db page. Older workbooks: sheet page = db page - (first db page - 1)
+        if _off is None and fin.get('offset') is not None: _off = fin['offset']      # catalog 'final' may carry the offset chosen by hand (sheet page = db page - offset)
         offset = rule if _off is None else _off
         offset_info = {'offset': offset, 'used': offset, 'rule': rule, 'detected_from_text': det, 'share': share, 'top': top, 'first_pali_page_db': pmap[0][2],
                        'differs': (det is not None and abs(det - rule) > 1 and share >= 0.6)}
