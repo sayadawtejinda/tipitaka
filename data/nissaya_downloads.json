@@ -787,6 +787,17 @@
    "edition_of": "mula_bi_03"
   },
   {
+   "id": "mula_bi_03_sheet066",
+   "title": "ဓာတုကထာပါဠိ (ဘုံကျော်မူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 1184295,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_03"
+  },
+  {
    "id": "mula_bi_04",
    "title": "ပုဂ္ဂလပညတ္တိပါဠိ",
    "basket": "ပါဠိတော်",
@@ -805,6 +816,17 @@
    "cat_key": "bi",
    "size": 854686,
    "date": "2026-11-16",
+   "edition_of": "mula_bi_04"
+  },
+  {
+   "id": "mula_bi_04_sheet066",
+   "title": "ပုဂ္ဂလပညတ္တိပါဠိ (ဘုံကျော်မူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 1301263,
+   "date": "2026-11-17",
    "edition_of": "mula_bi_04"
   },
   {
@@ -2478,5 +2500,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 135
+ "n_editions": 137
 }
