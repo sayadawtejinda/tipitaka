@@ -110,5 +110,96 @@
   "name": "ပဋ္ဌာနအဋ္ဌကထာဘာသာဋီကာ",
   "fit": "7/8",
   "pages": "1-386"
+ },
+ "SI_BT_01.pdf": {
+  "file": "attha_di_01_sheet101",
+  "delta": 0,
+  "name": "သီလက္ခန်ဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "344/375",
+  "pages": "1-585"
+ },
+ "SI_BT_02.pdf": {
+  "file": "attha_di_01_sheet102",
+  "delta": 0,
+  "name": "သီလက္ခန်ဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "308/334",
+  "pages": "1-457"
+ },
+ "SI_BT_04.pdf": {
+  "file": "attha_di_01_sheet104",
+  "delta": 0,
+  "name": "သီလက္ခန်ဘာသာဋီကာ (စ တွဲ)",
+  "fit": "194/222",
+  "pages": "1-322"
+ },
+ "PJ_BT_01.pdf": {
+  "file": "attha_vi_01_01_sheet078",
+  "delta": 0,
+  "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "372/423",
+  "pages": "1-630"
+ },
+ "PJ_BT_02.pdf": {
+  "file": "attha_vi_01_01_sheet079",
+  "delta": 0,
+  "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "349/384",
+  "pages": "1-616"
+ },
+ "PJ_BT_03.pdf": {
+  "file": "attha_vi_01_02_sheet082",
+  "delta": 13,
+  "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (တ တွဲ)",
+  "fit": "118/162",
+  "pages": "148-608"
+ },
+ "PJ_BT_04.pdf": {
+  "file": "attha_vi_01_02_sheet083",
+  "delta": 0,
+  "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (စ တွဲ)",
+  "fit": "94/107",
+  "pages": "1-431"
+ },
+ "PC_BT_01.pdf": {
+  "file": "attha_vi_02_sheet084",
+  "delta": 0,
+  "name": "ပါစိတ်ဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "102/118",
+  "pages": "1-324"
+ },
+ "PC_BT_02.pdf": {
+  "file": "attha_vi_02_sheet085",
+  "delta": 0,
+  "name": "ပါစိတ်ဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "81/88",
+  "pages": "1-219"
+ },
+ "MV_BT_01.pdf": {
+  "file": "attha_vi_03_sheet087",
+  "delta": 0,
+  "name": "မဟာဝါဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "164/180",
+  "pages": "1-394"
+ },
+ "MV_BT_02.pdf": {
+  "file": "attha_vi_03_sheet088",
+  "delta": 0,
+  "name": "မဟာဝါဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "152/158",
+  "pages": "1-366"
+ },
+ "CV_AT_BT.pdf": {
+  "file": "attha_vi_04_sheet089",
+  "delta": 0,
+  "name": "စူဠဝဂ္ဂဘာသာဋီကာ",
+  "fit": "169/197",
+  "pages": "1-463"
+ },
+ "PV_BT.pdf": {
+  "file": "attha_vi_05_sheet090",
+  "delta": 0,
+  "name": "ပရိဝါဘာသာဋီကာ",
+  "fit": "79/89",
+  "pages": "1-349"
  }
 }

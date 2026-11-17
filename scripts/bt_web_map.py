@@ -52,6 +52,7 @@ for f in files:
             if k >= (0.4 if tot >= 20 else 0.6) * tot and (not best or k / tot > best[3]): best = (b, d, k, k / tot, tot)
     if best:
         b, d, k, r, tot = best
+        if b['file'] in out and int(out[b['file']]['fit'].split('/')[0]) >= k: continue      # same PDF on several sheets -> keep the best fit
         out[b['file']] = {'file': f, 'delta': d, 'name': b['name'], 'fit': '%d/%d' % (k, tot), 'pages': '%d-%d' % (pages[0], pages[-1])}
         print(b['file'], '<-', f, 'delta', d, '%d/%d' % (k, tot), flush=True)
 json.dump(out, open(os.path.join(ROOT, 'data', 'bhasatika_web.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
