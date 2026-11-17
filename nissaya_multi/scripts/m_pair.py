@@ -388,7 +388,7 @@ def run(n, pali_override=None, verbose=True, _fin=None, _off=None):
     db, nsy_id = fin.get('db'), fin.get('nsy_id')
     pmap = page_map(db, nsy_id) if (fin.get('mode') == 'db' and db) else []
     _po = os.path.join(ROOT, 'pagemap_override', '%d.json' % n)   # page map built from the page marks typed in the nissaya (used when the database map is wrong)
-    MAP_AS_IS = 404 <= n <= 409           # the annya_nsy page map of these books was checked by the user: used exactly as it is (no override, no outlier repair)
+    MAP_AS_IS = 404 <= n <= 409 or bool(fin.get('as_is'))           # the annya_nsy page map of these books was checked by the user: used exactly as it is (no override, no outlier repair)
     if os.path.exists(_po) and not MAP_AS_IS: pmap = [tuple(r) for r in json.load(open(_po, encoding='utf-8'))]; print('page map override:', _po)
     if MAP_AS_IS: db_outliers = []; print('page map: database map used as it is')
     else: pmap, db_outliers = drop_map_outliers(pmap)

@@ -12976,12 +12976,16 @@
   "status": "no-id",
   "cand": [],
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "117",
    "books": [
     "annya_vi_01_04"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
-  "check": "content guess annya_vi_01_04 (0.45); database said -"
+  "check": "db map used as is (best candidate annya:117 ပခုက္ကူ (ပ), content share 0.17 - not verified)"
  },
  {
   "n": 328,
@@ -14878,12 +14882,16 @@
   "status": "no-id",
   "cand": [],
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
-  "check": "content guess annya_sadda_02 (0.32); database said -"
+  "check": "db map used as is (best candidate annya:033 ဘာသာဋီကာ (ပ), content share 0.18 - not verified)"
  },
  {
   "n": 357,
@@ -14896,12 +14904,16 @@
   "status": "no-id",
   "cand": [],
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "034",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
-  "check": "content guess annya_sadda_02 (0.27); database said -"
+  "check": "db map used as is (best candidate annya:034 ဘာသာဋီကာ (ဒု), content share 0.43 - not verified)"
  },
  {
   "n": 358,
@@ -14914,12 +14926,16 @@
   "status": "no-id",
   "cand": [],
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
-  "check": "content guess annya_sadda_02 (0.25); database said -"
+  "check": "db map used as is (best candidate annya:033 ဘာသာဋီကာ (ပ), content share 0.28 - not verified)"
  },
  {
   "n": 359,
@@ -14932,12 +14948,16 @@
   "status": "no-id",
   "cand": [],
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
    "books": [
     "annya_sadda_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
-  "check": "content guess annya_sadda_02 (0.29); database said -"
+  "check": "db map used as is (best candidate annya:033 ဘာသာဋီကာ (ပ), content share 0.44 - not verified)"
  },
  {
   "n": 360,

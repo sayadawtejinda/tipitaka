@@ -1648,7 +1648,17 @@
    "rule_offset": -1
   },
   "tried": 2,
-  "check": "NO RELIABLE ID (best share 0.17) - please tell me the id"
+  "check": "NO RELIABLE ID (best share 0.17) - please tell me the id",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "117",
+   "books": [
+    "annya_vi_01_04"
+   ],
+   "offset": 0,
+   "as_is": true
+  }
  },
  "328": {
   "n": 328,
@@ -3021,7 +3031,17 @@
    "rule_offset": 23
   },
   "tried": 5,
-  "check": "NO RELIABLE ID (best share 0.18) - please tell me the id"
+  "check": "NO RELIABLE ID (best share 0.18) - please tell me the id",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 0,
+   "as_is": true
+  }
  },
  "357": {
   "n": 357,
@@ -3062,7 +3082,17 @@
    "rule_offset": 25
   },
   "tried": 5,
-  "check": "NO RELIABLE ID (best share 0.43) - please tell me the id"
+  "check": "NO RELIABLE ID (best share 0.43) - please tell me the id",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "034",
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 0,
+   "as_is": true
+  }
  },
  "358": {
   "n": 358,
@@ -3103,7 +3133,17 @@
    "rule_offset": 23
   },
   "tried": 5,
-  "check": "NO RELIABLE ID (best share 0.28) - please tell me the id"
+  "check": "NO RELIABLE ID (best share 0.28) - please tell me the id",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 0,
+   "as_is": true
+  }
  },
  "359": {
   "n": 359,
@@ -3144,7 +3184,17 @@
    "rule_offset": 23
   },
   "tried": 5,
-  "check": "NO RELIABLE ID (best share 0.44) - please tell me the id"
+  "check": "NO RELIABLE ID (best share 0.44) - please tell me the id",
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "033",
+   "books": [
+    "annya_sadda_02"
+   ],
+   "offset": 0,
+   "as_is": true
+  }
  },
  "360": {
   "n": 360,
