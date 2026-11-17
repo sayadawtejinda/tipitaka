@@ -699,6 +699,17 @@
    "date": "2026-10-29"
   },
   {
+   "id": "mula_bi_03_bhasatika",
+   "title": "ဓာတုကထာပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 596440,
+   "date": "2026-11-16",
+   "edition_of": "mula_bi_03"
+  },
+  {
    "id": "mula_bi_04",
    "title": "ပုဂ္ဂလပညတ္တိပါဠိ",
    "basket": "ပါဠိတော်",
@@ -707,6 +718,17 @@
    "cat_key": "bi",
    "size": 1119998,
    "date": "2026-10-29"
+  },
+  {
+   "id": "mula_bi_04_bhasatika",
+   "title": "ပုဂ္ဂလပညတ္တိပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 854686,
+   "date": "2026-11-16",
+   "edition_of": "mula_bi_04"
   },
   {
    "id": "mula_bi_05",
@@ -1455,5 +1477,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 42
+ "n_editions": 44
 }
