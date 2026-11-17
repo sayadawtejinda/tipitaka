@@ -1083,6 +1083,12 @@
    "file": "tika_bi_02_01_sheet208",
    "from": 1,
    "to": 77
+  },
+  {
+   "label": "ဘာဋီမူ (တ)",
+   "file": "tika_bi_02_01_sheet210",
+   "from": 176,
+   "to": 235
   }
  ]
 }
