@@ -829,6 +829,12 @@
    "file": "mula_bi_03_bhasatika",
    "from": 1,
    "to": 100
+  },
+  {
+   "label": "ဘုံကျော်မူ",
+   "file": "mula_bi_03_sheet066",
+   "from": 1,
+   "to": 100
   }
  ],
  "mula_bi_04": [
@@ -839,6 +845,12 @@
   {
    "label": "ဘာသာဋီကာ",
    "file": "mula_bi_04_bhasatika",
+   "from": 101,
+   "to": 185
+  },
+  {
+   "label": "ဘုံကျော်မူ",
+   "file": "mula_bi_04_sheet066",
    "from": 101,
    "to": 185
   }
