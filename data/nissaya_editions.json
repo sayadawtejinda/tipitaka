@@ -43,6 +43,12 @@
   {
    "label": "ပခုက္ကူမူ",
    "file": "mula_di_01_pakhokku"
+  },
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "mula_di_01_bhasatika",
+   "from": 1,
+   "to": 236
   }
  ],
  "mula_di_02": [
