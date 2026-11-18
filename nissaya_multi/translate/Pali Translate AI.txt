@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ပါဠိ မြန်မာပြန် AI အက်ပ် (Pali Translate AI)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Padauk:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Padauk', 'Inter', sans-serif; background-color: #f8fafc; }
+        .myanmar-text { font-family: 'Padauk', sans-serif; line-height: 1.8; }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col">
+
+    <header class="bg-amber-800 text-amber-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i class="fa-solid font-bold text-2xl fa-book-journal-whills text-amber-300"></i>
+                <h1 class="text-xl sm:text-2xl font-bold tracking-wide">ပါဠိ မြန်မာပြန် AI အက်ပ်</h1>
+            </div>
+            <span class="text-xs bg-amber-900/60 text-amber-200 px-3 py-1 rounded-full border border-amber-600/40 hidden sm:inline-block">Powered by Gemini AI</span>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- INPUT -->
+        <div class="lg:col-span-6 flex flex-col gap-5">
+            <div class="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 flex-1 flex flex-col">
+                <h2 class="text-lg font-bold text-amber-900 mb-3 flex items-center gap-2 border-b pb-2 border-amber-100">
+                    <i class="fa-solid fa-file-pen text-amber-700"></i> ထည့်သွင်းရန်
+                </h2>
+
+                <div id="dropZone" class="flex flex-row items-stretch gap-2 mb-1 p-2 border-2 border-dashed border-amber-400 rounded-xl bg-amber-50">
+                    <label for="fileInput" title="ဖိုင်ရွေးမည် (သို့) ဤနေရာသို့ ဆွဲချပါ" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold px-4 rounded-lg border border-amber-300 flex items-center justify-center cursor-pointer">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <input id="fileInput" type="file" accept=".txt,text/plain" class="hidden">
+                    </label>
+                    <button id="checkBtn" onclick="analyzeNissaya()"
+                        class="flex-1 min-w-0 bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span id="checkLabel" class="truncate">စစ်မည်</span>
+                    </button>
+                    <button onclick="downloadResult(false)" title="ရလဒ်ဖိုင် ဒေါင်းလုပ်ချမည် (အလိုအလျောက် မချလျှင် ကိုယ်တိုင်ချပါ)"
+                        class="bg-sky-700 hover:bg-sky-800 text-white px-4 rounded-lg transition duration-200 flex items-center justify-center cursor-pointer">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
+                    <button onclick="clearForm()" title="ရှင်းလင်းမည်"
+                        class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 rounded-lg transition duration-200 flex items-center justify-center cursor-pointer">
+                        <i class="fa-solid fa-rotate-left"></i>
+                    </button>
+                </div>
+                <p id="fileInfo" class="text-xs text-slate-600 myanmar-text mb-2"></p>
+                <label for="allInput" class="block text-sm font-semibold text-slate-700 mb-1">
+                    ပါဠိ နှင့် နိဿယ အားလုံး (ဖိုင်တင်လျှင် ဤနေရာတွင် အလိုလို ပေါ်လာမည်၊ ကိုယ်တိုင် ကူးထည့်လည်း ရသည်)
+                </label>
+                <p class="text-xs text-slate-500 mb-2 myanmar-text"><b>--- စာမျက်နှာ N ---</b> ဖြင့် ပါဠိစာမျက်နှာတစ်ခုချင်း ခြား၍ အောက်တွင် <b>### ပါဠိ</b> (ပြန်ရမည့်စာ) နှင့် <b>### နိဿယ</b> (အနက်ကိုးကား) ပါသည်။ <b>===== အစု N / M =====</b> ဖြင့် အစုများ ခြားထားလျှင် ခလုပ်ကို တစ်ခါနှိပ်လျှင် အစု တစ်စုစီ မြန်မာပြန်ပေးပြီး ရလဒ်များ ဆက်စုပေးပါမည်။</p>
+                <textarea id="allInput" rows="16"
+                    class="w-full p-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none myanmar-text text-base bg-slate-50 focus:bg-white transition flex-1 min-h-[300px]"
+                    placeholder="===== အစု 1 / 10 =====
+--- စာမျက်နှာ 7 ---
+### ပါဠိ
+ဧဝံ ဝုတ္တေ, ဝေရဉ္ဇော ...
+### နိဿယ
+ဧဝံ၊ ဤသို့။ ဝုတ္တေ၊ ဟောအပ်သည်ရှိသော်။ ...
+--- စာမျက်နှာ 8 ---
+### ပါဠိ
+...
+### နိဿယ
+..."></textarea>
+
+                <details class="mt-3" id="keyBox">
+                    <summary class="text-xs text-slate-500 cursor-pointer select-none">Gemini API key (Gemini canvas ထဲမှာ မဟုတ်ဘဲ ကိုယ့် browser မှာ ဖွင့်ထားလျှင်သာ လိုသည်)</summary>
+                    <div class="mt-2 flex gap-2 items-center">
+                        <input id="apiKeyInput" type="password" autocomplete="off" placeholder="AIza..." class="flex-1 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50">
+                        <span class="text-xs text-slate-500">ဤ browser ထဲတွင်သာ သိမ်းသည်</span>
+                    </div>
+                </details>
+                <details class="hidden">
+                    <summary class="text-xs text-slate-500 cursor-pointer select-none">ပါဠိကို သီးခြားအကွက်ဖြင့် ထည့်လိုလျှင် (မလိုလျှင် ကျော်ပါ)</summary>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                        <textarea id="paliPage1" rows="4" class="w-full p-2 border border-slate-300 rounded-lg myanmar-text text-sm bg-slate-50" placeholder="ပါဠိတော် (ပထမ)"></textarea>
+                        <textarea id="paliPage2" rows="4" class="w-full p-2 border border-slate-300 rounded-lg myanmar-text text-sm bg-slate-50" placeholder="ပါဠိတော် (ဒုတိယ)"></textarea>
+                    </div>
+                </details>
+
+                <div class="flex flex-wrap items-center gap-3 pt-3 text-sm text-slate-700 myanmar-text">
+                    <label class="flex items-center gap-1.5"><input type="checkbox" id="autoRun" checked> အစုတစ်စုပြီးလျှင် နောက်အစုကို အလိုအလျောက် ဆက်စစ်</label>
+                    <label class="flex items-center gap-1.5">ခြားချိန် <input id="autoGap" type="number" min="0" value="30" class="w-16 p-1 border border-slate-300 rounded"> စက္ကန့်</label>
+                    <label class="flex items-center gap-1.5"><input type="checkbox" id="autoRetry" checked> မအောင်မြင်လျှင် ခလုပ်ကို <input id="retryGap" type="number" min="5" value="60" class="w-16 p-1 border border-slate-300 rounded"> စက္ကန့်အကြာ အလိုအလျောက် ပြန်နှိပ် (အမှားအားလုံး၊ ဆက်တိုက် ၃၀ ကြိမ်အထိ)</label>
+                    <button id="stopBtn" onclick="stopAuto()" class="hidden bg-rose-600 hover:bg-rose-700 text-white font-semibold py-1.5 px-4 rounded-lg">ရပ်မည်</button>
+                </div>
+                <div id="setInfo" class="pt-2 text-xs text-slate-600 myanmar-text"></div>
+                <div id="retryInfo" class="pt-1 text-xs text-amber-700 myanmar-text"></div>
+            </div>
+        </div>
+
+        <!-- OUTPUT -->
+        <div class="lg:col-span-6 flex flex-col gap-5">
+            <div class="bg-white p-5 sm:p-6 rounded-xl shadow-sm border border-slate-200 flex-1 flex flex-col">
+                <h2 class="text-lg font-bold text-amber-900 mb-3 flex items-center justify-between border-b pb-2 border-amber-100">
+                    <span class="flex items-center gap-2"><i class="fa-solid fa-square-poll-vertical text-amber-700"></i> မြန်မာပြန်များ</span>
+                    <span id="statusBadge" class="hidden text-xs bg-emerald-100 text-emerald-800 font-medium px-2.5 py-0.5 rounded-full border border-emerald-300">ပြန်ပြီးပါပြီ</span>
+                </h2>
+
+                <div id="emptyState" class="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400">
+                    <i class="fa-solid fa-file-magnifying-glass text-5xl mb-3 text-slate-300"></i>
+                    <p class="text-base myanmar-text">ပါဠိနှင့် နိဿယကို ထည့်ပြီး မြန်မာပြန်ပါ။ ရလဒ်ကို တစ်ခါတည်း အားလုံး ကူးယူနိုင်ပါသည်။</p>
+                </div>
+
+                <div id="loadingState" class="hidden flex-1 flex flex-col items-center justify-center p-8 text-center">
+                    <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-amber-700 border-t-transparent mb-4"></div>
+                    <p class="text-base font-semibold text-amber-900 myanmar-text">မြန်မာပြန်နေပါသည်...</p>
+                    <p class="text-xs text-slate-500 mt-1 myanmar-text">စာမျက်နှာများလျှင် ၁-၃ မိနစ်ခန့် ကြာနိုင်ပါသည်။ ခဏစောင့်ပါ။</p>
+                </div>
+
+                <div id="resultContent" class="hidden flex-1 flex flex-col gap-5 overflow-y-auto">
+                    <!-- copy everything at once -->
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                        <button onclick="copyAll()" class="bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-2.5 px-5 rounded-lg shadow flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-regular fa-copy"></i><span>အားလုံး တစ်ခါတည်း ကူးမည်</span>
+                        </button>
+                        <button onclick="downloadResult(false)" class="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2.5 px-5 rounded-lg shadow flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-download"></i><span>ရလဒ်ဖိုင် ဒေါင်းလုပ်ချမည်</span>
+                        </button>
+                        <span id="allInfo" class="text-xs text-emerald-900 myanmar-text"></span>
+                    </div>
+                    <textarea id="allText" readonly rows="5" onclick="this.select()" class="w-full p-2 border border-emerald-200 rounded-lg myanmar-text text-sm bg-white" title="ကူးမရလျှင် ဤအကွက်ကို နှိပ်ပြီး Ctrl+A, Ctrl+C နှိပ်ပါ"></textarea>
+                    <div id="warnBox" class="hidden bg-rose-50 border border-rose-200 rounded-xl p-3 text-sm text-rose-800 myanmar-text"></div>
+
+                    <div id="pagesContainer" class="flex flex-col gap-5"></div>
+
+                    <div id="summarySection" class="bg-slate-50 rounded-xl p-4 border border-slate-200 hidden">
+                        <h4 class="font-bold text-slate-800 mb-2 text-sm flex items-center gap-1.5">
+                            <i class="fa-solid fa-lightbulb text-amber-600"></i> သုံးသပ်ချက် နှင့် မသေချာသော နေရာများ
+                        </h4>
+                        <div id="overallSummary" class="myanmar-text text-sm text-slate-600 whitespace-pre-wrap"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-100 border-t border-slate-200 py-4 mt-auto text-center text-slate-500 text-xs myanmar-text">
+        ပါဠိ မြန်မာပြန် AI အထောက်အကူပြု စနစ် - Gemini API
+    </footer>
+
+    <script>
+        let lastData = null;
+
+        // ------------------------------------------------------------------
+        // PROMPT
+        // ------------------------------------------------------------------
+        const SYSTEM_PROMPT = `သင်သည် ပါဠိစာပေ (ပိဋကတ်၊ အဋ္ဌကထာ၊ ဋီကာ) နှင့် မြန်မာစာ နှစ်မျိုးလုံးတွင် ကျွမ်းကျင်သော ပိဋကတ်ပညာရှင် ဘာသာပြန်ဆရာ ဖြစ်သည်။ ပါဠိစာမျက်နှာတစ်ခုချင်းကို မြန်မာလို ဖတ်လို့ရလွယ်၍ မူရင်းနှင့် တိကျသော ဘာသာပြန်ကို ရေးပေးရမည်။
+
+## ၁။ ထည့်သွင်းထားသော စာသား
+အသုံးပြုသူ၏ စာတွင် ပါဠိစာမျက်နှာ တစ်ခုချင်းစီ ပါသည်။
+- "--- စာမျက်နှာ N ---" = ပါဠိစာမျက်နှာ N အစ။ (N သည် ဂဏန်း)
+- "### ပါဠိ" အောက်ရှိစာ = ပါဠိတော်/အဋ္ဌကထာ/ဋီကာ မူရင်းစာ (ပြန်ရမည့်စာ)။
+- "### နိဿယ" အောက်ရှိစာ = ထိုပါဠိစာမျက်နှာနှင့် ကိုက်ညီသော မြန်မာ နိဿယ (ပါဠိစကားလုံး ၊ မြန်မာအနက် ။ ပုံစံ)။ ဤ နိဿယသည် အလွန်ယုံကြည်ရသော အနက်ကိုးကားစာ ဖြစ်သည်။ OCR စာလုံးပေါင်းအမှား အနည်းငယ် ပါနိုင်သည်။ ထို့ကြောင့် ရှင်းလင်းစွာ မှားနေသည်ကို တွေ့လျှင် ပါဠိမူရင်းအတိုင်း နားလည်ပါ။ နိဿယ မပါလျှင် (ဗလာ) ပါဠိမှ တိုက်ရိုက်ပြန်ပါ။
+- "===== အစု N / M =====" သည် အစုခြားသည့် မှတ်သားချက်သာ။
+
+## ၂။ ဘာသာပြန်ရေးပုံ
+(က) နိဿယပါ အနက်ကို အခြေခံ၍ ပါဠိဝါကျ တစ်ကြောင်းချင်းစီကို မြန်မာစကားလုံး အစဉ်ကျ ဆက်စပ်ပြီး **သဘာဝကျသော မြန်မာဝါကျ** ဖြစ်အောင် ပြန်ပါ။ နိဿယ၏ စကားလုံးတစ်လုံးချင်း အနက်ကို မြန်မာဝါကျ၏ ဖွဲ့ပုံ (ကတ္တား၊ ကံ၊ ကြိယာ အစဉ်) အတိုင်း ပြန်စီပြီး ၊ ။ ပျောက်၍ တစ်ဆက်တည်း ဖတ်ရအောင် ရေးပါ။ နိဿယကို ထပ်ပြန်ရေးခြင်း (စကားလုံး ၊ အနက် ။ ပုံစံ) မလုပ်ပါနှင့်။
+(ခ) ပါဠိ၏ စကားလုံး မည်သည်ကိုမျှ မချန်ပါနှင့်၊ မထည့်ပါနှင့် (ရှင်းလင်းချက်ထပ်မံ မထည့်ပါ)။ မူရင်း၏ အဓိပ္ပာယ်ကိုသာ ပြန်ပါ။ အဓိပ္ပာယ် မသေချာလျှင် ခန့်မှန်း၍ မဖြည့်ဘဲ "uncertain" တွင် ရေးပါ။
+(ဂ) ဝါကျအလိုက် ပါဠိအစဉ်အတိုင်း ရေးပါ။ ပါဠိတွင် စာပိုဒ်ခွဲထားလျှင် ပြန်ထားသည်ကိုလည်း ထိုအတိုင်း စာပိုဒ်ခွဲပါ (ပိုဒ်ကြား ကွက်လပ် စာကြောင်းတစ်ကြောင်း)။ ပါဠိတွင် ပိုဒ်နံပါတ် ပါလျှင် (ဥပမာ ၁၂၊ 12။) ထိုနံပါတ်ကို ပိုဒ်အစတွင် ထားပါ။
+(ဃ) ဂါထာ (ပဒ၊ တစ်ကြောင်းချင်း) ကို ဂါထာအတိုင်း စာကြောင်းခွဲ၍ မြန်မာအနက် ပေးပါ (ကဗျာစပ်စရာ မလို၊ အဓိပ္ပာယ်တိကျရေးသာ အဓိက)။
+(င) ပါဠိ၌ တင်ပြထားသော ဒေသနာ/ဝါကျ အတွင်းရှိ "…’’တိ" စသည့် ဣတိ ကိုးကားချက် (ဥပမာ "အဟံ ဘုဉ္ဇာမီ’’တိ ဝဒေသိ") ကို "…" ဟု ရေး၍ "ဟု" ဖြင့် ပြန်ပါ။ ကိုးကားထားသော ပါဠိကို မူရင်းအတိုင်း ပြန်မရေးပါ၊ မြန်မာသာ ပြန်ပါ။
+(စ) ပုဂ္ဂိုလ်၊ နေရာ၊ ကျမ်းစာအမည်များ (ဥပမာ သာဝတ္ထိ၊ အနာထပိဏ္ဍိက၊ ဇေတဝန်) ကို မြန်မာအက္ခရာ ပါဠိအတိုင်း (သို့) မြန်မာစာတွင် တွင်ကျယ်သော အသုံးအနှုန်းအတိုင်း ရေးပါ။ နိဿယတွင် ပေးထားသော မြန်မာစကားလုံးကို ဦးစားပေး သုံးပါ။
+(ဆ) ဓမ္မဝေါဟာရ (ဥပမာ ကုသလ၊ အကုသလ၊ ခန္ဓာ၊ ဓာတ်၊ ဝေဒနာ၊ ဥပါဒါန်) ကို မြန်မာတွင် လူသုံးများသော ပိဋကတ်ဝေါဟာရ အတိုင်း ထားပါ။ အဓိပ္ပာယ်ကို ရှင်းမပြပါနှင့်။
+(ဇ) စာအသွား - ပိဋကတ်စာပေ မြန်မာပြန်အသုံးအနှုန်း၊ ရိုသေသော၊ ကျစ်လစ်သော စာရေးဟန် ("ဘုရားရှင်", "ရဟန်းတို့", "…၏", "…သည်", "…၏ ဟု") ဖြင့် ရေးပါ။ ခေတ်ပေါ် ပြောစကား မသုံးပါနှင့်။ ပါဠိအနက်မှ ပိုမိုရှည်ရန် လိုလျှင်သာ ရှင်းလင်းစွာ ရေးပါ။
+(ဈ) စာအမှားများ (ရှေ့/နောက်စာမျက်နှာ မှ ပြတ်သွားသော ဝါကျ) ပါလျှင် ပါသလောက်သာ ပြန်ပါ၊ ပြတ်နေသည်ကို "…" ဖြင့် ပြပါ။ ပြန်မထည့်ပါနှင့်။
+(ည) အစီအစဉ် - စာမျက်နှာများကို ထည့်သွင်းသော အတိုင်း စာမျက်နှာအားလုံး ပြန်ပါ။ စာမျက်နှာတစ်ခုမျှ မကျန်စေရ၊ စာတိုချုံ့ခြင်း၊ "..." ဖြင့် ဖြတ်ခြင်း မလုပ်ရ။
+
+## ၃။ မသေချာမှု "uncertain"
+အောက်ပါ နေရာများကိုသာ "uncertain" တွင် တစ်ကြောင်းစီ ရေးပါ (အလွန်များလျှင် အများဆုံး ၁၀ ခု)။ အရေးမကြီးသော နေရာများ မရေးပါနှင့်။
+- ပါဠိနှင့် နိဿယ အနက် ကွဲလွဲနေခြင်း၊ နိဿယအနက်ကို ပါဠိနှင့် ကိုက်အောင် မပြန်နိုင်ခြင်း
+- ပါဠိစာ ပျက်စီး/ရှင်းမလင်း၍ အဓိပ္ပာယ် ခန့်မှန်းရခြင်း
+- ဝေါဟာရတစ်လုံး၏ အနက်ကို နိဿယတွင် မတွေ့၍ ကိုယ်တိုင်ရွေးရခြင်း
+ပုံစံ - "ပါဠိစကား: အကြောင်းအရာ → ရွေးချယ်ခဲ့သော အနက် (အကြောင်းရင်း)"။
+
+## ၄။ "key_terms"
+စာမျက်နှာထဲ ပါသော အရေးကြီးသည့် ဝေါဟာရ/အမည် (အများဆုံး ၈ ခု) ကို "ပါဠိစကား = မြန်မာပြန်" ပုံစံဖြင့် ရေးပါ (စာမျက်နှာများအကြား ပြန်ပုံ တစ်ညီတည်း ဖြစ်စေရန် မှတ်တမ်းအဖြစ်)။ မရှိလျှင် အလွတ်ထားပါ။
+
+## ၅။ ထွက်ရလဒ် (JSON သာ၊ အခြား စာမပါရ)
+{
+  "pages": [
+    { "page_number": 28, "translation": "(ထိုပါဠိစာမျက်နှာ၏ မြန်မာပြန် အပြည့်အစုံ၊ '--- စာမျက်နှာ' ခေါင်းစဉ်စာကြောင်း မပါ)", "key_terms": ["ပါဠိ = မြန်မာ"], "uncertain": ["ပါဠိစကား: အကြောင်းအရာ → ရွေးချယ်ချက်"] }
+  ],
+  "overall_summary": "စုစုပေါင်း စာမျက်နှာအရေအတွက်၊ နိဿယ မပါသော စာမျက်နှာများ၊ သတိပြုရန် အချက်များ အတိုချုပ်"
+}
+"page_number" သည် ဂဏန်း (ကိန်းပြည့်) သာ ဖြစ်ရမည်၊ ထည့်သွင်းသော "--- စာမျက်နှာ N ---" ၏ N နှင့် တူရမည်။`;
+
+        // ------------------------------------------------------------------
+        // helpers
+        // ------------------------------------------------------------------
+        const BURMESE_DIGITS = '၀၁၂၃၄၅၆၇၈၉';
+        function toInt(s) { return parseInt(String(s).replace(/[၀-၉]/g, d => BURMESE_DIGITS.indexOf(d)), 10); }
+        function inputPageNumbers(text) {
+            const nums = [];
+            const re = /^[-\s]*(?:ပါဠိ|နိဿယ)?\s*စာမျက်နှာ[\s-]*([0-9၀-၉]+)[\s-]*$/gm;
+            let m; while ((m = re.exec(text)) !== null) nums.push(toInt(m[1]));
+            return nums;
+        }
+
+        // sets: the input may hold many sets ("===== အစု N / M ====="). Each press of the button checks the NEXT set; all results are collected.
+        let queue = [], qi = 0, acc = [], lastInput = '', lastSummary = '';
+        function splitSets(text) {
+            const re = /^={3,}\s*အစု\s*[0-9၀-၉]+(?:\s*\/\s*[0-9၀-၉]+)?\s*={3,}\s*$/gm;
+            const idx = []; let m;
+            while ((m = re.exec(text)) !== null) idx.push({ start: m.index, end: m.index + m[0].length });
+            if (!idx.length) return [text];
+            return idx.map((x, i) => text.slice(x.end, i + 1 < idx.length ? idx[i + 1].start : text.length).trim()).filter(Boolean);
+        }
+        // how much is in the input: sets, nissaya pages and characters (all sets / the set that is checked next)
+        function setStats(t) {
+            const pages = (t.match(/^[-\s]*(?:ပါဠိ|နိဿယ)?\s*စာမျက်နှာ[\s-]*[0-9၀-၉]+[\s-]*$/gm) || []).length;
+            return { pages: pages, chars: t.length };
+        }
+        function updateInfo() {
+            const box = document.getElementById('setInfo'); if (!box) return;
+            if (!queue.length || !lastInput) { box.innerHTML = ''; return; }
+            const st = queue.map(setStats), totP = st.reduce((a, x) => a + x.pages, 0), totC = st.reduce((a, x) => a + x.chars, 0);
+            let h = `စုစုပေါင်း: <b>${queue.length}</b> အစု၊ ပါဠိ <b>${totP}</b> မျက်နှာ၊ စာလုံး <b>${totC.toLocaleString()}</b>`;
+            if (qi < queue.length) { const c = st[qi]; h += ` &nbsp;|&nbsp; နောက်စစ်မည့် အစု ${qi + 1}: ပါဠိ <b>${c.pages}</b> မျက်နှာ၊ စာလုံး <b>${c.chars.toLocaleString()}</b>`; }
+            const big = st.map((x, i) => (x.pages > 10 || x.chars > 15000) ? (i + 1) : 0).filter(Boolean);
+            if (big.length) h += `<div style="color:#be123c">⚠ အစု ${big.join(', ')} သည် ကြီးလွန်းသည် (မျက်နှာ ၁၀ ထက်များ သို့ စာလုံး ၁၅,၀၀၀ ထက်များ) - ဖိုင်ကို ပြန်ခွဲပါ</div>`;
+            box.innerHTML = h;
+        }
+        function updateLabel() {
+            const l = document.getElementById('checkLabel');
+            setTimeout(updateInfo, 0);
+            if (!queue.length) l.innerText = 'စစ်မည်';
+            else if (qi >= queue.length) l.innerText = `အစု ${queue.length}/${queue.length} ✔ ပြီးပြီ`;
+            else l.innerText = `အစု ${qi + 1}/${queue.length} စစ်မည်`;
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const kb = document.getElementById('apiKeyInput');
+                kb.value = localStorage.getItem('pnaKey') || '';
+                kb.addEventListener('input', () => { try { localStorage.setItem('pnaKey', kb.value.trim()); } catch (e) {} });
+            } catch (e) {}
+            document.getElementById('allInput').addEventListener('input', () => { inputFileName = ''; document.getElementById('fileInfo').innerText = ''; onInputChanged(); });
+            const fi = document.getElementById('fileInput');
+            fi.addEventListener('change', () => { if (fi.files && fi.files[0]) loadFile(fi.files[0]); });
+            const dz = document.getElementById('dropZone');
+            ['dragenter', 'dragover'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.add('bg-amber-100'); }));
+            ['dragleave', 'drop'].forEach(ev => dz.addEventListener(ev, e => { e.preventDefault(); dz.classList.remove('bg-amber-100'); }));
+            dz.addEventListener('drop', e => { const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]; if (f) loadFile(f); });
+        });
+        function onInputChanged() {
+            const t = document.getElementById('allInput').value.trim();
+            queue = splitSets(t); qi = 0; acc = []; lastInput = t; lastSummary = ''; autoSaved = false; resetRetry(); updateLabel();
+        }
+        // an uploaded file: its text goes into the box, its name is remembered (the result file is named after it so that the run tool knows which book it belongs to)
+        let inputFileName = '', autoSaved = false;
+        function loadFile(file) {
+            const rd = new FileReader();
+            rd.onload = () => {
+                document.getElementById('allInput').value = String(rd.result || '').replace(/^\uFEFF/, '');
+                inputFileName = file.name;
+                onInputChanged();
+                const st = queue.map(setStats), totP = st.reduce((a, x) => a + x.pages, 0);
+                document.getElementById('fileInfo').innerHTML = `✔ <b>${escapeHtml(file.name)}</b> — ${queue.length} အစု၊ ${totP} မျက်နှာ`;
+            };
+            rd.onerror = () => { document.getElementById('fileInfo').innerText = '⚠ ဖိုင်ကို မဖတ်နိုင်ပါ'; };
+            rd.readAsText(file, 'utf-8');
+        }
+        // the result file: "--- နိဿယ စာမျက်နှာ N ---" + text for every page, named <input file name without .txt>_checked.txt
+        function downloadResult(auto) {
+            if (!lastData || !(lastData.pages || []).length) { alert('ဒေါင်းလုပ်ချရန် ရလဒ် မရှိသေးပါ'); return; }
+            const base = (inputFileName || 'translate_result').replace(/\.txt$/i, '');
+            const name = base + '_translated.txt';
+            const blob = new Blob(['\uFEFF' + buildAllText(lastData)], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+            setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+            document.getElementById('retryInfo').innerText = (auto ? 'အားလုံး စစ်ပြီး — ' : '') + '⬇ ' + name + ' (မတွေ့လျှင် ⬇ ကို ပြန်နှိပ်ပါ)';
+        }
+
+        function httpMessage(code) {
+            const m = {
+                400: "HTTP 400: ပို့သောစာ မမှန် (သို့) အရှည်လွန်နေသည်၊ ဖိုင်ထဲက အစုကို လျှော့ကြည့်ပါ",
+                401: "HTTP 401: API key မရှိ / မမှန် / သက်တမ်းကုန် — token ကုန်တာ မဟုတ်ပါ။ Gemini canvas ကို refresh လုပ်ပါ၊ canvas ပြင်ပမှာ ဖွင့်ထားလျှင် အပေါ်က API key ကွက်ထဲ key ထည့်ပါ",
+                403: "HTTP 403: ဤ key ဖြင့် ခွင့်မပြု (key ကန့်သတ်ထား / API မဖွင့်ရသေး)",
+                404: "HTTP 404: မော်ဒယ်နာမည် မတွေ့ပါ",
+                429: "HTTP 429: တစ်မိနစ်/တစ်ရက် အသုံးပြုကန့်သတ်ချက် (quota) ပြည့်သွားသည် — ခဏစောင့်ပြီး (သို့) ခြားချိန်ကို တိုးပြီး ထပ်နှိပ်ပါ",
+                500: "HTTP 500: Google ဘက်က ယာယီအမှား၊ ထပ်ကြိုးစားပါ",
+                503: "HTTP 503: မော်ဒယ်အလုပ်များနေသည်၊ ခဏစောင့်ပြီး ထပ်ကြိုးစားပါ"
+            };
+            return m[code] || ("HTTP error " + code);
+        }
+        // 401 / 403 / 404 will not get better by retrying: stop at once and say what it is
+        const NO_RETRY = [401, 403, 404];
+
+        let lastFailed = false, retryCount = 0;
+        function showRetry() { const b = document.getElementById('retryInfo'); if (b) b.innerText = retryCount ? `အလိုအလျောက် ပြန်နှိပ်ခဲ့သည်: ${retryCount} ကြိမ်` : ''; }
+        async function analyzeOne() {
+            lastFailed = false;
+            const all = document.getElementById('allInput').value.trim();
+            const p1 = document.getElementById('paliPage1').value.trim();
+            const p2 = document.getElementById('paliPage2').value.trim();
+            if (!all) { alert("ကျေးဇူးပြု၍ ပါဠိနှင့် နိဿယ စာသားများကို ထည့်သွင်းပေးပါ။"); return false; }
+            if (all !== lastInput || !queue.length) { queue = splitSets(all); qi = 0; acc = []; lastInput = all; lastSummary = ''; }
+            if (qi >= queue.length) { alert("အစု အားလုံး စစ်ပြီးပါပြီ။ အသစ်စစ်လိုလျှင် ရှင်းလင်းမည်ကို နှိပ်ပါ။"); return false; }
+            const setText = queue[qi];
+
+            document.getElementById('emptyState').classList.add('hidden');
+            if (!acc.length) document.getElementById('resultContent').classList.add('hidden');
+            document.getElementById('loadingState').classList.remove('hidden');
+            document.getElementById('statusBadge').classList.add('hidden');
+            document.getElementById('checkBtn').disabled = true;
+
+            const apiKey = (document.getElementById("apiKeyInput").value || "").trim(); // empty: the Canvas runtime supplies the key
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+            let userPrompt = setText;
+            if (p1 || p2) userPrompt = `===== ပါဠိ =====\n${p1}\n${p2}\n\n` + setText;
+            userPrompt = `အောက်ပါ စာသားတွင် ပါဠိစာမျက်နှာများနှင့် ၎င်းတို့၏ နိဿယ ပါသည်။ ညွှန်ကြားချက်များအတိုင်း ပါဠိစာမျက်နှာ တစ်ခုချင်းကို မြန်မာလို ဘာသာပြန်၍ JSON ဖြင့် ပြန်ပေးပါ။\n\n` + userPrompt;
+
+            const payload = {
+                contents: [{ parts: [{ text: userPrompt }] }],
+                systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+                generationConfig: {
+                    temperature: 0.2,
+                    maxOutputTokens: 65000,
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            "pages": {
+                                type: "ARRAY",
+                                items: {
+                                    type: "OBJECT",
+                                    properties: {
+                                        "page_number": { type: "INTEGER" },
+                                        "translation": { type: "STRING" },
+                                        "key_terms": { type: "ARRAY", items: { type: "STRING" } },
+                                        "uncertain": { type: "ARRAY", items: { type: "STRING" } }
+                                    },
+                                    required: ["page_number", "translation", "key_terms", "uncertain"]
+                                }
+                            },
+                            "overall_summary": { type: "STRING" }
+                        },
+                        required: ["pages", "overall_summary"]
+                    }
+                }
+            };
+
+            let retries = 3, delay = 1000, okRun = false;
+            while (retries > 0) {
+                try {
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) {
+                        if (response.status === 400 && payload.generationConfig.maxOutputTokens) { delete payload.generationConfig.maxOutputTokens; throw new Error('retry without maxOutputTokens'); }
+                        throw new Error(httpMessage(response.status));
+                    }
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const parsedData = JSON.parse(candidate.content.parts[0].text);
+                        // a page checked again (same number) replaces the older one; the pages stay in the order of the input
+                        for (const pg of parsedData.pages || []) { const k = acc.findIndex(x => x.page_number === pg.page_number); if (k >= 0) acc[k] = pg; else acc.push(pg); }
+                        qi++;
+                        lastSummary = (lastSummary ? lastSummary + '\n' : '') + `[အစု ${qi}/${queue.length}] ` + (parsedData.overall_summary || '');
+                        let expected = []; for (let i = 0; i < qi; i++) expected = expected.concat(inputPageNumbers(queue[i]));
+                        renderDynamicResults({ pages: acc, overall_summary: lastSummary }, expected, candidate.finishReason);
+                        okRun = true; break;
+                    } else { throw new Error("Invalid response format"); }
+                } catch (error) {
+                    retries--;
+                    if (NO_RETRY.some(c => String(error.message).startsWith('HTTP ' + c))) retries = 0;
+                    if (retries === 0) lastFailed = true;      // every failure is tried again by itself (a 401 may also go away after a while; after 30 failures in a row the pressing stops)
+                    if (retries === 0) showError("ဘာသာပြန်ရာတွင် အမှားအယွင်း ရှိနေပါသည် (" + error.message + ")။ ခလုပ်ကို ပြန်နှိပ်၍ ဤအစုကို ထပ်ကြိုးစားပါ။");
+                    else { await new Promise(res => setTimeout(res, delay)); delay *= 2; }
+                }
+            }
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('checkBtn').disabled = false;
+            updateLabel();
+            return okRun;
+        }
+
+        // ONE click checks all the remaining sets, one after another, with a pause between them (a stop button ends it; a failed set stops it - a new click continues from that set)
+        let running = false, autoStop = false, failRun = 0;      // failRun: failed tries in a row (after 30 the automatic pressing stops)
+        const sleep = ms => new Promise(res => setTimeout(res, ms));
+        async function analyzeNissaya() {
+            if (running) return;
+            const auto = document.getElementById('autoRun').checked;
+            const gap = Math.max(0, parseInt(document.getElementById('autoGap').value, 10) || 30);
+            running = true; autoStop = false;
+            document.getElementById('stopBtn').classList.remove('hidden');
+            document.getElementById('checkBtn').disabled = true;
+            try {
+                while (true) {
+                    const ok = await analyzeOne();
+                    document.getElementById('checkBtn').disabled = true;
+                    if (ok) failRun = 0;
+                    if (!ok && lastFailed && !autoStop && qi < queue.length && ++failRun <= 30 && document.getElementById('autoRetry').checked) {      // a failed set (not a 401 / 403 / 404): the button is pressed again by itself
+                        const rg = Math.max(5, parseInt(document.getElementById('retryGap').value, 10) || 60);
+                        retryCount++; showRetry();
+                        for (let sec = rg; sec > 0 && !autoStop; sec--) {
+                            document.getElementById('checkLabel').innerText = `အစု ${qi + 1}/${queue.length} မအောင် — ${sec}s ပြန်စစ် (${retryCount})`;
+                            await sleep(1000);
+                        }
+                        if (autoStop) break;
+                        continue;
+                    }
+                    if (!ok || !auto || qi >= queue.length || autoStop) break;
+                    for (let sec = gap; sec > 0 && !autoStop; sec--) {
+                        document.getElementById('checkLabel').innerText = `အစု ${qi}/${queue.length} ✔ — ${sec}s စောင့်`;
+                        await sleep(1000);
+                    }
+                    if (autoStop) break;
+                }
+            } finally {
+                running = false;
+                if (queue.length && qi >= queue.length && acc.length && !autoSaved) { autoSaved = true; try { downloadResult(true); } catch (e) {} }
+                document.getElementById('stopBtn').classList.add('hidden');
+                document.getElementById('checkBtn').disabled = false;
+                updateLabel();
+            }
+        }
+        function stopAuto() { autoStop = true; }
+        function resetRetry() { retryCount = 0; showRetry(); }
+
+        function buildAllText(data) {
+            return (data.pages || []).map(p => `--- စာမျက်နှာ ${p.page_number} ---\n${p.translation}`).join('\n\n');
+        }
+
+        function renderDynamicResults(data, expectedPages, finishReason) {
+            lastData = data;
+            const pagesContainer = document.getElementById('pagesContainer');
+            pagesContainer.innerHTML = '';
+            const pages = data.pages || [];
+
+            // check: same pages as the input?
+            const got = pages.map(p => p.page_number);
+            const missing = (expectedPages || []).filter(n => !got.includes(n));
+            const extra = got.filter(n => (expectedPages || []).length && !expectedPages.includes(n));
+            const warn = [];
+            if (missing.length) warn.push('ပြန်မလာသော စာမျက်နှာ: ' + missing.join(', ') + ' — စာမျက်နှာနည်းနည်းဖြင့် ထပ်စစ်ပါ');
+            if (extra.length) warn.push('ထည့်မပေးထားသော စာမျက်နှာ ပါလာသည်: ' + extra.join(', '));
+            if (finishReason && finishReason !== 'STOP') warn.push('ရလဒ် ကြားဖြတ်ပြတ်သွားနိုင်သည် (' + finishReason + ') — စာမျက်နှာနည်းနည်းဖြင့် ထပ်စစ်ပါ');
+            const wb = document.getElementById('warnBox');
+            if (warn.length) { wb.innerHTML = warn.map(escapeHtml).join('<br>'); wb.classList.remove('hidden'); } else { wb.classList.add('hidden'); }
+
+            document.getElementById('allText').value = buildAllText(data);
+            document.getElementById('allInfo').innerText = `စာမျက်နှာ ${pages.length} ခု — "--- စာမျက်နှာ N ---" ခြားပြီး တစ်ခါတည်း ကူးပါမည်`;
+
+            pages.forEach((page, index) => {
+                const textId = `pageText_${index}`;
+                const card = document.createElement('div');
+                card.className = 'bg-amber-50/60 rounded-xl p-4 border border-amber-200 shadow-sm';
+                const li = (arr, icon) => (arr || []).map(i => `<li class="flex items-start gap-1.5"><i class="fa-solid ${icon} mt-1 text-xs"></i><span>${escapeHtml(i)}</span></li>`).join('');
+                let block = '';
+                if ((page.key_terms || []).length) block += `<div class="mt-3 bg-white/90 p-3 rounded-lg border border-slate-200"><strong class="text-xs text-slate-500 block mb-1">အဓိက ဝေါဟာရ ရွေးချယ်ချက် -</strong><ul class="text-xs text-slate-700 space-y-1">${li(page.key_terms, 'fa-check text-emerald-600')}</ul></div>`;
+                if ((page.uncertain || []).length) block += `<div class="mt-2 bg-rose-50 p-3 rounded-lg border border-rose-200"><strong class="text-xs text-rose-700 block mb-1">မသေချာသော နေရာများ (ကိုယ်တိုင်စစ်ပါ) -</strong><ul class="text-xs text-rose-800 space-y-1">${li(page.uncertain, 'fa-question text-rose-600')}</ul></div>`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-3 border-b border-amber-200 pb-2">
+                        <div class="flex items-center gap-2 font-bold text-amber-900 text-base">
+                            <span class="bg-amber-800 text-white rounded-full px-2.5 py-0.5 text-xs font-sans">${index + 1}</span>
+                            <span>နိဿယ စာမျက်နှာ ${escapeHtml(String(page.page_number))}</span>
+                        </div>
+                        <button onclick="copyToClipboard('${textId}')" class="text-xs bg-amber-100 hover:bg-amber-200 text-amber-900 font-semibold px-2.5 py-1 rounded border border-amber-300 flex items-center gap-1"><i class="fa-regular fa-copy"></i> ဤစာမျက်နှာ ကူးမည်</button>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-slate-200">
+                        <div id="${textId}" class="whitespace-pre-wrap leading-relaxed text-slate-800 bg-slate-50 p-3 rounded border border-slate-100 myanmar-text text-base">${escapeHtml(page.translation)}</div>
+                    </div>${block}`;
+                pagesContainer.appendChild(card);
+            });
+
+            if (data.overall_summary) {
+                document.getElementById('overallSummary').innerText = data.overall_summary;
+                document.getElementById('summarySection').classList.remove('hidden');
+            } else document.getElementById('summarySection').classList.add('hidden');
+
+            document.getElementById('resultContent').classList.remove('hidden');
+            document.getElementById('statusBadge').classList.remove('hidden');
+        }
+
+        function legacyCopy(text) {
+            const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
+        }
+        function copyAll() {
+            if (!lastData) return;
+            const text = buildAllText(lastData), n = (lastData.pages || []).length;
+            const done = () => alert("စာမျက်နှာ " + n + " ခုလုံးကို တစ်ခါတည်း ကူးပြီးပါပြီ။ ကိရိယာ၏ ④ ခလုပ်ဖြင့် ထည့်ပါ။");
+            if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(() => { legacyCopy(text); done(); });
+            else { legacyCopy(text); done(); }
+        }
+        function copyToClipboard(id) {
+            const text = document.getElementById(id)?.innerText;
+            if (text) { legacyCopy(text); alert("ဤစာမျက်နှာကို ကူးပြီးပါပြီ။"); }
+        }
+        function clearForm() {
+            resetRetry();
+            ['allInput', 'paliPage1', 'paliPage2'].forEach(i => document.getElementById(i).value = '');
+            document.getElementById('pagesContainer').innerHTML = '';
+            document.getElementById('emptyState').classList.remove('hidden');
+            document.getElementById('resultContent').classList.add('hidden');
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('statusBadge').classList.add('hidden');
+            autoStop = true; lastData = null; queue = []; qi = 0; acc = []; lastInput = ''; lastSummary = ''; inputFileName = ''; autoSaved = false; document.getElementById('fileInfo').innerText = ''; document.getElementById('fileInput').value = ''; updateLabel();
+        }
+        function showError(msg) {
+            if (!acc.length) document.getElementById('emptyState').classList.remove('hidden');
+            document.getElementById('emptyState').innerHTML = `<i class="fa-solid fa-triangle-exclamation text-4xl text-rose-500 mb-2"></i><p class="text-rose-600 font-semibold myanmar-text">${escapeHtml(msg)}</p>`;
+        }
+        function escapeHtml(text) { const div = document.createElement('div'); div.innerText = text; return div.innerHTML; }
+    </script>
+</body>
+</html>
