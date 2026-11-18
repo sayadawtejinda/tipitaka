@@ -1336,5 +1336,17 @@
    "from": 1,
    "to": 173
   }
+ ],
+ "attha_sa_02": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_sa_02"
+  },
+  {
+   "label": "မိုးထိမူ (ပ)",
+   "file": "attha_sa_02_sheet121",
+   "from": 1,
+   "to": 118
+  }
  ]
 }
