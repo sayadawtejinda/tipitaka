@@ -873,6 +873,17 @@
    "edition_of": "mula_bi_05"
   },
   {
+   "id": "mula_bi_05_sheet068",
+   "title": "ကထာဝတ္ထုပါဠိ (ရာဇဂုရုမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 4090281,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_05"
+  },
+  {
    "id": "mula_bi_06_01",
    "title": "ယမကပါဠိ (ပ)",
    "basket": "ပါဠိတော်",
@@ -2544,5 +2555,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 141
+ "n_editions": 142
 }
