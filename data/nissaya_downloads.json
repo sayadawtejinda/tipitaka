@@ -947,6 +947,17 @@
    "edition_of": "mula_bi_06_03"
   },
   {
+   "id": "mula_bi_07_01_sheet072",
+   "title": "ပဋ္ဌာနပါဠိ (ပ) (အရှင်နန္ဒမေဓာမူ (ပ))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 1800885,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_07_01"
+  },
+  {
    "id": "attha_vi_01_01",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -2599,5 +2610,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 146
+ "n_editions": 147
 }
