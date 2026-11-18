@@ -662,6 +662,17 @@
    "date": "2026-10-15"
   },
   {
+   "id": "mula_ku_17_sheet056",
+   "title": "စူဠနိဒ္ဒေသပါဠိ (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 5918434,
+   "date": "2026-11-17",
+   "edition_of": "mula_ku_17"
+  },
+  {
    "id": "mula_ku_18",
    "title": "ပဋိသမ္ဘိဒါမဂ္ဂပါဠိ",
    "basket": "ပါဠိတော်",
@@ -2533,5 +2544,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 140
+ "n_editions": 141
 }
