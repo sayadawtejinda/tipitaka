@@ -21,13 +21,19 @@ def _collected(n):
     return {int(k): v for k, v in json.load(open(p, encoding='utf-8')).items()} if os.path.exists(p) else {}
 
 
-def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print):
+def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=False, only=None, rest=False):
+    """redo=False: Pali pages that Gemini has already translated (gold/tr_NNN.json) are left out;  only={Pali pages}: just these;  rest=True: the 'rest' file of a half-finished input (old files of the book are NOT deleted)"""
     P = _paired(n); col = _collected(n)
     pages = {p['num']: p for p in P['pages'] if p.get('num') is not None}
     blocks = {}
     for b in P['blocks']: blocks.setdefault((b['book'], b['page']), []).append(b)
     keys = sorted(((k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']), key=lambda x: (x[0], x[1]))
     keys = [g for g in keys if lo <= g[1] <= hi]
+    if only is not None: keys = [g for g in keys if g[1] in only]
+    elif not redo:
+        done = load_translations(n); skip = [g[1] for g in keys if g[1] in done]
+        keys = [g for g in keys if g[1] not in done]
+        if skip: log('  မြန်မာပြန်ပြီးသား ပါဠိ %d မျက်နှာ ချန်ထားသည်' % len(skip))
     if len({g[0] for g in keys}) > 1: log('⚠ ဤအကွာအဝေးတွင် ပါဠိစာအုပ် တစ်အုပ်ထက်ပို ပါသည် — ပထမစာအုပ်သာ ယူပါ (အကွာအဝေး ကျဉ်းပါ)')
     built = []; left_out = []; raw_used = set()
     for g in keys:
@@ -50,12 +56,12 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print):
         cur.append((g, t)); size += len(t)
     if cur: groups.append(cur)
     os.makedirs(OUT, exist_ok=True); files = []
-    for old in glob.glob(os.path.join(OUT, 'tr_%03d_*.txt' % n)):               # the earlier input files of THIS book are deleted first (so old and new are never mixed up)
+    for old in ([] if rest else glob.glob(os.path.join(OUT, 'tr_%03d_*.txt' % n))):               # the earlier input files of THIS book are deleted first (so old and new are never mixed up)
         os.remove(old); log('  🗑 ဖိုင်အဟောင်း ဖျက်ပြီး: ' + os.path.basename(old))
     for j in range(0, len(groups), sets):
         chunk = groups[j:j + sets]
         first, last = chunk[0][0][0], chunk[-1][-1][0]
-        name = 'tr_%03d_%s_pali%d-%d.txt' % (n, first[0], first[1], last[1])
+        name = 'tr_%03d_%s_pali%d-%d%s.txt' % (n, first[0], first[1], last[1], '_rest' if rest else '')
         body = NL.join('===== အစု %d / %d =====' % (k + 1, len(chunk)) + NL + NL.join(t for g, t in s) for k, s in enumerate(chunk))
         open(os.path.join(OUT, name), 'w', encoding='utf-8').write(body)
         files.append(name); log('  %s : %d sets (ပါဠိ %d-%d), %d characters' % (name, len(chunk), first[1], last[1], len(body)))
@@ -87,7 +93,7 @@ def save_translations(n, d):
 def ingest_downloads(log=print):
     got = 0
     for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt'))):
-        name = os.path.basename(f); m = re.match(r'tr_(\d+)_(.+?)_pali(\d+)-(\d+)_translated', name)
+        name = os.path.basename(f); m = re.match(r'tr_(\d+)_(.+?)_pali(\d+)-(\d+)(?:_rest)?_translated', name)
         if not m or time.time() - os.path.getmtime(f) < 3: continue
         n = int(m.group(1))
         pg = parse_pages(open(f, encoding='utf-8-sig').read())
@@ -100,7 +106,13 @@ def ingest_downloads(log=print):
         if os.path.exists(inp):
             want = set(parse_pages(open(inp, encoding='utf-8').read()))
             if want <= set(d): os.remove(inp); log('  ✔ ထည့်ဖိုင်ပြီးစီးသဖြင့် ဖျက်ပြီး')
-            else: log('  ပြန်မလာသေးသော ပါဠိစာမျက်နှာ: %s — ထည့်ဖိုင်ကို မဖျက်' % ' '.join(map(str, sorted(want - set(d)))))
+            else:
+                miss = want - set(d)
+                log('  ပြန်မလာသေးသော ပါဠိစာမျက်နှာ: %s — ကျန်တာကို ဖိုင်အသစ် (_rest) အလိုအလျောက် ထုတ်မည်' % ' '.join(map(str, sorted(miss))))
+                try:
+                    build(n, 1, 10 ** 6, only=miss, rest=True, log=log, raw_ok=False)
+                    os.remove(inp); log('  🗑 မပြည့်စုံသော ထည့်ဖိုင်အဟောင်း ဖျက်ပြီး')
+                except BaseException as e: log('  ⚠ _rest ဖိုင် မထုတ်နိုင်: %r (ထည့်ဖိုင်ကို မဖျက်)' % e)
         got += 1
     return got
 

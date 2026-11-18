@@ -35,6 +35,8 @@ def refresh_books():        # a book that run_tool publishes later appears here 
 r = ttk.Frame(f); r.grid(row=1, column=0, columnspan=2, sticky='w', pady=6)
 ttk.Label(r, text='စာအုပ်တစ်အုပ်လုံး ထုတ်မည်။    အစုတစ်စု စာလုံးရေ အများဆုံး').pack(side='left'); mc = ttk.Entry(r, width=6); mc.pack(side='left', padx=3); mc.insert(0, '10000')
 ttk.Label(r, text='   ဖိုင်တစ်ခုမှာ အစု').pack(side='left'); ns = ttk.Entry(r, width=3); ns.pack(side='left', padx=3); ns.insert(0, '10')
+redo = tk.BooleanVar(value=False)
+ttk.Checkbutton(f, text='မြန်မာပြန်ပြီးသော ပါဠိမျက်နှာကိုပါ ပြန်ထုတ် (မခြစ်လျှင် မပြန်ရသေးသည်များကိုသာ စုထုတ်)', variable=redo).grid(row=5, column=0, columnspan=2, sticky='w')
 raw = tk.BooleanVar(value=False)
 ttk.Checkbutton(f, text='Gemini မစစ်ရသေးသော နိဿယစာမျက်နှာကို OCR စာဖြင့် ထည့် (မခြစ်လျှင် စစ်ပြီးသော နိဿယသာ ယူ၊ မစစ်ရသေးလျှင် ထိုပါဠိမျက်နှာကို ချန်)', variable=raw).grid(row=2, column=0, columnspan=2, sticky='w')
 bf = ttk.Frame(f); bf.grid(row=3, column=0, columnspan=2, sticky='w', pady=6)
@@ -48,7 +50,7 @@ def sel():
 
 def work1(n, m, k):
     try:
-        out, files = t_core.build(n, 1, 10 ** 6, m, k, raw.get(), say)
+        out, files = t_core.build(n, 1, 10 ** 6, m, k, raw.get(), say, redo=redo.get())
         say('✔ ဖိုင် %d ခု ထွက်ပါပြီ — ဖိုင်ကို Gemini Canvas "Pali Translate AI" app ထဲ upload လုပ်ပြီး ခလုပ်တစ်ခါနှိပ်ပါ (ပြီးလျှင် ရလဒ်ကို Downloads ထဲ ချမည်၊ ဤကိရိယာက ယူပါလိမ့်မည်)' % len(files))
         if files: os.startfile(out)
     except BaseException as e: say('အမှား: %r' % e)
