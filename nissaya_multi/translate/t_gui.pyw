@@ -30,6 +30,14 @@ def published():        # only books whose web file is COMMITTED in the tipitaka
             m = json.load(open(mp, encoding='utf-8')); f_ = 'data/' + m['file'] + '.html'
             if (f_ in tracked) if tracked else os.path.exists(os.path.join(TIPI, f_)): out.add(int(m['sheet']))
         except Exception: pass
+    # a sheet whose Pali book(s) already have a nissaya on the web (data/nissaya_books.json) is listed too - also when its own web file was removed / was published earlier without a .meta.json
+    try:
+        web_books = set(json.load(open(os.path.join(TIPI, 'data', 'nissaya_books.json'), encoding='utf-8')))
+        web_books |= set(json.load(open(os.path.join(TIPI, 'data', 'nissaya_editions.json'), encoding='utf-8')))
+        for r in json.load(open(os.path.join(NSY, 'catalog.json'), encoding='utf-8')):
+            b = (r.get('final') or {}).get('books') or []
+            if b and all(x in web_books for x in b): out.add(r['n'])
+    except Exception: pass
     return out
 STATE = os.path.join(HERE, 'gui_state.json')
 def load_state():
