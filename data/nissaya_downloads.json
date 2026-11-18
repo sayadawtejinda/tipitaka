@@ -1603,6 +1603,17 @@
    "date": "2026-10-08"
   },
   {
+   "id": "attha_sa_02_sheet121",
+   "title": "နိဒါနဝဂ္ဂအဋ္ဌကထာ (မိုးထိမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 2540081,
+   "date": "2026-11-18",
+   "edition_of": "attha_sa_02"
+  },
+  {
    "id": "attha_sa_03",
    "title": "ခန္ဓဝဂ္ဂအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -2786,5 +2797,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 163
+ "n_editions": 164
 }
