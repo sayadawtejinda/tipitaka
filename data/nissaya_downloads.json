@@ -1698,6 +1698,17 @@
    "date": "2026-10-10"
   },
   {
+   "id": "attha_an_01_sheet127",
+   "title": "ဧကကနိပါတအဋ္ဌကထာ (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 3516951,
+   "date": "2026-11-18",
+   "edition_of": "attha_an_01"
+  },
+  {
    "id": "attha_an_02",
    "title": "ဒုကာဒိနိပါတအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -1715,6 +1726,17 @@
    "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
    "cat_key": "an",
    "size": 2904103,
+   "date": "2026-11-18",
+   "edition_of": "attha_an_02"
+  },
+  {
+   "id": "attha_an_02_sheet127",
+   "title": "ဒုကာဒိနိပါတအဋ္ဌကထာ (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 1387002,
    "date": "2026-11-18",
    "edition_of": "attha_an_02"
   },
@@ -2852,5 +2874,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 169
+ "n_editions": 171
 }
