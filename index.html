@@ -2712,7 +2712,7 @@ let isRomanPali = false;
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}}, {label:"Gemini မြန်မာပြန်"}]);
     const books = await tpGeminiBooks();
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-gbook="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ</span></div>`).join("")}</div>`;
-    document.querySelectorAll("[data-gbook]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.gbook); isNissayaOpen = false; nisViaList = false; isMmSplitOpen = true; mmViaMm = false; mmGemini = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
+    document.querySelectorAll("[data-gbook]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.gbook); isNissayaOpen = false; nisViaList = false; nsyShowTr = 1; isMmSplitOpen = true; mmViaMm = false; mmGemini = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
     setParams({basket: "myanmar", category: "gemini"});
   }
   async function showMmBookList(categorySlug){
@@ -3029,7 +3029,7 @@ let isRomanPali = false;
     const books = (await nissayaBooksIn(idx)).filter(b => b.basket === basketId && b.category === categoryId);
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ${(TP_NISSAYA_EDITIONS[b.id] || []).length > 1 ? " · နိဿယမူ " + toMyanmarDigits(TP_NISSAYA_EDITIONS[b.id].length) + " မျိုး" : ((TP_NISSAYA_EDITIONS[b.id] || [])[0] && TP_NISSAYA_EDITIONS[b.id][0].label ? " · " + TP_NISSAYA_EDITIONS[b.id][0].label : "")}</span><button class="tp-dl-btn" data-dlnis="${b.id}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
     wireNisDownloadButtons(async key => books.filter(b => b.id === key));
-    document.querySelectorAll("[data-book]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.book); isNissayaOpen = true; nisViaList = true; isMmSplitOpen = mmViaMm = mmGemini = false; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
+    document.querySelectorAll("[data-book]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.book); isNissayaOpen = true; nisViaList = true; nsyShowTr = 0; isMmSplitOpen = mmViaMm = mmGemini = false; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
     setParams({basket: "nissaya", category: basketId + ":" + categoryId});
   }
   async function fetchBookPages(bookId){ return fetchJson(cdnUrl(`${DATA_FOLDER}/${bookId}.json`)); }
@@ -3080,7 +3080,7 @@ let isRomanPali = false;
   async function openMmSplitFromMm(mmBookId, paliPage, para){
     await ensureMmSplitIndex(); const ent = mmSplitEntryByMm(mmBookId); if(!ent) return false;
     const idx = await ensureIndex(); const meta = idx.books.find(b => b.id === ent.pali); if(!meta) return false;
-    isNissayaOpen = false; nisViaList = mmGemini = false; isMmSplitOpen = true; mmViaMm = true; mmSplitPendingPara = para != null ? para : null;
+    isNissayaOpen = false; nisViaList = mmGemini = false; nsyShowTr = 1; isMmSplitOpen = true; mmViaMm = true; mmSplitPendingPara = para != null ? para : null;
     await loadPage(meta.basket, meta.category, meta.id, Math.max(paliPage || 1, ent.start || 1, meta.firstpage || 1), meta.firstpage);
     return true;
   }
@@ -3090,40 +3090,19 @@ let isRomanPali = false;
     const w = document.getElementById("tp-split-wrapper"); if(w) w.classList.add("mm-first");
     if(window.innerWidth <= 768 && c.style.display !== "block") setTimeout(() => { try{ c.scrollIntoView({block:"start"}); }catch(e){} }, 80);
   }
-  async function openMmSplit(bookId, pageNum, para) {
+  async function openMmSplit(bookId, pageNum, para) {          // မြန်မာပြန်လမ်းကြောင်း - နိဿယနှင့် တူသော ဘေးခြမ်း (နိဿယမူခလုပ်များ၊ မူလ၊ မြန်မာ) ကို openNissaya ဖြင့်ပဲ ပြမည် (nsyShowTr = 1 ဖြင့် မြန်မာပြန်ကို ဦးစွာပြ)
       isMmSplitOpen = true; isNissayaOpen = false; nisViaList = false;
       if(para == null){ para = mmSplitPendingPara; } mmSplitPendingPara = null;
-      const container = document.getElementById("tp-nissaya-container");
-      const contentEl = document.getElementById("tp-nissaya-content");
+      try{ await ensureMmSplitIndex(); }catch(e){}
+      await tp_loadEditions();
+      const container = document.getElementById("tp-nissaya-container"), contentEl = document.getElementById("tp-nissaya-content");
       if(!container || !contentEl) return;
-      tp_splitFirst(container);
-      container.style.display = "block";
-      const edBox = document.getElementById("tp-nissaya-editions"); if(edBox) edBox.innerHTML = "";
-      contentEl.classList.add("tp-mm-split");
-      contentEl.innerHTML = "<p class='tp-loading'>မြန်မာပြန် ဆွဲယူနေပါသည်...</p>";
-      try {
-          const idx = await ensureMmSplitIndex();
-          let src = {type: "mm"};
-          if(!idx[bookId]){          // ရှိပြီးသား Split View မရှိလျှင် Gemini မြန်မာပြန် (ပထမမူ) ကို သုံး
-            if(!(TP_TR_VARS[bookId] && TP_TR_VARS[bookId].length)){ contentEl.innerHTML = "<p style='color:#888'>ဒီစာအုပ်အတွက် မြန်မာပြန် Split View မရှိသေးပါ။</p>"; return; }
-            src = {type: "tr", file: TP_TR_VARS[bookId][0]};
-          } else if(!mmSplitCache[bookId]) mmSplitCache[bookId] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${bookId}.json`));
-          await tp_renderTranslation(bookId, pageNum, contentEl, src);          // ၃ မျက်နှာ (အလယ် = လက်ရှိ၊ အပေါ်အောက် = ရှေ့/နောက်) - နိဿယ၏ "မြန်မာ" ခလုပ်နှင့် တူအောင်
-          if(para != null){
-              const want = toMyanmarDigits(para);
-              const sp = Array.from(contentEl.querySelectorAll(".paragraph")).find(x => x.textContent.trim() === want);
-              if(sp){ sp.classList.add("tp-mm-highlight"); sp.scrollIntoView({behavior:"smooth", block:"center"}); }
-          }
-      } catch(e) {
-          contentEl.innerHTML = `<p style='color:red'>မြန်မာပြန် ဖိုင်မရရှိနိုင်သေးပါ (${e.message})</p>`;
-      }
-      if(!container.dataset.closeWired){
-        container.dataset.closeWired = "1";
-        document.getElementById("tp-nissaya-close").addEventListener("click", () => {
-            container.style.display = "none";
-            const sw = document.getElementById("tp-split-wrapper"); if(sw) sw.classList.remove("mm-first");
-            isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = mmGemini = false;
-        });
+      if(!tp_hasTr(bookId)){ tp_splitFirst(container); container.style.display = "block"; contentEl.innerHTML = "<p style='color:#888'>ဒီစာအုပ်အတွက် မြန်မာပြန် Split View မရှိသေးပါ။</p>"; return; }
+      await openNissaya(bookId, pageNum, true);
+      if(para != null){
+          const want = toMyanmarDigits(para);
+          const sp = Array.from(contentEl.querySelectorAll(".paragraph")).find(x => x.textContent.trim() === want);
+          if(sp){ sp.classList.add("tp-mm-highlight"); sp.scrollIntoView({behavior:"smooth", block:"center"}); }
       }
   }
   // 📋 နိဿယ ကူးယူရန် panel (floating) - ပါဠိစာမျက်နှာ (သို့) နိဿယစာအုပ်ကိုယ်ပိုင်စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ရွေး၍ စာသားသက်သက်ကို clipboard ထဲ ကူးပေးသည်
@@ -3245,10 +3224,11 @@ let isRomanPali = false;
     const box = document.getElementById("tp-nissaya-container"), curEl = document.getElementById("tp-tr-current");
     if(box && curEl){ box.scrollTop = 0; box.scrollTop += curEl.getBoundingClientRect().top - box.getBoundingClientRect().top - 40; }      // လက်ရှိစာမျက်နှာ ထိပ်ဆုံးမှာ (အပေါ်က ရှေ့စာမျက်နှာအတွက် နေရာ အနည်းငယ်ချန်)
   }
-  async function openNissaya(bookId, pageNum) {
-      isMmSplitOpen = mmViaMm = false;
-      isNissayaOpen = true; 
-      await tp_loadEditions();
+  async function openNissaya(bookId, pageNum, keepMm) {          // keepMm: opened by the မြန်မာပြန် route (openMmSplit) - its flags / breadcrumb stay; the pane is the same one (နိဿယ မူခလုပ်များ + မူလ + မြန်မာ)
+      if(!keepMm){ isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; }
+      await tp_loadEditions(); try{ await ensureNissayaIds(); }catch(e){}
+      const hasNsy = (tpNissayaIds || []).includes(bookId) || (TP_NISSAYA_EDITIONS[bookId] || []).length > 0;       // နိဿယရှိသော စာအုပ်လား (မြန်မာပြန်သက်သက်ရှိသော စာအုပ်မှာ နိဿယမူ ခလုပ်များ မပါ)
+      if(tp_hasTr(bookId)){ if(!hasNsy && nsyShowTr < 1) nsyShowTr = 1; if(nsyShowTr > tp_trSources(bookId).length) nsyShowTr = 1; } else nsyShowTr = 0;
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
       tp_splitFirst(container);
@@ -3261,22 +3241,31 @@ let isRomanPali = false;
           const chosen = editions.find(e => e.file === nissayaFile) || editions[0] || null;       // မူရွေးထားသည့်အတိုင်း (မရွေးရသေးလျှင် ပထမမူ)
           const edBox = document.getElementById("tp-nissaya-editions");
           if (edBox) {
-              edBox.innerHTML = editions.length > 1 ? editions.map(e => `<button data-ed="${e.file}" style="padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;${e.file === chosen.file ? "background:#8a5a1a;color:#fff;" : "background:transparent;color:#8a5a1a;"}">${tp_edLabel(e.label)}</button>`).join("") : (editions.length === 1 && editions[0].label ? `<span style="padding:2px 9px;font-size:.8em;border-radius:12px;border:1px solid #8a5a1a;color:#8a5a1a;">${editions[0].label}</span>` : "");
-              edBox.querySelectorAll("[data-ed]").forEach(b => b.addEventListener("click", () => { nissayaFile = b.dataset.ed; nsyShowTr = 0; openNissaya(bookId, pageNum); }));
+              edBox.innerHTML = editions.length > 1 ? editions.map(e => `<button data-ed="${e.file}" style="padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;${(nsyShowTr === 0 && e.file === chosen.file) ? "background:#8a5a1a;color:#fff;" : "background:transparent;color:#8a5a1a;"}">${tp_edLabel(e.label)}</button>`).join("") : (editions.length === 1 && editions[0].label && !tp_hasTr(bookId) ? `<span style="padding:2px 9px;font-size:.8em;border-radius:12px;border:1px solid #8a5a1a;color:#8a5a1a;">${editions[0].label}</span>` : "");
+              edBox.querySelectorAll("[data-ed]").forEach(b => b.addEventListener("click", () => { nissayaFile = b.dataset.ed; nsyShowTr = 0; openNissaya(bookId, pageNum, keepMm); }));
           }
           if (edBox) {      // 📋 ကူးမည် - ဤမူမှ စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ကူးယူရန်
+              if(hasNsy){
               const cb = document.createElement("button");
               cb.textContent = "📋"; cb.title = "နိဿယကို စာမျက်နှာ အကွာအဝေးရွေး၍ ကူးယူမည်";
               cb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:transparent;color:#2a7a3a;";
               cb.addEventListener("click", () => tp_nissayaCopyPanel(chosen ? chosen.file : bookId, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null));
               edBox.appendChild(cb);
-              if (tp_hasTr(bookId)) {      // မြန်မာပြန်ထားသော စာအုပ်မှာသာ "မြန်မာ" ခလုပ် (မြန်မာပြန် တစ်ခုထက်ပိုလျှင် "မြန်မာ ၁"၊ "မြန်မာ ၂" ...)
+              }
+              if (tp_hasTr(bookId)) {
+                if (hasNsy && editions.length <= 1) {      // နိဿယမူ တစ်မူတည်း (မူခလုပ်မပါ) - မြန်မာပြန်ရှိလျှင် နိဿယကို ပြန်ပြရန် "မူလ" ခလုပ် (မူနာမည်က ပါလျှင် ထိုနာမည်)
+                  const ob = document.createElement("button"), onO = nsyShowTr === 0, lbl0 = editions.length === 1 && editions[0].label && editions[0].label !== "မူလနိဿယ" ? tp_edLabel(editions[0].label) : "မူလ";
+                  ob.textContent = lbl0; ob.title = "နိဿယကို ပြမည်";
+                  ob.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;background:" + (onO ? "#8a5a1a;color:#fff;" : "transparent;color:#8a5a1a;");
+                  ob.addEventListener("click", () => { nsyShowTr = 0; openNissaya(bookId, pageNum, keepMm); });
+                  edBox.appendChild(ob);
+                }      // မြန်မာပြန်ထားသော စာအုပ်မှာသာ "မြန်မာ" ခလုပ် (မြန်မာပြန် တစ်ခုထက်ပိုလျှင် "မြန်မာ ၁"၊ "မြန်မာ ၂" ...)
                 const nTr = tp_trSources(bookId).length;
                 for (let k = 1; k <= nTr; k++) {
                   const mb = document.createElement("button"), on = nsyShowTr === k;
                   mb.textContent = nTr > 1 ? "မြန်မာ " + toMyanmarDigits(k) : "မြန်မာ"; mb.title = "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်" + (nTr > 1 ? " (" + toMyanmarDigits(k) + ")" : "") + " ကို ပြမည် / နိဿယ ပြန်ပြမည်";
                   mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (on ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
-                  mb.addEventListener("click", () => { nsyShowTr = on ? 0 : k; openNissaya(bookId, pageNum); });
+                  mb.addEventListener("click", () => { nsyShowTr = (on && hasNsy) ? 0 : k; openNissaya(bookId, pageNum, keepMm); });
                   edBox.appendChild(mb);
                 }
               }
@@ -3765,10 +3754,10 @@ let isRomanPali = false;
                   closeAllDropdowns(); 
                   const opt = allOptions[item.dataset.idx];
                   if(opt.action === "nissaya") {
-                      nissayaFile = null; nsyBtPdf = null;                 // မီနူးမှ ဖွင့်လျှင် ပထမမူ (မူလနိဿယ) ကို အရင်ပြ၊ မူပြောင်းရန် နိဿယအပိုင်း အပေါ်ဘက် ခလုပ်များ
+                      nissayaFile = null; nsyBtPdf = null; nsyShowTr = 0;                 // မီနူးမှ ဖွင့်လျှင် ပထမမူ (မူလနိဿယ) ကို အရင်ပြ၊ မူပြောင်းရန် နိဿယအပိုင်း အပေါ်ဘက် ခလုပ်များ
                       openNissaya(bookId, pageNum);
                   } else if(opt.action === "mmsplit") {
-                      mmViaMm = false;
+                      mmViaMm = false; nsyShowTr = 1;
                       openMmSplit(bookId, pageNum);
                   } else if(opt.action === "toggle_roman") {
                       if (!isRomanPali) {
