@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.join(NSY, 'scripts'))
 OUT = os.path.join(HERE, 'output'); GOLD = os.path.join(HERE, 'gold'); RECV = os.path.join(GOLD, 'received')
 DOWNLOADS = os.path.join(os.path.expanduser('~'), 'Downloads')
 NL = chr(10)
+HEAD_CLS = {'nikaya', 'book', 'chapter', 'subhead', 'subsubhead', 'title', 'centered', 'center_bold', 'center', 'ending'}      # Pali block classes that are headings
 
 
 def _paired(n): return json.load(open(os.path.join(NSY, 'paired', '%03d.json' % n), encoding='utf-8'))
@@ -53,7 +54,7 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=Fals
             elif raw_ok: texts.append('[နိဿယ မျက်နှာ %d (Gemini မစစ်ရသေး)]' % k + NL + (pages[k]['body'] + (NL + pages[k]['foot'] if pages[k].get('foot') else '')).strip()); raw_used.add(k)
             else: missing.append(k)
         if missing: left_out.append((g[1], missing)); continue
-        pali = NL.join(b['pali'] for b in sorted(blocks.get(g, []), key=lambda b: b['i']))
+        pali = NL.join(('## ' if (b.get('cls') or '').strip() in HEAD_CLS else '') + b['pali'] for b in sorted(blocks.get(g, []), key=lambda b: b['i']))      # headings (title, chapter ...) are marked '## ' so Gemini keeps them as separate heading lines
         if not pali.strip(): left_out.append((g[1], ['ပါဠိစာ မရှိ'])); continue
         built.append((g, '--- စာမျက်နှာ %d ---' % g[1] + NL + '### ပါဠိ' + NL + pali + NL + '### နိဿယ' + NL + ((NL * 2).join(texts) if texts else '(နိဿယ မရှိ — ပါဠိမှ တိုက်ရိုက်ပြန်ပါ)') + NL))
     for pg, miss in left_out: log('  ပါဠိ %d: ထုတ်မရ — နိဿယ %s' % (pg, ' '.join(map(str, miss)) if isinstance(miss[0], int) else miss[0]) + (' မစစ်ရသေး' if isinstance(miss[0], int) else ''))
@@ -88,31 +89,46 @@ def parse_pages(text):
     return out
 
 
-def load_translations(n):
-    p = os.path.join(GOLD, 'tr_%03d.json' % n)
+def load_translations(n, lang=''):
+    p = os.path.join(GOLD, 'tr_%03d%s.json' % (n, ('_' + lang) if lang else ''))
     return {int(k): v for k, v in json.load(open(p, encoding='utf-8')).items()} if os.path.exists(p) else {}
 
 
-def save_translations(n, d):
+def save_translations(n, d, lang=''):
     os.makedirs(GOLD, exist_ok=True)
-    json.dump({str(k): d[k] for k in sorted(d)}, open(os.path.join(GOLD, 'tr_%03d.json' % n), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    json.dump({str(k): d[k] for k in sorted(d)}, open(os.path.join(GOLD, 'tr_%03d%s.json' % (n, ('_' + lang) if lang else '')), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+
+
+def _heads(text):
+    """number of '## ' heading lines of each page of a Gemini file: {page: count}"""
+    return {k: sum(1 for l in v.split(NL) if l.strip().startswith('## ')) for k, v in parse_pages(text).items()}
+
+
+_NAME = re.compile(r'tr_(DD+)_(.+?)_pali(DD+)-(DD+)(?:_rest)?_translated(?:_(vi|en))?(?: [(]DD+[)])?[.]txt$'.replace('DD', chr(92) + 'd'))
 
 
 def ingest_downloads(log=print, after=None):
     got = 0
     for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt'))):
-        name = os.path.basename(f); m = re.match(r'tr_(\d+)_(.+?)_pali(\d+)-(\d+)(?:_rest)?_translated', name)
+        name = os.path.basename(f); m = _NAME.match(name)
         if not m or time.time() - os.path.getmtime(f) < 3: continue
-        n = int(m.group(1))
+        n = int(m.group(1)); lang = m.group(5) or ''
         pg = parse_pages(open(f, encoding='utf-8-sig').read())
         if not pg: log('⚠ Downloads/%s — "--- စာမျက်နှာ N ---" မတွေ့ပါ' % name); continue
-        d = load_translations(n); repl = [k for k in pg if k in d]
-        d.update({k: v for k, v in pg.items() if v.strip()}); save_translations(n, d)
+        d = load_translations(n, lang); repl = [k for k in pg if k in d]
+        d.update({k: v for k, v in pg.items() if v.strip()}); save_translations(n, d, lang)
         os.makedirs(RECV, exist_ok=True); shutil.move(f, os.path.join(RECV, time.strftime('%Y%m%d_%H%M%S_') + name))
-        log('⬇ %s — စာအုပ် %03d ထဲ ပါဠိ %d မျက်နှာ ထည့်ပြီး%s' % (name, n, len(pg), (' (အစားထိုး %d)' % len(repl)) if repl else ''))
-        inp =os.path.join(OUT, re.sub(r'_translated.*$', '.txt', name))
+        log('⬇ %s — စာအုပ် %03d ထဲ %s %d မျက်နှာ ထည့်ပြီး%s' % (name, n, {'vi': 'ဗီယက်နမ်ပြန်', 'en': 'အင်္ဂလိပ်ပြန်'}.get(lang, 'ပါဠိ'), len(pg), (' (အစားထိုး %d)' % len(repl)) if repl else ''))
+        if lang:                                           # Vietnamese / English of the Burmese translation: only kept (gold/tr_NNN_vi.json / _en.json), nothing else to do
+            got += 1; continue
+        inp = os.path.join(OUT, re.sub(r'_translated.*$', '.txt', name))
         if os.path.exists(inp):
-            want = set(parse_pages(open(inp, encoding='utf-8').read()))
+            src = open(inp, encoding='utf-8').read(); want = set(parse_pages(src))
+            sent = {}                                      # headings ('## ' lines of the Pali part) of every page that was sent
+            for k, v in parse_pages(src).items(): sent[k] = sum(1 for l in v.split('### နိဿယ')[0].split(NL) if l.strip().startswith('## '))
+            back = _heads(open(os.path.join(RECV, [x for x in sorted(os.listdir(RECV)) if x.endswith(name)][-1]), encoding='utf-8-sig').read())
+            bad = sorted(k for k in sent if k in back and sent[k] != back[k])
+            if bad: log('  ⚠ ခေါင်းစဉ် ("## " စာကြောင်း) အရေအတွက် မကိုက်သော ပါဠိမျက်နှာ: ' + ', '.join('%d (ပို့ %d / ပြန် %d)' % (k, sent[k], back[k]) for k in bad[:12]) + ' — ခေါင်းစဉ်ကို စာပိုဒ်ထဲ ပေါင်းမိနိုင်သည်၊ ကြည့်ပါ')
             if want <= set(d): os.remove(inp); log('  ✔ ထည့်ဖိုင်ပြီးစီးသဖြင့် ဖျက်ပြီး')
             else:
                 miss = want - set(d)
