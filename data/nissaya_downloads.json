@@ -1794,6 +1794,17 @@
    "date": "2026-10-10"
   },
   {
+   "id": "attha_an_04_sheet131",
+   "title": "အဋ္ဌကာဒိနိပါတအဋ္ဌကထာ (မိုးထိမူ (ဆ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 3059014,
+   "date": "2026-11-18",
+   "edition_of": "attha_an_04"
+  },
+  {
    "id": "attha_ku_01",
    "title": "ခုဒ္ဒကပါဌအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -2918,5 +2929,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 175
+ "n_editions": 176
 }
