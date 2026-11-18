@@ -66,6 +66,7 @@ def show_book(*_):
     if cb.current() < 0: cur_lbl.config(text='⚠ စာအုပ် မရွေးရသေးပါ', fg='#b00020'); return
     _t = ' '.join(str(sheets[cb.current()][1]).split()); _t = (_t[:32] + '…') if len(_t) > 32 else _t       # one short line only (a long / multi-line sheet name used to take the whole right half of the window)
     cur_lbl.config(text='● ' + _t, fg='#1b5e20')
+    root.after(300, lambda: threading.Thread(target=_auto_missing, args=(sheets[cb.current()][0],), daemon=True).start())     # the chosen book: pages nobody has sent to Gemini yet get their file by themselves
     try: _j.dump({'sheet': sheets[cb.current()][0], 'hide_pub': bool(hidepub.get())}, open(STATE, 'w', encoding='utf-8'))
     except Exception: pass
 cb.bind('<<ComboboxSelected>>', show_book); show_book()
@@ -361,8 +362,27 @@ b7.config(command=lambda: (busy(True), threading.Thread(target=work7, daemon=Tru
 b13.config(command=lambda: (busy(True), threading.Thread(target=work13, daemon=True).start()))
 b3.config(command=go3); b4.config(command=go4); b5.config(command=go5)
 b6.config(command=lambda: (os.makedirs(m_tool.OUT, exist_ok=True), os.startfile(m_tool.OUT)))
+_miss_lock = threading.Lock()
+def _on_web(n):          # the book's web file is COMMITTED in the tipitaka repository (a file only copied into data/ but not committed is not on the web)
+    try:
+        fp = glob.glob(os.path.join(ROOT, 'web', '*_sheet%03d.meta.json' % n)) + glob.glob(os.path.join(ROOT, 'web', '*_sheet%d.meta.json' % n))
+        if not fp: return True          # unknown: do not make files by itself
+        fn = _jj.load(open(fp[0], encoding='utf-8'))['file'] + '.html'
+        return subprocess.run(['git', 'ls-files', '--error-unmatch', 'data/' + fn], cwd=TIPI, capture_output=True).returncode == 0
+    except Exception: return False
+def _auto_missing(n):
+    """a book that is being worked on (not on the web yet): the pages that Gemini has not checked and that wait in no file are put into new files (…_gap.txt) - no button needed"""
+    if not _miss_lock.acquire(blocking=False): return
+    try:
+        if _on_web(n): return
+        if m_gcheck.make_missing(n, say): say('  ➜ စာအုပ် %03d: မစစ်ရသေးသော စာမျက်နှာများအတွက် ဖိုင်အသစ် ထုတ်ပြီးပါပြီ' % n)
+    except BaseException as e: say('  ⚠ မစစ်ရသေးသော စာမျက်နှာ ဖိုင်ထုတ်ရာ အမှား: %r' % e)
+    finally: _miss_lock.release()
 def _auto_publish(n):
     import glob
+    try:
+        if m_gcheck.make_missing(n, say): return          # pages nobody has sent yet get their own file first (the book is not finished, nothing is published)
+    except BaseException as e: say('  ⚠ မစစ်ရသေးသော စာမျက်နှာ ဖိုင်ထုတ်ရာ အမှား: %r' % e)
     left = glob.glob(os.path.join(ROOT, 'output', 'gemini', '%03d_*.txt' % n))
     if left: say('  (စာအုပ် %03d — Gemini ဖိုင် %d ခု ကျန်သေး၊ အားလုံးပြီးမှ web တင်မည်)' % (n, len(left))); return
     if not autopub.get(): say('  (စာအုပ် %03d အားလုံးပြီးပြီ - အလိုအလျောက် web တင်ခြင်း ပိတ်ထားသည်၊ ကိုယ်တိုင် တင်ပါ)' % n); return

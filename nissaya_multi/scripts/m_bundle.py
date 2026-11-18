@@ -19,11 +19,12 @@ FOOT = "(ထွက်ရလဒ်ထဲတွင် '--- နိဿယ စာမ�
 NL = chr(10)
 
 
-def main(n, lo, hi, per=2, raw=False, nopali=False, log=print, sets=10, with_prompt=False, nsy=None, maxchars=10000):
+def main(n, lo, hi, per=2, raw=False, nopali=False, log=print, sets=10, with_prompt=False, nsy=None, maxchars=10000, exclude=None, suffix='', outdir=None):
+    """exclude = nissaya pages that are NOT given again (they wait in other files); suffix = ends the file names (e.g. '_gap' for the pages nobody has sent yet)"""
     P = json.load(open(os.path.join(ROOT, 'paired', '%03d.json' % n), encoding='utf-8'))
     prompt = open(os.path.join(ROOT, 'gemini_prompt.txt'), encoding='utf-8').read().strip()
     pages = {p['num']: p for p in P['pages'] if p.get('num') is not None}
-    out = os.path.join(ROOT, 'output', 'gemini'); os.makedirs(out, exist_ok=True)
+    out = outdir or os.path.join(ROOT, 'output', 'gemini'); os.makedirs(out, exist_ok=True)
     keys = sorted(((k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']), key=lambda x: (x[0], x[1]))
     keys = [(b, p) for b, p in keys if lo <= p <= hi]
     TEXT = {}
@@ -49,6 +50,7 @@ def main(n, lo, hi, per=2, raw=False, nopali=False, log=print, sets=10, with_pro
     if os.path.exists(gp_):
         seen = {int(k) for k in json.load(open(gp_, encoding='utf-8'))}; done_ = set(seen)
         log('  (%d nissaya pages are already checked by Gemini - left out)' % len(seen))
+    if exclude: seen.update(exclude); done_.update(exclude)
     for g in keys:
         r = P['ppmap']['%s|%s' % g]
         new = [k for k in range(r[0], r[1] + 1) if k in pages and k not in seen]
@@ -59,18 +61,19 @@ def main(n, lo, hi, per=2, raw=False, nopali=False, log=print, sets=10, with_pro
         seen.update(range(r[0], r[1] + 1))
     if skipped: log('  Pali pages left out (their nissaya pages are already in another set): %s' % ' '.join(str(x) for x in skipped))
     keys = kept
-    if kept:                                                             # a nissaya page that no Pali page points to (a gap of the database map) goes into the set of the Pali page just before it
-        r_all = [P['ppmap']['%s|%s' % g] for g in kept]
-        have = {k for g in kept for k in fresh[g]}
-        k_lo, k_hi = min(r[0] for r in r_all), max(r[1] for r in r_all)
-        all_keys = sorted(((k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']), key=lambda x: (x[0], x[1]))
-        if kept[-1] == all_keys[-1] and pages: k_hi = max(k_hi, max(pages))        # the last Pali page of the book is in this range: nissaya pages AFTER the last mapped one (colophon, index, ... - the database map ends earlier) go into the last set, so they can be checked too
-        if kept[0] == all_keys[0] and pages: k_lo = min(k_lo, min(pages))          # same for pages BEFORE the first mapped one
-        for k in range(k_lo, k_hi + 1):
-            if k in pages and k not in have and k not in done_:
-                before = [g for g in kept if P['ppmap']['%s|%s' % g][0] <= k]
-                g = before[-1] if before else kept[0]
-                fresh[g] = sorted(fresh[g] + [k]); log('  nissaya page %d: no Pali page points to it - put with Pali page %d' % (k, g[1]))
+    # a nissaya page that no Pali page points to (a gap of the database map, pages before the first / after the last mapped one: colophon, index ...) and that is not collected / excluded yet:
+    # it goes into the set of the Pali page just before it (the first Pali page for pages before the map starts) - only if that Pali page is in the requested range
+    all_keys = sorted(((k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']), key=lambda x: (x[0], x[1]))
+    for k in sorted(pages):
+        if k in seen: continue
+        if not (pages[k]['body'] + pages[k].get('foot', '')).strip(): seen.add(k); continue          # nothing on the page at all
+        before = [g for g in all_keys if P['ppmap']['%s|%s' % g][0] <= k]
+        g = before[-1] if before else all_keys[0]
+        if not (lo <= g[1] <= hi): continue
+        if g not in kept: kept.append(g); fresh[g] = []
+        fresh[g] = sorted(set(fresh[g]) | {k}); seen.add(k)
+        log('  nissaya page %d: no Pali page points to it - put with Pali page %d' % (k, g[1]))
+    kept = sorted(set(kept), key=lambda x: (x[0], x[1])); keys = kept
     built = []                                                           # one text per set
 
     def text_of(grp, nums):
@@ -120,7 +123,7 @@ def main(n, lo, hi, per=2, raw=False, nopali=False, log=print, sets=10, with_pro
     for j in range(0, len(built), sets):
         chunk = built[j:j + sets]
         first, last = chunk[0][0][0], chunk[-1][0][-1]
-        name = '%03d_%s_pali%d-%d.txt' % (n, first[0], first[1], last[1])
+        name = '%03d_%s_pali%d-%d%s.txt' % (n, first[0], first[1], last[1], suffix)
         body = NL.join('===== အစု %d / %d =====' % (k + 1, len(chunk)) + NL + t for k, (g, t) in enumerate(chunk))
         open(os.path.join(out, name), 'w', encoding='utf-8').write(body)
         files.append(name)
