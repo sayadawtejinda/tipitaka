@@ -14,12 +14,16 @@ import m_tool, m_bundle, m_gcheck
 
 root = tk.Tk(); root.title('နိဿယ ပြင်ဆင်ကိရိယာ'); root.geometry('1000x860')
 import json as _jj
-def _published():       # sheets whose web file is already in the tipitaka repository (data/<file>.html)
+def _published():       # sheets whose web file is COMMITTED in the tipitaka repository (a file only copied into data/ but never committed is NOT on the web yet)
     out = set()
+    try:
+        tracked = set(subprocess.run(['git', 'ls-files', 'data'], cwd=TIPI, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout.split(chr(10)))
+    except Exception: tracked = None
     for mp in glob.glob(os.path.join(ROOT, 'web', '*.meta.json')):
         try:
             m = _jj.load(open(mp, encoding='utf-8'))
-            if os.path.exists(os.path.join(TIPI, 'data', m['file'] + '.html')): out.add(int(m['sheet']))
+            f_ = 'data/' + m['file'] + '.html'
+            if (f_ in tracked) if tracked else os.path.exists(os.path.join(TIPI, f_)): out.add(int(m['sheet']))
         except Exception: pass
     return out
 def _hide_on():

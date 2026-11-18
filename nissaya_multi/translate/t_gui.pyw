@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Pali -> Burmese translation tool (like run_tool): ① file for the Gemini 'Pali Translate AI' app  ② Gemini's answers are taken from Downloads  ③ translated book out."""
-import os, sys, threading, tkinter as tk
+import os, subprocess, sys, threading, tkinter as tk
 from tkinter import ttk, messagebox
 HERE = os.path.dirname(os.path.abspath(__file__)); NSY = os.path.dirname(HERE)
 sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(NSY, 'scripts'))
@@ -10,12 +10,14 @@ root = tk.Tk(); root.title('ပါဠိ မြန်မာပြန် ကိ�
 f = ttk.Frame(root, padding=10); f.pack(fill='both', expand=True); f.columnconfigure(1, weight=1); f.rowconfigure(6, weight=1)
 import glob, json
 TIPI = os.path.dirname(NSY)
-def published():        # only books whose checked web file is already in the tipitaka repository (same test as run_tool's "web ပေါ်တင်ပြီး")
+def published():        # only books whose web file is COMMITTED in the tipitaka repository (a file only copied into data/ is not on the web yet)
     out = set()
+    try: tracked = set(subprocess.run(['git', 'ls-files', 'data'], cwd=TIPI, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout.split(chr(10)))
+    except Exception: tracked = None
     for mp in glob.glob(os.path.join(NSY, 'web', '*.meta.json')):
         try:
-            m = json.load(open(mp, encoding='utf-8'))
-            if os.path.exists(os.path.join(TIPI, 'data', m['file'] + '.html')): out.add(int(m['sheet']))
+            m = json.load(open(mp, encoding='utf-8')); f_ = 'data/' + m['file'] + '.html'
+            if (f_ in tracked) if tracked else os.path.exists(os.path.join(TIPI, f_)): out.add(int(m['sheet']))
         except Exception: pass
     return out
 STATE = os.path.join(HERE, 'gui_state.json')
