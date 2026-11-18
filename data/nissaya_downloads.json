@@ -1858,6 +1858,17 @@
    "edition_of": "attha_ku_02_01"
   },
   {
+   "id": "attha_ku_02_01_sheet134",
+   "title": "ဓမ္မပဒအဋ္ဌကထာ (ပ) (ပြာသာဒ်မူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 5592258,
+   "date": "2026-11-18",
+   "edition_of": "attha_ku_02_01"
+  },
+  {
    "id": "attha_ku_02_02",
    "title": "ဓမ္မပဒအဋ္ဌကထာ (ဒု)",
    "basket": "အဋ္ဌကထာ",
@@ -2962,5 +2973,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 179
+ "n_editions": 180
 }
