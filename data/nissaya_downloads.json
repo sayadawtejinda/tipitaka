@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-17",
+ "generated": "2026-11-18",
  "books": [
   {
    "id": "mula_vi_01",
@@ -1582,6 +1582,17 @@
    "date": "2026-10-08"
   },
   {
+   "id": "attha_sa_01_sheet119",
+   "title": "သဂါထာဝဂ္ဂအဋ္ဌကထာ (မိုးထိမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 3457206,
+   "date": "2026-11-18",
+   "edition_of": "attha_sa_01"
+  },
+  {
    "id": "attha_sa_02",
    "title": "နိဒါနဝဂ္ဂအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -2775,5 +2786,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 162
+ "n_editions": 163
 }
