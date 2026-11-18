@@ -1347,6 +1347,17 @@
    "edition_of": "attha_di_01"
   },
   {
+   "id": "attha_di_01_sheet103",
+   "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (တ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3866491,
+   "date": "2026-11-18",
+   "edition_of": "attha_di_01"
+  },
+  {
    "id": "attha_di_02",
    "title": "မဟာဝဂ္ဂဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -3006,5 +3017,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 183
+ "n_editions": 184
 }
