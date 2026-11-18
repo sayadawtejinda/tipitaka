@@ -30,7 +30,8 @@ def list_sheets():
     hidden = set(json.load(open(hp, encoding='utf-8'))) if os.path.exists(hp) else set()
     for r in cat:
         if not r.get('final') or r['n'] in hidden: continue
-        name = re.sub(r'^Z\d\d\s*\d{3}\s*', '', r['sheet'])
+        name = ' '.join(re.sub(r'^Z\d\d\s*\d{3}\s*', '', r['sheet']).split())          # one line only
+        if len(name) > 36: name = name[:36] + '…'
         out.append((r['n'], '%d · %s → %s' % (r['n'], name, ' + '.join(r['final']['books']))))
     return out
 

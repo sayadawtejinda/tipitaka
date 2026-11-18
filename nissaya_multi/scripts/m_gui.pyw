@@ -60,11 +60,12 @@ def _toggle_hide():
     except Exception: pass
     refresh_books(keep)
 ttk.Checkbutton(f, text='web ပေါ်တင်ပြီးသော စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).grid(row=0, column=6, sticky='w', padx=4)
-cur_lbl = tk.Label(f, text='', font=('', 12, 'bold'), anchor='w'); cur_lbl.grid(row=0, column=5, sticky='w', padx=8)
+cur_lbl = tk.Label(f, text='', font=('', 12, 'bold'), anchor='w', width=36); cur_lbl.grid(row=0, column=5, sticky='w', padx=8)
 def show_book(*_):
     import json as _j
     if cb.current() < 0: cur_lbl.config(text='⚠ စာအုပ် မရွေးရသေးပါ', fg='#b00020'); return
-    cur_lbl.config(text='● အလုပ်လုပ်နေသော စာအုပ်: ' + sheets[cb.current()][1], fg='#1b5e20')
+    _t = ' '.join(str(sheets[cb.current()][1]).split()); _t = (_t[:32] + '…') if len(_t) > 32 else _t       # one short line only (a long / multi-line sheet name used to take the whole right half of the window)
+    cur_lbl.config(text='● ' + _t, fg='#1b5e20')
     try: _j.dump({'sheet': sheets[cb.current()][0], 'hide_pub': bool(hidepub.get())}, open(STATE, 'w', encoding='utf-8'))
     except Exception: pass
 cb.bind('<<ComboboxSelected>>', show_book); show_book()
