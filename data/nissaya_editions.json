@@ -1476,5 +1476,17 @@
    "from": 1,
    "to": 191
   }
+ ],
+ "attha_ku_01": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_ku_01"
+  },
+  {
+   "label": "မိုးထိ",
+   "file": "attha_ku_01_sheet132",
+   "from": 1,
+   "to": 216
+  }
  ]
 }
