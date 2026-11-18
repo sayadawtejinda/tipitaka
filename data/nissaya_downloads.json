@@ -1826,6 +1826,17 @@
    "date": "2026-10-17"
   },
   {
+   "id": "attha_ku_01_sheet132",
+   "title": "ခုဒ္ဒကပါဌအဋ္ဌကထာ (မိုးထိ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4404434,
+   "date": "2026-11-18",
+   "edition_of": "attha_ku_01"
+  },
+  {
    "id": "attha_ku_02_01",
    "title": "ဓမ္မပဒအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -2951,5 +2962,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 178
+ "n_editions": 179
 }
