@@ -1593,6 +1593,17 @@
    "edition_of": "attha_sa_01"
   },
   {
+   "id": "attha_sa_01_sheet120",
+   "title": "သဂါထာဝဂ္ဂအဋ္ဌကထာ (မိုးထိမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "သံယုတ်နိကာယ်",
+   "cat_key": "sa",
+   "size": 2979278,
+   "date": "2026-11-18",
+   "edition_of": "attha_sa_01"
+  },
+  {
    "id": "attha_sa_02",
    "title": "နိဒါနဝဂ္ဂအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -2874,5 +2885,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 171
+ "n_editions": 172
 }
