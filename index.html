@@ -3276,11 +3276,12 @@ let isRomanPali = false;
                   edBox.appendChild(ob);
                 }      // မြန်မာပြန်ထားသော စာအုပ်မှာသာ "မြန်မာ" ခလုပ် (မြန်မာပြန် တစ်ခုထက်ပိုလျှင် "မြန်မာ ၁"၊ "မြန်မာ ၂" ...)
                 const nTr = tp_trSources(bookId).length;
-                for (let k = 1; k <= nTr; k++) {
-                  const mb = document.createElement("button"), on = nsyShowTr === k;
-                  mb.textContent = nTr > 1 ? "မြန်မာ " + toMyanmarDigits(k) : "မြန်မာ"; mb.title = "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်" + (nTr > 1 ? " (" + toMyanmarDigits(k) + ")" : "") + " ကို ပြမည် / နိဿယ ပြန်ပြမည်";
+                {      // "မြန်မာ" ခလုပ် တစ်ခုတည်း - မြန်မာပြန် မူကွဲ အများရှိလျှင် နှိပ်လိုက်တိုင်း ၁ → ၂ → ... → ၁ တစ်လှည့်စီ ပြမည် (နိဿယသို့ ပြန်ရန် နိဿယမူခလုပ်)
+                  const on = nsyShowTr > 0, mb = document.createElement("button");
+                  mb.textContent = nTr > 1 && on ? "မြန်မာ " + toMyanmarDigits(nsyShowTr) + "/" + toMyanmarDigits(nTr) : "မြန်မာ";
+                  mb.title = "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည်" + (nTr > 1 ? " (နှိပ်တိုင်း မူကွဲ တစ်လှည့်စီ)" : " / နိဿယ ပြန်ပြမည်");
                   mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (on ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
-                  mb.addEventListener("click", () => { nsyShowTr = (on && hasNsy) ? 0 : k; openNissaya(bookId, pageNum, keepMm); });
+                  mb.addEventListener("click", () => { nsyShowTr = !on ? 1 : nTr > 1 ? (nsyShowTr % nTr) + 1 : (hasNsy ? 0 : 1); openNissaya(bookId, pageNum, keepMm); });
                   edBox.appendChild(mb);
                 }
               }
