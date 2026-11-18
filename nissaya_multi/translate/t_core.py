@@ -21,7 +21,7 @@ def _collected(n):
     return {int(k): v for k, v in json.load(open(p, encoding='utf-8')).items()} if os.path.exists(p) else {}
 
 
-def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=False, only=None, rest=False):
+def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=False, only=None, rest=False, extra_pali=None):
     """redo=False: Pali pages that Gemini has already translated (gold/tr_NNN.json) are left out;  only={Pali pages}: just these;  rest=True: the 'rest' file of a half-finished input (old files of the book are NOT deleted)"""
     P = _paired(n); col = _collected(n)
     pages = {p['num']: p for p in P['pages'] if p.get('num') is not None}
@@ -34,11 +34,19 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=Fals
         done = load_translations(n); skip = [g[1] for g in keys if g[1] in done]
         keys = [g for g in keys if g[1] not in done]
         if skip: log('  မြန်မာပြန်ပြီးသား ပါဠိ %d မျက်နှာ ချန်ထားသည်' % len(skip))
+    mapped = {int(k.split('|')[1]) for k in P['ppmap']}
+    if extra_pali:                # Pali pages WITHOUT a nissaya page (not in the page map, e.g. the last Pali page of a book): only when asked for - translated from the Pali alone
+        bk0 = sorted({k.split('|')[0] for k in P['ppmap']})[0]
+        for p in sorted(extra_pali):
+            if p in mapped: log('  ပါဠိ %d က နိဿယနှင့် တွဲထားပြီးသား (ပုံမှန်နည်းဖြင့် ထုတ်ပါ)' % p)
+            elif (bk0, p) not in blocks: log('  ပါဠိ %d ဤစာအုပ်ထဲ မတွေ့ပါ' % p)
+            elif (bk0, p) not in keys: keys.append((bk0, p))
+        keys.sort(key=lambda x: (x[0], x[1]))
     if len({g[0] for g in keys}) > 1: log('⚠ ဤအကွာအဝေးတွင် ပါဠိစာအုပ် တစ်အုပ်ထက်ပို ပါသည် — ပထမစာအုပ်သာ ယူပါ (အကွာအဝေး ကျဉ်းပါ)')
     built = []; left_out = []; raw_used = set()
     for g in keys:
-        r0, r1 = P['ppmap']['%s|%s' % g]
-        nums = [k for k in range(r0, r1 + 1) if k in pages]
+        r0, r1 = P['ppmap'].get('%s|%s' % g) or (None, None)
+        nums = [] if r0 is None else [k for k in range(r0, r1 + 1) if k in pages]
         texts = []; missing = []
         for k in nums:
             if k in col: texts.append('[နိဿယ မျက်နှာ %d]' % k + NL + col[k].strip())
@@ -47,7 +55,7 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=Fals
         if missing: left_out.append((g[1], missing)); continue
         pali = NL.join(b['pali'] for b in sorted(blocks.get(g, []), key=lambda b: b['i']))
         if not pali.strip(): left_out.append((g[1], ['ပါဠိစာ မရှိ'])); continue
-        built.append((g, '--- စာမျက်နှာ %d ---' % g[1] + NL + '### ပါဠိ' + NL + pali + NL + '### နိဿယ' + NL + (NL * 2).join(texts) + NL))
+        built.append((g, '--- စာမျက်နှာ %d ---' % g[1] + NL + '### ပါဠိ' + NL + pali + NL + '### နိဿယ' + NL + ((NL * 2).join(texts) if texts else '(နိဿယ မရှိ — ပါဠိမှ တိုက်ရိုက်ပြန်ပါ)') + NL))
     for pg, miss in left_out: log('  ပါဠိ %d: ထုတ်မရ — နိဿယ %s' % (pg, ' '.join(map(str, miss)) if isinstance(miss[0], int) else miss[0]) + (' မစစ်ရသေး' if isinstance(miss[0], int) else ''))
     if raw_used: log('  ⚠ Gemini မစစ်ရသေးသော နိဿယစာမျက်နှာ %d ခု OCR စာဖြင့် ထည့်ထားသည်' % len(raw_used))
     groups = []; cur = []; size = 0
@@ -153,20 +161,33 @@ def publish(n, log=print):
     per = {b: {} for b in books}
     for pg, txt in d.items():
         owners = [b for b in books if (b, pg) in keys]
+        if not owners and len(books) == 1: owners = books                # a Pali page without nissaya (translated from the Pali alone) belongs to the only Pali book of the sheet
         if len(owners) == 1: per[owners[0]][pg] = txt
         elif len(owners) > 1: log('  ⚠ ပါဠိမျက်နှာ %d က စာအုပ် %s တွင် အားလုံးပါ — ကျော်သည်' % (pg, '/'.join(owners)))
     os.makedirs(WEBDIR, exist_ok=True); paths = []
+    ip = os.path.join(WEBDIR, 'index.json')
+    raw_idx = json.load(open(ip, encoding='utf-8')) if os.path.exists(ip) else {}
+    idx = {b: [{'file': b + '.json', 'sheet': None}] for b in raw_idx} if isinstance(raw_idx, list) else raw_idx      # index.json: {Pali book: [{file, sheet}, ...]} - one entry for each nissaya sheet that was translated ("မြန်မာ ၁", "မြန်မာ ၂" on the web); the old list form is read too
     for b, pages in per.items():
         if not pages: continue
-        fp = os.path.join(WEBDIR, b + '.json')
-        old = {int(k): v for k, v in json.load(open(fp, encoding='utf-8')).items()} if os.path.exists(fp) else {}
+        vs = idx.setdefault(b, [])
+        v = next((x for x in vs if x.get('sheet') == n), None)
+        if v is None:                                                 # an old entry (written before the sheet number was kept) whose text is the same as this sheet's translation: it IS this sheet
+            for x in vs:
+                if x.get('sheet') is None:
+                    fo = os.path.join(WEBDIR, x['file'])
+                    od = json.load(open(fo, encoding='utf-8')) if os.path.exists(fo) else {}
+                    same = sum(1 for k, t in pages.items() if od.get(str(k)) == t)
+                    if same >= max(1, len(pages) // 2): x['sheet'] = n; v = x; break
+        if v is None:
+            v = {'file': (b + '.json') if not vs else '%s__%d.json' % (b, n), 'sheet': n}; vs.append(v)
+            log('  %s : မြန်မာပြန် အသစ် (မူကွဲ %d) — web တွင် "မြန်မာ %d" ဟု ပေါ်မည်' % (b, len(vs), len(vs)))
+        fp = os.path.join(WEBDIR, v['file'])
+        old = {int(k): t for k, t in json.load(open(fp, encoding='utf-8')).items()} if os.path.exists(fp) else {}
         old.update(pages)
         json.dump({str(k): old[k] for k in sorted(old)}, open(fp, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
-        paths.append(os.path.relpath(fp, REPO).replace(os.sep, '/')); log('  %s : မြန်မာပြန် ပါဠိ %d မျက်နှာ' % (b, len(old)))
-    ip = os.path.join(WEBDIR, 'index.json')
-    ids = set(json.load(open(ip, encoding='utf-8'))) if os.path.exists(ip) else set()
-    ids.update(b for b, pages in per.items() if pages)
-    json.dump(sorted(ids), open(ip, 'w', encoding='utf-8'), ensure_ascii=False)
+        paths.append(os.path.relpath(fp, REPO).replace(os.sep, '/')); log('  %s : မြန်မာပြန် ပါဠိ %d မျက်နှာ' % (v['file'], len(old)))
+    json.dump(idx, open(ip, 'w', encoding='utf-8'), ensure_ascii=False)
     paths.append(os.path.relpath(ip, REPO).replace(os.sep, '/'))
     if not _git('status', '--porcelain', '--', *paths).stdout.strip(): log('  (web ပေါ်ရှိနှင့် တူနေသည် — ပြောင်းစရာ မရှိ)'); return paths
     _git('fetch', 'origin')

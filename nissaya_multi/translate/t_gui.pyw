@@ -136,6 +136,23 @@ def after_ingest(n):       # a whole book is translated (no input file waiting a
         threading.Thread(target=work_pub, args=(n, True), daemon=True).start()
 
 
+def work_extra(n, pages):
+    try:
+        out, files = t_core.build(n, 1, 10 ** 6, 10000, 10, False, say, only=set(), extra_pali=set(pages), rest=True)
+        if files: say('✔ ဖိုင် ထွက်ပါပြီ (နိဿယမပါ - ပါဠိမှ တိုက်ရိုက်ပြန်) — Gemini ထဲ တင်ပါ'); os.startfile(out)
+    except BaseException as e: say('အမှား: %r' % e)
+    finally: root.after(0, lambda: bextra.config(state='normal'))
+
+
+def go_extra():
+    import re as _re
+    try: pages = [int(x) for x in _re.findall(r'\d+', extra_e.get())]
+    except ValueError: pages = []
+    if not pages: return messagebox.showerror('', 'ပါဠိစာမျက်နှာနံပါတ် ထည့်ပါ (ဥပမာ 213)')
+    n = sel(); bextra.config(state='disabled'); say('နိဿယမပါသော ပါဠိမျက်နှာ ဖိုင်ထုတ်နေသည်...')
+    threading.Thread(target=work_extra, args=(n, pages), daemon=True).start()
+
+
 def export():
     n = sel(); p, c = t_core.export_book(n); say('✔ မြန်မာပြန် ပါဠိ %d မျက်နှာ -> %s' % (c, p)); os.startfile(p)
 
@@ -150,6 +167,9 @@ ttk.Button(bf, text='② မြန်မာပြန်ပြီး စာမျ
 ttk.Button(bf, text='③ မြန်မာပြန် စာအုပ် ထုတ် (.txt)', command=export).pack(side='left', padx=3)
 bpub = tk.Button(bf, text='▲  web သို့ တင်', bg='#2a7a3b', fg='white', activebackground='#1f5c2b', activeforeground='white', font=('', 10, 'bold'), padx=10, command=go_pub); bpub.pack(side='left', padx=6)
 autopub = tk.BooleanVar(value=True)
+ex = ttk.Frame(f); ex.grid(row=7, column=0, columnspan=2, sticky='w')
+ttk.Label(ex, text='နိဿယမတွဲရသော ပါဠိမျက်နှာ (မြေပုံထဲ မပါ - ပါဠိမှ တိုက်ရိုက်ပြန်) ဥပမာ 213 :').pack(side='left'); extra_e = ttk.Entry(ex, width=12); extra_e.pack(side='left', padx=3)
+bextra = ttk.Button(ex, text='④ ဤမျက်နှာများ ဖိုင်ထုတ်', command=go_extra); bextra.pack(side='left', padx=3)
 ttk.Checkbutton(bf, text='စာအုပ်တစ်အုပ်လုံး ပြီးလျှင် အလိုအလျောက် တင်', variable=autopub).pack(side='left', padx=3)
 ttk.Label(f, text='လုပ်ပုံ: ① → ဖိုင်ကို Gemini "Pali Translate AI" app ထဲ upload → ▶ → *_translated.txt Downloads ထဲ ရောက်လျှင် ၅ စက္ကန့်တစ်ခါ အလိုလို ယူ → ③', foreground='#555').grid(row=4, column=0, columnspan=2, sticky='w')
 
