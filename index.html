@@ -369,6 +369,7 @@ const SAYOKESON_FILE = "sayokeson.json";
   let mmHtmlCache = {}, mmPagesCache = {}, mmBackContext = null, mmCurrentBookId = null, mmCurrentPageIdx = 1;
   let currentRows = [], currentRow = null, currentBookId = "", currentBookMeta = null, bookPagesCache = {};
 let isNissayaOpen = false;
+let nisViaList = false;    // နိဿယများ စာရင်းကနေ ဖွင့်ထားသည် - ထိပ်က လမ်းကြောင်းကို နိဿယများ › ... အတိုင်း ထားပြီး ဖုန်းတွင် နိဿယကို အပေါ်ဆုံးက ပြမည်
 let isMmSplitOpen = false, mmViaMm = false, mmSplitIndex = null, mmSplitCache = {}, mmSplitPendingPara = null;   // 📖 မြန်မာပြန် Split View (data/mm_split/<ပါဠိစာအုပ်>.json = {ပါဠိစာမျက်နှာ: မြန်မာပြန်html})
 // ဆိုင်ရာ ပါဠိစာအုပ်အတွက် နိဿယမူ တစ်မျိုးထက်ပိုရှိလျှင် ရွေးရန်။ စာရင်းက data/nissaya_editions.json ထဲမှာ (nissaya_multi/scripts/m_publish.py က အလိုအလျောက် ထည့်သည်)
 // { "mula_vi_01": [ {"label":"မူလနိဿယ","file":"mula_vi_01"}, {"label":"ဘုရားကြီးမူ","file":"mula_vi_01_bhurakyi"} ], ... }   (file = data/ ထဲက .html ဖိုင်အမည်၊ .html မပါ)
@@ -1709,7 +1710,7 @@ let isRomanPali = false;
         if(mm){
           const pdfUrl2 = (TP_BT_LOC[file] || TP_BT_BASE) + file + "#page=" + (n + (bk.page_offset || 0));
           tp_sayHideForPhone();
-          isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; nissayaFile = w.file;
+          isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; nisViaList = false; nissayaFile = w.file;
           nsyBtScroll = target;
           nsyBtPdf = { url: pdfUrl2, title: w.name + " — စာမျက်နှာ " + n };
           await tp_sayOpenRef(bookId, parseInt(tp_btToArabic(mm[1]), 10));
@@ -2558,7 +2559,7 @@ let isRomanPali = false;
 
   // ကျမ်းညွန်းကို နှိပ်လိုက်သောအခါ Split View ဘေးတခြမ်းတွင် သက်ဆိုင်ရာစာမျက်နှာကို ဖွင့်ပြရန်
   async function openXrefSplit(bookId, pageNum, highlightPara){
-    isNissayaOpen = isMmSplitOpen = mmViaMm = false;
+    isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false;
     const container = document.getElementById("tp-nissaya-container");
     const contentEl = document.getElementById("tp-nissaya-content");
     container.style.display = "block";
@@ -2890,7 +2891,7 @@ let isRomanPali = false;
     const books = idx.books.filter(b=>b.basket===basketId && b.category===categoryId);
     const html = books.map(b=> `<div class="tp-card" data-book="${b.id}" data-firstpage="${b.firstpage}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ</span></div>`).join("");
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
-    document.querySelectorAll("[data-book]").forEach(el=> el.addEventListener("click", ()=> { isNissayaOpen = isMmSplitOpen = mmViaMm = false; loadPage(basketId, categoryId, el.dataset.book, parseInt(el.dataset.firstpage,10), parseInt(el.dataset.firstpage,10)); }));
+    document.querySelectorAll("[data-book]").forEach(el=> el.addEventListener("click", ()=> { isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false; loadPage(basketId, categoryId, el.dataset.book, parseInt(el.dataset.firstpage,10), parseInt(el.dataset.firstpage,10)); }));
     setParams({basket: basketId, category: categoryId});
   }
 
@@ -3002,7 +3003,7 @@ let isRomanPali = false;
     const books = (await nissayaBooksIn(idx)).filter(b => b.basket === basketId && b.category === categoryId);
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-book="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ${(TP_NISSAYA_EDITIONS[b.id] || []).length > 1 ? " · နိဿယမူ " + toMyanmarDigits(TP_NISSAYA_EDITIONS[b.id].length) + " မျိုး" : ((TP_NISSAYA_EDITIONS[b.id] || [])[0] && TP_NISSAYA_EDITIONS[b.id][0].label ? " · " + TP_NISSAYA_EDITIONS[b.id][0].label : "")}</span><button class="tp-dl-btn" data-dlnis="${b.id}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
     wireNisDownloadButtons(async key => books.filter(b => b.id === key));
-    document.querySelectorAll("[data-book]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.book); isNissayaOpen = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
+    document.querySelectorAll("[data-book]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.book); isNissayaOpen = true; nisViaList = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
     setParams({basket: "nissaya", category: basketId + ":" + categoryId});
   }
   async function fetchBookPages(bookId){ return fetchJson(cdnUrl(`${DATA_FOLDER}/${bookId}.json`)); }
@@ -3051,13 +3052,13 @@ let isRomanPali = false;
   async function openMmSplitFromMm(mmBookId, paliPage, para){
     await ensureMmSplitIndex(); const ent = mmSplitEntryByMm(mmBookId); if(!ent) return false;
     const idx = await ensureIndex(); const meta = idx.books.find(b => b.id === ent.pali); if(!meta) return false;
-    isNissayaOpen = false; isMmSplitOpen = true; mmViaMm = true; mmSplitPendingPara = para != null ? para : null;
+    isNissayaOpen = false; nisViaList = false; isMmSplitOpen = true; mmViaMm = true; mmSplitPendingPara = para != null ? para : null;
     await loadPage(meta.basket, meta.category, meta.id, Math.max(paliPage || 1, ent.start || 1, meta.firstpage || 1), meta.firstpage);
     return true;
   }
   // မြန်မာပြန်ကို ပါဠိစာမျက်နှာနံပါတ်အတိုင်း ဘေးတခြမ်းမှာ ပြမည် (နိဿယ Split View နေရာကိုပဲ မျှသုံး)
   async function openMmSplit(bookId, pageNum, para) {
-      isMmSplitOpen = true; isNissayaOpen = false;
+      isMmSplitOpen = true; isNissayaOpen = false; nisViaList = false;
       if(para == null){ para = mmSplitPendingPara; } mmSplitPendingPara = null;
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
@@ -3085,7 +3086,7 @@ let isRomanPali = false;
         container.dataset.closeWired = "1";
         document.getElementById("tp-nissaya-close").addEventListener("click", () => {
             container.style.display = "none";
-            isNissayaOpen = isMmSplitOpen = mmViaMm = false;
+            isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false;
         });
       }
   }
@@ -3257,7 +3258,7 @@ let isRomanPali = false;
         container.dataset.closeWired = "1";
         document.getElementById("tp-nissaya-close").addEventListener("click", () => {
             container.style.display = "none";
-            isNissayaOpen = isMmSplitOpen = mmViaMm = false;
+            isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false;
         });
       }
   }
@@ -3560,9 +3561,10 @@ let isRomanPali = false;
           const ent = mmSplitIndex[bookId]; let mid = ent && ent.mm;
           if(ent && ent.mms){ let best = -1; for(const [k, v] of Object.entries(ent.mms)){ if(v <= pageNum && v > best){ best = v; mid = k; } } }
           const bm = mid && burmeseBookMeta[mid];
-          if(bm) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = false; showMmCategories();}}, {label: MM_CATEGORY_LABELS[bm.category] || bm.category, onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = false; showMmBookList(bm.category);}}, {label: bm.title || mid}];
+          if(bm) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false; showMmCategories();}}, {label: MM_CATEGORY_LABELS[bm.category] || bm.category, onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false; showMmBookList(bm.category);}}, {label: bm.title || mid}];
         }catch(e){ mmCrumbs = null; }
       }
+      if(!mmCrumbs && isNissayaOpen && nisViaList) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showNissayaSubjects(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showNissayaBooks(basketId, categoryId);}}, {label: bookMeta.name || bookId}];     // နိဿယများ စာရင်းကနေ ဖွင့်ထားလျှင် လမ်းကြောင်းကို နိဿယများအတိုင်းပဲ ထား
       renderBreadcrumb(mmCrumbs || [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}}, {label: bookMeta.name || bookId}]);
       if(!row){ document.getElementById("tp-view").innerHTML = `<p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`; return; }
 
@@ -3598,7 +3600,7 @@ let isRomanPali = false;
         
         <div id="tp-meta">${citationText(bookMeta, row.page)}</div>
         
-        <div id="tp-split-wrapper"${(isMmSplitOpen && mmViaMm) ? ' class="mm-first"' : ''}>
+        <div id="tp-split-wrapper"${((isMmSplitOpen && mmViaMm) || (isNissayaOpen && nisViaList)) ? ' class="mm-first"' : ''}>
           <div id="tp-content" class="tp-split-pane">${buildStitchedPageHtml(currentRows, row, pageNum, bookMeta)}</div>
           <div id="tp-nissaya-container" class="tp-split-pane">
              <div id="tp-nissaya-header" style="justify-content: flex-end; border-bottom: none; background: transparent; padding-bottom: 0;">
