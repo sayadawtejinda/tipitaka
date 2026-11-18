@@ -35,8 +35,8 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print):
         nums = [k for k in range(r0, r1 + 1) if k in pages]
         texts = []; missing = []
         for k in nums:
-            if k in col: texts.append('--- နိဿယ စာမျက်နှာ %d ---' % k + NL + col[k].strip())
-            elif raw_ok: texts.append('--- နိဿယ စာမျက်နှာ %d (Gemini မစစ်ရသေး) ---' % k + NL + (pages[k]['body'] + (NL + pages[k]['foot'] if pages[k].get('foot') else '')).strip()); raw_used.add(k)
+            if k in col: texts.append('[နိဿယ မျက်နှာ %d]' % k + NL + col[k].strip())
+            elif raw_ok: texts.append('[နိဿယ မျက်နှာ %d (Gemini မစစ်ရသေး)]' % k + NL + (pages[k]['body'] + (NL + pages[k]['foot'] if pages[k].get('foot') else '')).strip()); raw_used.add(k)
             else: missing.append(k)
         if missing: left_out.append((g[1], missing)); continue
         pali = NL.join(b['pali'] for b in sorted(blocks.get(g, []), key=lambda b: b['i']))

@@ -33,9 +33,7 @@ def refresh_books():        # a book that run_tool publishes later appears here 
         if n == keep: cb.current(i)
     say('📚 စာအုပ်စာရင်း ပြောင်းသည် — web တင်ပြီးသော စာအုပ် %d အုပ်' % len(sheets))
 r = ttk.Frame(f); r.grid(row=1, column=0, columnspan=2, sticky='w', pady=6)
-ttk.Label(r, text='ပါဠိစာမျက်နှာ').pack(side='left'); pl = ttk.Entry(r, width=5); pl.pack(side='left', padx=3); pl.insert(0, '1')
-ttk.Label(r, text='မှ').pack(side='left'); ph = ttk.Entry(r, width=5); ph.pack(side='left', padx=3); ph.insert(0, '20')
-ttk.Label(r, text='ထိ    အစုတစ်စု စာလုံးရေ အများဆုံး').pack(side='left'); mc = ttk.Entry(r, width=6); mc.pack(side='left', padx=3); mc.insert(0, '10000')
+ttk.Label(r, text='စာအုပ်တစ်အုပ်လုံး ထုတ်မည်။    အစုတစ်စု စာလုံးရေ အများဆုံး').pack(side='left'); mc = ttk.Entry(r, width=6); mc.pack(side='left', padx=3); mc.insert(0, '10000')
 ttk.Label(r, text='   ဖိုင်တစ်ခုမှာ အစု').pack(side='left'); ns = ttk.Entry(r, width=3); ns.pack(side='left', padx=3); ns.insert(0, '10')
 raw = tk.BooleanVar(value=False)
 ttk.Checkbutton(f, text='Gemini မစစ်ရသေးသော နိဿယစာမျက်နှာကို OCR စာဖြင့် ထည့် (မခြစ်လျှင် စစ်ပြီးသော နိဿယသာ ယူ၊ မစစ်ရသေးလျှင် ထိုပါဠိမျက်နှာကို ချန်)', variable=raw).grid(row=2, column=0, columnspan=2, sticky='w')
@@ -48,9 +46,9 @@ def sel():
     return sheets[cb.current()][0]
 
 
-def work1(n, a, b, m, k):
+def work1(n, m, k):
     try:
-        out, files = t_core.build(n, a, b, m, k, raw.get(), say)
+        out, files = t_core.build(n, 1, 10 ** 6, m, k, raw.get(), say)
         say('✔ ဖိုင် %d ခု ထွက်ပါပြီ — ဖိုင်ကို Gemini Canvas "Pali Translate AI" app ထဲ upload လုပ်ပြီး ခလုပ်တစ်ခါနှိပ်ပါ (ပြီးလျှင် ရလဒ်ကို Downloads ထဲ ချမည်၊ ဤကိရိယာက ယူပါလိမ့်မည်)' % len(files))
         if files: os.startfile(out)
     except BaseException as e: say('အမှား: %r' % e)
@@ -58,10 +56,10 @@ def work1(n, a, b, m, k):
 
 
 def go1():
-    try: a, b, m, k = int(pl.get()), int(ph.get()), max(1000, int(mc.get())), max(1, int(ns.get()))
+    try: m, k = max(1000, int(mc.get())), max(1, int(ns.get()))
     except ValueError: return messagebox.showerror('', 'ဂဏန်း ထည့်ပါ')
     n = sel(); b1.config(state='disabled'); say('ဖိုင်ထုတ်နေသည်...')
-    threading.Thread(target=work1, args=(n, a, b, m, k), daemon=True).start()
+    threading.Thread(target=work1, args=(n, m, k), daemon=True).start()
 
 
 def export():

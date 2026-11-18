@@ -31,7 +31,11 @@ rep = [
     ("const name = base + '_checked.txt';", "const name = base + '_translated.txt';"),
     ('--- နိဿယ စာမျက်နှာ ${p.page_number} ---', '--- စာမျက်နှာ ${p.page_number} ---'),
     ('"--- နိဿယ စာမျက်နှာ N ---" ခြားပြီး', '"--- စာမျက်နှာ N ---" ခြားပြီး'),
-    ('(?:နိဿယ)?' + BS + 's*စာမျက်နှာ', '(?:ပါဠိ|နိဿယ)?' + BS + 's*စာမျက်နှာ'),
+    ('(?:နိဿယ)?' + BS + 's*စာမျက်နှာ', '(?:)' + BS + 's*စာမျက်နှာ'),      # ONLY "--- စာမျက်နှာ N ---" counts as an input page (the nissaya page markers are [နိဿယ မျက်နှာ K])
+    ('အစု ${qi + 1}/${queue.length} စစ်မည်', 'အစု ${qi + 1}/${queue.length} ပြန်မည်'),
+    ("l.innerText = 'စစ်မည်'", "l.innerText = 'မြန်မာပြန်မည်'"),
+    ('<span id="checkLabel" class="truncate">စစ်မည်</span>', '<span id="checkLabel" class="truncate">မြန်မာပြန်မည်</span>'),
+    ('else l.innerText = `အစု ${qi + 1}/${queue.length} ပြန်မည်`;', 'else l.innerText = `အစု ${qi + 1}/${queue.length} ပြန်မည်`;' + chr(10) + "            { const bt = document.getElementById('checkBtn'), fin = !!queue.length && qi >= queue.length; ['bg-emerald-700', 'hover:bg-emerald-800'].forEach(c => bt.classList.toggle(c, fin)); ['bg-amber-700', 'hover:bg-amber-800'].forEach(c => bt.classList.toggle(c, !fin)); }  // orange while sets are left, GREEN when all are done"),
 ]
 for o, n in rep:
     if o not in s: print('NOT FOUND:', o[:60])

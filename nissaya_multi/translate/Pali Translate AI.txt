@@ -41,7 +41,7 @@
                     <button id="checkBtn" onclick="analyzeNissaya()"
                         class="flex-1 min-w-0 bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200 flex items-center justify-center gap-2 cursor-pointer">
                         <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span id="checkLabel" class="truncate">စစ်မည်</span>
+                        <span id="checkLabel" class="truncate">မြန်မာပြန်မည်</span>
                     </button>
                     <button onclick="downloadResult(false)" title="ရလဒ်ဖိုင် ဒေါင်းလုပ်ချမည် (အလိုအလျောက် မချလျှင် ကိုယ်တိုင်ချပါ)"
                         class="bg-sky-700 hover:bg-sky-800 text-white px-4 rounded-lg transition duration-200 flex items-center justify-center cursor-pointer">
@@ -160,6 +160,7 @@
 - "--- စာမျက်နှာ N ---" = ပါဠိစာမျက်နှာ N အစ။ (N သည် ဂဏန်း)
 - "### ပါဠိ" အောက်ရှိစာ = ပါဠိတော်/အဋ္ဌကထာ/ဋီကာ မူရင်းစာ (ပြန်ရမည့်စာ)။
 - "### နိဿယ" အောက်ရှိစာ = ထိုပါဠိစာမျက်နှာနှင့် ကိုက်ညီသော မြန်မာ နိဿယ (ပါဠိစကားလုံး ၊ မြန်မာအနက် ။ ပုံစံ)။ ဤ နိဿယသည် အလွန်ယုံကြည်ရသော အနက်ကိုးကားစာ ဖြစ်သည်။ OCR စာလုံးပေါင်းအမှား အနည်းငယ် ပါနိုင်သည်။ ထို့ကြောင့် ရှင်းလင်းစွာ မှားနေသည်ကို တွေ့လျှင် ပါဠိမူရင်းအတိုင်း နားလည်ပါ။ နိဿယ မပါလျှင် (ဗလာ) ပါဠိမှ တိုက်ရိုက်ပြန်ပါ။
+- နိဿယထဲရှိ "[နိဿယ မျက်နှာ K]" သည် နိဿယစာအုပ်၏ မျက်နှာနံပါတ် အမှတ်အသားသာ ဖြစ်သည် (ရလဒ်စာမျက်နှာ မဟုတ်)။ ပါဠိစာမျက်နှာ တစ်ခုအတွက် နိဿယမျက်နှာ အများအပြား ပါနိုင်သည်၊ ၎င်းတို့ကို ပေါင်း၍ ထိုပါဠိစာမျက်နှာတစ်ခုတည်းကိုသာ ပြန်ပါ။
 - "===== အစု N / M =====" သည် အစုခြားသည့် မှတ်သားချက်သာ။
 
 ## ၂။ ဘာသာပြန်ရေးပုံ
@@ -172,7 +173,8 @@
 (ဆ) ဓမ္မဝေါဟာရ (ဥပမာ ကုသလ၊ အကုသလ၊ ခန္ဓာ၊ ဓာတ်၊ ဝေဒနာ၊ ဥပါဒါန်) ကို မြန်မာတွင် လူသုံးများသော ပိဋကတ်ဝေါဟာရ အတိုင်း ထားပါ။ အဓိပ္ပာယ်ကို ရှင်းမပြပါနှင့်။
 (ဇ) စာအသွား - ပိဋကတ်စာပေ မြန်မာပြန်အသုံးအနှုန်း၊ ရိုသေသော၊ ကျစ်လစ်သော စာရေးဟန် ("ဘုရားရှင်", "ရဟန်းတို့", "…၏", "…သည်", "…၏ ဟု") ဖြင့် ရေးပါ။ ခေတ်ပေါ် ပြောစကား မသုံးပါနှင့်။ ပါဠိအနက်မှ ပိုမိုရှည်ရန် လိုလျှင်သာ ရှင်းလင်းစွာ ရေးပါ။
 (ဈ) စာအမှားများ (ရှေ့/နောက်စာမျက်နှာ မှ ပြတ်သွားသော ဝါကျ) ပါလျှင် ပါသလောက်သာ ပြန်ပါ၊ ပြတ်နေသည်ကို "…" ဖြင့် ပြပါ။ ပြန်မထည့်ပါနှင့်။
-(ည) အစီအစဉ် - စာမျက်နှာများကို ထည့်သွင်းသော အတိုင်း စာမျက်နှာအားလုံး ပြန်ပါ။ စာမျက်နှာတစ်ခုမျှ မကျန်စေရ၊ စာတိုချုံ့ခြင်း၊ "..." ဖြင့် ဖြတ်ခြင်း မလုပ်ရ။
+(ည) **ရလဒ်စာမျက်နှာ = ပါဠိစာမျက်နှာ** - ထည့်သွင်းသော "--- စာမျက်နှာ N ---" တစ်ခုလျှင် "pages" ထဲတွင် ရလဒ် တစ်ခုတည်း (page_number = N)၊ ထို ပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို တစ်ခုတည်း၌ ပြည့်စုံစွာ ရေးပါ။ နိဿယမျက်နှာ နံပါတ်ဖြင့် ရလဒ်မခွဲပါနှင့်၊ ပါဠိစာမျက်နှာ ၂ ခုကို ပေါင်း၍လည်း မရေးပါနှင့်။ ရလဒ်ပါ pages အရေအတွက်သည် ထည့်သွင်းသော "--- စာမျက်နှာ N ---" အရေအတွက်နှင့် အတိအကျ တူရမည်။
+(ဋ) အစီအစဉ် - စာမျက်နှာများကို ထည့်သွင်းသော အတိုင်း စာမျက်နှာအားလုံး ပြန်ပါ။ စာမျက်နှာတစ်ခုမျှ မကျန်စေရ၊ စာတိုချုံ့ခြင်း၊ "..." ဖြင့် ဖြတ်ခြင်း မလုပ်ရ။
 
 ## ၃။ မသေချာမှု "uncertain"
 အောက်ပါ နေရာများကိုသာ "uncertain" တွင် တစ်ကြောင်းစီ ရေးပါ (အလွန်များလျှင် အများဆုံး ၁၀ ခု)။ အရေးမကြီးသော နေရာများ မရေးပါနှင့်။
@@ -200,7 +202,7 @@
         function toInt(s) { return parseInt(String(s).replace(/[၀-၉]/g, d => BURMESE_DIGITS.indexOf(d)), 10); }
         function inputPageNumbers(text) {
             const nums = [];
-            const re = /^[-\s]*(?:ပါဠိ|နိဿယ)?\s*စာမျက်နှာ[\s-]*([0-9၀-၉]+)[\s-]*$/gm;
+            const re = /^[-\s]*(?:)\s*စာမျက်နှာ[\s-]*([0-9၀-၉]+)[\s-]*$/gm;
             let m; while ((m = re.exec(text)) !== null) nums.push(toInt(m[1]));
             return nums;
         }
@@ -216,7 +218,7 @@
         }
         // how much is in the input: sets, nissaya pages and characters (all sets / the set that is checked next)
         function setStats(t) {
-            const pages = (t.match(/^[-\s]*(?:ပါဠိ|နိဿယ)?\s*စာမျက်နှာ[\s-]*[0-9၀-၉]+[\s-]*$/gm) || []).length;
+            const pages = (t.match(/^[-\s]*(?:)\s*စာမျက်နှာ[\s-]*[0-9၀-၉]+[\s-]*$/gm) || []).length;
             return { pages: pages, chars: t.length };
         }
         function updateInfo() {
@@ -232,9 +234,10 @@
         function updateLabel() {
             const l = document.getElementById('checkLabel');
             setTimeout(updateInfo, 0);
-            if (!queue.length) l.innerText = 'စစ်မည်';
+            if (!queue.length) l.innerText = 'မြန်မာပြန်မည်';
             else if (qi >= queue.length) l.innerText = `အစု ${queue.length}/${queue.length} ✔ ပြီးပြီ`;
-            else l.innerText = `အစု ${qi + 1}/${queue.length} စစ်မည်`;
+            else l.innerText = `အစု ${qi + 1}/${queue.length} ပြန်မည်`;
+            { const bt = document.getElementById('checkBtn'), fin = !!queue.length && qi >= queue.length; ['bg-emerald-700', 'hover:bg-emerald-800'].forEach(c => bt.classList.toggle(c, fin)); ['bg-amber-700', 'hover:bg-amber-800'].forEach(c => bt.classList.toggle(c, !fin)); }  // orange while sets are left, GREEN when all are done
         }
         document.addEventListener('DOMContentLoaded', () => {
             try {
