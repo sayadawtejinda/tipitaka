@@ -7,7 +7,7 @@ Text of every nissaya page:  Gemini answer (gold/gemini/NNN_collected.json)  >  
 2. bold Pali: m_pair.pali_spans on the final paragraph text.
 3. 🔖: the place where every Pali page starts inside the nissaya (marks of paired/NNN.json); in a Gemini text it is searched again by the words that followed the mark.
 Output per Pali page:  {"pali_page": N, "npages": [first, last], "html": "..."}  - nissaya page breaks are dotted lines."""
-import sys, os, re, json, difflib, html as _html
+import glob, sys, os, re, json, difflib, html as _html
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE); sys.path.insert(0, HERE); sys.path.insert(0, os.path.dirname(ROOT))
 import m_pair, m_sandhi
 W = re.compile('[က-အဣ-ဿ၌၍၏]+')
@@ -350,6 +350,13 @@ if __name__ == '__main__':
             _q = _c.execute('select name from nsy_books where id=?', (_f['nsy_id'],)).fetchone(); edition = _q[0] if _q else None
         except Exception: edition = None
     edition = edition or ('နိဿယ-%s' % n)
+    for _mp in glob.glob(os.path.join(outdir, '*.meta.json')):     # the web files an EARLIER build of this sheet made (another edition name -> another file name) are removed, so the sheet never gets published twice
+        try:
+            _m = json.load(open(_mp, encoding='utf-8'))
+            if _m.get('sheet') == n:
+                for _x in (os.path.join(outdir, _m['file'] + '.html'), _mp):
+                    if os.path.exists(_x): os.remove(_x)
+        except Exception: pass
     for book in sorted({b for b, _ in per}):                    # a sheet that covers two books (e.g. 113: attha_ma_01_01 + attha_ma_01_02) gives one web file per book
         path, slug = write_web_html(n, per, book, edition, outdir)
         json.dump({'book': book, 'edition': edition, 'file': os.path.splitext(os.path.basename(path))[0], 'sheet': n}, open(os.path.join(outdir, '%s_%s.meta.json' % (book, slug)), 'w', encoding='utf-8'), ensure_ascii=False)

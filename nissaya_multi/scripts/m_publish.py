@@ -33,7 +33,13 @@ def nice_label(edition):
 def _put_one(n, meta, dry, log):
     data = os.path.join(REPO, 'data')
     book, fname = meta['book'], meta['file']
-    edition = meta.get('edition') or ('နိဿယ-%s' % n)          # sheets without an edition name (347+) get a plain label
+    edition = meta.get('edition')
+    if not edition:                                       # no edition name on the sheet: the nissaya book name of the db (nsy_books.name), like m_final does
+        try:
+            import sqlite3; _f = [r for r in json.load(open(os.path.join(ROOT, 'catalog.json'), encoding='utf-8')) if r['n'] == n][0]['final']
+            _q = sqlite3.connect(os.path.join(REPO, '%s_nsy.db' % _f['db'])).execute('select name from nsy_books where id=?', (_f['nsy_id'],)).fetchone(); edition = _q[0] if _q else None
+        except Exception: edition = None
+    edition = edition or ('နိဿယ-%s' % n)                  # last resort: a plain label
     src = os.path.join(ROOT, 'web', fname + '.html')
     if not os.path.exists(src): raise RuntimeError('missing ' + src)
     dst = os.path.join(data, fname + '.html')
