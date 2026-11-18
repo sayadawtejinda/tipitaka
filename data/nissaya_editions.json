@@ -1500,5 +1500,19 @@
    "from": 1,
    "to": 216
   }
+ ],
+ "annya_vi_05_01": [
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "annya_vi_05_01_bhasatika",
+   "from": 131,
+   "to": 212
+  },
+  {
+   "label": "နိဿယ-351",
+   "file": "annya_vi_05_01_sheet351",
+   "from": 131,
+   "to": 212
+  }
  ]
 }
