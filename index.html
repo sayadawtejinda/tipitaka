@@ -3057,12 +3057,18 @@ let isRomanPali = false;
     return true;
   }
   // မြန်မာပြန်ကို ပါဠိစာမျက်နှာနံပါတ်အတိုင်း ဘေးတခြမ်းမှာ ပြမည် (နိဿယ Split View နေရာကိုပဲ မျှသုံး)
+  // ဖုန်း - နိဿယ/မြန်မာပြန် Split View ဖွင့်လျှင် ပါဠိအောက်မဟုတ်ဘဲ အပေါ်ဆုံးက ဦးစားပေးပြမည် (CSS က ≤768px မှာသာ သက်ရောက်)၊ အသစ်ဖွင့်ချိန် နိဿယအထိ scroll ပြန်တင်
+  function tp_splitFirst(c){
+    const w = document.getElementById("tp-split-wrapper"); if(w) w.classList.add("mm-first");
+    if(window.innerWidth <= 768 && c.style.display !== "block") setTimeout(() => { try{ c.scrollIntoView({block:"start"}); }catch(e){} }, 80);
+  }
   async function openMmSplit(bookId, pageNum, para) {
       isMmSplitOpen = true; isNissayaOpen = false; nisViaList = false;
       if(para == null){ para = mmSplitPendingPara; } mmSplitPendingPara = null;
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
       if(!container || !contentEl) return;
+      tp_splitFirst(container);
       container.style.display = "block";
       const edBox = document.getElementById("tp-nissaya-editions"); if(edBox) edBox.innerHTML = "";
       contentEl.classList.add("tp-mm-split");
@@ -3086,6 +3092,7 @@ let isRomanPali = false;
         container.dataset.closeWired = "1";
         document.getElementById("tp-nissaya-close").addEventListener("click", () => {
             container.style.display = "none";
+            const sw = document.getElementById("tp-split-wrapper"); if(sw) sw.classList.remove("mm-first");
             isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false;
         });
       }
@@ -3184,6 +3191,7 @@ let isRomanPali = false;
       await tp_loadEditions();
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
+      tp_splitFirst(container);
       container.style.display = "block";
       contentEl.classList.remove("tp-mm-split");
       contentEl.innerHTML = "<p class='tp-loading'>နိဿယ ဒေတာ ဆွဲယူနေပါသည်...</p>";
@@ -3258,6 +3266,7 @@ let isRomanPali = false;
         container.dataset.closeWired = "1";
         document.getElementById("tp-nissaya-close").addEventListener("click", () => {
             container.style.display = "none";
+            const sw = document.getElementById("tp-split-wrapper"); if(sw) sw.classList.remove("mm-first");
             isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = false;
         });
       }
@@ -3600,7 +3609,7 @@ let isRomanPali = false;
         
         <div id="tp-meta">${citationText(bookMeta, row.page)}</div>
         
-        <div id="tp-split-wrapper"${((isMmSplitOpen && mmViaMm) || (isNissayaOpen && nisViaList)) ? ' class="mm-first"' : ''}>
+        <div id="tp-split-wrapper"${(isMmSplitOpen || isNissayaOpen) ? ' class="mm-first"' : ''}>
           <div id="tp-content" class="tp-split-pane">${buildStitchedPageHtml(currentRows, row, pageNum, bookMeta)}</div>
           <div id="tp-nissaya-container" class="tp-split-pane">
              <div id="tp-nissaya-header" style="justify-content: flex-end; border-bottom: none; background: transparent; padding-bottom: 0;">
