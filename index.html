@@ -3106,7 +3106,14 @@ let isRomanPali = false;
       }
   }
   // 📋 နိဿယ ကူးယူရန် panel (floating) - ပါဠိစာမျက်နှာ (သို့) နိဿယစာအုပ်ကိုယ်ပိုင်စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ရွေး၍ စာသားသက်သက်ကို clipboard ထဲ ကူးပေးသည်
-  async function tp_nissayaCopyPanel(file, curPage, minP, maxP){
+  // the Burmese translation data of a book ({d: {page: text}, isHtml}) - the variant that is shown now (the first one when none is shown)
+  async function tp_trLoad(bookId){
+    const srcs = tp_trSources(bookId), src = srcs[Math.max(0, (nsyShowTr || 1) - 1)] || srcs[0]; if(!src) return null;
+    if(src.type === "mm"){ if(!mmSplitCache[bookId]) mmSplitCache[bookId] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${bookId}.json`)); return {d: mmSplitCache[bookId], isHtml: true}; }
+    let d = tpTrCache[src.file]; if(!d){ d = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/${src.file}?v=${Date.now()}`)); tpTrCache[src.file] = d; }
+    return {d, isHtml: false};
+  }
+  async function tp_nissayaCopyPanel(file, curPage, minP, maxP, bookId){
       let box = document.getElementById("tp-nsy-copybox");
       if (box) { box.remove(); return; }
       box = document.createElement("div"); box.id = "tp-nsy-copybox";
@@ -3114,7 +3121,8 @@ let isRomanPali = false;
       box.textContent = "ဆွဲယူနေသည်...";
       document.body.appendChild(box);
       let html;
-      try { html = await fetchText(cdnUrl(`${DATA_FOLDER}/${file}.html`)); } catch (e) { box.textContent = "မအောင်မြင်ပါ: " + e.message; return; }
+      const hasTrBook = !!bookId && tp_hasTr(bookId);
+      try { html = file ? await fetchText(cdnUrl(`${DATA_FOLDER}/${file}.html`)) : ""; } catch (e) { if(!hasTrBook){ box.textContent = "မအောင်မြင်ပါ: " + e.message; return; } html = ""; }
       const reOwn = /<p[^>]*>\(နိဿယစာအုပ် စာမျက်နှာ ([၀-၉]+)\)<\/p>/g, rePali = /\[စာမျက်နှာ-([၀-၉]+)\]/g;
       const own = [...html.matchAll(reOwn)], pali = [...html.matchAll(rePali)];
       const hasOwn = own.length > 0;
@@ -3124,6 +3132,7 @@ let isRomanPali = false;
         ${hasOwn ? `<label><input type="radio" name="tp-nsy-mode" value="pali" checked> ပါဠိစာမျက်နှာ</label> <label style="margin-left:10px"><input type="radio" name="tp-nsy-mode" value="own"> နိဿယစာအုပ်စာမျက်နှာ (${toMyanmarDigits(ownMin)} မှ ${toMyanmarDigits(ownMax)})</label><br>` : `<span style="opacity:.7">ပါဠိစာမျက်နှာ ${rng}</span><br>`}
         စာမျက်နှာ <input id="tp-nsy-from" type="number" min="1" value="${curPage}" style="width:5em"> မှ <input id="tp-nsy-to" type="number" min="1" value="${curPage}" style="width:5em"> ထိ <span id="tp-nsy-rng" style="opacity:.7;font-size:.85em">${rng}</span><br>
         <label><input id="tp-nsy-marks" type="checkbox" checked> စာမျက်နှာအမှတ်များ ပါမည်</label>
+        ${hasTrBook ? `<br><label>ကူးမည့်စာ <select id="tp-nsy-what"><option value="nsy"${html ? " selected" : " disabled"}>နိဿယ</option><option value="tr"${html ? "" : " selected"}>မြန်မာပြန်</option><option value="both"${html ? "" : " disabled"}>နိဿယ + မြန်မာပြန်</option></select></label>` : ""}
         <button id="tp-nsy-go" style="margin-left:8px;padding:2px 12px;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:#2a7a3a;color:#fff;">ကူးမည်</button>
         <span id="tp-nsy-msg" style="margin-left:8px"></span>`;
       box.querySelector("#tp-nsy-x").addEventListener("click", () => box.remove());
@@ -3136,6 +3145,7 @@ let isRomanPali = false;
       }));
       const toText = (seg) => { const d = document.createElement("div"); d.innerHTML = seg.replace(/<\/p>/gi, "</p>\n").replace(/<br\s*\/?>/gi, "\n"); return d.textContent; };
       const key30 = (txt) => txt.replace(/[\s၊။]+/g, "").slice(0, 30);
+      const trText = (tr, pg) => { const v = tr && tr.d[pg]; return v ? (tr.isHtml ? toText(v) : v).replace(/\n{3,}/g, "\n\n").trim() : ""; };      // the translation of page pg as plain text (headings "## " too)
       // နိဿယစာအုပ် စာမျက်နှာတစ်ခုက ပါဠိစာမျက်နှာ အများအပြားအောက်မှာ ထပ်ပါနေတတ်သည် - ကူးသည့်အခါ တစ်ခါပဲ ကူးမည်
       box.querySelector("#tp-nsy-go").addEventListener("click", async () => {
           try {
@@ -3144,7 +3154,11 @@ let isRomanPali = false;
               if (!(b >= a)) b = a;
               const withMarks = box.querySelector("#tp-nsy-marks").checked, isOwn = modeOf() === "own";
               const out = []; let got = 0;
-              if (!isOwn) {
+              const whatEl = box.querySelector("#tp-nsy-what"), what = whatEl ? whatEl.value : "nsy";
+              const tr = (what !== "nsy" && hasTrBook) ? await tp_trLoad(bookId) : null;
+              if (what === "tr" && !isOwn) {                      // translation only: Pali pages a .. b
+                  for (let pg = a; pg <= b; pg++) { const t = trText(tr, pg); if (!t) continue; out.push(withMarks ? `[စာမျက်နှာ-${toMyanmarDigits(pg)}] (မြန်မာပြန်)\n${t}` : t); got++; }
+              } else if (!isOwn) {
                   const seen = new Set();
                   pali.forEach((m, i) => {
                       const pg = parseInt(fromMyanmarDigits(m[1]), 10);
@@ -3160,6 +3174,7 @@ let isRomanPali = false;
                           txt += c;
                       }
                       txt = txt.replace(/\n{3,}/g, "\n\n").trim();
+                      if (what === "both") { const t2 = trText(tr, pg); if (t2) txt += (withMarks ? "\n\n(မြန်မာပြန်)\n" : "\n\n") + t2; }
                       out.push(withMarks ? `[စာမျက်နှာ-${m[1]}]\n${txt}` : txt); got++;
                   });
               } else {
@@ -3245,11 +3260,11 @@ let isRomanPali = false;
               edBox.querySelectorAll("[data-ed]").forEach(b => b.addEventListener("click", () => { nissayaFile = b.dataset.ed; nsyShowTr = 0; openNissaya(bookId, pageNum, keepMm); }));
           }
           if (edBox) {      // 📋 ကူးမည် - ဤမူမှ စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ကူးယူရန်
-              if(hasNsy){
+              if(hasNsy || tp_hasTr(bookId)){
               const cb = document.createElement("button");
               cb.textContent = "📋"; cb.title = "နိဿယကို စာမျက်နှာ အကွာအဝေးရွေး၍ ကူးယူမည်";
               cb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:transparent;color:#2a7a3a;";
-              cb.addEventListener("click", () => tp_nissayaCopyPanel(chosen ? chosen.file : bookId, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null));
+              cb.addEventListener("click", () => tp_nissayaCopyPanel(hasNsy ? (chosen ? chosen.file : bookId) : null, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null, bookId));
               edBox.appendChild(cb);
               }
               if (tp_hasTr(bookId)) {
