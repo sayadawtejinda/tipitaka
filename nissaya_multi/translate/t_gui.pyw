@@ -51,6 +51,24 @@ hidepub = tk.BooleanVar(value=load_state().get('hide_pub', True))
 def _json(path, default):
     try: return json.load(open(path, encoding='utf-8'))
     except Exception: return default
+import m_gcheck
+_GDF = os.path.join(HERE, 'gem_done_cache.json')
+try: _GD = json.load(open(_GDF, encoding='utf-8'))        # {sheet: [key, ok]} - kept between runs (the check reads big files: first time ~15 s, then instant)
+except Exception: _GD = {}
+def gemini_done(n):
+    """the nissaya of sheet n is completely checked by Gemini: pages collected, no page missing, no Gemini file still waiting (a book that is not checked yet is not translated)"""
+    cp = os.path.join(NSY, 'gold', 'gemini', '%03d_collected.json' % n)
+    try: key = [os.path.getmtime(cp), len(glob.glob(os.path.join(NSY, 'output', 'gemini', '%03d_*.txt' % n))), os.path.getmtime(os.path.join(NSY, 'paired', '%03d.json' % n))]
+    except OSError: return False
+    if _GD.get(str(n), [None, None])[0] == key: return _GD[str(n)][1]
+    try:
+        miss, waiting = m_gcheck.missing_pages(n)
+        ok = key[1] == 0 and not miss and len(json.load(open(cp, encoding='utf-8'))) > 0
+    except Exception: ok = False
+    _GD[str(n)] = [key, ok]
+    try: json.dump(_GD, open(_GDF, 'w', encoding='utf-8'))
+    except Exception: pass
+    return ok
 def get_sheets(keep=None):
     keep = keep if keep is not None else load_state().get('sheet')     # the book chosen / published last stays in the list (even when it would be hidden)
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
@@ -61,6 +79,7 @@ def get_sheets(keep=None):
     out = []
     for n, t in m_tool.list_sheets():
         if n not in pub: continue
+        if not gemini_done(n): continue                    # nissaya not (completely) checked by Gemini yet: not offered for translation
         b = bks.get(n) or []
         if n != keep and b and (all(x in mm for x in b) or all(x in done for x in b)): continue
         out.append((n, t))
