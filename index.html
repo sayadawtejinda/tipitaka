@@ -3080,9 +3080,7 @@ let isRomanPali = false;
           const idx = await ensureMmSplitIndex();
           if(!idx[bookId]){ contentEl.innerHTML = "<p style='color:#888'>ဒီစာအုပ်အတွက် မြန်မာပြန် Split View မရှိသေးပါ။</p>"; return; }
           if(!mmSplitCache[bookId]) mmSplitCache[bookId] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${bookId}.json`));
-          const html = mmSplitCache[bookId][String(pageNum)];
-          const title = `<div class="tp-page-divider">မြန်မာပြန် - စာမျက်နှာ ${toMyanmarDigits(pageNum)}</div>`;
-          contentEl.innerHTML = title + (html || "<p style='color:#888'>(ဤစာမျက်နှာတွင် စာပိုဒ်အသစ် မစပါ — ရှေ့စာမျက်နှာမှ ဆက်နေသည်)</p>");
+          await tp_renderTranslation(bookId, pageNum, contentEl, {type: "mm"});          // ၃ မျက်နှာ (အလယ် = လက်ရှိ၊ အပေါ်အောက် = ရှေ့/နောက်) - နိဿယ၏ "မြန်မာ" ခလုပ်နှင့် တူအောင်
           if(para != null){
               const want = toMyanmarDigits(para);
               const sp = Array.from(contentEl.querySelectorAll(".paragraph")).find(x => x.textContent.trim() === want);
@@ -3191,8 +3189,8 @@ let isRomanPali = false;
   // စာအုပ်တစ်အုပ်၏ မြန်မာပြန်များ: ရှိပြီးသား မြန်မာပြန် Split View (mm_split) ကို ဦးစွာ၊ ထို့နောက် Gemini မြန်မာပြန် (nissaya_translations) ဖိုင်တစ်ခုချင်းကို
   const tp_trSources = bookId => { const v = []; if(mmSplitIndex && mmSplitIndex[bookId]) v.push({type: "mm"}); (TP_TR_VARS[bookId] || []).forEach(f => v.push({type: "tr", file: f})); return v; };
   const tp_hasTr = bookId => tp_trSources(bookId).length > 0;
-  async function tp_renderTranslation(bookId, pageNum, contentEl){
-    const src = tp_trSources(bookId)[Math.max(0, nsyShowTr - 1)] || tp_trSources(bookId)[0];
+  async function tp_renderTranslation(bookId, pageNum, contentEl, forceSrc){
+    const src = forceSrc || tp_trSources(bookId)[Math.max(0, nsyShowTr - 1)] || tp_trSources(bookId)[0];
     let d = null, isHtml = false;
     if(src && src.type === "mm"){          // ရှိပြီးသား မြန်မာပြန် Split View (ပါဠိစာမျက်နှာအတိုင်း စီပြီးသား HTML)
       try{ if(!mmSplitCache[bookId]) mmSplitCache[bookId] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${bookId}.json`)); d = mmSplitCache[bookId]; isHtml = true; }catch(e){ d = null; }
@@ -3215,7 +3213,7 @@ let isRomanPali = false;
     if(prev){ html += `<div class="tp-adjacent-page">${body(prev)}</div>` + div(pageNum); }
     html += `<div id="tp-tr-current">${cur ? body(cur) : (isHtml ? "<p style='color:#888'>(ဤစာမျက်နှာတွင် စာပိုဒ်အသစ် မစပါ — ရှေ့စာမျက်နှာမှ ဆက်နေသည်)</p>" : "<p style='color:#999'>ဤစာမျက်နှာ၏ မြန်မာပြန် မရှိသေးပါ။</p>")}</div>`;
     if(next){ html += div(pageNum + 1) + `<div class="tp-adjacent-page">${body(next)}</div>`; }
-    contentEl.classList.remove("tp-mm-split"); contentEl.innerHTML = html; nsyEntries = [];
+    contentEl.classList.toggle("tp-mm-split", isHtml); contentEl.innerHTML = html; nsyEntries = [];
     const box = document.getElementById("tp-nissaya-container"), curEl = document.getElementById("tp-tr-current");
     if(box && curEl){ box.scrollTop = 0; box.scrollTop += curEl.getBoundingClientRect().top - box.getBoundingClientRect().top - 40; }      // လက်ရှိစာမျက်နှာ ထိပ်ဆုံးမှာ (အပေါ်က ရှေ့စာမျက်နှာအတွက် နေရာ အနည်းငယ်ချန်)
   }
