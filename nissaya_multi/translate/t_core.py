@@ -50,6 +50,8 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print):
         cur.append((g, t)); size += len(t)
     if cur: groups.append(cur)
     os.makedirs(OUT, exist_ok=True); files = []
+    for old in glob.glob(os.path.join(OUT, 'tr_%03d_*.txt' % n)):               # the earlier input files of THIS book are deleted first (so old and new are never mixed up)
+        os.remove(old); log('  🗑 ဖိုင်အဟောင်း ဖျက်ပြီး: ' + os.path.basename(old))
     for j in range(0, len(groups), sets):
         chunk = groups[j:j + sets]
         first, last = chunk[0][0][0], chunk[-1][-1][0]
