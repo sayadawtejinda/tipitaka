@@ -9409,10 +9409,14 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "113",
    "books": [
     "annya_vi_01_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess annya_vi_01_02 (0.18); database said -"
  },
@@ -9473,10 +9477,14 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "114",
    "books": [
     "annya_vi_01_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess annya_vi_01_02 (0.23); database said -"
  },
@@ -9515,10 +9523,14 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "111",
    "books": [
     "annya_vi_01_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess annya_vi_01_02 (0.42); database said -"
  },
@@ -9557,10 +9569,14 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "112",
    "books": [
     "annya_vi_01_02"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess annya_vi_01_02 (0.52); database said -"
  },
@@ -15185,18 +15201,14 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "117",
    "books": [
     "annya_vi_01_04"
    ],
-   "alt": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "006",
-    "books": [
-     "attha_vi_01_01"
-    ]
-   }
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess annya_vi_01_04 (0.41); database said ['attha_vi_01_01']"
  },
@@ -15212,10 +15224,14 @@
   "cand": [],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "118",
    "books": [
     "annya_vi_01_04"
-   ]
+   ],
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess annya_vi_01_04 (0.43); database said -"
  },
@@ -15875,18 +15891,14 @@
   ],
   "label": "နီ မူဋီ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "020",
    "books": [
     "tika_bi_01"
    ],
-   "alt": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "020",
-    "books": [
-     "attha_vi_03"
-    ]
-   }
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess tika_bi_01 (0.50); database said ['attha_vi_03']"
  },
@@ -15969,18 +15981,14 @@
   ],
   "label": "နီ မူဋီ",
   "final": {
-   "mode": "content",
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "021",
    "books": [
     "tika_bi_01"
    ],
-   "alt": {
-    "mode": "db",
-    "db": "attha",
-    "nsy_id": "021",
-    "books": [
-     "attha_vi_03"
-    ]
-   }
+   "offset": 0,
+   "as_is": true
   },
   "check": "content guess tika_bi_01 (0.54); database said ['attha_vi_03']"
  },
