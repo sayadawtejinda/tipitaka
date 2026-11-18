@@ -376,7 +376,7 @@ def _on_web(n):          # the book's web file is COMMITTED in the tipitaka repo
     except Exception: return False
 def _auto_missing(n):
     """a book that is being worked on (not on the web yet): the pages that Gemini has not checked and that wait in no file are put into new files (…_gap.txt) - no button needed"""
-    if not _miss_lock.acquire(blocking=False): return
+    _miss_lock.acquire()          # one book after the other (a book chosen while another is still being made waits its turn - nothing is dropped)
     try:
         if _on_web(n): return
         if m_gcheck.make_missing(n, say): say('  ➜ စာအုပ် %03d: မစစ်ရသေးသော စာမျက်နှာများအတွက် ဖိုင်အသစ် ထုတ်ပြီးပါပြီ' % n)
