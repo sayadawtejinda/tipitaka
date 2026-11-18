@@ -2867,9 +2867,20 @@ let isRomanPali = false;
     });
   }
 
+  // ပင်မစာမျက်နှာ "မြန်မာပြန်" ကဒ်ပေါ်က စာအုပ်အရေအတွက် = မြန်မာပြန်စာအုပ်များ (myanmar_books.json - ဆရာတော်များအုပ်စု မပါ) + Gemini ဖြင့် အသစ်မြန်မာပြန်ထည့်ထားသော စာအုပ်များ (data/nissaya_translations/index.json၊ ရှိပြီးသား Split View ရှိသော စာအုပ်ကို နှစ်ခါ မရေ) - အသစ်ထည့်တိုင်း အလိုလို ပေါင်းသွားသည်
+  async function mmHomeCount(){
+    try{
+      const books = await fetchJson(cdnUrl(BURMESE_BOOKS_FILE));
+      const base = books.filter(b => !["other", "mbv", "paauk"].includes(mmCategoryFromId(b.id))).length;
+      await ensureNissayaIds(); try{ await ensureMmSplitIndex(); }catch(e){}
+      const extra = [...TP_TR_BOOKS].filter(b => !(mmSplitIndex && mmSplitIndex[b])).length;
+      return base + extra;
+    }catch(e){ return null; }
+  }
   async function showBaskets(){
     setFloatSearchVisible(true); const idx = await ensureIndex(); const nisBooks = await nissayaBooksIn(idx); renderBreadcrumb([{label:"တိပိဋက"}]);
-    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${nisCountText(nisBooks)}</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div>`;
+    const mmN = await mmHomeCount();
+    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${nisCountText(nisBooks)}</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်${mmN != null ? `<span class="tp-count">${toMyanmarDigits(mmN)} အုပ်</span>` : ""}</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div>`;
     let last = null; try{ last = JSON.parse(localStorage.getItem("tp_last_read")); }catch(e){}
     const resume = last && last.name ? `<div class="tp-resume" style="margin:0 0 14px;padding:10px 14px;border:2px solid #5a8f6c;border-radius:10px;background:#eef3ea;cursor:pointer;color:#2d5c3d;font-weight:bold;">📌 ဆက်ဖတ်ရန် — ${last.name}<span style="font-weight:normal;color:#666;"> (${last.type === "mm" ? "စာမျက်နှာ " + toMyanmarDigits(last.pageIdx || 1) : "စာမျက်နှာ " + toMyanmarDigits(last.pageNum || 1)})</span></div>` : "";
     document.getElementById("tp-view").innerHTML = resume + `<div class="tp-grid">${html}</div>`;
