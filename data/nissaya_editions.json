@@ -1389,6 +1389,12 @@
    "file": "attha_an_02_sheet128",
    "from": 69,
    "to": 200
+  },
+  {
+   "label": "မိုးထိမူ (ဒု)",
+   "file": "attha_an_02_sheet127",
+   "from": 1,
+   "to": 67
   }
  ],
  "attha_sa_04": [
@@ -1401,6 +1407,18 @@
    "file": "attha_sa_04_sheet124",
    "from": 1,
    "to": 152
+  }
+ ],
+ "attha_an_01": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "attha_an_01"
+  },
+  {
+   "label": "မိုးထိမူ (ဒု)",
+   "file": "attha_an_01_sheet127",
+   "from": 261,
+   "to": 416
   }
  ]
 }
