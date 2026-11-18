@@ -2550,6 +2550,17 @@
    "edition_of": "tika_vi_04"
   },
   {
+   "id": "tika_vi_04_sheet191",
+   "title": "ဝဇိရဗုဒ္ဓိဋီကာ (ဆင်တဲမူ (ဒု))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4957761,
+   "date": "2026-11-18",
+   "edition_of": "tika_vi_04"
+  },
+  {
    "id": "tika_vi_05",
    "title": "ဝိမတိဝိနောဒနီဋီကာ (ပ)",
    "basket": "ဋီကာ",
@@ -3061,5 +3072,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 188
+ "n_editions": 189
 }
