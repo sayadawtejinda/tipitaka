@@ -2677,6 +2677,17 @@
    "edition_of": "tika_bi_03"
   },
   {
+   "id": "annya_vi_01_01_bhasatika",
+   "title": "ဒွေမာတိကာ (ဘာသာဋီကာ)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "ဝိနည်းဆိုင်ရာ",
+   "cat_key": "vi",
+   "size": 2854585,
+   "date": "2026-11-18",
+   "edition_of": "annya_vi_01_01"
+  },
+  {
    "id": "annya_vi_01_02_sheet429",
    "title": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ (ဘာသာဋီကာ (ပ))",
    "basket": "အည",
@@ -3006,5 +3017,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 183
+ "n_editions": 184
 }
