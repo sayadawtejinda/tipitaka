@@ -1514,5 +1514,13 @@
    "from": 131,
    "to": 212
   }
+ ],
+ "annya_vi_01_01": [
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "annya_vi_01_01_bhasatika",
+   "from": 1,
+   "to": 129
+  }
  ]
 }
