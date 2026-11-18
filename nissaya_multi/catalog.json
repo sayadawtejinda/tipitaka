@@ -10456,7 +10456,8 @@
    "nsy_id": "048",
    "books": [
     "attha_di_02"
-   ]
+   ],
+   "offset": 19
   },
   "check": "db+content agree"
  },
@@ -10865,7 +10866,8 @@
    "nsy_id": "055",
    "books": [
     "attha_di_03"
-   ]
+   ],
+   "offset": 0
   },
   "check": "db+content agree"
  },
@@ -13764,7 +13766,8 @@
    "nsy_id": "113",
    "books": [
     "attha_ku_20"
-   ]
+   ],
+   "offset": 0
   },
   "check": "db+content agree"
  },
