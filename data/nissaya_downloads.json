@@ -1336,6 +1336,17 @@
    "edition_of": "attha_di_01"
   },
   {
+   "id": "attha_di_01_sheet100",
+   "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (နေရင်းမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 4468099,
+   "date": "2026-11-17",
+   "edition_of": "attha_di_01"
+  },
+  {
    "id": "attha_di_02",
    "title": "မဟာဝဂ္ဂဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -2764,5 +2775,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 161
+ "n_editions": 162
 }
