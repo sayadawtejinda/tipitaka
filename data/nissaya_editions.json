@@ -157,16 +157,16 @@
    "file": "attha_di_03"
   },
   {
-   "label": "ပခုက္ကူမူ",
-   "file": "attha_di_03_sheet110",
-   "from": 1,
-   "to": 251
-  },
-  {
    "label": "ဘာဋီ",
    "file": "attha_di_03_sheet111",
    "from": 1,
    "to": 100
+  },
+  {
+   "label": "ပခုက္ကူ",
+   "file": "attha_di_03_sheet110",
+   "from": 1,
+   "to": 251
   }
  ],
  "annya_bi_01": [
