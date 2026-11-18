@@ -1156,5 +1156,17 @@
    "from": 1,
    "to": 58
   }
+ ],
+ "mula_ku_17": [
+  {
+   "label": "မူလနိဿယ",
+   "file": "mula_ku_17"
+  },
+  {
+   "label": "မိုးထိမူ",
+   "file": "mula_ku_17_sheet056",
+   "from": 1,
+   "to": 307
+  }
  ]
 }
