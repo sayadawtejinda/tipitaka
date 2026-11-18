@@ -991,6 +991,39 @@
    "edition_of": "mula_bi_07_02"
   },
   {
+   "id": "mula_bi_07_03_sheet075",
+   "title": "ပဋ္ဌာနပါဠိ (တ) (အရှင်နန္ဒမေဓာမူ (စတု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2916833,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_07_03"
+  },
+  {
+   "id": "mula_bi_07_04_sheet075",
+   "title": "ပဋ္ဌာနပါဠိ (စ) (အရှင်နန္ဒမေဓာမူ (စတု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2741348,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_07_04"
+  },
+  {
+   "id": "mula_bi_07_05_sheet075",
+   "title": "ပဋ္ဌာနပါဠိ (ပဉ္စ) (အရှင်နန္ဒမေဓာမူ (စတု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2349929,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_07_05"
+  },
+  {
    "id": "attha_vi_01_01",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -2643,5 +2676,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 150
+ "n_editions": 153
 }
