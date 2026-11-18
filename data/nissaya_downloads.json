@@ -1132,6 +1132,17 @@
    "edition_of": "attha_vi_01_02"
   },
   {
+   "id": "attha_vi_01_02_sheet081",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု) (မအူမူ (စ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 7520882,
+   "date": "2026-11-17",
+   "edition_of": "attha_vi_01_02"
+  },
+  {
    "id": "attha_vi_02",
    "title": "ပါစိတ္တိယအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -2709,5 +2720,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 156
+ "n_editions": 157
 }
