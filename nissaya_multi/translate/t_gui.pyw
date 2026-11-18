@@ -18,16 +18,46 @@ def published():        # only books whose checked web file is already in the ti
             if os.path.exists(os.path.join(TIPI, 'data', m['file'] + '.html')): out.add(int(m['sheet']))
         except Exception: pass
     return out
-def get_sheets():
-    pub = published(); return [(n, t) for n, t in m_tool.list_sheets() if n in pub]
+STATE = os.path.join(HERE, 'gui_state.json')
+def load_state():
+    try: return json.load(open(STATE, encoding='utf-8'))
+    except Exception: return {}
+def save_state(**kw):
+    st = load_state(); st.update(kw)
+    try: json.dump(st, open(STATE, 'w', encoding='utf-8'))
+    except Exception: pass
+hidepub = tk.BooleanVar(value=load_state().get('hide_pub', True))
+def _json(path, default):
+    try: return json.load(open(path, encoding='utf-8'))
+    except Exception: return default
+def get_sheets(keep=None):
+    """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
+    pub = published()
+    mm = set(_json(os.path.join(TIPI, 'data', 'mm_split', 'index.json'), {}))
+    done = set(_json(os.path.join(TIPI, 'data', 'nissaya_translations', 'index.json'), [])) if hidepub.get() else set()
+    bks = {r['n']: (r.get('final') or {}).get('books') or [] for r in _json(os.path.join(NSY, 'catalog.json'), [])}
+    out = []
+    for n, t in m_tool.list_sheets():
+        if n not in pub: continue
+        b = bks.get(n) or []
+        if n != keep and b and (all(x in mm for x in b) or all(x in done for x in b)): continue
+        out.append((n, t))
+    return out
 sheets = get_sheets()
 ttk.Label(f, text='စာအုပ်', font=('', 11, 'bold')).grid(row=0, column=0, sticky='w')
 cb = ttk.Combobox(f, values=[t for n, t in sheets], state='readonly'); cb.grid(row=0, column=1, sticky='we')
-def refresh_books():        # a book that run_tool publishes later appears here by itself (checked every few seconds); the chosen book stays chosen
+_last = load_state().get('sheet')                       # the book chosen last time is chosen again
+for _i, (_n, _t) in enumerate(sheets):
+    if _n == _last: cb.current(_i)
+cb.bind('<<ComboboxSelected>>', lambda e: save_state(sheet=sheets[cb.current()][0]))
+def _toggle_hide():
+    save_state(hide_pub=bool(hidepub.get())); refresh_books(force=True)
+ttk.Checkbutton(f, text='✅ web ပေါ်တင်ပြီးသော မြန်မာပြန် စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).grid(row=0, column=2, sticky='w', padx=6)
+def refresh_books(force=False):        # a book that run_tool publishes later appears here by itself (checked every few seconds); the chosen book stays chosen
     global sheets
-    new = get_sheets()
-    if [n for n, t in new] == [n for n, t in sheets]: return
     keep = sheets[cb.current()][0] if cb.current() >= 0 else None
+    new = get_sheets(keep)
+    if not force and [n for n, t in new] == [n for n, t in sheets]: return
     sheets = new; cb['values'] = [t for n, t in sheets]
     for i, (n, t) in enumerate(sheets):
         if n == keep: cb.current(i)
