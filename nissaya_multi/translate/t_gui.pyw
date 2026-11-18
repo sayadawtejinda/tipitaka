@@ -64,6 +64,25 @@ def go1():
     threading.Thread(target=work1, args=(n, m, k), daemon=True).start()
 
 
+def work_pub(n, auto=False):
+    try:
+        if not auto and not messagebox.askyesno('web သို့ တင်မည်', 'စာအုပ် %03d ၏ မြန်မာပြန်ပြီးသည့် စာမျက်နှာများကို web (GitHub) သို့ တင်မည်လား?' % n): return
+        say('web သို့ တင်နေသည်...'); t_core.publish(n, say)
+    except BaseException as e: say('အမှား: %r' % e)
+    finally: root.after(0, lambda: bpub.config(state='normal'))
+
+
+def go_pub():
+    n = sel(); bpub.config(state='disabled')
+    threading.Thread(target=work_pub, args=(n,), daemon=True).start()
+
+
+def after_ingest(n):       # a whole book is translated (no input file waiting any more) -> published by itself when the box is ticked
+    if autopub.get() and t_core.is_complete(n):
+        say('✔ စာအုပ် %03d မြန်မာပြန် ပြည့်စုံပြီ — အလိုအလျောက် web သို့ တင်မည်' % n)
+        threading.Thread(target=work_pub, args=(n, True), daemon=True).start()
+
+
 def export():
     n = sel(); p, c = t_core.export_book(n); say('✔ မြန်မာပြန် ပါဠိ %d မျက်နှာ -> %s' % (c, p)); os.startfile(p)
 
@@ -76,12 +95,15 @@ b1 = ttk.Button(bf, text='① Gemini ဖိုင် ထုတ်မည်', com
 ttk.Button(bf, text='output folder', command=lambda: (os.makedirs(t_core.OUT, exist_ok=True), os.startfile(t_core.OUT))).pack(side='left', padx=3)
 ttk.Button(bf, text='② မြန်မာပြန်ပြီး စာမျက်နှာ အရေအတွက်', command=count).pack(side='left', padx=3)
 ttk.Button(bf, text='③ မြန်မာပြန် စာအုပ် ထုတ် (.txt)', command=export).pack(side='left', padx=3)
+bpub = tk.Button(bf, text='▲  web သို့ တင်', bg='#2a7a3b', fg='white', activebackground='#1f5c2b', activeforeground='white', font=('', 10, 'bold'), padx=10, command=go_pub); bpub.pack(side='left', padx=6)
+autopub = tk.BooleanVar(value=True)
+ttk.Checkbutton(bf, text='စာအုပ်တစ်အုပ်လုံး ပြီးလျှင် အလိုအလျောက် တင်', variable=autopub).pack(side='left', padx=3)
 ttk.Label(f, text='လုပ်ပုံ: ① → ဖိုင်ကို Gemini "Pali Translate AI" app ထဲ upload → ▶ → *_translated.txt Downloads ထဲ ရောက်လျှင် ၅ စက္ကန့်တစ်ခါ အလိုလို ယူ → ③', foreground='#555').grid(row=4, column=0, columnspan=2, sticky='w')
 
 
 def poll():
     try:
-        if t_core.ingest_downloads(say): pass
+        if t_core.ingest_downloads(say, after_ingest): pass
     except Exception as e: say('ingest အမှား: %r' % e)
     try: refresh_books()
     except Exception as e: say('စာရင်း အမှား: %r' % e)

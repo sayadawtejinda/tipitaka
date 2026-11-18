@@ -5,7 +5,7 @@ and m_gcheck collected into gold/gemini/NNN_collected.json).  Many sets in one f
     ingest_downloads()       -> takes  tr_*_translated.txt  from Downloads into gold/tr_NNN.json  {Pali page: Burmese text}, moves the file to received/, deletes the finished input file
     export_book(n)           -> gold/tr_NNN.txt  every translated Pali page in order
 A nissaya page that Gemini has not checked yet is NOT used (the Pali page is left out and listed) unless raw_ok=True (then the cleaned OCR text is used and the page is marked)."""
-import glob, json, os, re, shutil, sys, time
+import glob, json, os, re, shutil, subprocess, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__)); NSY = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(NSY, 'scripts'))
 OUT = os.path.join(HERE, 'output'); GOLD = os.path.join(HERE, 'gold'); RECV = os.path.join(GOLD, 'received')
@@ -90,7 +90,7 @@ def save_translations(n, d):
     json.dump({str(k): d[k] for k in sorted(d)}, open(os.path.join(GOLD, 'tr_%03d.json' % n), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 
-def ingest_downloads(log=print):
+def ingest_downloads(log=print, after=None):
     got = 0
     for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt'))):
         name = os.path.basename(f); m = re.match(r'tr_(\d+)_(.+?)_pali(\d+)-(\d+)(?:_rest)?_translated', name)
@@ -114,6 +114,9 @@ def ingest_downloads(log=print):
                     os.remove(inp); log('  🗑 မပြည့်စုံသော ထည့်ဖိုင်အဟောင်း ဖျက်ပြီး')
                 except BaseException as e: log('  ⚠ _rest ဖိုင် မထုတ်နိုင်: %r (ထည့်ဖိုင်ကို မဖျက်)' % e)
         got += 1
+        if after:
+            try: after(n)
+            except BaseException as e: log('⚠ after-step (web တင်) အမှား: %r' % e)
     return got
 
 
@@ -122,3 +125,57 @@ def export_book(n):
     p = os.path.join(GOLD, 'tr_%03d.txt' % n)
     open(p, 'w', encoding='utf-8').write((NL * 2).join('--- ပါဠိစာမျက်နှာ %d ---' % k + NL + d[k] for k in sorted(d)))
     return p, len(d)
+
+
+REPO = os.path.dirname(NSY)
+WEBDIR = os.path.join(REPO, 'data', 'nissaya_translations')
+
+
+def _git(*args):
+    r = subprocess.run(['git'] + list(args), cwd=REPO, capture_output=True, text=True, encoding='utf-8', errors='replace')
+    if r.returncode: raise RuntimeError('git %s: %s' % (' '.join(args), (r.stderr or r.stdout).strip()[:500]))
+    return r
+
+
+def is_complete(n):
+    """no input file of this book is waiting for Gemini any more (every Pali page that could be sent has been translated)"""
+    return not glob.glob(os.path.join(OUT, 'tr_%03d_*.txt' % n))
+
+
+def publish(n, log=print):
+    """data/nissaya_translations/<book>.json {Pali page: Burmese} (merged with what is already there) + index.json (the books that have a translation) -> git commit ONLY these files + push.
+    The reader (index.html) shows the 'မြန်မာ' button of a nissaya book when its id is in index.json."""
+    d = load_translations(n)
+    if not d: raise RuntimeError('စာအုပ် %03d: မြန်မာပြန် မရှိသေးပါ' % n)
+    P = _paired(n)
+    keys = {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
+    books = sorted({b for b, p in keys})
+    per = {b: {} for b in books}
+    for pg, txt in d.items():
+        owners = [b for b in books if (b, pg) in keys]
+        if len(owners) == 1: per[owners[0]][pg] = txt
+        elif len(owners) > 1: log('  ⚠ ပါဠိမျက်နှာ %d က စာအုပ် %s တွင် အားလုံးပါ — ကျော်သည်' % (pg, '/'.join(owners)))
+    os.makedirs(WEBDIR, exist_ok=True); paths = []
+    for b, pages in per.items():
+        if not pages: continue
+        fp = os.path.join(WEBDIR, b + '.json')
+        old = {int(k): v for k, v in json.load(open(fp, encoding='utf-8')).items()} if os.path.exists(fp) else {}
+        old.update(pages)
+        json.dump({str(k): old[k] for k in sorted(old)}, open(fp, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+        paths.append(os.path.relpath(fp, REPO).replace(os.sep, '/')); log('  %s : မြန်မာပြန် ပါဠိ %d မျက်နှာ' % (b, len(old)))
+    ip = os.path.join(WEBDIR, 'index.json')
+    ids = set(json.load(open(ip, encoding='utf-8'))) if os.path.exists(ip) else set()
+    ids.update(b for b, pages in per.items() if pages)
+    json.dump(sorted(ids), open(ip, 'w', encoding='utf-8'), ensure_ascii=False)
+    paths.append(os.path.relpath(ip, REPO).replace(os.sep, '/'))
+    if not _git('status', '--porcelain', '--', *paths).stdout.strip(): log('  (web ပေါ်ရှိနှင့် တူနေသည် — ပြောင်းစရာ မရှိ)'); return paths
+    _git('fetch', 'origin')
+    if int(_git('rev-list', '--count', 'HEAD..origin/main').stdout.strip() or 0):
+        r = subprocess.run(['git', 'pull', '--rebase', '--autostash'], cwd=REPO, capture_output=True, text=True)
+        if r.returncode: subprocess.run(['git', 'rebase', '--abort'], cwd=REPO); raise RuntimeError('git pull --rebase မအောင်မြင်ပါ')
+    _git('add', '--', *paths)
+    msg = 'Nissaya translation (Burmese, per Pali page): ' + ', '.join(sorted(b for b, p in per.items() if p)) + chr(10) * 2 + 'Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>'
+    _git('commit', '-m', msg, '--', *paths)
+    _git('push')
+    log('✔ web သို့ တင်ပြီး (GitHub Pages ပေါ် ၁–၂ မိနစ်အတွင်း ပေါ်လာမည်)')
+    return paths

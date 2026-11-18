@@ -375,6 +375,7 @@ let isMmSplitOpen = false, mmViaMm = false, mmSplitIndex = null, mmSplitCache = 
 // { "mula_vi_01": [ {"label":"မူလနိဿယ","file":"mula_vi_01"}, {"label":"ဘုရားကြီးမူ","file":"mula_vi_01_bhurakyi"} ], ... }   (file = data/ ထဲက .html ဖိုင်အမည်၊ .html မပါ)
 let TP_NISSAYA_EDITIONS = { "mula_vi_01": [ {label:"မူလနိဿယ", file:"mula_vi_01"}, {label:"ဘုရားကြီးမူ", file:"mula_vi_01_bhurakyi"} ] };   // ဖိုင်ဖတ်မရလျှင် သုံးမည့် အရန်
 let tpEditionsLoaded = false;
+let TP_TR_BOOKS = new Set(), tpTrCache = {};   // မြန်မာပြန်ပြီးသော နိဿယစာအုပ်များ (data/nissaya_translations/index.json) နှင့် စာအုပ်တစ်အုပ်ချင်း၏ မြန်မာပြန် (ပါဠိစာမျက်နှာ → စာ)
 let nsyBtScroll = null;   // ဘာသာဋီကာ split view ဖွင့်လျှင် ရွှေ့ရမည့် နိဿယစာအုပ်စာမျက်နှာ
 let nsyBtPdf = null;     // ဘာသာဋီကာ split view ဖွင့်ထားစဉ် 📕 ခလုပ်အတွက် PDF လင့်
 let nissayaFile = null;  // ရွေးထားသော မူ (null = ပုံမှန် bookId)
@@ -3034,6 +3035,7 @@ let isRomanPali = false;
   async function tp_loadEditions(){
     if(tpEditionsLoaded) return; tpEditionsLoaded = true;
     try{ const j = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_editions.json`)); if(j && typeof j === "object") TP_NISSAYA_EDITIONS = j; }catch(e){ /* အရန်စာရင်းကိုပဲ သုံးမည် */ }
+    try{ const t = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/index.json`)); if(Array.isArray(t)) TP_TR_BOOKS = new Set(t); }catch(e){ /* မြန်မာပြန် မရှိသေးပါ */ }
   }
   async function ensureMmSplitIndex(){
     if(!mmSplitIndex){
@@ -3184,7 +3186,22 @@ let isRomanPali = false;
     l = l.replace(/^(.+?)မူ(?=\s*(\(|$))/, "$1");
     return l;
   }
-  let nsyMmOnly = false;       // 🅰 နိဿယ - ပါဠိစာလုံးဖျောက်၍ မြန်မာအနက်သာ ပြရန်
+  let nsyShowTr = false;       // "မြန်မာ" ခလုပ် - နိဿယဘက်ခြမ်းမှာ ပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည် (အလယ် = လက်ရှိစာမျက်နှာ၊ အပေါ်အောက် = ရှေ့/နောက်စာမျက်နှာ၊ ပါဠိဘက်ခြမ်းလိုပဲ)
+  async function tp_renderTranslation(bookId, pageNum, contentEl){
+    let d = tpTrCache[bookId];
+    if(!d){ try{ d = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/${bookId}.json?v=${Date.now()}`)); }catch(e){ d = {}; } tpTrCache[bookId] = d; }
+    const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const body = t => t ? t.split(/\n{2,}/).map(q => `<p class="bodytext">${esc(q.trim()).replace(/\n/g, "<br>")}</p>`).join("") : "";
+    const div = n => `<div class="tp-page-divider">မြန်မာပြန် — စာမျက်နှာ ${toMyanmarDigits(n)}</div>`;
+    const prev = d[pageNum - 1], cur = d[pageNum], next = d[pageNum + 1];
+    let html = "";
+    if(prev){ html += `<div class="tp-adjacent-page">${body(prev)}</div>` + div(pageNum); }
+    html += `<div id="tp-tr-current">${cur ? body(cur) : "<p style='color:#999'>ဤစာမျက်နှာ၏ မြန်မာပြန် မရှိသေးပါ။</p>"}</div>`;
+    if(next){ html += div(pageNum + 1) + `<div class="tp-adjacent-page">${body(next)}</div>`; }
+    contentEl.classList.remove("tp-mm-split"); contentEl.innerHTML = html; nsyEntries = [];
+    const box = document.getElementById("tp-nissaya-container"), curEl = document.getElementById("tp-tr-current");
+    if(box && curEl){ box.scrollTop = 0; box.scrollTop += curEl.getBoundingClientRect().top - box.getBoundingClientRect().top - 40; }      // လက်ရှိစာမျက်နှာ ထိပ်ဆုံးမှာ (အပေါ်က ရှေ့စာမျက်နှာအတွက် နေရာ အနည်းငယ်ချန်)
+  }
   async function openNissaya(bookId, pageNum) {
       isMmSplitOpen = mmViaMm = false;
       isNissayaOpen = true; 
@@ -3210,11 +3227,13 @@ let isRomanPali = false;
               cb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:transparent;color:#2a7a3a;";
               cb.addEventListener("click", () => tp_nissayaCopyPanel(chosen ? chosen.file : bookId, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null));
               edBox.appendChild(cb);
-              const mb = document.createElement("button");
-              mb.textContent = nsyMmOnly ? "မူရင်း" : "မြန်မာ"; mb.title = "ပါဠိစာလုံးများ ဖျောက်၍ မြန်မာအနက်သာ ပြမည် / ပြန်ပြမည်";
-              mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (nsyMmOnly ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
-              mb.addEventListener("click", () => { nsyMmOnly = !nsyMmOnly; openNissaya(bookId, pageNum); });
-              edBox.appendChild(mb);
+              if (TP_TR_BOOKS.has(bookId)) {      // မြန်မာပြန်ထားသော စာအုပ်မှာသာ "မြန်မာ" ခလုပ်
+                const mb = document.createElement("button");
+                mb.textContent = "မြန်မာ"; mb.title = "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည် / နိဿယ ပြန်ပြမည်";
+                mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (nsyShowTr ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
+                mb.addEventListener("click", () => { nsyShowTr = !nsyShowTr; openNissaya(bookId, pageNum); });
+                edBox.appendChild(mb);
+              }
               if (nsyBtPdf && chosen && TP_BT_WEB_FILES().has(chosen.file)) {      // ဘာသာဋီကာ - 📕 PDF ဖြင့် ဖွင့်ရန်
                 const pb = document.createElement("button");
                 pb.textContent = "📕"; pb.title = "PDF စာအုပ်ကို ဤစာမျက်နှာဖြင့် ဖွင့်ရန်";
@@ -3223,6 +3242,7 @@ let isRomanPali = false;
                 edBox.appendChild(pb);
               }
           }
+          if (nsyShowTr && TP_TR_BOOKS.has(bookId)) { await tp_renderTranslation(bookId, pageNum, contentEl); } else {
           const htmlText = await fetchText(cdnUrl(`${DATA_FOLDER}/${chosen ? chosen.file : bookId}.html`));
           const mmPageStr = toMyanmarDigits(pageNum);
           const startMarker = `[စာမျက်နှာ-${mmPageStr}]`;
@@ -3240,11 +3260,6 @@ let isRomanPali = false;
               extractedHtml = extractedHtml.replace(startMarker, `<span class="tp-mm-highlight">${startMarker}</span>`);
               contentEl.innerHTML = await tp_nissayaLinkify(extractedHtml);
               nsyEntries = tp_nsyBuildEntries(contentEl);
-              if (nsyMmOnly) contentEl.querySelectorAll("b").forEach(bt => {       // ပါဠိ (စာလုံးမည်း) ဖျောက်၊ နောက်က "၊" ဖယ်
-                const nx = bt.nextSibling;
-                if (nx && nx.nodeType === 3) nx.nodeValue = nx.nodeValue.replace(/^\s*၊\s*/, "");
-                bt.remove();
-              });
               if (nsyBtScroll != null) {      // ဘာသာဋီကာ - ဆိုင်ရာ နိဿယစာအုပ်စာမျက်နှာသို့ အလိုအလျောက် ရွှေ့
                 const tg = "(နိဿယစာအုပ် စာမျက်နှာ " + toMyanmarDigits(nsyBtScroll) + ")";
                 const el = [...contentEl.querySelectorAll("p")].find(p => p.textContent.trim() === tg);
@@ -3257,6 +3272,7 @@ let isRomanPali = false;
               }));
           } else {
               contentEl.innerHTML = `<p style='color:red'>စာမျက်နှာ ${mmPageStr} အတွက် နိဿယကို မတွေ့ပါ။</p>`;
+          }
           }
       } catch(e) {
           contentEl.innerHTML = `<p style='color:red'>နိဿယ ဖိုင် မတင်ရသေးပါ</p>`;
