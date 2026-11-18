@@ -8,9 +8,30 @@ import t_core, m_tool
 
 root = tk.Tk(); root.title('ပါဠိ မြန်မာပြန် ကိရိယာ'); root.geometry('900x640')
 f = ttk.Frame(root, padding=10); f.pack(fill='both', expand=True); f.columnconfigure(1, weight=1); f.rowconfigure(6, weight=1)
-sheets = m_tool.list_sheets()
+import glob, json
+TIPI = os.path.dirname(NSY)
+def published():        # only books whose checked web file is already in the tipitaka repository (same test as run_tool's "web ပေါ်တင်ပြီး")
+    out = set()
+    for mp in glob.glob(os.path.join(NSY, 'web', '*.meta.json')):
+        try:
+            m = json.load(open(mp, encoding='utf-8'))
+            if os.path.exists(os.path.join(TIPI, 'data', m['file'] + '.html')): out.add(int(m['sheet']))
+        except Exception: pass
+    return out
+def get_sheets():
+    pub = published(); return [(n, t) for n, t in m_tool.list_sheets() if n in pub]
+sheets = get_sheets()
 ttk.Label(f, text='စာအုပ်', font=('', 11, 'bold')).grid(row=0, column=0, sticky='w')
 cb = ttk.Combobox(f, values=[t for n, t in sheets], state='readonly'); cb.grid(row=0, column=1, sticky='we')
+def refresh_books():        # a book that run_tool publishes later appears here by itself (checked every few seconds); the chosen book stays chosen
+    global sheets
+    new = get_sheets()
+    if [n for n, t in new] == [n for n, t in sheets]: return
+    keep = sheets[cb.current()][0] if cb.current() >= 0 else None
+    sheets = new; cb['values'] = [t for n, t in sheets]
+    for i, (n, t) in enumerate(sheets):
+        if n == keep: cb.current(i)
+    say('📚 စာအုပ်စာရင်း ပြောင်းသည် — web တင်ပြီးသော စာအုပ် %d အုပ်' % len(sheets))
 r = ttk.Frame(f); r.grid(row=1, column=0, columnspan=2, sticky='w', pady=6)
 ttk.Label(r, text='ပါဠိစာမျက်နှာ').pack(side='left'); pl = ttk.Entry(r, width=5); pl.pack(side='left', padx=3); pl.insert(0, '1')
 ttk.Label(r, text='မှ').pack(side='left'); ph = ttk.Entry(r, width=5); ph.pack(side='left', padx=3); ph.insert(0, '20')
@@ -62,6 +83,8 @@ def poll():
     try:
         if t_core.ingest_downloads(say): pass
     except Exception as e: say('ingest အမှား: %r' % e)
+    try: refresh_books()
+    except Exception as e: say('စာရင်း အမှား: %r' % e)
     root.after(5000, poll)
 root.after(2000, poll)
 root.mainloop()
