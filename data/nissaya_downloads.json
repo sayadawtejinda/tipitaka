@@ -894,6 +894,17 @@
    "date": "2026-10-29"
   },
   {
+   "id": "mula_bi_06_01_sheet070",
+   "title": "ယမကပါဠိ (ပ) (အရှင်နန္ဒမေဓာမူ (ပ))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2601010,
+   "date": "2026-11-17",
+   "edition_of": "mula_bi_06_01"
+  },
+  {
    "id": "mula_bi_06_02",
    "title": "ယမကပါဠိ (ဒု)",
    "basket": "ပါဠိတော်",
@@ -2555,5 +2566,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 142
+ "n_editions": 143
 }
