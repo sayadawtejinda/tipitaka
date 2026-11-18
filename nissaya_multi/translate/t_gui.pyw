@@ -4,16 +4,27 @@ import os, subprocess, sys, threading, tkinter as tk
 from tkinter import ttk, messagebox
 HERE = os.path.dirname(os.path.abspath(__file__)); NSY = os.path.dirname(HERE)
 sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(NSY, 'scripts'))
+# every helper program (git ...) started from here runs WITHOUT a console window (otherwise a black window flashes open and shut every few seconds)
+class _NoWinPopen(subprocess.Popen):
+    def __init__(self, *a, **k):
+        if os.name == 'nt': k.setdefault('creationflags', 0x08000000)
+        super().__init__(*a, **k)
+subprocess.Popen = _NoWinPopen
 import t_core, m_tool
 
 root = tk.Tk(); root.title('ပါဠိ မြန်မာပြန် ကိရိယာ'); root.geometry('900x640')
 f = ttk.Frame(root, padding=10); f.pack(fill='both', expand=True); f.columnconfigure(1, weight=1); f.rowconfigure(6, weight=1)
 import glob, json
 TIPI = os.path.dirname(NSY)
+_TRK = {'t': 0, 'set': None}
 def published():        # only books whose web file is COMMITTED in the tipitaka repository (a file only copied into data/ is not on the web yet)
     out = set()
-    try: tracked = set(subprocess.run(['git', 'ls-files', 'data'], cwd=TIPI, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout.split(chr(10)))
-    except Exception: tracked = None
+    import time
+    if time.time() - _TRK['t'] > 90 or _TRK['set'] is None:          # git is asked only once in 90 seconds (not every 5 seconds)
+        try: _TRK['set'] = set(subprocess.run(['git', 'ls-files', 'data'], cwd=TIPI, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout.split(chr(10)))
+        except Exception: _TRK['set'] = None
+        _TRK['t'] = time.time()
+    tracked = _TRK['set']
     for mp in glob.glob(os.path.join(NSY, 'web', '*.meta.json')):
         try:
             m = json.load(open(mp, encoding='utf-8')); f_ = 'data/' + m['file'] + '.html'
@@ -33,6 +44,7 @@ def _json(path, default):
     try: return json.load(open(path, encoding='utf-8'))
     except Exception: return default
 def get_sheets(keep=None):
+    keep = keep if keep is not None else load_state().get('sheet')     # the book chosen / published last stays in the list (even when it would be hidden)
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
     pub = published()
     mm = set(_json(os.path.join(TIPI, 'data', 'mm_split', 'index.json'), {}))
@@ -99,7 +111,8 @@ def go1():
 def work_pub(n, auto=False):
     try:
         if not auto and not messagebox.askyesno('web သို့ တင်မည်', 'စာအုပ် %03d ၏ မြန်မာပြန်ပြီးသည့် စာမျက်နှာများကို web (GitHub) သို့ တင်မည်လား?' % n): return
-        say('web သို့ တင်နေသည်...'); t_core.publish(n, say)
+        say('web သို့ တင်နေသည်...'); t_core.publish(n, say); _TRK['t'] = 0; save_state(sheet=n, last_pub=n)
+        say('📌 နောက်ဆုံး web တင်ပြီးသော စာအုပ်: %03d (စာရင်းထဲ ဆက်ထားသည်)' % n)
     except BaseException as e: say('အမှား: %r' % e)
     finally: root.after(0, lambda: bpub.config(state='normal'))
 
