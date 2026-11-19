@@ -1599,16 +1599,16 @@
    "file": "tika_di_01_02"
   },
   {
-   "label": "ညောင်ရမ်းမူ (ပ)",
-   "file": "tika_di_01_02_sheet194",
-   "from": 1,
-   "to": 230
-  },
-  {
    "label": "ညောင်ရမ်းမူ (ဒု)",
    "file": "tika_di_01_02_sheet195",
    "from": 230,
    "to": 500
+  },
+  {
+   "label": "ညောင်ရမ်းမူ (ပ)",
+   "file": "tika_di_01_02_sheet194",
+   "from": 1,
+   "to": 230
   }
  ],
  "tika_di_01_03": [
