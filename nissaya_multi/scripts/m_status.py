@@ -30,17 +30,23 @@ def _jl(p, d):
 
 
 def on_web_set(fresh=False):
-    """sheets that are on the web.  A sheet with a web file is on the web when that file is committed; a sheet without any web file (published before .meta.json existed) counts when ALL its Pali books have a nissaya on the web."""
-    tracked = _tracked(fresh); out = set(); has_meta = set()
-    for mp in glob.glob(os.path.join(ROOT, 'web', '*.meta.json')):
-        try:
-            m = json.load(open(mp, encoding='utf-8')); n = int(m['sheet']); has_meta.add(n); f_ = 'data/' + m['file'] + '.html'
-            if (f_ in tracked) if tracked else os.path.exists(os.path.join(TIPI, f_)): out.add(n)
-        except Exception: pass
-    wb = set(_jl(os.path.join(TIPI, 'data', 'nissaya_books.json'), [])) | set(_jl(os.path.join(TIPI, 'data', 'nissaya_editions.json'), []))
+    """sheets that are on the web = a COMMITTED web file data/<book>_sheetNNN.html exists (the name carries the sheet number).  A Pali book having some other nissaya (the original 'မူလနိဿယ', another edition) says nothing about this sheet."""
+    import re
+    tracked = _tracked(fresh)
+    if tracked is None: tracked = set('data/' + os.path.basename(f) for f in glob.glob(os.path.join(TIPI, 'data', '*_sheet*.html')))
+    out = set()
+    for f in tracked:
+        m = re.search(r'_sheet(\d+)\.html$', f)
+        if m: out.add(int(m.group(1)))
+    # published before the file names carried a sheet number: the sheet counts when its edition (the label of the sheet) is listed for ALL its Pali books in data/nissaya_editions.json
+    ed = _jl(os.path.join(TIPI, 'data', 'nissaya_editions.json'), {}); nb = set(_jl(os.path.join(TIPI, 'data', 'nissaya_books.json'), []))
     for r in _jl(os.path.join(ROOT, 'catalog.json'), []):
-        b = (r.get('final') or {}).get('books') or []
-        if r['n'] not in has_meta and b and all(x in wb for x in b): out.add(r['n'])
+        n = r['n']; b = (r.get('final') or {}).get('books') or []
+        if n in out or not b: continue
+        lab = r.get('edition')
+        if lab:
+            if all(any(e.get('label') == lab or e.get('label', '').startswith(lab.split(' (')[0]) and lab in e.get('label', '') for e in ed.get(x, [])) for x in b): out.add(n)
+        elif all(any(e.get('label') == 'ဘာသာဋီကာ' for e in ed.get(x, [])) for x in b): out.add(n)          # no edition name on the sheet (the Vinaya tika sheets): the book has the 'ဘာသာဋီကာ' edition on the web
     return out
 
 
