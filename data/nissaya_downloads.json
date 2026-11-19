@@ -2820,17 +2820,6 @@
    "edition_of": "tika_bi_03"
   },
   {
-   "id": "tika_bi_03_sheet211",
-   "title": "ပဉ္စပကရဏမူလဋီကာ (ဘာဋီ)",
-   "basket": "ဋီကာ",
-   "basket_key": "tika",
-   "category": "အဘိဓမ္မာပိဋက",
-   "cat_key": "bi",
-   "size": 1665689,
-   "date": "2026-11-17",
-   "edition_of": "tika_bi_03"
-  },
-  {
    "id": "tika_bi_03_sheet214",
    "title": "ပဉ္စပကရဏမူလဋီကာ (ဘာဋီ)",
    "basket": "ဋီကာ",
@@ -2861,6 +2850,17 @@
    "cat_key": "bi",
    "size": 2438419,
    "date": "2026-11-17",
+   "edition_of": "tika_bi_03"
+  },
+  {
+   "id": "tika_bi_03_sheet211",
+   "title": "ပဉ္စပကရဏမူလဋီကာ (ဘာဋီ)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 1668592,
+   "date": "2026-11-18",
    "edition_of": "tika_bi_03"
   },
   {
