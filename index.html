@@ -379,7 +379,7 @@ let tpEditionsLoaded = false;
 let trLang = "my", trRomanForced = false;      // "vi" / "en" = the Tiếng Việt / English translation reader (Pali + book names in Roman, translation of that language beside it)
 const TR_LANG_DIR = {my: "nissaya_translations", vi: "translations_vi", en: "translations_en"}, TR_LANG_NAME = {vi: "Tiếng Việt", en: "English"};
 let TP_TR_VARS_X = {vi: {}, en: {}};             // {book: [file, ...]} of data/translations_vi|en/index.json
-function tp_leaveLang(){ if(trLang !== "my"){ trLang = "my"; if(trRomanForced){ isRomanPali = false; trRomanForced = false; } } }       // back to the Burmese reader: the Roman Pali that the language reader switched on goes off again
+function tp_leaveLang(){ if(trLang !== "my"){ trLang = "my"; if(window.tpUiStop) window.tpUiStop(); if(trRomanForced){ isRomanPali = false; trRomanForced = false; } } }       // back to the Burmese reader: the Roman Pali that the language reader switched on goes off again
 let TP_TR_BOOKS = new Set(), tpTrCache = {}, TP_TR_VARS = {};   // မြန်မာပြန်ပြီးသော နိဿယစာအုပ်များ (data/nissaya_translations/index.json) နှင့် စာအုပ်တစ်အုပ်ချင်း၏ မြန်မာပြန် (ပါဠိစာမျက်နှာ → စာ)
 let nsyBtScroll = null;   // ဘာသာဋီကာ split view ဖွင့်လျှင် ရွှေ့ရမည့် နိဿယစာအုပ်စာမျက်နှာ
 let nsyBtPdf = null;     // ဘာသာဋီကာ split view ဖွင့်ထားစဉ် 📕 ခလုပ်အတွက် PDF လင့်
@@ -2898,7 +2898,7 @@ let isRomanPali = false;
     }catch(e){ return null; }
   }
   async function showTrLangBooks(lang){
-    tp_leaveLang(); setFloatSearchVisible(true);
+    tp_leaveLang(); trLang = lang; if(window.tpUiStart) window.tpUiStart(); setFloatSearchVisible(true);
     renderBreadcrumb([{label:"Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: TR_LANG_NAME[lang]}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     const idx = await ensureIndex(); try{ await tp_loadEditions(); }catch(e){}
@@ -2918,6 +2918,52 @@ let isRomanPali = false;
     setParams({basket: "tr_" + lang});
   }
   const esc2 = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  // ---- Tiếng Việt / English reader: the Burmese words of the page (buttons, tooltips, menus ...) are shown in the language; Burmese-script names / numbers become Roman letters / digits.
+  //      The Pali text and the translation panes are not touched here (Roman Pali / the translation itself).  Every changed text is remembered and put back when the language reader is left.
+  const TP_UI = {
+    "မာတိကာ": ["Mục lục", "Contents"], "မာတိကာ ရှာဖွေနေပါသည်...": ["Đang tải mục lục...", "Loading contents..."],
+    "ဆက်စပ်ကျမ်း အချက်အလက် မရှိသေးပါ။": ["Chưa có thông tin về sách liên quan.", "No related-text information yet."],
+    "စာမျက်နှာ:": ["Trang:", "Page:"], "သွားမည်": ["Đi", "Go"], "မူလ": ["Gốc", "Original"], "ဖျက်မည်": ["Xóa", "Clear"], "ရှာရန်": ["Tìm", "Search"], "ရှာမည်": ["Tìm", "Search"],
+    "အဋ္ဌကထာ/ဋီကာ ဖတ်ရန်": ["Đọc Chú giải / Phụ chú giải", "Read commentary / sub-commentary"],
+    "စာမျက်နှာ/စာပိုဒ် သွားမည်": ["Đến trang / đoạn", "Go to page / paragraph"], "သုတ္တန်ရှာရန်": ["Tìm kinh", "Search suttas"],
+    "ဘာသာပြန်/နိဿယ ဖတ်ရန်": ["Đọc bản dịch / nissaya", "Read translation / nissaya"],
+    "AI ဖြင့် ရှင်းပြခိုင်းရန် (Google AI / ChatGPT / Claude)": ["Nhờ AI giải thích (Google AI / ChatGPT / Claude)", "Ask AI to explain (Google AI / ChatGPT / Claude)"],
+    "စာပိုဒ်နံပါတ် (ဥပမာ- ၁၂)": ["Số đoạn (vd: 12)", "Paragraph number (e.g. 12)"], "စာအုပ် (သို့) သုတ္တန်အမည် ရိုက်ရှာပါ...": ["Nhập tên sách hoặc kinh...", "Type a book or sutta name..."],
+    "ရှေ့စာမျက်နှာ": ["Trang trước", "Previous page"], "နောက်စာမျက်နှာ": ["Trang sau", "Next page"],
+    "နိဿယကို စာမျက်နှာ အကွာအဝေးရွေး၍ ကူးယူမည်": ["Chọn khoảng trang để sao chép", "Select a page range to copy"], "နိဿယကို ပြမည်": ["Hiện nissaya", "Show nissaya"],
+    "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည် / နိဿယ ပြန်ပြမည်": ["Hiện bản dịch của trang Pāli này", "Show the translation of this Pāli page"],
+    "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည် (နှိပ်တိုင်း မူကွဲ တစ်လှည့်စီ)": ["Hiện bản dịch của trang Pāli này", "Show the translation of this Pāli page"],
+    "📖 မြန်မာပြန် (Split View ဖတ်ရန်)": ["📖 Bản dịch (xem song song)", "📖 Translation (side-by-side)"],
+    "မြန်မာပါဠိ": ["Pāḷi Myanmar", "Myanmar-script Pāḷi"],
+    "ရှေ့သို့": ["Trước", "Previous"], "နောက်သို့": ["Sau", "Next"], "ပိတ်မည်": ["Đóng", "Close"], "ပိတ်": ["Đóng", "Close"], "ကူးယူမည်": ["Sao chép", "Copy"], "ရွေးပါ": ["Chọn", "Choose"],
+  };
+  const TP_MYD = "၀၁၂၃၄၅၆၇၈၉";
+  let tpUiObs = null, tpUiSaved = new Map(), tpUiAttrs = [];
+  const tpUiSkip = n => { const a = document.getElementById("tp-content"), b = document.getElementById("tp-nissaya-content"); return (a && a.contains(n)) || (b && b.contains(n)); };
+  function tpUiConv(str){
+    const t = str.trim(); if(!/[က-႟]/.test(t)) return str;
+    const e = TP_UI[t]; if(e) return str.replace(t, e[trLang === "vi" ? 0 : 1]);
+    return myanmarToRoman(str.replace(/[၀-၉]/g, c => TP_MYD.indexOf(c)));
+  }
+  function tpUiRun(root){
+    if(trLang === "my" || !root) return;
+    const doNode = n => { if(n.nodeType === 3){ if(/[က-႟]/.test(n.nodeValue) && n.parentNode && !["SCRIPT", "STYLE"].includes(n.parentNode.tagName) && !tpUiSkip(n)){ const o = n.nodeValue; const v = tpUiConv(o); if(v !== o){ if(!tpUiSaved.has(n)) tpUiSaved.set(n, o); n.nodeValue = v; } } return; }
+      if(n.nodeType !== 1 || tpUiSkip(n)) return;
+      for(const a of ["title", "placeholder", "aria-label"]){ const o = n.getAttribute(a); if(o && /[က-႟]/.test(o)){ const v = tpUiConv(o); if(v !== o){ tpUiAttrs.push([n, a, o]); n.setAttribute(a, v); } } } };
+    if(root.nodeType === 3 || root.nodeType === 1) doNode(root);
+    if(root.nodeType === 1){ const w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT); let n; while(n = w.nextNode()) doNode(n); }
+  }
+  window.tpUiStart = function(){
+    if(tpUiObs) return;
+    tpUiRun(document.body);
+    tpUiObs = new MutationObserver(ms => { ms.forEach(m => { if(m.type === "characterData") tpUiRun(m.target); else if(m.type === "attributes") tpUiRun(m.target); else m.addedNodes.forEach(n => tpUiRun(n)); }); });
+    tpUiObs.observe(document.body, {childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["title", "placeholder", "aria-label"]});
+  };
+  window.tpUiStop = function(){
+    if(tpUiObs){ tpUiObs.disconnect(); tpUiObs = null; }
+    tpUiSaved.forEach((o, n) => { if(n.isConnected) n.nodeValue = o; }); tpUiSaved = new Map();
+    tpUiAttrs.forEach(([n, a, o]) => { if(n.isConnected) n.setAttribute(a, o); }); tpUiAttrs = [];
+  };
   async function showBaskets(){
     tp_leaveLang(); try{ await tp_loadEditions(); }catch(e){}
     setFloatSearchVisible(true); const idx = await ensureIndex(); const nisBooks = await nissayaBooksIn(idx); renderBreadcrumb([{label:"တိပိဋက"}]);
@@ -3257,7 +3303,9 @@ let isRomanPali = false;
     const body = t => {          // Gemini မြန်မာပြန် - "## " ဖြင့်စသော စာကြောင်း = ခေါင်းစဉ် (အလယ်၊ စာလုံးမည်း)၊ ကျန်တာ စာပိုဒ် (ကွက်လပ်စာကြောင်းဖြင့် ခွဲ)
       if(!t) return ""; if(isHtml) return t;
       const out = []; let buf = [];
-      const fmt = l => esc(l).replace(/“[^“”\n]{1,150}”|"[^"\n]{1,150}"|‘[^‘’\n]{1,150}’|'[^'\n]{1,150}'/g, m => "<b>" + m + "</b>");      // "..." / “...” ထဲက စကားလုံးကို စာလုံးမည်ဖြင့် ပြသည်
+      const BURM = /(သည်|၏|ကို|တို့|ကုန်|၍|ဖြင့်|နှင့်|အား|၌|ဟု|ဟူ|ပြီ|လျှင်|သော|သူ|ရာ|ခြင်း|ပါ)$/;      // a token with a Burmese grammar ending
+      const isPaliQuote = q => { const tk = q.slice(1, -1).split(/[\s၊။,.;:!?()\[\]\-]+/).filter(Boolean); return tk.length > 0 && !tk.some(x => BURM.test(x)); };      // "ဧဝံ မေ သုတံ" is Pali (bold); a quotation in Burmese is not
+      const fmt = l => esc(l).replace(/“[^“”\n]{1,150}”|"[^"\n]{1,150}"|‘[^‘’\n]{1,150}’|'[^'\n]{1,150}'/g, m => isPaliQuote(m) ? "<b>" + m + "</b>" : m);      // "..." / “...” ထဲက စကားလုံးကို စာလုံးမည်ဖြင့် ပြသည်
       const flush = () => { if(buf.length){ out.push(`<p class="bodytext">${buf.map(fmt).join("<br>")}</p>`); buf = []; } };
       t = t.replace(/([^\n#])[ \t]*(##\s)/g, "$1\n$2");      // Gemini က "## ခေါင်းစဉ်" ကို စာကြောင်းအလယ်မှာ ထည့်မိလျှင်လည်း ခေါင်းစဉ်ကို စာကြောင်းအသစ်ဖြင့် စပေးသည်
       const hd0 = h => { let m = h.match(/^(.*?။)\s+(\S[\s\S]*)$/); if(m && m[1].length <= 45) return [m[1], m[2]]; if(h.length > 60){ m = h.match(/^(.{1,80}?(?:ကထာ|အဖွင့်|ဝဏ္ဏနာ|ဝတ္ထု|နိဒ္ဒေသော|နိဒ္ဒေသ|ခန္ဓက|ဝဂ္ဂ|အခန်း|သုတ်|သုတ္တ)[။)]?)\s+(\S[\s\S]*)$/); if(m) return [m[1], m[2]]; return ["", h]; } return [h, ""]; };      // "## " စာကြောင်းရှည်ပြီး ခေါင်းစဉ်အဆုံး မသိရလျှင် ("ကထာ"၊ "အဖွင့်" စသည်ဖြင့် မဆုံး) ခေါင်းစဉ်မလုပ်ဘဲ စာပိုဒ်အဖြစ် ပြသည်
