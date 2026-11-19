@@ -1281,17 +1281,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "attha_di_01_sheet097",
-   "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (ပခုက္ကူမူ (ပ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဒီဃနိကာယ်",
-   "cat_key": "di",
-   "size": 4789285,
-   "date": "2026-11-12",
-   "edition_of": "attha_di_01"
-  },
-  {
    "id": "attha_di_01_sheet098",
    "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (ပခုက္ကူမူ (ဒု))",
    "basket": "အဋ္ဌကထာ",
@@ -1365,6 +1354,17 @@
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
    "size": 3866491,
+   "date": "2026-11-18",
+   "edition_of": "attha_di_01"
+  },
+  {
+   "id": "attha_di_01_sheet097",
+   "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (ပခုက္ကူမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 4814765,
    "date": "2026-11-18",
    "edition_of": "attha_di_01"
   },
