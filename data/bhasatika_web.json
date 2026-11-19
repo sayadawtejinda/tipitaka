@@ -1,9 +1,37 @@
 {
+ "KS_BT_01.pdf": {
+  "file": "annya_sadda_01_sheet355",
+  "delta": 7,
+  "name": "ကစ္စည်းဘာသာဋီကာ (ပတွဲ)",
+  "fit": "165/194",
+  "pages": "1-555"
+ },
+ "KS_BT_02.pdf": {
+  "file": "annya_sadda_01_sheet356",
+  "delta": 0,
+  "name": "ကစ္စည်းဘာသာဋီကာ (ဒုတွဲ)",
+  "fit": "303/344",
+  "pages": "1-609"
+ },
+ "RPSD_BT_01.pdf": {
+  "file": "annya_sadda_02_sheet362",
+  "delta": 20,
+  "name": "ရူပသိဒ္ဓိဘာသာဋီကာ (ပတွဲ)",
+  "fit": "151/198",
+  "pages": "21-635"
+ },
+ "RPSD_BT_02.pdf": {
+  "file": "annya_sadda_02_sheet363",
+  "delta": 0,
+  "name": "ရူပသိဒ္ဓိဘာသာဋီကာ (ဒုတွဲ)",
+  "fit": "402/461",
+  "pages": "1-593"
+ },
  "KCYN_BT.pdf": {
   "file": "annya_sadda_16_sheet424",
   "delta": 4,
   "name": "ကစ္စာယန ဘာသာဋီကာ",
-  "fit": "33/40",
+  "fit": "34/41",
   "pages": "5-113"
  },
  "BDCT_BT.pdf": {
@@ -13,39 +41,53 @@
   "fit": "26/47",
   "pages": "13-382"
  },
+ "PTM_BT.pdf": {
+  "file": "annya_vi_01_01_bhasatika",
+  "delta": 28,
+  "name": "ပါတိမောက်-ဘာသာဋီကာ",
+  "fit": "89/119",
+  "pages": "29-518"
+ },
  "KK_AT_BT_01.pdf": {
   "file": "annya_vi_01_02_sheet429",
   "delta": 0,
   "name": "ကင်္ခါဘာသာဋီကာ (ပတွဲ)",
-  "fit": "235/269",
+  "fit": "239/273",
   "pages": "1-469"
  },
  "KK_AT_BT_02.pdf": {
   "file": "annya_vi_01_02_sheet430",
   "delta": 0,
   "name": "ကင်္ခါဘာသာဋီကာ (ဒု တွဲ)",
-  "fit": "144/158",
+  "fit": "146/161",
   "pages": "1-410"
+ },
+ "KSK_BT.pdf": {
+  "file": "annya_vi_05_01_bhasatika",
+  "delta": 1,
+  "name": "ခုဒ္ဒသိက္ခာ-ဘာသာဋီကာ",
+  "fit": "110/141",
+  "pages": "2-610"
  },
  "ATSLN_BT_01.pdf": {
   "file": "attha_bi_01_sheet176",
   "delta": 0,
   "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (ပ တွဲ)",
-  "fit": "224/258",
+  "fit": "226/259",
   "pages": "1-382"
  },
  "ATSLN_BT_02.pdf": {
   "file": "attha_bi_01_sheet177",
   "delta": 0,
   "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (ဒု တွဲ)",
-  "fit": "140/154",
+  "fit": "139/153",
   "pages": "1-501"
  },
  "ATSLN_BT_03.pdf": {
   "file": "attha_bi_01_sheet178",
   "delta": 0,
   "name": "အဋ္ဌသာလိနီ ဘာသာဋီကာ (တ တွဲ)",
-  "fit": "113/131",
+  "fit": "114/133",
   "pages": "1-426"
  },
  "ATSLN_BT_04.pdf": {
@@ -115,49 +157,84 @@
   "file": "attha_di_01_sheet101",
   "delta": 0,
   "name": "သီလက္ခန်ဘာသာဋီကာ (ပ တွဲ)",
-  "fit": "344/375",
+  "fit": "350/381",
   "pages": "1-585"
  },
  "SI_BT_02.pdf": {
   "file": "attha_di_01_sheet102",
   "delta": 0,
   "name": "သီလက္ခန်ဘာသာဋီကာ (ဒု တွဲ)",
-  "fit": "308/334",
+  "fit": "309/334",
   "pages": "1-457"
+ },
+ "SI_BT_03.pdf": {
+  "file": "attha_di_01_sheet103",
+  "delta": 0,
+  "name": "သီလက္ခန်ဘာသာဋီကာ (တ တွဲ)",
+  "fit": "319/363",
+  "pages": "5-520"
  },
  "SI_BT_04.pdf": {
   "file": "attha_di_01_sheet104",
   "delta": 0,
   "name": "သီလက္ခန်ဘာသာဋီကာ (စ တွဲ)",
-  "fit": "194/222",
+  "fit": "199/225",
   "pages": "1-322"
+ },
+ "S_MV_AT_BT_01.pdf": {
+  "file": "attha_di_02_sheet107",
+  "delta": -2,
+  "name": "သုတ်မဟာဝါဘာသာဋီကာ (ပ တွဲ)",
+  "fit": "93/112",
+  "pages": "1-378"
+ },
+ "S_MV_AT_BT_02.pdf": {
+  "file": "attha_di_02_sheet108",
+  "delta": 0,
+  "name": "သုတ်မဟာဝါဘာသာဋီကာ (ဒု တွဲ)",
+  "fit": "55/68",
+  "pages": "1-324"
+ },
+ "S_MV_AT_BT_03.pdf": {
+  "file": "attha_di_02_sheet109",
+  "delta": 0,
+  "name": "သုတ်မဟာဝါဘာသာဋီကာ (တ တွဲ)",
+  "fit": "82/92",
+  "pages": "1-734"
+ },
+ "S_PTY_AT_BT.pdf": {
+  "file": "attha_di_03_sheet111",
+  "delta": 0,
+  "name": "သုတ်ပါထေယျ-ဘာသာဋီကာ",
+  "fit": "202/223",
+  "pages": "1-430"
  },
  "PJ_BT_01.pdf": {
   "file": "attha_vi_01_01_sheet078",
   "delta": 0,
   "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (ပ တွဲ)",
-  "fit": "372/423",
+  "fit": "375/426",
   "pages": "1-630"
  },
  "PJ_BT_02.pdf": {
   "file": "attha_vi_01_01_sheet079",
   "delta": 0,
   "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (ဒု တွဲ)",
-  "fit": "349/384",
+  "fit": "354/389",
   "pages": "1-616"
  },
  "PJ_BT_03.pdf": {
   "file": "attha_vi_01_02_sheet082",
   "delta": 13,
   "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (တ တွဲ)",
-  "fit": "118/162",
+  "fit": "120/166",
   "pages": "148-608"
  },
  "PJ_BT_04.pdf": {
   "file": "attha_vi_01_02_sheet083",
   "delta": 0,
   "name": "ပါရာဇိကဏ်ဘာသာဋီကာ (စ တွဲ)",
-  "fit": "94/107",
+  "fit": "94/108",
   "pages": "1-431"
  },
  "PC_BT_01.pdf": {
@@ -185,14 +262,14 @@
   "file": "attha_vi_03_sheet088",
   "delta": 0,
   "name": "မဟာဝါဘာသာဋီကာ (ဒု တွဲ)",
-  "fit": "152/158",
+  "fit": "154/161",
   "pages": "1-366"
  },
  "CV_AT_BT.pdf": {
   "file": "attha_vi_04_sheet089",
   "delta": 0,
   "name": "စူဠဝဂ္ဂဘာသာဋီကာ",
-  "fit": "169/197",
+  "fit": "168/196",
   "pages": "1-463"
  },
  "PV_BT.pdf": {
