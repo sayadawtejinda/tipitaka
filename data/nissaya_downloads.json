@@ -2732,6 +2732,17 @@
    "edition_of": "tika_bi_01"
   },
   {
+   "id": "tika_bi_01_sheet207",
+   "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ (ဘာဋီမူ (စ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 1459271,
+   "date": "2026-11-18",
+   "edition_of": "tika_bi_01"
+  },
+  {
    "id": "tika_bi_02_01_sheet209",
    "title": "ဝိဘင်္ဂမူလဋီကာ (ပ) (ဘာဋီမူ (ဒု))",
    "basket": "ဋီကာ",
@@ -3182,5 +3193,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 199
+ "n_editions": 200
 }
