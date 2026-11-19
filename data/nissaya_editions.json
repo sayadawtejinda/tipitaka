@@ -117,12 +117,6 @@
    "to": 121
   },
   {
-   "label": "ဘာဋီမူ (တ)",
-   "file": "attha_di_01_sheet103",
-   "from": 166,
-   "to": 262
-  },
-  {
    "label": "ဘာဋီမူ (ပ)",
    "file": "attha_di_01_sheet101",
    "from": 1,
@@ -133,6 +127,12 @@
    "file": "attha_di_01_sheet102",
    "from": 93,
    "to": 165
+  },
+  {
+   "label": "ဘာဋီမူ (တ)",
+   "file": "attha_di_01_sheet103",
+   "from": 166,
+   "to": 262
   }
  ],
  "attha_di_02": [
