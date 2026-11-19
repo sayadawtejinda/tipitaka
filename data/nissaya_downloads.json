@@ -2550,17 +2550,6 @@
    "date": "2026-10-31"
   },
   {
-   "id": "tika_vi_04_sheet190",
-   "title": "ဝဇိရဗုဒ္ဓိဋီကာ (ဆင်တဲမူ (ပ))",
-   "basket": "ဋီကာ",
-   "basket_key": "tika",
-   "category": "ဝိနည်းပိဋက",
-   "cat_key": "vi",
-   "size": 5605216,
-   "date": "2026-11-18",
-   "edition_of": "tika_vi_04"
-  },
-  {
    "id": "tika_vi_04_sheet191",
    "title": "ဝဇိရဗုဒ္ဓိဋီကာ (ဆင်တဲမူ (ဒု))",
    "basket": "ဋီကာ",
@@ -2568,6 +2557,17 @@
    "category": "ဝိနည်းပိဋက",
    "cat_key": "vi",
    "size": 4957761,
+   "date": "2026-11-18",
+   "edition_of": "tika_vi_04"
+  },
+  {
+   "id": "tika_vi_04_sheet190",
+   "title": "ဝဇိရဗုဒ္ဓိဋီကာ (ဆင်တဲမူ (ပ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 5626884,
    "date": "2026-11-18",
    "edition_of": "tika_vi_04"
   },
