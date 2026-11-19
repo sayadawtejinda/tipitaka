@@ -1184,12 +1184,6 @@
   },
   {
    "label": "ဘာဋီ",
-   "file": "tika_bi_03_sheet211",
-   "from": 1,
-   "to": 45
-  },
-  {
-   "label": "ဘာဋီ",
    "file": "tika_bi_03_sheet214",
    "from": 117,
    "to": 164
@@ -1205,6 +1199,12 @@
    "file": "tika_bi_03_sheet215",
    "from": 165,
    "to": 248
+  },
+  {
+   "label": "ဘာဋီ",
+   "file": "tika_bi_03_sheet211",
+   "from": 1,
+   "to": 45
   }
  ],
  "annya_sadda_01": [
