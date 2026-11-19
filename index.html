@@ -2913,6 +2913,26 @@ let isRomanPali = false;
       return base + extra;
     }catch(e){ return null; }
   }
+  // ဇယားများ (Charts) - ဝီထိစိတ် / ပရမတ် / အဘိဓမ္မာ ဇယားများ: reader ၏ view ထဲမှာပင် ဖွင့်ပြသည် (လင့်ကို မပြ)
+  const TP_CHARTS = [
+    {id: "vithicitta", name: "ဝီထိစိတ်", sub: "Vithi Citta", url: "https://sayadawtejinda.github.io/dhamma/vithicitta.html"},
+    {id: "paramattha", name: "ပရမတ်", sub: "Paramattha", url: "https://sayadawtejinda.github.io/dhamma/paramattha"},
+    {id: "abhidhamma", name: "အဘိဓမ္မာ ဇယားများ", sub: "Abhidhamma Charts", url: "https://sayadawtejinda.github.io/dhamma/abhidhamma-charts.html"}
+  ];
+  function showChartsList(){
+    tp_leaveLang(); setFloatSearchVisible(true);
+    renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဇယားများ"}]);
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${TP_CHARTS.map(c => `<div class="tp-card" data-chart="${c.id}">${c.name}<span class="tp-count">${c.sub}</span></div>`).join("")}</div>`;
+    document.querySelectorAll("[data-chart]").forEach(el => el.addEventListener("click", () => showChart(el.dataset.chart)));
+    setParams({basket: "charts"});
+  }
+  function showChart(id){
+    const c = TP_CHARTS.find(x => x.id === id); if(!c) return showChartsList();
+    tp_leaveLang(); setFloatSearchVisible(true);
+    renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဇယားများ", onclick:(e)=>{e.preventDefault(); showChartsList();}}, {label: c.name}]);
+    document.getElementById("tp-view").innerHTML = `<iframe title="${c.name}" src="${c.url}" style="width:100%;height:calc(100vh - 150px);min-height:480px;border:0;border-radius:8px;background:#fff;"></iframe>`;
+    setParams({basket: "charts", category: id});
+  }
   async function showTrLangBooks(lang){
     tp_leaveLang(); trLang = lang; if(window.tpUiStart) window.tpUiStart(); setFloatSearchVisible(true);
     renderBreadcrumb([{label:"Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: TR_LANG_NAME[lang]}]);
@@ -2987,12 +3007,12 @@ let isRomanPali = false;
     tp_leaveLang(); try{ await tp_loadEditions(); }catch(e){}
     setFloatSearchVisible(true); const idx = await ensureIndex(); const nisBooks = await nissayaBooksIn(idx); renderBreadcrumb([{label:"တိပိဋက"}]);
     const mmN = await mmHomeCount();
-    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${nisCountText(nisBooks)}</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်${mmN != null ? `<span class="tp-count">${toMyanmarDigits(mmN)} အုပ်</span>` : ""}</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div><div class="tp-card" data-basket="tr_vi">ဗီယက်နမ် (Tiếng Việt)<span class="tp-count">${toMyanmarDigits(Object.keys(TP_TR_VARS_X.vi).length)} အုပ်</span></div><div class="tp-card" data-basket="tr_en">အင်္ဂလိပ် (English)<span class="tp-count">${toMyanmarDigits(Object.keys(TP_TR_VARS_X.en).length)} အုပ်</span></div>`;
+    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${nisCountText(nisBooks)}</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်${mmN != null ? `<span class="tp-count">${toMyanmarDigits(mmN)} အုပ်</span>` : ""}</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div><div class="tp-card" data-basket="tr_vi">ဗီယက်နမ် (Tiếng Việt)<span class="tp-count">${toMyanmarDigits(Object.keys(TP_TR_VARS_X.vi).length)} အုပ်</span></div><div class="tp-card" data-basket="tr_en">အင်္ဂလိပ် (English)<span class="tp-count">${toMyanmarDigits(Object.keys(TP_TR_VARS_X.en).length)} အုပ်</span></div><div class="tp-card" data-basket="charts">ဇယားများ (Charts)<span class="tp-count">၃ ခု</span></div>`;
     let last = null; try{ last = JSON.parse(localStorage.getItem("tp_last_read")); }catch(e){}
     const resume = last && last.name ? `<div class="tp-resume" style="margin:0 0 14px;padding:10px 14px;border:2px solid #5a8f6c;border-radius:10px;background:#eef3ea;cursor:pointer;color:#2d5c3d;font-weight:bold;">📌 ဆက်ဖတ်ရန် — ${last.name}<span style="font-weight:normal;color:#666;"> (${last.type === "mm" ? "စာမျက်နှာ " + toMyanmarDigits(last.pageIdx || 1) : "စာမျက်နှာ " + toMyanmarDigits(last.pageNum || 1)})</span></div>` : "";
     document.getElementById("tp-view").innerHTML = resume + `<div class="tp-grid">${html}</div>`;
     const rs = document.querySelector("#tp-view .tp-resume"); if(rs) rs.addEventListener("click", () => openRecentBook(last));
-    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{ if(el.dataset.basket === "tr_vi") showTrLangBooks("vi"); else if(el.dataset.basket === "tr_en") showTrLangBooks("en"); else if(el.dataset.basket === "myanmar") showMmCategories(); else if(el.dataset.basket === "nissaya") showNissayaCategories(); else if(el.dataset.basket === "sayadaw") showSayadawList(); else showCategories(el.dataset.basket); }));
+    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{ if(el.dataset.basket === "charts") showChartsList(); else if(el.dataset.basket === "tr_vi") showTrLangBooks("vi"); else if(el.dataset.basket === "tr_en") showTrLangBooks("en"); else if(el.dataset.basket === "myanmar") showMmCategories(); else if(el.dataset.basket === "nissaya") showNissayaCategories(); else if(el.dataset.basket === "sayadaw") showSayadawList(); else showCategories(el.dataset.basket); }));
     setParams({});
   }
 
@@ -3957,7 +3977,8 @@ let isRomanPali = false;
     renderRecentBooks();
     const {basket, category, book, page, firstpage} = getParams();
     try{
-      if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
+      if(basket === "charts" && !book){ if(category) showChart(category); else showChartsList(); }
+      else if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
       else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && (category === "paauk" || category === "paauk_texts")){ showPaBooks(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
