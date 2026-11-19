@@ -1401,17 +1401,6 @@
    "edition_of": "attha_di_02"
   },
   {
-   "id": "attha_di_02_sheet107",
-   "title": "မဟာဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (ပ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဒီဃနိကာယ်",
-   "cat_key": "di",
-   "size": 2852411,
-   "date": "2026-11-17",
-   "edition_of": "attha_di_02"
-  },
-  {
    "id": "attha_di_02_sheet109",
    "title": "မဟာဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (တ))",
    "basket": "အဋ္ဌကထာ",
@@ -1441,6 +1430,17 @@
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
    "size": 5098900,
+   "date": "2026-11-18",
+   "edition_of": "attha_di_02"
+  },
+  {
+   "id": "attha_di_02_sheet107",
+   "title": "မဟာဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 2861363,
    "date": "2026-11-18",
    "edition_of": "attha_di_02"
   },
