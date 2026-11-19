@@ -1303,17 +1303,6 @@
    "edition_of": "attha_di_01"
   },
   {
-   "id": "attha_di_01_sheet102",
-   "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (ဒု))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဒီဃနိကာယ်",
-   "cat_key": "di",
-   "size": 3352770,
-   "date": "2026-11-17",
-   "edition_of": "attha_di_01"
-  },
-  {
    "id": "attha_di_01_sheet104",
    "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (စ))",
    "basket": "အဋ္ဌကထာ",
@@ -1376,6 +1365,17 @@
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
    "size": 4412322,
+   "date": "2026-11-18",
+   "edition_of": "attha_di_01"
+  },
+  {
+   "id": "attha_di_01_sheet102",
+   "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3405020,
    "date": "2026-11-18",
    "edition_of": "attha_di_01"
   },
