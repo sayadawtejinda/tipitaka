@@ -31,19 +31,33 @@ def _json(path, default):
     try: return json.load(open(path, encoding='utf-8'))
     except Exception: return default
 gemini_done = m_status.gemini_done          # the nissaya of the sheet is completely checked by Gemini (same rule as run_tool)
+def translated_here(n, books, tri):
+    """the translation on the web covers EVERY Pali page of this sheet (a Pali book made of two sheets - e.g. 117 = Pali 1-135, 118 = Pali 136-254 - is not finished when only the first sheet is translated)"""
+    if not tri: return False
+    try: P = json.load(open(os.path.join(NSY, 'paired', '%03d.json' % n), encoding='utf-8'))['ppmap']
+    except Exception: return False
+    for x in books:
+        if x not in tri: return False
+        if isinstance(tri, list): continue                                       # old index form (a list of books): the whole book
+        have = set()
+        for e in tri[x]:
+            d = _json(os.path.join(TIPI, 'data', 'nissaya_translations', e['file']), {}); have.update(int(k) for k in d)
+        need = {int(k.split('|')[1]) for k in P if k.split('|')[0] == x}
+        if not need or not need <= have: return False
+    return True
 def get_sheets(keep=None):
     keep = keep if keep is not None else load_state().get('sheet')     # the book chosen / published last stays in the list (even when it would be hidden)
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
     pub = published()
     mm = set(_json(os.path.join(TIPI, 'data', 'mm_split', 'index.json'), {}))
-    done = set(_json(os.path.join(TIPI, 'data', 'nissaya_translations', 'index.json'), [])) if hidepub.get() else set()
+    tri = _json(os.path.join(TIPI, 'data', 'nissaya_translations', 'index.json'), []) if hidepub.get() else []
     bks = {r['n']: (r.get('final') or {}).get('books') or [] for r in _json(os.path.join(NSY, 'catalog.json'), [])}
     out = []
     for n, t in m_tool.list_sheets():
         if n not in pub: continue
         if not gemini_done(n): continue                    # nissaya not (completely) checked by Gemini yet: not offered for translation
         b = bks.get(n) or []
-        if n != keep and b and (all(x in mm for x in b) or all(x in done for x in b)): continue
+        if n != keep and b and (all(x in mm for x in b) or translated_here(n, b, tri)): continue
         out.append((n, t))
     return out
 sheets = get_sheets()
