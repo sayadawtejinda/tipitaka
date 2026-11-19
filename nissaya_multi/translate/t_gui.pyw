@@ -229,5 +229,9 @@ def poll():
     try: refresh_books()
     except Exception as e: say('စာရင်း အမှား: %r' % e)
     root.after(5000, poll)
+def _resume_start():
+    try: t_core.resume_partial(say)
+    except Exception as e: say('resume အမှား: %r' % e)
+root.after(1500, _resume_start)          # half-translated input files get their _rest file when the tool starts
 root.after(2000, poll)
 root.mainloop()

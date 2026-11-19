@@ -81,7 +81,7 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=Fals
 LANGS = {'vi': 'ဗီယက်နမ်', 'en': 'အင်္ဂလိပ်'}
 
 
-def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=None):
+def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=None, rest=False):
     """Vietnamese / English input files: every Pali page that HAS a Burmese translation (gold/tr_NNN.json) -> '### ပါဠိ' (the Pali text, to look at when the Burmese is unclear) + '### မြန်မာပြန်'
     (the text to translate).  Pages already translated into the language (gold/tr_NNN_<lang>.json) are left out unless redo.  -> output/tr_NNN_<book>_pali<a>-<b>_for<lang>.txt
     (the Canvas app's answer comes back as ..._for<lang>_<lang>.txt and is ingested by ingest_downloads)"""
@@ -106,10 +106,10 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
         cur.append((g, t)); size += len(t)
     if cur: groups.append(cur)
     os.makedirs(OUT, exist_ok=True); files = []
-    for old in glob.glob(os.path.join(OUT, 'tr_%03d_*_for%s.txt' % (n, lang))): os.remove(old); log('  🗑 ဖိုင်အဟောင်း ဖျက်ပြီး: ' + os.path.basename(old))
+    for old in ([] if rest else glob.glob(os.path.join(OUT, 'tr_%03d_*_for%s.txt' % (n, lang)))): os.remove(old); log('  🗑 ဖိုင်အဟောင်း ဖျက်ပြီး: ' + os.path.basename(old))          # the _rest file of a half-finished input does not delete the old files
     for j in range(0, len(groups), sets):
         chunk = groups[j:j + sets]; first, last = chunk[0][0][0], chunk[-1][-1][0]
-        name = 'tr_%03d_%s_pali%d-%d_for%s.txt' % (n, first[0], first[1], last[1], lang)
+        name = 'tr_%03d_%s_pali%d-%d%s_for%s.txt' % (n, first[0], first[1], last[1], '_rest' if rest else '', lang)
         body = NL.join('===== အစု %d / %d =====' % (k + 1, len(chunk)) + NL + NL.join(t for g, t in s_) for k, s_ in enumerate(chunk))
         open(os.path.join(OUT, name), 'w', encoding='utf-8').write(body)
         files.append(name); log('  %s : %d sets (ပါဠိ %d-%d), %d characters' % (name, len(chunk), first[1], last[1], len(body)))
@@ -163,7 +163,13 @@ def ingest_downloads(log=print, after=None, after_lang=None):
             if '_for' + lang in name and os.path.exists(inp):
                 want = set(parse_pages(open(inp, encoding='utf-8').read()))
                 if want <= set(d): os.remove(inp); log('  ✔ ထည့်ဖိုင်ပြီးစီးသဖြင့် ဖျက်ပြီး')
-                else: log('  ပြန်မလာသေးသော ပါဠိစာမျက်နှာ: %s — ဖိုင်ကို ဆက်ထားသည် (ကျန်တာကို ① ထပ်နှိပ်၍ ပြန်ထုတ်)' % ' '.join(map(str, sorted(want - set(d)))))
+                else:
+                    miss = want - set(d)
+                    log('  ပြန်မလာသေးသော ပါဠိစာမျက်နှာ: %s — ကျန်တာကို ဖိုင်အသစ် (_rest) အလိုအလျောက် ထုတ်မည်' % ' '.join(map(str, sorted(miss))))
+                    try:
+                        build_lang(n, lang, only=miss, rest=True, log=log)
+                        os.remove(inp); log('  🗑 မပြည့်စုံသော ထည့်ဖိုင်အဟောင်း ဖျက်ပြီး')
+                    except BaseException as e: log('  ⚠ _rest ဖိုင် မထုတ်နိုင်: %r (ထည့်ဖိုင်ကို မဖျက်)' % e)
             got += 1
             if after_lang:
                 try: after_lang(n, lang)
@@ -191,6 +197,29 @@ def ingest_downloads(log=print, after=None, after_lang=None):
             try: after(n)
             except BaseException as e: log('⚠ after-step (web တင်) အမှား: %r' % e)
     return got
+
+
+def resume_partial(log=print):
+    """input files that are HALF translated (some of their pages came back, the answer was taken before this rule existed or the tool was closed): the missing pages get a _rest file by themselves, the old input file goes.
+    An input file nothing came back for yet is left alone (it waits for the Canvas app).  Done when the tool starts."""
+    n_made = 0
+    for f in sorted(glob.glob(os.path.join(OUT, 'tr_*_pali*-*.txt'))):
+        name = os.path.basename(f)
+        m = re.match(r'tr_(\d+)_(.+?)_pali(\d+)-(\d+)(_rest)?(?:_for(vi|en))?[.]txt$', name)
+        if not m: continue
+        n = int(m.group(1)); lang = m.group(6) or ''
+        try:
+            want = set(parse_pages(open(f, encoding='utf-8').read())); d = load_translations(n, lang)
+            got = want & set(d)
+            if not got: continue                                   # nothing back yet
+            if want <= set(d): os.remove(f); log('✔ %s — ပြီးစီးပြီးသား၊ ထည့်ဖိုင် ဖျက်ပြီး' % name); continue
+            miss = want - set(d)
+            log('↻ %s — ပြန်လာပြီး %d / %d မျက်နှာ၊ ကျန် %d မျက်နှာကို ဖိုင်အသစ် (_rest) ထုတ်မည်' % (name, len(got), len(want), len(miss)))
+            if lang: build_lang(n, lang, only=miss, rest=True, log=log)
+            else: build(n, 1, 10 ** 6, only=miss, rest=True, log=log, raw_ok=False)
+            os.remove(f); n_made += 1; log('  🗑 မပြည့်စုံသော ထည့်ဖိုင်အဟောင်း ဖျက်ပြီး')
+        except BaseException as e: log('⚠ %s: %r' % (name, e))
+    return n_made
 
 
 def export_book(n):
