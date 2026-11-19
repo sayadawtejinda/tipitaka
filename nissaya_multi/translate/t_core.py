@@ -78,6 +78,45 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=Fals
     return OUT, files
 
 
+LANGS = {'vi': 'ဗီယက်နမ်', 'en': 'အင်္ဂလိပ်'}
+
+
+def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=None):
+    """Vietnamese / English input files: every Pali page that HAS a Burmese translation (gold/tr_NNN.json) -> '### ပါဠိ' (the Pali text, to look at when the Burmese is unclear) + '### မြန်မာပြန်'
+    (the text to translate).  Pages already translated into the language (gold/tr_NNN_<lang>.json) are left out unless redo.  -> output/tr_NNN_<book>_pali<a>-<b>_for<lang>.txt
+    (the Canvas app's answer comes back as ..._for<lang>_<lang>.txt and is ingested by ingest_downloads)"""
+    P = _paired(n); my = load_translations(n)
+    if not my: raise RuntimeError('စာအုပ် %03d: မြန်မာပြန် မရှိသေးပါ' % n)
+    done = {} if redo else load_translations(n, lang)
+    keyset = {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
+    books = sorted({b for b, p in keyset}); blocks = {}
+    for b in P['blocks']: blocks.setdefault((b['book'], b['page']), []).append(b)
+    have = [p for p in my if my[p].strip() and (only is None or p in only)]
+    pages = sorted(p for p in have if p not in done)
+    if len(pages) < len(have): log('  %sပြီးသား ပါဠိ %d မျက်နှာ ချန်ထားသည်' % (LANGS[lang], len(have) - len(pages)))
+    built = []
+    for pg in pages:
+        owners = [b for b in books if (b, pg) in blocks] or books[:1]
+        bk = owners[0]; bl = sorted(blocks.get((bk, pg), []), key=lambda b: b['i'])
+        pali = NL.join(('## ' if (b.get('cls') or '').strip() in HEAD_CLS else '') + b['pali'] for b in bl)
+        built.append(((bk, pg), '--- စာမျက်နှာ %d ---' % pg + NL + '### ပါဠိ' + NL + (pali.strip() or '(ပါဠိစာ မတွေ့)') + NL + '### မြန်မာပြန်' + NL + my[pg].strip() + NL))
+    groups = []; cur = []; size = 0
+    for g, t in built:
+        if cur and size + len(t) > maxchars: groups.append(cur); cur = []; size = 0
+        cur.append((g, t)); size += len(t)
+    if cur: groups.append(cur)
+    os.makedirs(OUT, exist_ok=True); files = []
+    for old in glob.glob(os.path.join(OUT, 'tr_%03d_*_for%s.txt' % (n, lang))): os.remove(old); log('  🗑 ဖိုင်အဟောင်း ဖျက်ပြီး: ' + os.path.basename(old))
+    for j in range(0, len(groups), sets):
+        chunk = groups[j:j + sets]; first, last = chunk[0][0][0], chunk[-1][-1][0]
+        name = 'tr_%03d_%s_pali%d-%d_for%s.txt' % (n, first[0], first[1], last[1], lang)
+        body = NL.join('===== အစု %d / %d =====' % (k + 1, len(chunk)) + NL + NL.join(t for g, t in s_) for k, s_ in enumerate(chunk))
+        open(os.path.join(OUT, name), 'w', encoding='utf-8').write(body)
+        files.append(name); log('  %s : %d sets (ပါဠိ %d-%d), %d characters' % (name, len(chunk), first[1], last[1], len(body)))
+    log('%d ဖိုင်၊ %sပြန်ရန် ပါဠိ/မြန်မာပြန် %d မျက်နှာ -> %s' % (len(files), LANGS[lang], len(built), OUT))
+    return OUT, files
+
+
 _PAGE = re.compile(r'^---\s*စာမျက်နှာ\s*([0-9၀-၉]+)\s*---\s*$', re.M)
 _DIG = str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789')
 
@@ -104,23 +143,29 @@ def _heads(text):
     return {k: sum(1 for l in v.split(NL) if l.strip().startswith('## ')) for k, v in parse_pages(text).items()}
 
 
-_NAME = re.compile(r'tr_(DD+)_(.+?)_pali(DD+)-(DD+)(?:_rest)?_translated(?:_(vi|en))?(?: [(]DD+[)])?[.]txt$'.replace('DD', chr(92) + 'd'))
+_NAME = re.compile(r'tr_(DD+)_(.+?)_pali(DD+)-(DD+)(?:_rest)?(?:_translated(?:_(vi|en))?|_for(?:vi|en)_(vi|en))(?: [(]DD+[)])?[.]txt$'.replace('DD', chr(92) + 'd'))
 
 
 def ingest_downloads(log=print, after=None):
     got = 0
-    for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt'))):
+    for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt')) + glob.glob(os.path.join(DOWNLOADS, 'tr_*_for??_??*.txt'))):
         name = os.path.basename(f); m = _NAME.match(name)
         if not m or time.time() - os.path.getmtime(f) < 3: continue
-        n = int(m.group(1)); lang = m.group(5) or ''
+        n = int(m.group(1)); lang = m.group(5) or m.group(6) or ''
         pg = parse_pages(open(f, encoding='utf-8-sig').read())
         if not pg: log('⚠ Downloads/%s — "--- စာမျက်နှာ N ---" မတွေ့ပါ' % name); continue
         d = load_translations(n, lang); repl = [k for k in pg if k in d]
         d.update({k: v for k, v in pg.items() if v.strip()}); save_translations(n, d, lang)
         os.makedirs(RECV, exist_ok=True); shutil.move(f, os.path.join(RECV, time.strftime('%Y%m%d_%H%M%S_') + name))
         log('⬇ %s — စာအုပ် %03d ထဲ %s %d မျက်နှာ ထည့်ပြီး%s' % (name, n, {'vi': 'ဗီယက်နမ်ပြန်', 'en': 'အင်္ဂလိပ်ပြန်'}.get(lang, 'ပါဠိ'), len(pg), (' (အစားထိုး %d)' % len(repl)) if repl else ''))
-        if lang:                                           # Vietnamese / English of the Burmese translation: only kept (gold/tr_NNN_vi.json / _en.json), nothing else to do
+        if lang:                                           # Vietnamese / English of the Burmese translation: kept in gold/tr_NNN_vi.json / _en.json
+            inp = os.path.join(OUT, re.sub('_' + lang + r'(?: [(]\d+[)])?[.]txt$', '.txt', name))          # ..._forvi_vi.txt -> the input file ..._forvi.txt
+            if '_for' + lang in name and os.path.exists(inp):
+                want = set(parse_pages(open(inp, encoding='utf-8').read()))
+                if want <= set(d): os.remove(inp); log('  ✔ ထည့်ဖိုင်ပြီးစီးသဖြင့် ဖျက်ပြီး')
+                else: log('  ပြန်မလာသေးသော ပါဠိစာမျက်နှာ: %s — ဖိုင်ကို ဆက်ထားသည် (ကျန်တာကို ① ထပ်နှိပ်၍ ပြန်ထုတ်)' % ' '.join(map(str, sorted(want - set(d)))))
             got += 1; continue
+
         inp = os.path.join(OUT, re.sub(r'_translated.*$', '.txt', name))
         if os.path.exists(inp):
             src = open(inp, encoding='utf-8').read(); want = set(parse_pages(src))
@@ -159,6 +204,11 @@ def _git(*args):
     r = subprocess.run(['git'] + list(args), cwd=REPO, capture_output=True, text=True, encoding='utf-8', errors='replace')
     if r.returncode: raise RuntimeError('git %s: %s' % (' '.join(args), (r.stderr or r.stdout).strip()[:500]))
     return r
+
+
+def lang_progress(n, lang):
+    """(Pali pages with a Burmese translation, of them already translated into the language)"""
+    my = {k for k, v in load_translations(n).items() if v.strip()}; return len(my), len(my & set(load_translations(n, lang)))
 
 
 def is_complete(n):

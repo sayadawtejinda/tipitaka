@@ -60,7 +60,7 @@ MODES_JS = (chr(10) + "        const PROMPT_VI = `" + _prompt('translate_prompt_
     + "        const PROMPTS = { my: SYSTEM_PROMPT, vi: PROMPT_VI, en: PROMPT_EN };" + chr(10)
     + "        const SUFFIX = { my: '_translated.txt', vi: '_vi.txt', en: '_en.txt' };" + chr(10)
     + "        const MODE_LBL = { my: 'မြန်မာပြန်မည်', vi: 'ဗီယက်နမ်ပြန်မည်', en: 'အင်္ဂလိပ်ပြန်မည်' };" + chr(10)
-    + "        const USER_PRE = { vi: 'အောက်ပါ စာသားသည် မြန်မာဘာသာပြန် စာမျက်နှာများ ဖြစ်သည်။ ညွှန်ကြားချက်များအတိုင်း စာမျက်နှာ တစ်ခုချင်းကို ဗီယက်နမ်ဘာသာသို့ ပြန်၍ JSON ဖြင့် ပြန်ပေးပါ။', en: 'အောက်ပါ စာသားသည် မြန်မာဘာသာပြန် စာမျက်နှာများ ဖြစ်သည်။ ညွှန်ကြားချက်များအတိုင်း စာမျက်နှာ တစ်ခုချင်းကို အင်္ဂလိပ်ဘာသာသို့ ပြန်၍ JSON ဖြင့် ပြန်ပေးပါ။' };" + chr(10)
+    + "        const USER_PRE = { vi: 'အောက်ပါ စာသားတွင် ပါဠိစာမျက်နှာများနှင့် ၎င်းတို့၏ မြန်မာဘာသာပြန် ပါသည်။ ညွှန်ကြားချက်များအတိုင်း မြန်မာပြန်ကို (ပါဠိကို ကိုးကား၍) ဗီယက်နမ်ဘာသာသို့ စာမျက်နှာ တစ်ခုချင်း ပြန်၍ JSON ဖြင့် ပြန်ပေးပါ။', en: 'အောက်ပါ စာသားတွင် ပါဠိစာမျက်နှာများနှင့် ၎င်းတို့၏ မြန်မာဘာသာပြန် ပါသည်။ ညွှန်ကြားချက်များအတိုင်း မြန်မာပြန်ကို (ပါဠိကို ကိုးကား၍) အင်္ဂလိပ်ဘာသာသို့ စာမျက်နှာ တစ်ခုချင်း ပြန်၍ JSON ဖြင့် ပြန်ပေးပါ။' };" + chr(10)
     + "        function setMode(m) { MODE = m; ['my', 'vi', 'en'].forEach(k => { const b = document.getElementById('mode_' + k); if (!b) return; b.className = 'px-3 py-1.5 rounded-lg text-sm font-bold border ' + (k === m ? 'bg-amber-700 text-white border-amber-700' : 'bg-white text-amber-800 border-amber-400 hover:bg-amber-50'); }); try { updateLabel(); } catch (e) {} }" + chr(10) + "        setMode('my');" + chr(10))
 s = s[:end] + MODES_JS + s[end:]
 for o, n in [

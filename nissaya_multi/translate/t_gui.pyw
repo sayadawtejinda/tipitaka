@@ -27,6 +27,8 @@ def save_state(**kw):
     try: json.dump(st, open(STATE, 'w', encoding='utf-8'))
     except Exception: pass
 hidepub = tk.BooleanVar(value=load_state().get('hide_pub', True))
+lang_var = tk.StringVar(value=load_state().get('lang', 'my'))          # my = Pali -> Burmese;  vi / en = the Burmese translation (+ the Pali page) -> Vietnamese / English
+LANG_NAME = {'my': 'မြန်မာ', 'vi': 'ဗီယက်နမ်', 'en': 'အင်္ဂလိပ်'}
 def _json(path, default):
     try: return json.load(open(path, encoding='utf-8'))
     except Exception: return default
@@ -47,6 +49,16 @@ def translated_here(n, books, tri):
     return True
 def get_sheets(keep=None):
     keep = keep if keep is not None else load_state().get('sheet')     # the book chosen / published last stays in the list (even when it would be hidden)
+    L = lang_var.get()
+    if L in ('vi', 'en'):               # Vietnamese / English: the sheets that already have a Burmese translation (gold/tr_NNN.json); a sheet finished in the language is hidden when the box is ticked
+        out = []
+        for n, t in m_tool.list_sheets():
+            if not os.path.exists(os.path.join(t_core.GOLD, 'tr_%03d.json' % n)): continue
+            tot, got = t_core.lang_progress(n, L)
+            if not tot: continue
+            if n != keep and hidepub.get() and got >= tot: continue
+            out.append((n, '%s   [%s %d/%d]' % (t, LANG_NAME[L], got, tot)))
+        return out
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
     pub = published()
     mm = set(_json(os.path.join(TIPI, 'data', 'mm_split', 'index.json'), {}))
@@ -70,6 +82,14 @@ cb.bind('<<ComboboxSelected>>', lambda e: save_state(sheet=sheets[cb.current()][
 def _toggle_hide():
     save_state(hide_pub=bool(hidepub.get())); refresh_books(force=True)
 ttk.Checkbutton(f, text='✅ web ပေါ်တင်ပြီးသော မြန်မာပြန် စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).grid(row=0, column=2, sticky='w', padx=6)
+def _lang_changed(*_):
+    save_state(lang=lang_var.get()); refresh_books(force=True)
+ttk.Label(f, text='ဘာသာပြန်မည့်ဘာသာ').grid(row=0, column=3, sticky='e', padx=(10, 2))
+_lc = ttk.Combobox(f, state='readonly', width=12, values=[LANG_NAME['my'], LANG_NAME['vi'], LANG_NAME['en']]); _lc.grid(row=0, column=4, sticky='w')
+_lc.current(['my', 'vi', 'en'].index(lang_var.get()) if lang_var.get() in ('my', 'vi', 'en') else 0)
+def _lc_pick(e=None):
+    lang_var.set(['my', 'vi', 'en'][_lc.current()]); _lang_changed()
+_lc.bind('<<ComboboxSelected>>', _lc_pick)
 def refresh_books(force=False):        # a book that run_tool publishes later appears here by itself (checked every few seconds); the chosen book stays chosen
     global sheets
     keep = sheets[cb.current()][0] if cb.current() >= 0 else None
@@ -78,7 +98,7 @@ def refresh_books(force=False):        # a book that run_tool publishes later ap
     sheets = new; cb['values'] = [t for n, t in sheets]
     for i, (n, t) in enumerate(sheets):
         if n == keep: cb.current(i)
-    say('📚 စာအုပ်စာရင်း ပြောင်းသည် — web တင်ပြီးသော စာအုပ် %d အုပ်' % len(sheets))
+    say('📚 စာအုပ်စာရင်း ပြောင်းသည် — %s စာအုပ် %d အုပ်' % ('web တင်ပြီး' if lang_var.get() == 'my' else LANG_NAME[lang_var.get()] + 'ပြန်ရန်', len(sheets)))
 r = ttk.Frame(f); r.grid(row=1, column=0, columnspan=2, sticky='w', pady=6)
 ttk.Label(r, text='စာအုပ်တစ်အုပ်လုံး ထုတ်မည်။    အစုတစ်စု စာလုံးရေ အများဆုံး').pack(side='left'); mc = ttk.Entry(r, width=6); mc.pack(side='left', padx=3); mc.insert(0, '10000')
 ttk.Label(r, text='   ဖိုင်တစ်ခုမှာ အစု').pack(side='left'); ns = ttk.Entry(r, width=3); ns.pack(side='left', padx=3); ns.insert(0, '10')
@@ -97,6 +117,12 @@ def sel():
 
 def work1(n, m, k):
     try:
+        L = lang_var.get()
+        if L in ('vi', 'en'):
+            out, files = t_core.build_lang(n, L, m, k, say, redo=redo.get())
+            say('✔ ဖိုင် %d ခု ထွက်ပါပြီ — Gemini Canvas "Pali Translate AI" app ထဲ upload → အပေါ်က "%sပြန်" ခလုပ်ကို ရွေးပြီး ▶ (ရလဒ် *_for%s_%s.txt ကို Downloads ထဲ ချမည်၊ ဤကိရိယာက ယူပါလိမ့်မည်)' % (len(files), LANG_NAME[L], L, L))
+            if files: os.startfile(out)
+            return
         out, files = t_core.build(n, 1, 10 ** 6, m, k, raw.get(), say, redo=redo.get())
         say('✔ ဖိုင် %d ခု ထွက်ပါပြီ — ဖိုင်ကို Gemini Canvas "Pali Translate AI" app ထဲ upload လုပ်ပြီး ခလုပ်တစ်ခါနှိပ်ပါ (ပြီးလျှင် ရလဒ်ကို Downloads ထဲ ချမည်၊ ဤကိရိယာက ယူပါလိမ့်မည်)' % len(files))
         if files: os.startfile(out)
@@ -121,11 +147,14 @@ def work_pub(n, auto=False):
 
 
 def go_pub():
-    n = sel(); bpub.config(state='disabled')
+    n = sel()
+    if lang_var.get() in ('vi', 'en'): return messagebox.showinfo('', 'ဗီယက်နမ် / အင်္ဂလိပ်ပြန်ကို web ပေါ် ပြမည့် နည်းလမ်း မရေးရသေးပါ။ ရလဒ်ကို gold/tr_%03d_%s.json ထဲ သိမ်းထားသည် (③ ဖြင့် .txt ထုတ်နိုင်)။' % (n, lang_var.get()))
+    bpub.config(state='disabled')
     threading.Thread(target=work_pub, args=(n,), daemon=True).start()
 
 
 def after_ingest(n):       # a whole book is translated (no input file waiting any more) -> published by itself when the box is ticked
+    # (called for the Burmese translation only: Vietnamese / English results stop in ingest_downloads)
     if autopub.get() and t_core.is_complete(n):
         say('✔ စာအုပ် %03d မြန်မာပြန် ပြည့်စုံပြီ — အလိုအလျောက် web သို့ တင်မည်' % n)
         threading.Thread(target=work_pub, args=(n, True), daemon=True).start()
@@ -149,11 +178,18 @@ def go_extra():
 
 
 def export():
-    n = sel(); p, c = t_core.export_book(n); say('✔ မြန်မာပြန် ပါဠိ %d မျက်နှာ -> %s' % (c, p)); os.startfile(p)
+    n = sel(); L = lang_var.get()
+    if L in ('vi', 'en'):
+        d = t_core.load_translations(n, L); p = os.path.join(t_core.GOLD, 'tr_%03d_%s.txt' % (n, L))
+        open(p, 'w', encoding='utf-8').write((chr(10) * 2).join('--- ပါဠိစာမျက်နှာ %d ---' % k + chr(10) + d[k] for k in sorted(d))); say('✔ %sပြန် ပါဠိ %d မျက်နှာ -> %s' % (LANG_NAME[L], len(d), p)); return os.startfile(p)
+    p, c = t_core.export_book(n); say('✔ မြန်မာပြန် ပါဠိ %d မျက်နှာ -> %s' % (c, p)); os.startfile(p)
 
 
 def count():
-    n = sel(); d = t_core.load_translations(n); say('စာအုပ် %03d: မြန်မာပြန်ပြီး ပါဠိ %d မျက်နှာ%s' % (n, len(d), (' (%d–%d)' % (min(d), max(d))) if d else ''))
+    n = sel(); L = lang_var.get()
+    if L in ('vi', 'en'):
+        tot, got = t_core.lang_progress(n, L); return say('စာအုပ် %03d: မြန်မာပြန်ပြီး ပါဠိ %d မျက်နှာအနက် %sပြန်ပြီး %d မျက်နှာ' % (n, tot, LANG_NAME[L], got))
+    d = t_core.load_translations(n); say('စာအုပ် %03d: မြန်မာပြန်ပြီး ပါဠိ %d မျက်နှာ%s' % (n, len(d), (' (%d–%d)' % (min(d), max(d))) if d else ''))
 
 
 b1 = ttk.Button(bf, text='① Gemini ဖိုင် ထုတ်မည်', command=go1); b1.pack(side='left', padx=3)
