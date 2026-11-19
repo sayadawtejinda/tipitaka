@@ -1262,6 +1262,17 @@
    "edition_of": "attha_vi_03"
   },
   {
+   "id": "attha_vi_03_sheet223",
+   "title": "မဟာဝဂ္ဂအဋ္ဌကထာ (မဟာဝါအဋ္ဌကထာနိသျ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4108603,
+   "date": "2026-11-19",
+   "edition_of": "attha_vi_03"
+  },
+  {
    "id": "attha_vi_04",
    "title": "စူဠဝဂ္ဂအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -3237,5 +3248,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 204
+ "n_editions": 205
 }
