@@ -76,7 +76,9 @@
   },
   {
    "label": "ပခုက္ကူမူ",
-   "file": "mula_di_03_pakhokku"
+   "file": "mula_di_03_pakhokku",
+   "from": 1,
+   "to": 260
   }
  ],
  "attha_di_01": [
