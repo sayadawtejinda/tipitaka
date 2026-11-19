@@ -41,7 +41,7 @@ def lang_on_web(n, L):
     have = set()
     for ents in idx.values():
         for e in ents:
-            if e.get('sheet') == n: have.update(int(k) for k in _json(os.path.join(TIPI, 'data', 'translations_' + L, e['file']), {}))
+            if n in (e.get('sheets') or [e.get('sheet')]): have.update(int(k) for k in _json(os.path.join(TIPI, 'data', 'translations_' + L, e['file']), {}))
     return my <= have
 def translated_here(n, books, tri):
     """the translation on the web covers EVERY Pali page of this sheet (a Pali book made of two sheets - e.g. 117 = Pali 1-135, 118 = Pali 136-254 - is not finished when only the first sheet is translated)"""

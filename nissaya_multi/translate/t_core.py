@@ -271,7 +271,7 @@ def publish(n, log=print, lang=''):
     for b, pages in per.items():
         if not pages: continue
         vs = idx.setdefault(b, [])
-        v = next((x for x in vs if x.get('sheet') == n), None)
+        v = next((x for x in vs if n in (x.get('sheets') or [x.get('sheet')])), None)
         if v is None:                                                 # an old entry (written before the sheet number was kept) whose text is the same as this sheet's translation: it IS this sheet
             for x in vs:
                 if x.get('sheet') is None:
@@ -279,6 +279,11 @@ def publish(n, log=print, lang=''):
                     od = json.load(open(fo, encoding='utf-8')) if os.path.exists(fo) else {}
                     same = sum(1 for k, t in pages.items() if od.get(str(k)) == t)
                     if same >= max(1, len(pages) // 2): x['sheet'] = n; v = x; break
+        if v is None:                                                 # another VOLUME of the same Pali book (its Pali pages do not overlap with this sheet's): the same file, not a second variant ("မြန်မာ ၂" is for another EDITION of the same pages)
+            for x in vs:
+                fo = os.path.join(WEBDIR, x['file']); od = json.load(open(fo, encoding='utf-8')) if os.path.exists(fo) else {}
+                if od and not (set(int(k) for k in od) & set(pages)):
+                    x['sheets'] = sorted(set((x.get('sheets') or [x.get('sheet')]) + [n]), key=lambda q: (q is None, q)); v = x; log('  %s : အတွဲအသစ် (ပါဠိစာမျက်နှာ မထပ်) - ရှိပြီးသားဖိုင်ထဲ ပေါင်းထည့်သည်' % b); break
         if v is None:
             v = {'file': (b + '.json') if not vs else '%s__%d.json' % (b, n), 'sheet': n}; vs.append(v)
             log('  %s : မြန်မာပြန် အသစ် (မူကွဲ %d) — web တွင် "မြန်မာ %d" ဟု ပေါ်မည်' % (b, len(vs), len(vs)))
