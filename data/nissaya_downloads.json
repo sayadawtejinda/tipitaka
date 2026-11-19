@@ -3126,17 +3126,6 @@
    "edition_of": "annya_sadda_07"
   },
   {
-   "id": "annya_sadda_08_sheet406",
-   "title": "သဒ္ဒနီတိပ္ပကရဏံ (ဓာတုမာလာ) (ဦးဗုဓ် (ပ))",
-   "basket": "အည",
-   "basket_key": "annya",
-   "category": "သဒ္ဒါဆိုင်ရာ",
-   "cat_key": "sadda",
-   "size": 3285409,
-   "date": "2026-11-12",
-   "edition_of": "annya_sadda_08"
-  },
-  {
    "id": "annya_sadda_08_sheet407",
    "title": "သဒ္ဒနီတိပ္ပကရဏံ (ဓာတုမာလာ) (ဦးဗုဓ် (ဒု))",
    "basket": "အည",
@@ -3145,6 +3134,17 @@
    "cat_key": "sadda",
    "size": 2456900,
    "date": "2026-11-12",
+   "edition_of": "annya_sadda_08"
+  },
+  {
+   "id": "annya_sadda_08_sheet406",
+   "title": "သဒ္ဒနီတိပ္ပကရဏံ (ဓာတုမာလာ) (ဦးဗုဓ် (ပ))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "သဒ္ဒါဆိုင်ရာ",
+   "cat_key": "sadda",
+   "size": 3265140,
+   "date": "2026-11-18",
    "edition_of": "annya_sadda_08"
   },
   {
