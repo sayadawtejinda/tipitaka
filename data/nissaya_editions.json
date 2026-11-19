@@ -941,12 +941,6 @@
    "file": "attha_vi_01_01"
   },
   {
-   "label": "ဘာဋီမူ (တ)",
-   "file": "attha_vi_01_01_sheet082",
-   "from": 289,
-   "to": 346
-  },
-  {
    "label": "မအူမူ (ဒု)",
    "file": "attha_vi_01_01_sheet077",
    "from": 79,
@@ -987,6 +981,12 @@
    "file": "attha_vi_01_01_sheet080",
    "from": 169,
    "to": 346
+  },
+  {
+   "label": "ဘာဋီမူ (တ)",
+   "file": "attha_vi_01_01_sheet082",
+   "from": 289,
+   "to": 346
   }
  ],
  "attha_vi_01_02": [
@@ -1001,16 +1001,16 @@
    "to": 312
   },
   {
-   "label": "ဘာဋီမူ (တ)",
-   "file": "attha_vi_01_02_sheet082",
-   "from": 1,
-   "to": 147
-  },
-  {
    "label": "မအူမူ (စ)",
    "file": "attha_vi_01_02_sheet081",
    "from": 1,
    "to": 312
+  },
+  {
+   "label": "ဘာဋီမူ (တ)",
+   "file": "attha_vi_01_02_sheet082",
+   "from": 1,
+   "to": 147
   }
  ],
  "attha_vi_02": [
