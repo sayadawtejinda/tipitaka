@@ -3308,7 +3308,13 @@ let isRomanPali = false;
       const out = []; let buf = [];
       const BURM = /(သည်|၏|ကို|တို့|ကုန်|၍|ဖြင့်|နှင့်|အား|၌|ဟု|ဟူ|ပြီ|လျှင်|သော|သူ|ရာ|ခြင်း|ပါ)$/;      // a token with a Burmese grammar ending
       const isPaliQuote = q => { const tk = q.slice(1, -1).split(/[\s၊။,.;:!?()\[\]\-]+/).filter(Boolean); return tk.length > 0 && !tk.some(x => BURM.test(x)); };      // "ဧဝံ မေ သုတံ" is Pali (bold); a quotation in Burmese is not
-      const fmt = l => esc(l).replace(/“[^“”\n]{1,150}”|"[^"\n]{1,150}"|‘[^‘’\n]{1,150}’|'[^'\n]{1,150}'/g, m => isPaliQuote(m) ? "<b>" + m + "</b>" : m);      // "..." / “...” ထဲက စကားလုံးကို စာလုံးမည်ဖြင့် ပြသည်
+      const fmt = l => {      // "..." quotations: the straight quotes are paired one after the other (1st-2nd, 3rd-4th ...) however long the quotation is, so one long quotation cannot turn the following ones inside out; only a PALI quotation is bold
+        let t = esc(l), idx = [], o = "", last = 0;
+        for(let i = 0; i < t.length; i++) if(t[i] === '"') idx.push(i);
+        for(let k = 0; k + 1 < idx.length; k += 2){ const q = t.slice(idx[k], idx[k + 1] + 1); o += t.slice(last, idx[k]) + (q.length <= 152 && isPaliQuote(q) ? "<b>" + q + "</b>" : q); last = idx[k + 1] + 1; }
+        t = o + t.slice(last);
+        return t.replace(/“[^“”\n]{1,150}”|‘[^‘’\n]{1,150}’|'[^'\n]{1,150}'/g, m => isPaliQuote(m) ? "<b>" + m + "</b>" : m);
+      };
       const flush = () => { if(buf.length){ out.push(`<p class="bodytext">${buf.map(fmt).join("<br>")}</p>`); buf = []; } };
       t = t.replace(/([^\n#])[ \t]*(##\s)/g, "$1\n$2");      // Gemini က "## ခေါင်းစဉ်" ကို စာကြောင်းအလယ်မှာ ထည့်မိလျှင်လည်း ခေါင်းစဉ်ကို စာကြောင်းအသစ်ဖြင့် စပေးသည်
       const hd0 = h => { let m = h.match(/^(.*?။)\s+(\S[\s\S]*)$/); if(m && m[1].length <= 45) return [m[1], m[2]]; if(h.length > 60){ m = h.match(/^(.{1,80}?(?:ကထာ|အဖွင့်|ဝဏ္ဏနာ|ဝတ္ထု|နိဒ္ဒေသော|နိဒ္ဒေသ|ခန္ဓက|ဝဂ္ဂ|အခန်း|သုတ်|သုတ္တ)[။)]?)\s+(\S[\s\S]*)$/); if(m) return [m[1], m[2]]; return ["", h]; } return [h, ""]; };      // "## " စာကြောင်းရှည်ပြီး ခေါင်းစဉ်အဆုံး မသိရလျှင် ("ကထာ"၊ "အဖွင့်" စသည်ဖြင့် မဆုံး) ခေါင်းစဉ်မလုပ်ဘဲ စာပိုဒ်အဖြစ် ပြသည်
