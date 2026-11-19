@@ -1209,16 +1209,16 @@
  ],
  "annya_sadda_02": [
   {
-   "label": "ဘာသာဋီကာမူ (ပ)",
-   "file": "annya_sadda_02_sheet362",
-   "from": 1,
-   "to": 196
-  },
-  {
    "label": "ဘာသာဋီကာမူ (ဒု)",
    "file": "annya_sadda_02_sheet363",
    "from": 197,
    "to": 421
+  },
+  {
+   "label": "ဘာသာဋီကာမူ (ပ)",
+   "file": "annya_sadda_02_sheet362",
+   "from": 1,
+   "to": 196
   }
  ],
  "tika_bi_02_01": [
