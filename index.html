@@ -381,6 +381,7 @@ const TR_LANG_DIR = {my: "nissaya_translations", vi: "translations_vi", en: "tra
 let TP_TR_VARS_X = {vi: {}, en: {}};             // {book: [file, ...]} of data/translations_vi|en/index.json
 function tp_leaveLang(){ if(trLang !== "my"){ trLang = "my"; if(window.tpUiStop) window.tpUiStop(); if(trRomanForced){ isRomanPali = false; trRomanForced = false; } } }       // back to the Burmese reader: the Roman Pali that the language reader switched on goes off again
 let TP_TR_BOOKS = new Set(), tpTrCache = {}, TP_TR_VARS = {};   // မြန်မာပြန်ပြီးသော နိဿယစာအုပ်များ (data/nissaya_translations/index.json) နှင့် စာအုပ်တစ်အုပ်ချင်း၏ မြန်မာပြန် (ပါဠိစာမျက်နှာ → စာ)
+let nsyBtHl = null;      // the headword that was searched in the ဘာသာဋီကာအဘိဓာန် (highlighted in the page that opens)
 let nsyBtScroll = null;   // ဘာသာဋီကာ split view ဖွင့်လျှင် ရွှေ့ရမည့် နိဿယစာအုပ်စာမျက်နှာ
 let nsyBtPdf = null;     // ဘာသာဋီကာ split view ဖွင့်ထားစဉ် 📕 ခလုပ်အတွက် PDF လင့်
 let nissayaFile = null;  // ရွေးထားသော မူ (null = ပုံမှန် bookId)
@@ -1701,7 +1702,22 @@ let isRomanPali = false;
     box.querySelector('[data-a="close"]').addEventListener("click", () => { box.style.display = "none"; });
     return box;
   }
-  async function tp_btOpenWeb(file, n){      // file = "KK_AT_BT_01.pdf", n = အဘိဓာန်ညွှန်းထားသော စာမျက်နှာ
+  // the headword is marked (yellow) wherever it stands in the opened ဘာသာဋီကာ page (the text after the page mark until the next page mark; the whole opened part when it is not there)
+  function tp_btHighlight(markEl, contentEl, kw){
+    const k = String(kw || "").replace(/[\s\u200b-\u200d]+/g, "").replace(/[()၊။]/g, ""); if(k.length < 2) return;
+    const region = []; let n = markEl.nextElementSibling;
+    while(n && !/^\(နိဿယစာအုပ် စာမျက်နှာ/.test(n.textContent.trim())){ region.push(n); n = n.nextElementSibling; }
+    const wrap = els => { let count = 0;
+      els.forEach(root => { const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = []; let t; while(t = w.nextNode()) nodes.push(t);
+        nodes.forEach(t => { let v = t.nodeValue, i = v.indexOf(k); if(i < 0) return;
+          const frag = document.createDocumentFragment(); let from = 0;
+          while(i >= 0){ frag.appendChild(document.createTextNode(v.slice(from, i))); const m = document.createElement("mark"); m.className = "tp-bt-hl"; m.style.cssText = "background:#ffe14d;color:inherit;padding:0 1px;border-radius:2px;"; m.textContent = v.slice(i, i + k.length); frag.appendChild(m); count++; from = i + k.length; i = v.indexOf(k, from); }
+          frag.appendChild(document.createTextNode(v.slice(from))); t.parentNode.replaceChild(frag, t); }); });
+      return count; };
+    let c = wrap(region); if(!c) c = wrap([contentEl]);
+    const first = contentEl.querySelector("mark.tp-bt-hl"); if(first) first.scrollIntoView({block: "center"});
+  }
+  async function tp_btOpenWeb(file, n, kw){      // file = "KK_AT_BT_01.pdf", n = အဘိဓာန်ညွှန်းထားသော စာမျက်နှာ
     const w = TP_BT_WEB[file], bk = TP_BT_BOOKS.find(b => b.file === file) || { page_offset: 0 };
     // ဘာသာဋီကာကို 📖 နိဿယ (Split View) ထဲမှာ ဖွင့်မည် - ဘယ်ဘက်မှာ ပါဠိ၊ ညာဘက်မှာ ဘာသာဋီကာ (ဤဘာသာဋီကာစာမျက်နှာ ပါဝင်သော ပါဠိစာမျက်နှာသို့ သွား)
     try{
@@ -1717,7 +1733,7 @@ let isRomanPali = false;
           const pdfUrl2 = (TP_BT_LOC[file] || TP_BT_BASE) + file + "#page=" + (n + (bk.page_offset || 0));
           tp_sayHideForPhone();
           isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; nisViaList = mmGemini = false; nissayaFile = w.file;
-          nsyBtScroll = target;
+          nsyBtScroll = target; nsyBtHl = kw || null;
           nsyBtPdf = { url: pdfUrl2, title: w.name + " — စာမျက်နှာ " + n };
           await tp_sayOpenRef(bookId, parseInt(tp_btToArabic(mm[1]), 10));
           return;
@@ -1780,7 +1796,7 @@ let isRomanPali = false;
     body.querySelector(".tp-say-back").addEventListener("click", back);
     body.querySelectorAll(".tp-say-item").forEach(el => el.addEventListener("click", () => {
       const r = entry.refs[+el.dataset.i];
-      if(r.file && TP_BT_WEB[r.file]){ const nm = tp_btToArabic(r.page).match(/\d+/); if(nm){ tp_btOpenWeb(r.file, parseInt(nm[0], 10)); return; } }
+      if(r.file && TP_BT_WEB[r.file]){ const nm = tp_btToArabic(r.page).match(/\d+/); if(nm){ tp_btOpenWeb(r.file, parseInt(nm[0], 10), entry.keyword); return; } }
       if(r.url === "#" || (r.file && !avail.has(r.file))) return;
       tp_btOpenPdf(r.url, r.book + " — စာမျက်နှာ " + r.page);
     }));
@@ -3306,14 +3322,18 @@ let isRomanPali = false;
     const body = t => {          // Gemini မြန်မာပြန် - "## " ဖြင့်စသော စာကြောင်း = ခေါင်းစဉ် (အလယ်၊ စာလုံးမည်း)၊ ကျန်တာ စာပိုဒ် (ကွက်လပ်စာကြောင်းဖြင့် ခွဲ)
       if(!t) return ""; if(isHtml) return t;
       const out = []; let buf = [];
-      const BURM = /(သည်|၏|ကို|တို့|ကုန်|၍|ဖြင့်|နှင့်|အား|၌|ဟု|ဟူ|ပြီ|လျှင်|သော|သူ|ရာ|ခြင်း|ပါ)$/;      // a token with a Burmese grammar ending
-      const isPaliQuote = q => { const tk = q.slice(1, -1).split(/[\s၊။,.;:!?()\[\]\-]+/).filter(Boolean); return tk.length > 0 && !tk.some(x => BURM.test(x)); };      // "ဧဝံ မေ သုတံ" is Pali (bold); a quotation in Burmese is not
-      const fmt = l => {      // "..." quotations: the straight quotes are paired one after the other (1st-2nd, 3rd-4th ...) however long the quotation is, so one long quotation cannot turn the following ones inside out; only a PALI quotation is bold
-        let t = esc(l), idx = [], o = "", last = 0;
-        for(let i = 0; i < t.length; i++) if(t[i] === '"') idx.push(i);
-        for(let k = 0; k + 1 < idx.length; k += 2){ const q = t.slice(idx[k], idx[k + 1] + 1); o += t.slice(last, idx[k]) + (q.length <= 152 && isPaliQuote(q) ? "<b>" + q + "</b>" : q); last = idx[k + 1] + 1; }
+      const fmt = l => {      // "..." / “...” quotations are bold.  The straight quotes are paired by their look (an opener stands after a space / at the start and before a letter, a closer after a letter and before a space / mark), so one stray or very long quotation cannot turn the others inside out
+        let t = esc(l), o = "", last = 0, open = -1;
+        const isOp = i => (i === 0 || /[\s(\[၊။\-]/.test(t[i - 1])) && i + 1 < t.length && !/\s/.test(t[i + 1]);
+        const isCl = i => i > 0 && !/\s/.test(t[i - 1]) && (i + 1 >= t.length || /[\s၊။,.;:!?)\]]/.test(t[i + 1]));
+        for(let i = 0; i < t.length; i++){
+          if(t[i] !== '"') continue;
+          if(open < 0){ if(isCl(i) && !isOp(i)) continue; open = i; }
+          else if(isOp(i) && !isCl(i)){ open = i; }
+          else { o += t.slice(last, open) + "<b>" + t.slice(open, i + 1) + "</b>"; last = i + 1; open = -1; }
+        }
         t = o + t.slice(last);
-        return t.replace(/“[^“”\n]{1,150}”|‘[^‘’\n]{1,150}’|'[^'\n]{1,150}'/g, m => isPaliQuote(m) ? "<b>" + m + "</b>" : m);
+        return t.replace(/“[^“”\n]{1,400}”|‘[^‘’\n]{1,400}’/g, m => "<b>" + m + "</b>");
       };
       const flush = () => { if(buf.length){ out.push(`<p class="bodytext">${buf.map(fmt).join("<br>")}</p>`); buf = []; } };
       t = t.replace(/([^\n#])[ \t]*(##\s)/g, "$1\n$2");      // Gemini က "## ခေါင်းစဉ်" ကို စာကြောင်းအလယ်မှာ ထည့်မိလျှင်လည်း ခေါင်းစဉ်ကို စာကြောင်းအသစ်ဖြင့် စပေးသည်
@@ -3407,7 +3427,8 @@ let isRomanPali = false;
               if (nsyBtScroll != null) {      // ဘာသာဋီကာ - ဆိုင်ရာ နိဿယစာအုပ်စာမျက်နှာသို့ အလိုအလျောက် ရွှေ့
                 const tg = "(နိဿယစာအုပ် စာမျက်နှာ " + toMyanmarDigits(nsyBtScroll) + ")";
                 const el = [...contentEl.querySelectorAll("p")].find(p => p.textContent.trim() === tg);
-                if (el) { nsyBtScroll = null; el.style.background = "#fff3b0"; setTimeout(() => el.scrollIntoView({ block: "start" }), 60); }
+                if (el) { nsyBtScroll = null; el.style.background = "#fff3b0"; setTimeout(() => el.scrollIntoView({ block: "start" }), 60);
+                  if (nsyBtHl) { const kw = nsyBtHl; nsyBtHl = null; setTimeout(() => tp_btHighlight(el, contentEl, kw), 120); } }
               }
               contentEl.querySelectorAll(".tp-say-ref").forEach(a => a.addEventListener("click", (e) => {
                 e.preventDefault();
