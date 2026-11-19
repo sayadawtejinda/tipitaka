@@ -1664,6 +1664,17 @@
    "edition_of": "attha_di_03"
   },
   {
+   "id": "attha_di_03_sheet307",
+   "title": "ပါထိကဝဂ္ဂဋ္ဌကထာ (သုတ်ပါထေယျအဋ္ဌကထာနိသျ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 5015262,
+   "date": "2026-11-19",
+   "edition_of": "attha_di_03"
+  },
+  {
    "id": "attha_ma_01_01",
    "title": "မူလပဏ္ဏာသအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -3424,5 +3435,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 221
+ "n_editions": 222
 }
