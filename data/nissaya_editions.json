@@ -807,16 +807,16 @@
    "file": "mula_vi_03"
   },
   {
-   "label": "ဘာသာဋီကာ",
-   "file": "mula_vi_03_bhasatika",
-   "from": 1,
-   "to": 511
-  },
-  {
    "label": "ဝေယံဘုံသာမူ (ပ)",
    "file": "mula_vi_03_sheet006",
    "from": 1,
    "to": 219
+  },
+  {
+   "label": "ဘာသာဋီကာ",
+   "file": "mula_vi_03_bhasatika",
+   "from": 1,
+   "to": 511
   }
  ],
  "mula_vi_04": [
