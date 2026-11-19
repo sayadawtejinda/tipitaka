@@ -1567,16 +1567,16 @@
  ],
  "tika_vi_04": [
   {
-   "label": "ဆင်တဲမူ (ပ)",
-   "file": "tika_vi_04_sheet190",
-   "from": 1,
-   "to": 285
-  },
-  {
    "label": "ဆင်တဲမူ (ဒု)",
    "file": "tika_vi_04_sheet191",
    "from": 286,
    "to": 585
+  },
+  {
+   "label": "ဆင်တဲမူ (ပ)",
+   "file": "tika_vi_04_sheet190",
+   "from": 1,
+   "to": 285
   }
  ],
  "annya_vi_01_04": [
