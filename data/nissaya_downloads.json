@@ -1348,6 +1348,17 @@
    "edition_of": "attha_vi_05"
   },
   {
+   "id": "attha_vi_05_sheet225",
+   "title": "ပရိဝါရအဋ္ဌကထာ (ပရိဝါအဋ္ဌကထာနိသျ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 2160890,
+   "date": "2026-11-19",
+   "edition_of": "attha_vi_05"
+  },
+  {
    "id": "attha_di_01",
    "title": "သီလက္ခန္ဓဝဂ္ဂဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -3281,5 +3292,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 208
+ "n_editions": 209
 }
