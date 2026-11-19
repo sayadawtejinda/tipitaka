@@ -243,12 +243,6 @@
    "to": 223
   },
   {
-   "label": "ဘာဋီမူ (ပ)",
-   "file": "attha_bi_01_sheet176",
-   "from": 1,
-   "to": 96
-  },
-  {
    "label": "ဘာဋီမူ (တ)",
    "file": "attha_bi_01_sheet178",
    "from": 224,
@@ -265,6 +259,12 @@
    "file": "attha_bi_01_sheet174",
    "from": 150,
    "to": 289
+  },
+  {
+   "label": "ဘာဋီမူ (ပ)",
+   "file": "attha_bi_01_sheet176",
+   "from": 1,
+   "to": 96
   }
  ],
  "annya_sadda_07": [
