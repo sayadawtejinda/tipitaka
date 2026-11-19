@@ -3093,17 +3093,6 @@
    "edition_of": "annya_sadda_01"
   },
   {
-   "id": "annya_sadda_02_sheet363",
-   "title": "ပဒရူပသိဒ္ဓိ (ဘာသာဋီကာမူ (ဒု))",
-   "basket": "အည",
-   "basket_key": "annya",
-   "category": "သဒ္ဒါဆိုင်ရာ",
-   "cat_key": "sadda",
-   "size": 4710142,
-   "date": "2026-11-17",
-   "edition_of": "annya_sadda_02"
-  },
-  {
    "id": "annya_sadda_02_sheet362",
    "title": "ပဒရူပသိဒ္ဓိ (ဘာသာဋီကာမူ (ပ))",
    "basket": "အည",
@@ -3111,6 +3100,17 @@
    "category": "သဒ္ဒါဆိုင်ရာ",
    "cat_key": "sadda",
    "size": 5988300,
+   "date": "2026-11-18",
+   "edition_of": "annya_sadda_02"
+  },
+  {
+   "id": "annya_sadda_02_sheet363",
+   "title": "ပဒရူပသိဒ္ဓိ (ဘာသာဋီကာမူ (ဒု))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "သဒ္ဒါဆိုင်ရာ",
+   "cat_key": "sadda",
+   "size": 4774546,
    "date": "2026-11-18",
    "edition_of": "annya_sadda_02"
   },
