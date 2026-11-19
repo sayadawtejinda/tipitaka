@@ -1034,17 +1034,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "attha_vi_01_01_sheet082",
-   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (ဘာဋီမူ (တ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဝိနည်းပိဋက",
-   "cat_key": "vi",
-   "size": 1229809,
-   "date": "2026-11-16",
-   "edition_of": "attha_vi_01_01"
-  },
-  {
    "id": "attha_vi_01_01_sheet077",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (မအူမူ (ဒု))",
    "basket": "အဋ္ဌကထာ",
@@ -1122,6 +1111,17 @@
    "edition_of": "attha_vi_01_01"
   },
   {
+   "id": "attha_vi_01_01_sheet082",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (ဘာဋီမူ (တ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 1250128,
+   "date": "2026-11-18",
+   "edition_of": "attha_vi_01_01"
+  },
+  {
    "id": "attha_vi_01_02",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု)",
    "basket": "အဋ္ဌကထာ",
@@ -1143,17 +1143,6 @@
    "edition_of": "attha_vi_01_02"
   },
   {
-   "id": "attha_vi_01_02_sheet082",
-   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု) (ဘာဋီမူ (တ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဝိနည်းပိဋက",
-   "cat_key": "vi",
-   "size": 3696270,
-   "date": "2026-11-16",
-   "edition_of": "attha_vi_01_02"
-  },
-  {
    "id": "attha_vi_01_02_sheet081",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု) (မအူမူ (စ))",
    "basket": "အဋ္ဌကထာ",
@@ -1162,6 +1151,17 @@
    "cat_key": "vi",
    "size": 7520882,
    "date": "2026-11-17",
+   "edition_of": "attha_vi_01_02"
+  },
+  {
+   "id": "attha_vi_01_02_sheet082",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု) (ဘာဋီမူ (တ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3804644,
+   "date": "2026-11-18",
    "edition_of": "attha_vi_01_02"
   },
   {
