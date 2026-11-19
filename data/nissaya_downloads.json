@@ -1133,6 +1133,17 @@
    "edition_of": "attha_vi_01_01"
   },
   {
+   "id": "attha_vi_01_01_sheet219",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (ပါရာဇိကဏ်အဋ္ဌကထာနိသျမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4329905,
+   "date": "2026-11-19",
+   "edition_of": "attha_vi_01_01"
+  },
+  {
    "id": "attha_vi_01_02",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ဒု)",
    "basket": "အဋ္ဌကထာ",
@@ -3248,5 +3259,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 205
+ "n_editions": 206
 }
