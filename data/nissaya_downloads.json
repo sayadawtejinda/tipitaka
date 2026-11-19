@@ -2571,6 +2571,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "tika_vi_05_sheet188",
+   "title": "ဝိမတိဝိနောဒနီဋီကာ (ပ) (အရှင်ဣန္ဒာသဘမူ (ပ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 6712101,
+   "date": "2026-11-18",
+   "edition_of": "tika_vi_05"
+  },
+  {
    "id": "tika_vi_06",
    "title": "ဝိမတိဝိနောဒနီဋီကာ (ဒု)",
    "basket": "ဋီကာ",
@@ -3105,5 +3116,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 192
+ "n_editions": 193
 }
