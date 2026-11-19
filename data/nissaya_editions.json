@@ -229,12 +229,6 @@
    "to": 149
   },
   {
-   "label": "ပြည်မူ (ဒု)",
-   "file": "attha_bi_01_sheet174",
-   "from": 150,
-   "to": 289
-  },
-  {
    "label": "ပြည်မူ (တ)",
    "file": "attha_bi_01_sheet175",
    "from": 290,
@@ -263,6 +257,12 @@
    "file": "attha_bi_01_sheet179",
    "from": 356,
    "to": 454
+  },
+  {
+   "label": "ပြည်မူ (ဒု)",
+   "file": "attha_bi_01_sheet174",
+   "from": 150,
+   "to": 289
   }
  ],
  "annya_sadda_07": [
