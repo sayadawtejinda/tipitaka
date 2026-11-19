@@ -109,12 +109,6 @@
    "to": 338
   },
   {
-   "label": "နေရင်းမူ (ပ)",
-   "file": "attha_di_01_sheet099",
-   "from": 1,
-   "to": 121
-  },
-  {
    "label": "နေရင်းမူ (ဒု)",
    "file": "attha_di_01_sheet100",
    "from": 122,
@@ -129,6 +123,12 @@
   {
    "label": "ပခုက္ကူမူ (ပ)",
    "file": "attha_di_01_sheet097",
+   "from": 1,
+   "to": 121
+  },
+  {
+   "label": "နေရင်းမူ (ပ)",
+   "file": "attha_di_01_sheet099",
    "from": 1,
    "to": 121
   }
