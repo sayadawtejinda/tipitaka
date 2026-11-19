@@ -2919,17 +2919,6 @@
    "edition_of": "annya_vi_01_03"
   },
   {
-   "id": "annya_vi_01_04_sheet192",
-   "title": "ကင်္ခါဝိတရဏီအဘိနဝဋီကာ (ပခုက္ကူမူ (ပ))",
-   "basket": "အည",
-   "basket_key": "annya",
-   "category": "ဝိနည်းဆိုင်ရာ",
-   "cat_key": "vi",
-   "size": 6778788,
-   "date": "2026-11-18",
-   "edition_of": "annya_vi_01_04"
-  },
-  {
    "id": "annya_vi_01_04_sheet193",
    "title": "ကင်္ခါဝိတရဏီအဘိနဝဋီကာ (ပခုက္ကူမူ (ဒု))",
    "basket": "အည",
@@ -2937,6 +2926,17 @@
    "category": "ဝိနည်းဆိုင်ရာ",
    "cat_key": "vi",
    "size": 6302409,
+   "date": "2026-11-18",
+   "edition_of": "annya_vi_01_04"
+  },
+  {
+   "id": "annya_vi_01_04_sheet192",
+   "title": "ကင်္ခါဝိတရဏီအဘိနဝဋီကာ (ပခုက္ကူမူ (ပ))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "ဝိနည်းဆိုင်ရာ",
+   "cat_key": "vi",
+   "size": 6853506,
    "date": "2026-11-18",
    "edition_of": "annya_vi_01_04"
   },
