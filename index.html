@@ -2955,11 +2955,14 @@ let isRomanPali = false;
   }
   window.tpUiStart = function(){
     if(tpUiObs) return;
+    if(!document.getElementById("tp-lang-css")){ const st = document.createElement("style"); st.id = "tp-lang-css"; st.textContent = "body.tp-lang-mode #tp-ai-toggle, body.tp-lang-mode #tp-lang-toggle, body.tp-lang-mode #tp-search-toggle { display: none !important; }"; document.head.appendChild(st); }       // the Burmese-only tools (AI prompts, Burmese translation / nissaya menu, Burmese searches) are not offered
+    document.body.classList.add("tp-lang-mode");
     tpUiRun(document.body);
     tpUiObs = new MutationObserver(ms => { ms.forEach(m => { if(m.type === "characterData") tpUiRun(m.target); else if(m.type === "attributes") tpUiRun(m.target); else m.addedNodes.forEach(n => tpUiRun(n)); }); });
     tpUiObs.observe(document.body, {childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ["title", "placeholder", "aria-label"]});
   };
   window.tpUiStop = function(){
+    document.body.classList.remove("tp-lang-mode");
     if(tpUiObs){ tpUiObs.disconnect(); tpUiObs = null; }
     tpUiSaved.forEach((o, n) => { if(n.isConnected) n.nodeValue = o; }); tpUiSaved = new Map();
     tpUiAttrs.forEach(([n, a, o]) => { if(n.isConnected) n.setAttribute(a, o); }); tpUiAttrs = [];
