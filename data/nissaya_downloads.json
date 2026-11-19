@@ -3225,6 +3225,17 @@
    "edition_of": "annya_sadda_02"
   },
   {
+   "id": "annya_sadda_02_sheet506",
+   "title": "ပဒရူပသိဒ္ဓိ (စည်ရှင်)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "သဒ္ဒါဆိုင်ရာ",
+   "cat_key": "sadda",
+   "size": 6770162,
+   "date": "2026-11-19",
+   "edition_of": "annya_sadda_02"
+  },
+  {
    "id": "annya_sadda_03_sheet507",
    "title": "မောဂ္ဂလ္လာနသုတ္တပါဌော (အဘယာရာမမူ (ပ))",
    "basket": "အည",
@@ -3336,5 +3347,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 213
+ "n_editions": 214
 }
