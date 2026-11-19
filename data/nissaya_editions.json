@@ -645,16 +645,16 @@
    "file": "attha_ku_06"
   },
   {
-   "label": "မိုးထိမူ (ပ)",
-   "file": "attha_ku_06_sheet143",
-   "from": 1,
-   "to": 160
-  },
-  {
    "label": "မိုးထိမူ (ဒု)",
    "file": "attha_ku_06_sheet144",
    "from": 161,
    "to": 335
+  },
+  {
+   "label": "မိုးထိမူ (ပ)",
+   "file": "attha_ku_06_sheet143",
+   "from": 1,
+   "to": 160
   }
  ],
  "attha_ku_07": [
