@@ -2875,17 +2875,6 @@
    "edition_of": "annya_vi_01_01"
   },
   {
-   "id": "annya_vi_01_02_sheet430",
-   "title": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ (ဘာသာဋီကာ (ဒု))",
-   "basket": "အည",
-   "basket_key": "annya",
-   "category": "ဝိနည်းဆိုင်ရာ",
-   "cat_key": "vi",
-   "size": 3734291,
-   "date": "2026-11-16",
-   "edition_of": "annya_vi_01_02"
-  },
-  {
    "id": "annya_vi_01_02_sheet093",
    "title": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ (ဘာဋီမူ (ပ))",
    "basket": "အည",
@@ -2915,6 +2904,17 @@
    "category": "ဝိနည်းဆိုင်ရာ",
    "cat_key": "vi",
    "size": 3343829,
+   "date": "2026-11-18",
+   "edition_of": "annya_vi_01_02"
+  },
+  {
+   "id": "annya_vi_01_02_sheet430",
+   "title": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ (ဘာသာဋီကာ (ဒု))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "ဝိနည်းဆိုင်ရာ",
+   "cat_key": "vi",
+   "size": 3797710,
    "date": "2026-11-18",
    "edition_of": "annya_vi_01_02"
   },
