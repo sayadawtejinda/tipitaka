@@ -1589,16 +1589,16 @@
  ],
  "annya_vi_01_04": [
   {
-   "label": "ပခုက္ကူမူ (ပ)",
-   "file": "annya_vi_01_04_sheet192",
-   "from": 119,
-   "to": 292
-  },
-  {
    "label": "ပခုက္ကူမူ (ဒု)",
    "file": "annya_vi_01_04_sheet193",
    "from": 293,
    "to": 489
+  },
+  {
+   "label": "ပခုက္ကူမူ (ပ)",
+   "file": "annya_vi_01_04_sheet192",
+   "from": 119,
+   "to": 292
   }
  ],
  "tika_di_01_02": [
