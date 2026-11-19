@@ -46,7 +46,7 @@ def on_web_set(fresh=False):
         lab = r.get('edition')
         if lab:
             if all(any(e.get('label') == lab or e.get('label', '').startswith(lab.split(' (')[0]) and lab in e.get('label', '') for e in ed.get(x, [])) for x in b): out.add(n)
-        elif all(any(e.get('label') == 'ဘာသာဋီကာ' for e in ed.get(x, [])) for x in b): out.add(n)          # no edition name on the sheet (the Vinaya tika sheets): the book has the 'ဘာသာဋီကာ' edition on the web
+        elif os.path.exists(os.path.join(ROOT, 'gold', 'gemini', '%03d_collected.json' % n)) and all(any(e.get('label') == 'ဘာသာဋီကာ' for e in ed.get(x, [])) for x in b): out.add(n)          # no edition name on the sheet (the Vinaya tika sheets): the book has the 'ဘာသာဋီကာ' edition on the web AND the sheet was worked on (a Gemini result exists) - other sheets of the same Pali book are not on the web because of it
     return out
 
 
