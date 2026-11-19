@@ -33,6 +33,16 @@ def _json(path, default):
     try: return json.load(open(path, encoding='utf-8'))
     except Exception: return default
 gemini_done = m_status.gemini_done          # the nissaya of the sheet is completely checked by Gemini (same rule as run_tool)
+def lang_on_web(n, L):
+    """the Vietnamese / English of sheet n is on the web (data/translations_<L>/): every Pali page that has a Burmese translation is in the sheet's web file"""
+    idx = _json(os.path.join(TIPI, 'data', 'translations_' + L, 'index.json'), {})
+    my = {k for k, v in t_core.load_translations(n).items() if v.strip()}
+    if not my or not isinstance(idx, dict): return False
+    have = set()
+    for ents in idx.values():
+        for e in ents:
+            if e.get('sheet') == n: have.update(int(k) for k in _json(os.path.join(TIPI, 'data', 'translations_' + L, e['file']), {}))
+    return my <= have
 def translated_here(n, books, tri):
     """the translation on the web covers EVERY Pali page of this sheet (a Pali book made of two sheets - e.g. 117 = Pali 1-135, 118 = Pali 136-254 - is not finished when only the first sheet is translated)"""
     if not tri: return False
@@ -56,8 +66,9 @@ def get_sheets(keep=None):
             if not os.path.exists(os.path.join(t_core.GOLD, 'tr_%03d.json' % n)): continue
             tot, got = t_core.lang_progress(n, L)
             if not tot: continue
-            if n != keep and hidepub.get() and got >= tot: continue
-            out.append((n, '%s   [%s %d/%d]' % (t, LANG_NAME[L], got, tot)))
+            web = lang_on_web(n, L)
+            if n != keep and hidepub.get() and web: continue                 # the ticked box: a sheet whose Vietnamese / English is ON THE WEB (all its Burmese-translated pages) is hidden
+            out.append((n, '%s   [%s %d/%d%s]' % (t, LANG_NAME[L], got, tot, ' · web ✓' if web else '')))
         return out
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
     pub = published()
@@ -81,9 +92,10 @@ for _i, (_n, _t) in enumerate(sheets):
 cb.bind('<<ComboboxSelected>>', lambda e: save_state(sheet=sheets[cb.current()][0]))
 def _toggle_hide():
     save_state(hide_pub=bool(hidepub.get())); refresh_books(force=True)
-ttk.Checkbutton(f, text='✅ web ပေါ်တင်ပြီးသော မြန်မာပြန် စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).grid(row=0, column=2, sticky='w', padx=6)
+_hide_cb = ttk.Checkbutton(f, text='✅ web ပေါ်တင်ပြီးသော မြန်မာပြန် စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide); _hide_cb.grid(row=0, column=2, sticky='w', padx=6)
+if lang_var.get() in ('vi', 'en'): _hide_cb.config(text='✅ web ပေါ်တင်ပြီးသော %sပြန် စာအုပ်များ ဖျောက်' % LANG_NAME[lang_var.get()])
 def _lang_changed(*_):
-    save_state(lang=lang_var.get()); refresh_books(force=True)
+    save_state(lang=lang_var.get()); _hide_cb.config(text=('✅ web ပေါ်တင်ပြီးသော မြန်မာပြန် စာအုပ်များ ဖျောက်' if lang_var.get() == 'my' else '✅ web ပေါ်တင်ပြီးသော %sပြန် စာအုပ်များ ဖျောက်' % LANG_NAME[lang_var.get()])); refresh_books(force=True)
 ttk.Label(f, text='ဘာသာပြန်မည့်ဘာသာ').grid(row=0, column=3, sticky='e', padx=(10, 2))
 _lc = ttk.Combobox(f, state='readonly', width=12, values=[LANG_NAME['my'], LANG_NAME['vi'], LANG_NAME['en']]); _lc.grid(row=0, column=4, sticky='w')
 _lc.current(['my', 'vi', 'en'].index(lang_var.get()) if lang_var.get() in ('my', 'vi', 'en') else 0)
