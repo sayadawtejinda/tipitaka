@@ -2700,17 +2700,6 @@
    "edition_of": "tika_di_01_03"
   },
   {
-   "id": "tika_di_02_sheet199",
-   "title": "မဟာဝဂ္ဂဋီကာ (ဦးပညိဿရမူ (ဒု))",
-   "basket": "ဋီကာ",
-   "basket_key": "tika",
-   "category": "ဒီဃနိကာယ်",
-   "cat_key": "di",
-   "size": 3749255,
-   "date": "2026-11-18",
-   "edition_of": "tika_di_02"
-  },
-  {
    "id": "tika_di_02_sheet198",
    "title": "မဟာဝဂ္ဂဋီကာ (ဦးပညိဿရမူ (ပ))",
    "basket": "ဋီကာ",
@@ -2718,6 +2707,17 @@
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
    "size": 4951023,
+   "date": "2026-11-18",
+   "edition_of": "tika_di_02"
+  },
+  {
+   "id": "tika_di_02_sheet199",
+   "title": "မဟာဝဂ္ဂဋီကာ (ဦးပညိဿရမူ (ဒု))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3799998,
    "date": "2026-11-18",
    "edition_of": "tika_di_02"
   },
