@@ -1455,17 +1455,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "attha_di_03_sheet111",
-   "title": "ပါထိကဝဂ္ဂဋ္ဌကထာ (ဘာဋီ)",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဒီဃနိကာယ်",
-   "cat_key": "di",
-   "size": 3156868,
-   "date": "2026-11-17",
-   "edition_of": "attha_di_03"
-  },
-  {
    "id": "attha_di_03_sheet110",
    "title": "ပါထိကဝဂ္ဂဋ္ဌကထာ (ပခုက္ကူ)",
    "basket": "အဋ္ဌကထာ",
@@ -1473,6 +1462,17 @@
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
    "size": 6284277,
+   "date": "2026-11-18",
+   "edition_of": "attha_di_03"
+  },
+  {
+   "id": "attha_di_03_sheet111",
+   "title": "ပါထိကဝဂ္ဂဋ္ဌကထာ (ဘာဋီ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3190594,
    "date": "2026-11-18",
    "edition_of": "attha_di_03"
   },
