@@ -58,7 +58,7 @@ except Exception: _GD = {}
 def gemini_done(n):
     """the nissaya of sheet n is completely checked by Gemini: pages collected, no page missing, no Gemini file still waiting (a book that is not checked yet is not translated)"""
     cp = os.path.join(NSY, 'gold', 'gemini', '%03d_collected.json' % n)
-    try: key = [os.path.getmtime(cp), len(glob.glob(os.path.join(NSY, 'output', 'gemini', '%03d_*.txt' % n))), os.path.getmtime(os.path.join(NSY, 'paired', '%03d.json' % n))]
+    try: key = [os.path.getmtime(cp), len(glob.glob(os.path.join(NSY, 'output', 'gemini', '%03d_*.txt' % n))), os.path.getmtime(os.path.join(NSY, 'paired', '%03d.json' % n)), 2]
     except OSError: return False
     if _GD.get(str(n), [None, None])[0] == key: return _GD[str(n)][1]
     try:
