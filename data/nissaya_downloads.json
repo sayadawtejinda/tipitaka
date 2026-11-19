@@ -1067,17 +1067,6 @@
    "edition_of": "attha_vi_01_01"
   },
   {
-   "id": "attha_vi_01_01_sheet076",
-   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (မအူမူ (ပ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဝိနည်းပိဋက",
-   "cat_key": "vi",
-   "size": 3035029,
-   "date": "2026-11-17",
-   "edition_of": "attha_vi_01_01"
-  },
-  {
    "id": "attha_vi_01_01_sheet077",
    "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (မအူမူ (ဒု))",
    "basket": "အဋ္ဌကထာ",
@@ -1107,6 +1096,17 @@
    "category": "ဝိနည်းပိဋက",
    "cat_key": "vi",
    "size": 3225000,
+   "date": "2026-11-18",
+   "edition_of": "attha_vi_01_01"
+  },
+  {
+   "id": "attha_vi_01_01_sheet076",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (မအူမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3050201,
    "date": "2026-11-18",
    "edition_of": "attha_vi_01_01"
   },
