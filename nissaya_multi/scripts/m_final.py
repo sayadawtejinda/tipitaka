@@ -24,9 +24,20 @@ def hash_breaks(t):
     return re.sub(r'[ \t]*#+[ \t]*', chr(10) + PBREAK + chr(10), t)
 
 
+def _pali_test(P):
+    """is_pali(token) for the hyphen-style conversion: the Pali text of the book (+ fuzzy / lexicon evidence of m_pair)"""
+    vocab = set()
+    for b in P['blocks']:
+        toks = [m_pair.canon(re.sub('[' + m_pair.ZW + ']', '', t)) for t in m_pair.TOK.findall(b['pali'])]
+        vocab.update(toks); vocab.update(m_sandhi.block_words(b['pali'], toks))
+    fidx = m_pair.build_fuzzy_index(vocab); cache = {}
+    return lambda t: m_pair._evidence(m_pair.canon(t), vocab, fidx, cache) or m_pair.canon(t) in vocab
+
+
 def page_texts(n, P):
     """{nissaya page: (text, source)}"""
-    import m_tool
+    import m_tool, m_hyphen
+    is_pali = _pali_test(P)          # books written 'ပါဠိ-အနက်၊' (hyphen style) are shown as 'ပါဠိ၊ အနက်။' (bold Pali words and the pop-up need that form)
     gp = os.path.join(ROOT, 'gold', 'gemini', '%03d_collected.json' % n)
     G = {int(k): v for k, v in json.load(open(gp, encoding='utf-8')).items()} if os.path.exists(gp) else {}
     out = {}
@@ -35,13 +46,20 @@ def page_texts(n, P):
         if k is None: continue
         if k in G:
             gt = G[k].strip()
+            base_ = pg['body'] + (chr(10) + pg['foot'] if pg.get('foot') else '')
             try:
-                import m_gcheck
-                gt, _n = m_gcheck.restore_punct(pg['body'] + (chr(10) + pg['foot'] if pg.get('foot') else ''), gt)      # the sheet's ၊ ။ win where Gemini changed a hyphen-style unit
+                mk_, nh_ = m_hyphen.convert(base_, is_pali, mark=True)
+                if nh_ >= 3:          # a hyphen-style page: the separators of the converted sheet text go into Gemini's page
+                    gt, _n = m_hyphen.transfer(mk_, gt); gt, _n = m_hyphen.convert(gt, is_pali); gt, _n = m_hyphen.finish(gt, is_pali); gt = m_hyphen.tidy(gt)
+                else:
+                    import m_gcheck
+                    gt, _n = m_gcheck.restore_punct(base_, gt)      # the sheet's ၊ ။ win where Gemini changed a hyphen-style unit
             except Exception: pass
             out[k] = (hash_breaks(gt), 'gemini')
         else:
             t, _ = m_tool.apply_page(pg, True, False, False, True)          # no blue Pali proposals on the web (the user decides: Gemini's answer is published as it is)
+            try: t, _n = m_hyphen.convert(t, is_pali)
+            except Exception: pass
             out[k] = (hash_breaks(t), 'tool')
     return out
 
