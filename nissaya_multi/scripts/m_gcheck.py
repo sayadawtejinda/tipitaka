@@ -296,6 +296,10 @@ def missing_pages(n):
     if not have and not files: return [], waiting
     P = json.load(open(os.path.join(ROOT, 'paired', '%03d.json' % n), encoding='utf-8'))
     allp = {p['num'] for p in P['pages'] if p.get('num') is not None and (p['body'] + p.get('foot', '')).strip()}
+    pm = P.get('ppmap')
+    if pm:          # only the nissaya pages that belong to a Pali page are shown on the web (and used for translation); pages after the last map entry appear nowhere, so Gemini need not check them
+        shown = {q for v in pm.values() for q in range(v[0], v[1] + 1)}
+        allp &= shown
     return sorted(allp - have - empty - waiting), waiting
 
 
