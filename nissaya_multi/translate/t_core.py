@@ -151,6 +151,43 @@ def mostly_burmese(v):
     t = ''.join(v.split()); return bool(t) and sum(1 for c in t if 'က' <= c <= '႟') > 0.3 * len(t)
 
 
+def burmese_share(v):
+    t = ''.join(v.split()); return (sum(1 for c in t if 'က' <= c <= '႟') / len(t)) if t else 0.0
+
+
+def check_lang_page(out_txt, src_burmese=None):
+    """why a Vietnamese / English answer of ONE page cannot be taken (None = fine).  src_burmese = the Burmese translation that was sent (when the input file is still there)."""
+    t = out_txt.strip()
+    if not t: return 'ဗလာ'
+    bs = burmese_share(t)
+    if bs > 0.30: return 'မြန်မာစာကိုပဲ ပြန်ပေးသည် (%d%%)' % (bs * 100)
+    if bs > 0.04: return 'ဘာသာမပြန်ရသေးသော မြန်မာစာ ကျန်နေသည် (%d%%)' % (bs * 100)
+    if src_burmese:
+        a, b = len(''.join(t.split())), len(''.join(src_burmese.split()))
+        if b > 400 and a < 0.25 * b: return 'အတိုချုံ့ / ဖြတ်ထားသည် (ပို့ %d လုံး၊ ပြန် %d လုံး)' % (b, a)
+        if b > 100 and a > 5 * b: return 'ပြန်လာတာ အလွန်ရှည်နေသည် (ပို့ %d လုံး၊ ပြန် %d လုံး)' % (b, a)
+        hs, ho = sum(1 for l in src_burmese.split(NL) if l.strip().startswith('## ')), sum(1 for l in t.split(NL) if l.strip().startswith('## '))
+        if hs != ho: return 'ခေါင်းစဉ် ("## ") အရေအတွက် မကိုက် (ပို့ %d / ပြန် %d)' % (hs, ho)
+    return None
+
+
+def check_my_page(out_txt, pali=None):
+    """why a Burmese translation (from the Pali) of ONE page cannot be taken (None = fine)"""
+    t = out_txt.strip()
+    if not t: return 'ဗလာ'
+    bs = burmese_share(t)
+    if bs < 0.5: return 'မြန်မာစာ မဟုတ်သလောက် (မြန်မာအက္ခရာ %d%%)' % (bs * 100)
+    if pali:
+        a, b = len(''.join(t.split())), len(''.join(pali.split()))
+        if b > 400 and a < 0.3 * b: return 'အတိုချုံ့ / ဖြတ်ထားသည် (ပါဠိ %d လုံး၊ ပြန် %d လုံး)' % (b, a)
+    return None
+
+
+def _rejects(n, lang):
+    p = os.path.join(GOLD, 'tr_%03d_%s_rejects.json' % (n, lang))
+    return p, (json.load(open(p, encoding='utf-8')) if os.path.exists(p) else {})
+
+
 def ingest_downloads(log=print, after=None, after_lang=None):
     got = 0
     for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt')) + glob.glob(os.path.join(DOWNLOADS, 'tr_*_for??_??*.txt'))):
@@ -159,11 +196,37 @@ def ingest_downloads(log=print, after=None, after_lang=None):
         n = int(m.group(1)); lang = m.group(5) or m.group(6) or ''
         pg = parse_pages(open(f, encoding='utf-8-sig').read())
         if not pg: log('⚠ Downloads/%s — "--- စာမျက်နှာ N ---" မတွေ့ပါ' % name); continue
-        if lang:
-            back = sorted(k for k, v in pg.items() if mostly_burmese(v))
-            if back:
-                log('  ⚠ ပါဠိမျက်နှာ %s — Gemini က မြန်မာစာကိုပဲ ပြန်ပေးခဲ့သည် (ဘာသာမပြန်ရသေး)၊ မသိမ်းပါ - ကျန်တာအဖြစ် ထပ်ထုတ်မည်' % ' '.join(map(str, back)))
-                pg = {k: v for k, v in pg.items() if k not in back}
+        if lang:             # every page is checked: nothing Burmese, not cut short, headings kept.  A page that fails is NOT stored - it is sent again (the _rest file); after 3 failures of a page that is not Burmese-only it is stored and marked
+            inp0 = os.path.join(OUT, re.sub('_' + lang + r'(?: [(]\d+[)])?[.]txt$', '.txt', name)); srcs = {}
+            if '_for' + lang in name and os.path.exists(inp0):
+                srcs = {k: v.split('### မြန်မာပြန်', 1)[1].strip() for k, v in parse_pages(open(inp0, encoding='utf-8').read()).items() if '### မြန်မာပြန်' in v}
+            rp, rj = _rejects(n, lang); bad = {}
+            for k, v in list(pg.items()):
+                why = check_lang_page(v.replace(chr(92) + 'n', NL), srcs.get(k))
+                if not why: rj.pop(str(k), None); continue
+                cnt = rj.get(str(k), 0) + 1
+                if cnt >= 3 and burmese_share(v) <= 0.30 and v.strip(): log('  ⚠ ပါဠိမျက်နှာ %d: %s — ၃ ကြိမ်ပြန်ထုတ်ပြီးသော်လည်း ထိုအတိုင်း၊ သိမ်းထားသည် (ကိုယ်တိုင် စစ်ကြည့်ပါ)' % (k, why)); rj.pop(str(k), None); continue
+                bad[k] = why; rj[str(k)] = cnt
+            if rj or os.path.exists(rp):
+                os.makedirs(GOLD, exist_ok=True); json.dump(rj, open(rp, 'w', encoding='utf-8'))
+            if bad:
+                for k, why in sorted(bad.items()): log('  ⚠ ပါဠိမျက်နှာ %d — %s: မသိမ်းပါ၊ ထပ်ထုတ်မည်' % (k, why))
+                pg = {k: v for k, v in pg.items() if k not in bad}
+        if not lang:         # Burmese from the Pali: the same care - empty / not Burmese / cut short pages are not stored but sent again (after 3 failures stored and marked)
+            inp0 = os.path.join(OUT, re.sub(r'_translated.*$', '.txt', name)); srcs = {}
+            if os.path.exists(inp0): srcs = {k: v.split('### နိဿယ')[0].replace('### ပါဠိ', '').strip() for k, v in parse_pages(open(inp0, encoding='utf-8').read()).items()}
+            rp, rj = _rejects(n, 'my'); bad = {}
+            for k, v in list(pg.items()):
+                why = check_my_page(v.replace(chr(92) + 'n', NL), srcs.get(k))
+                if not why: rj.pop(str(k), None); continue
+                cnt = rj.get(str(k), 0) + 1
+                if cnt >= 3 and v.strip() and burmese_share(v) >= 0.5: log('  ⚠ ပါဠိမျက်နှာ %d: %s — ၃ ကြိမ်ပြန်ထုတ်ပြီးသော်လည်း ထိုအတိုင်း၊ သိမ်းထားသည် (ကိုယ်တိုင် စစ်ကြည့်ပါ)' % (k, why)); rj.pop(str(k), None); continue
+                bad[k] = why; rj[str(k)] = cnt
+            if rj or os.path.exists(rp):
+                os.makedirs(GOLD, exist_ok=True); json.dump(rj, open(rp, 'w', encoding='utf-8'))
+            if bad:
+                for k, why in sorted(bad.items()): log('  ⚠ ပါဠိမျက်နှာ %d — %s: မသိမ်းပါ၊ ထပ်ထုတ်မည်' % (k, why))
+                pg = {k: v for k, v in pg.items() if k not in bad}
         d = load_translations(n, lang); repl = [k for k in pg if k in d]
         d.update({k: v.replace(chr(92) + 'n', NL) for k, v in pg.items() if v.strip()}); save_translations(n, d, lang)          # a literal \n that Gemini wrote inside the text is a line break
         os.makedirs(RECV, exist_ok=True); shutil.move(f, os.path.join(RECV, time.strftime('%Y%m%d_%H%M%S_') + name))
