@@ -957,12 +957,6 @@
    "to": 346
   },
   {
-   "label": "မအူမူ (ပ)",
-   "file": "attha_vi_01_01_sheet076",
-   "from": 1,
-   "to": 78
-  },
-  {
    "label": "မအူမူ (ဒု)",
    "file": "attha_vi_01_01_sheet077",
    "from": 79,
@@ -979,6 +973,12 @@
    "file": "attha_vi_01_01_sheet216",
    "from": 1,
    "to": 334
+  },
+  {
+   "label": "မအူမူ (ပ)",
+   "file": "attha_vi_01_01_sheet076",
+   "from": 1,
+   "to": 78
   }
  ],
  "attha_vi_01_02": [
