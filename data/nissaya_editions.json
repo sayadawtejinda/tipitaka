@@ -1019,16 +1019,16 @@
    "file": "attha_vi_02"
   },
   {
-   "label": "ဘာဋီမူ (ဒု)",
-   "file": "attha_vi_02_sheet085",
-   "from": 121,
-   "to": 231
-  },
-  {
    "label": "ဘာဋီမူ (ပ)",
    "file": "attha_vi_02_sheet084",
    "from": 1,
    "to": 120
+  },
+  {
+   "label": "ဘာဋီမူ (ဒု)",
+   "file": "attha_vi_02_sheet085",
+   "from": 121,
+   "to": 231
   }
  ],
  "attha_vi_03": [
