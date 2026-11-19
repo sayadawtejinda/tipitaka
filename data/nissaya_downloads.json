@@ -2441,6 +2441,17 @@
    "edition_of": "attha_ku_20"
   },
   {
+   "id": "attha_ku_20_sheet309",
+   "title": "နေတ္တိပ္ပကရဏအဋ္ဌကထာ (ပေဋကောပဒေသအဋ္ဌကထာနိသျမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2999014,
+   "date": "2026-11-19",
+   "edition_of": "attha_ku_20"
+  },
+  {
    "id": "attha_ku_zat_06_sheet151",
    "title": "ဇာတကအဋ္ဌကထာ (ဆ) (ဒန့်တိုင်)",
    "basket": "အဋ္ဌကထာ",
@@ -3435,5 +3446,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 222
+ "n_editions": 223
 }
