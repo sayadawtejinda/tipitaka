@@ -1175,17 +1175,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "attha_vi_02_sheet085",
-   "title": "ပါစိတ္တိယအဋ္ဌကထာ (ဘာဋီမူ (ဒု))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဝိနည်းပိဋက",
-   "cat_key": "vi",
-   "size": 2036562,
-   "date": "2026-11-16",
-   "edition_of": "attha_vi_02"
-  },
-  {
    "id": "attha_vi_02_sheet084",
    "title": "ပါစိတ္တိယအဋ္ဌကထာ (ဘာဋီမူ (ပ))",
    "basket": "အဋ္ဌကထာ",
@@ -1193,6 +1182,17 @@
    "category": "ဝိနည်းပိဋက",
    "cat_key": "vi",
    "size": 2924934,
+   "date": "2026-11-18",
+   "edition_of": "attha_vi_02"
+  },
+  {
+   "id": "attha_vi_02_sheet085",
+   "title": "ပါစိတ္တိယအဋ္ဌကထာ (ဘာဋီမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 2076622,
    "date": "2026-11-18",
    "edition_of": "attha_vi_02"
   },
