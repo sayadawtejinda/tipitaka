@@ -2623,6 +2623,17 @@
    "date": "2026-08-20"
   },
   {
+   "id": "tika_di_01_03_sheet196",
+   "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ဒု) (ညောင်ရမ်းမူ (တ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 5880644,
+   "date": "2026-11-18",
+   "edition_of": "tika_di_01_03"
+  },
+  {
    "id": "tika_bi_01",
    "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ",
    "basket": "ဋီကာ",
@@ -3094,5 +3105,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 191
+ "n_editions": 192
 }
