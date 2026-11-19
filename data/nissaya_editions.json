@@ -1259,16 +1259,16 @@
    "to": 104
   },
   {
-   "label": "ဘာဋီမူ (စ)",
-   "file": "tika_bi_01_sheet207",
-   "from": 151,
-   "to": 203
-  },
-  {
    "label": "ဘာဋီမူ (တ)",
    "file": "tika_bi_01_sheet206",
    "from": 105,
    "to": 150
+  },
+  {
+   "label": "ဘာဋီမူ (စ)",
+   "file": "tika_bi_01_sheet207",
+   "from": 151,
+   "to": 203
   }
  ],
  "mula_ku_17": [
