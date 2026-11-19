@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-18",
+ "generated": "2026-11-19",
  "books": [
   {
    "id": "mula_vi_01",
@@ -1119,6 +1119,17 @@
    "cat_key": "vi",
    "size": 1250128,
    "date": "2026-11-18",
+   "edition_of": "attha_vi_01_01"
+  },
+  {
+   "id": "attha_vi_01_01_sheet218",
+   "title": "ပါရာဇိကကဏ္ဍအဋ္ဌကထာ (ပ) (ပါရာဇိကဏ်အဋ္ဌကထာနိသျမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4400062,
+   "date": "2026-11-19",
    "edition_of": "attha_vi_01_01"
   },
   {
@@ -3226,5 +3237,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 203
+ "n_editions": 204
 }
