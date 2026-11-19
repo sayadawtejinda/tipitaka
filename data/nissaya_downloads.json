@@ -2051,17 +2051,6 @@
    "date": "2026-10-27"
   },
   {
-   "id": "attha_ku_06_sheet143",
-   "title": "ဝိမာနဝတ္ထုအဋ္ဌကထာ (မိုးထိမူ (ပ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ခုဒ္ဒကနိကာယ်",
-   "cat_key": "ku",
-   "size": 3038084,
-   "date": "2026-11-14",
-   "edition_of": "attha_ku_06"
-  },
-  {
    "id": "attha_ku_06_sheet144",
    "title": "ဝိမာနဝတ္ထုအဋ္ဌကထာ (မိုးထိမူ (ဒု))",
    "basket": "အဋ္ဌကထာ",
@@ -2070,6 +2059,17 @@
    "cat_key": "ku",
    "size": 2991173,
    "date": "2026-11-14",
+   "edition_of": "attha_ku_06"
+  },
+  {
+   "id": "attha_ku_06_sheet143",
+   "title": "ဝိမာနဝတ္ထုအဋ္ဌကထာ (မိုးထိမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3039073,
+   "date": "2026-11-18",
    "edition_of": "attha_ku_06"
   },
   {
