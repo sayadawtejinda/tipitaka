@@ -1610,6 +1610,17 @@
    "edition_of": "attha_di_02"
   },
   {
+   "id": "attha_di_02_sheet305",
+   "title": "မဟာဝဂ္ဂဋ္ဌကထာ (သုတ်မဟာဝါအဋ္ဌကထာနိသျမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 4470622,
+   "date": "2026-11-19",
+   "edition_of": "attha_di_02"
+  },
+  {
    "id": "attha_di_03",
    "title": "ပါထိကဝဂ္ဂဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -3402,5 +3413,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 219
+ "n_editions": 220
 }
