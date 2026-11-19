@@ -783,12 +783,6 @@
    "to": 189
   },
   {
-   "label": "ဘာသာဋီကာ (ဒု)",
-   "file": "annya_vi_01_02_sheet430",
-   "from": 190,
-   "to": 357
-  },
-  {
    "label": "ဘာဋီမူ (ပ)",
    "file": "annya_vi_01_02_sheet093",
    "from": 83,
@@ -797,6 +791,12 @@
   {
    "label": "ဘာဋီမူ (ဒု)",
    "file": "annya_vi_01_02_sheet094",
+   "from": 190,
+   "to": 357
+  },
+  {
+   "label": "ဘာသာဋီကာ (ဒု)",
+   "file": "annya_vi_01_02_sheet430",
    "from": 190,
    "to": 357
   }
