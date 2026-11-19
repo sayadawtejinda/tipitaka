@@ -85,12 +85,6 @@
    "file": "attha_di_01"
   },
   {
-   "label": "ပခုက္ကူမူ (ပ)",
-   "file": "attha_di_01_sheet097",
-   "from": 1,
-   "to": 121
-  },
-  {
    "label": "ပခုက္ကူမူ (ဒု)",
    "file": "attha_di_01_sheet098",
    "from": 122,
@@ -131,6 +125,12 @@
    "file": "attha_di_01_sheet103",
    "from": 166,
    "to": 262
+  },
+  {
+   "label": "ပခုက္ကူမူ (ပ)",
+   "file": "attha_di_01_sheet097",
+   "from": 1,
+   "to": 121
   }
  ],
  "attha_di_02": [
