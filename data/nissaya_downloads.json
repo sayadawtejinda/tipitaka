@@ -1230,6 +1230,17 @@
    "edition_of": "attha_vi_02"
   },
   {
+   "id": "attha_vi_02_sheet222",
+   "title": "ပါစိတ္တိယအဋ္ဌကထာ (ပါစိတျာဒိအဋ္ဌကထာနိသျ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4079610,
+   "date": "2026-11-19",
+   "edition_of": "attha_vi_02"
+  },
+  {
    "id": "attha_vi_03",
    "title": "မဟာဝဂ္ဂအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -3259,5 +3270,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 206
+ "n_editions": 207
 }
