@@ -2678,6 +2678,17 @@
    "edition_of": "tika_di_02"
   },
   {
+   "id": "tika_di_02_sheet198",
+   "title": "မဟာဝဂ္ဂဋီကာ (ဦးပညိဿရမူ (ပ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 4904001,
+   "date": "2026-11-18",
+   "edition_of": "tika_di_02"
+  },
+  {
    "id": "tika_bi_01",
    "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ",
    "basket": "ဋီကာ",
@@ -3160,5 +3171,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 197
+ "n_editions": 198
 }
