@@ -2732,17 +2732,6 @@
    "edition_of": "tika_bi_01"
   },
   {
-   "id": "tika_bi_01_sheet207",
-   "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ (ဘာဋီမူ (စ))",
-   "basket": "ဋီကာ",
-   "basket_key": "tika",
-   "category": "အဘိဓမ္မာပိဋက",
-   "cat_key": "bi",
-   "size": 1459271,
-   "date": "2026-11-18",
-   "edition_of": "tika_bi_01"
-  },
-  {
    "id": "tika_bi_01_sheet206",
    "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ (ဘာဋီမူ (တ))",
    "basket": "ဋီကာ",
@@ -2750,6 +2739,17 @@
    "category": "အဘိဓမ္မာပိဋက",
    "cat_key": "bi",
    "size": 1300230,
+   "date": "2026-11-18",
+   "edition_of": "tika_bi_01"
+  },
+  {
+   "id": "tika_bi_01_sheet207",
+   "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ (ဘာဋီမူ (စ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 1466240,
    "date": "2026-11-18",
    "edition_of": "tika_bi_01"
   },
