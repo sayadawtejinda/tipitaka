@@ -146,6 +146,11 @@ def _heads(text):
 _NAME = re.compile(r'tr_(DD+)_(.+?)_pali(DD+)-(DD+)(?:_rest)?(?:_translated(?:_(vi|en))?|_for(?:vi|en)_(vi|en))(?: [(]DD+[)])?[.]txt$'.replace('DD', chr(92) + 'd'))
 
 
+def mostly_burmese(v):
+    """a Vietnamese / English answer that is still (mostly) Burmese script = Gemini gave the Burmese back, nothing was translated"""
+    t = ''.join(v.split()); return bool(t) and sum(1 for c in t if 'က' <= c <= '႟') > 0.3 * len(t)
+
+
 def ingest_downloads(log=print, after=None, after_lang=None):
     got = 0
     for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt')) + glob.glob(os.path.join(DOWNLOADS, 'tr_*_for??_??*.txt'))):
@@ -154,6 +159,11 @@ def ingest_downloads(log=print, after=None, after_lang=None):
         n = int(m.group(1)); lang = m.group(5) or m.group(6) or ''
         pg = parse_pages(open(f, encoding='utf-8-sig').read())
         if not pg: log('⚠ Downloads/%s — "--- စာမျက်နှာ N ---" မတွေ့ပါ' % name); continue
+        if lang:
+            back = sorted(k for k, v in pg.items() if mostly_burmese(v))
+            if back:
+                log('  ⚠ ပါဠိမျက်နှာ %s — Gemini က မြန်မာစာကိုပဲ ပြန်ပေးခဲ့သည် (ဘာသာမပြန်ရသေး)၊ မသိမ်းပါ - ကျန်တာအဖြစ် ထပ်ထုတ်မည်' % ' '.join(map(str, back)))
+                pg = {k: v for k, v in pg.items() if k not in back}
         d = load_translations(n, lang); repl = [k for k in pg if k in d]
         d.update({k: v.replace(chr(92) + 'n', NL) for k, v in pg.items() if v.strip()}); save_translations(n, d, lang)          # a literal \n that Gemini wrote inside the text is a line break
         os.makedirs(RECV, exist_ok=True); shutil.move(f, os.path.join(RECV, time.strftime('%Y%m%d_%H%M%S_') + name))
