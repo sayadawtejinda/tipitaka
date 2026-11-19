@@ -2624,6 +2624,17 @@
    "edition_of": "tika_di_01_02"
   },
   {
+   "id": "tika_di_01_02_sheet195",
+   "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ပ) (ညောင်ရမ်းမူ (ဒု))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 6650383,
+   "date": "2026-11-18",
+   "edition_of": "tika_di_01_02"
+  },
+  {
    "id": "tika_di_01_03",
    "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ဒု)",
    "basket": "ဋီကာ",
@@ -3116,5 +3127,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 193
+ "n_editions": 194
 }
