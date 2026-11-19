@@ -2408,17 +2408,6 @@
    "edition_of": "attha_bi_01"
   },
   {
-   "id": "attha_bi_01_sheet179",
-   "title": "ဓမ္မသင်္ဂဏီအဋ္ဌကထာ (ဘာဋီမူ (စ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "အဘိဓမ္မာပိဋက",
-   "cat_key": "bi",
-   "size": 2754005,
-   "date": "2026-11-15",
-   "edition_of": "attha_bi_01"
-  },
-  {
    "id": "attha_bi_01_sheet174",
    "title": "ဓမ္မသင်္ဂဏီအဋ္ဌကထာ (ပြည်မူ (ဒု))",
    "basket": "အဋ္ဌကထာ",
@@ -2459,6 +2448,17 @@
    "category": "အဘိဓမ္မာပိဋက",
    "cat_key": "bi",
    "size": 3591957,
+   "date": "2026-11-18",
+   "edition_of": "attha_bi_01"
+  },
+  {
+   "id": "attha_bi_01_sheet179",
+   "title": "ဓမ္မသင်္ဂဏီအဋ္ဌကထာ (ဘာဋီမူ (စ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2809713,
    "date": "2026-11-18",
    "edition_of": "attha_bi_01"
   },
