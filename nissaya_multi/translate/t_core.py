@@ -155,7 +155,7 @@ def ingest_downloads(log=print, after=None, after_lang=None):
         pg = parse_pages(open(f, encoding='utf-8-sig').read())
         if not pg: log('⚠ Downloads/%s — "--- စာမျက်နှာ N ---" မတွေ့ပါ' % name); continue
         d = load_translations(n, lang); repl = [k for k in pg if k in d]
-        d.update({k: v for k, v in pg.items() if v.strip()}); save_translations(n, d, lang)
+        d.update({k: v.replace(chr(92) + 'n', NL) for k, v in pg.items() if v.strip()}); save_translations(n, d, lang)          # a literal \n that Gemini wrote inside the text is a line break
         os.makedirs(RECV, exist_ok=True); shutil.move(f, os.path.join(RECV, time.strftime('%Y%m%d_%H%M%S_') + name))
         log('⬇ %s — စာအုပ် %03d ထဲ %s %d မျက်နှာ ထည့်ပြီး%s' % (name, n, {'vi': 'ဗီယက်နမ်ပြန်', 'en': 'အင်္ဂလိပ်ပြန်'}.get(lang, 'ပါဠိ'), len(pg), (' (အစားထိုး %d)' % len(repl)) if repl else ''))
         if lang:                                           # Vietnamese / English of the Burmese translation: kept in gold/tr_NNN_vi.json / _en.json

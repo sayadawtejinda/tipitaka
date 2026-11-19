@@ -3367,6 +3367,7 @@ let isRomanPali = false;
     const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     const body = t => {          // Gemini မြန်မာပြန် - "## " ဖြင့်စသော စာကြောင်း = ခေါင်းစဉ် (အလယ်၊ စာလုံးမည်း)၊ ကျန်တာ စာပိုဒ် (ကွက်လပ်စာကြောင်းဖြင့် ခွဲ)
       if(!t) return ""; if(isHtml) return t;
+      t = t.split(String.fromCharCode(92) + "n").join("\n");      // a literal backslash-n inside the text (Gemini double-escaped it) is a line break
       const out = []; let buf = [];
       const fmt = l => {      // "..." / “...” quotations are bold.  The straight quotes are paired by their look (an opener stands after a space / at the start and before a letter, a closer after a letter and before a space / mark), so one stray or very long quotation cannot turn the others inside out
         let t = esc(l), o = "", last = 0, open = -1;
