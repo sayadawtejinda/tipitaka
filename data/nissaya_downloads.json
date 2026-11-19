@@ -734,17 +734,6 @@
    "date": "2026-10-31"
   },
   {
-   "id": "mula_bi_01_bhasatika",
-   "title": "ဓမ္မသင်္ဂဏီပါဠိ (ဘာသာဋီကာ)",
-   "basket": "ပါဠိတော်",
-   "basket_key": "mula",
-   "category": "အဘိဓမ္မာပိဋက",
-   "cat_key": "bi",
-   "size": 2067943,
-   "date": "2026-11-16",
-   "edition_of": "mula_bi_01"
-  },
-  {
    "id": "mula_bi_01_sheet062",
    "title": "ဓမ္မသင်္ဂဏီပါဠိ (ထနောင်းဝန်းမူ)",
    "basket": "ပါဠိတော်",
@@ -753,6 +742,17 @@
    "cat_key": "bi",
    "size": 3490005,
    "date": "2026-11-17",
+   "edition_of": "mula_bi_01"
+  },
+  {
+   "id": "mula_bi_01_bhasatika",
+   "title": "ဓမ္မသင်္ဂဏီပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2097584,
+   "date": "2026-11-18",
    "edition_of": "mula_bi_01"
   },
   {
