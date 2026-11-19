@@ -1551,17 +1551,6 @@
    "date": "2026-10-28"
   },
   {
-   "id": "attha_ma_02_sheet115",
-   "title": "မဇ္ဈိမပဏ္ဏာသအဋ္ဌကထာ (မိုးထိမူ (ပ))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "မဇ္ဈိမနိကာယ်",
-   "cat_key": "ma",
-   "size": 3327426,
-   "date": "2026-11-12",
-   "edition_of": "attha_ma_02"
-  },
-  {
    "id": "attha_ma_02_sheet116",
    "title": "မဇ္ဈိမပဏ္ဏာသအဋ္ဌကထာ (မိုးထိမူ (ဒု))",
    "basket": "အဋ္ဌကထာ",
@@ -1570,6 +1559,17 @@
    "cat_key": "ma",
    "size": 3308718,
    "date": "2026-11-12",
+   "edition_of": "attha_ma_02"
+  },
+  {
+   "id": "attha_ma_02_sheet115",
+   "title": "မဇ္ဈိမပဏ္ဏာသအဋ္ဌကထာ (မိုးထိမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "မဇ္ဈိမနိကာယ်",
+   "cat_key": "ma",
+   "size": 3328229,
+   "date": "2026-11-18",
    "edition_of": "attha_ma_02"
   },
   {
