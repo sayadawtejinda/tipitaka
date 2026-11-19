@@ -14,18 +14,8 @@ import m_tool, m_bundle, m_gcheck
 
 root = tk.Tk(); root.title('နိဿယ ပြင်ဆင်ကိရိယာ'); root.geometry('1000x860')
 import json as _jj
-def _published():       # sheets whose web file is COMMITTED in the tipitaka repository (a file only copied into data/ but never committed is NOT on the web yet)
-    out = set()
-    try:
-        tracked = set(subprocess.run(['git', 'ls-files', 'data'], cwd=TIPI, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout.split(chr(10)))
-    except Exception: tracked = None
-    for mp in glob.glob(os.path.join(ROOT, 'web', '*.meta.json')):
-        try:
-            m = _jj.load(open(mp, encoding='utf-8'))
-            f_ = 'data/' + m['file'] + '.html'
-            if (f_ in tracked) if tracked else os.path.exists(os.path.join(TIPI, f_)): out.add(int(m['sheet']))
-        except Exception: pass
-    return out
+import m_status
+def _published(): return m_status.on_web_set()          # one shared rule for run_tool and run_translate (scripts/m_status.py)
 def _hide_on():
     try: return bool(_jj.load(open(os.path.join(ROOT, 'gui_state.json'), encoding='utf-8')).get('hide_pub', True))
     except Exception: return True
@@ -33,8 +23,8 @@ def visible_sheets(hide=None, keep=None):
     allb = m_tool.list_sheets()
     if hide is None: hide = _hide_on()
     if not hide: return allb
-    pub = _published()
-    return [(n, t) for n, t in allb if n not in pub or n == keep]
+    pub = _published()          # a book leaves the list only when it is on the web AND Gemini has checked all of it (otherwise run_tool still has work there)
+    return [(n, t) for n, t in allb if n == keep or n not in pub or not m_status.gemini_done(n)]
 sheets = visible_sheets()
 f = ttk.Frame(root, padding=10); f.pack(fill='both', expand=True); f.columnconfigure(1, weight=1); f.rowconfigure(9, weight=1)
 
@@ -63,7 +53,7 @@ def _toggle_hide():
     try: _jj.dump(st, open(STATE, 'w', encoding='utf-8'))
     except Exception: pass
     refresh_books(keep)
-ttk.Checkbutton(f, text='web ပေါ်တင်ပြီးသော စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).grid(row=0, column=6, sticky='w', padx=4)
+ttk.Checkbutton(f, text='web ပေါ်တင်ပြီး + Gemini အပြည့်စစ်ပြီးသော စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).grid(row=0, column=6, sticky='w', padx=4)
 cur_lbl = tk.Label(f, text='', font=('', 12, 'bold'), anchor='w', width=36); cur_lbl.grid(row=0, column=5, sticky='w', padx=8)
 def show_book(*_):
     import json as _j
@@ -367,18 +357,11 @@ b13.config(command=lambda: (busy(True), threading.Thread(target=work13, daemon=T
 b3.config(command=go3); b4.config(command=go4); b5.config(command=go5)
 b6.config(command=lambda: (os.makedirs(m_tool.OUT, exist_ok=True), os.startfile(m_tool.OUT)))
 _miss_lock = threading.Lock()
-def _on_web(n):          # the book's web file is COMMITTED in the tipitaka repository (a file only copied into data/ but not committed is not on the web)
-    try:
-        fp = glob.glob(os.path.join(ROOT, 'web', '*_sheet%03d.meta.json' % n)) + glob.glob(os.path.join(ROOT, 'web', '*_sheet%d.meta.json' % n))
-        if not fp: return True          # unknown: do not make files by itself
-        fn = _jj.load(open(fp[0], encoding='utf-8'))['file'] + '.html'
-        return subprocess.run(['git', 'ls-files', '--error-unmatch', 'data/' + fn], cwd=TIPI, capture_output=True).returncode == 0
-    except Exception: return False
+def _on_web(n): return n in m_status.on_web_set()
 def _auto_missing(n):
-    """a book that is being worked on (not on the web yet): the pages that Gemini has not checked and that wait in no file are put into new files (…_gap.txt) - no button needed"""
+    """a book that is being worked on (on the web or not): the pages that Gemini has not checked and that wait in no file are put into new files (…_gap.txt) - no button needed"""
     _miss_lock.acquire()          # one book after the other (a book chosen while another is still being made waits its turn - nothing is dropped)
     try:
-        if _on_web(n): return
         if m_gcheck.make_missing(n, say): say('  ➜ စာအုပ် %03d: မစစ်ရသေးသော စာမျက်နှာများအတွက် ဖိုင်အသစ် ထုတ်ပြီးပါပြီ' % n)
     except BaseException as e: say('  ⚠ မစစ်ရသေးသော စာမျက်နှာ ဖိုင်ထုတ်ရာ အမှား: %r' % e)
     finally: _miss_lock.release()
@@ -393,6 +376,7 @@ def _auto_publish(n):
     say('  ▲ စာအုပ် %03d ကို web သို့ အလိုအလျောက် တင်နေသည်...' % n)
     import m_publish
     with _pub_lock: m_publish.publish(n, True, False, say)
+    m_status._TRK['t'] = 0          # the list of books on the web is read again
 def _watch_downloads():
     """every 5 seconds: results that the Gemini Canvas app downloaded (…_checked.txt in Downloads) are put into their book by themselves"""
     import time

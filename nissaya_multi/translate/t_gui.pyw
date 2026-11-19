@@ -16,29 +16,8 @@ root = tk.Tk(); root.title('ပါဠိ မြန်မာပြန် ကိ�
 f = ttk.Frame(root, padding=10); f.pack(fill='both', expand=True); f.columnconfigure(1, weight=1); f.rowconfigure(6, weight=1)
 import glob, json
 TIPI = os.path.dirname(NSY)
-_TRK = {'t': 0, 'set': None}
-def published():        # only books whose web file is COMMITTED in the tipitaka repository (a file only copied into data/ is not on the web yet)
-    out = set()
-    import time
-    if time.time() - _TRK['t'] > 90 or _TRK['set'] is None:          # git is asked only once in 90 seconds (not every 5 seconds)
-        try: _TRK['set'] = set(subprocess.run(['git', 'ls-files', 'data'], cwd=TIPI, capture_output=True, text=True, encoding='utf-8', errors='replace').stdout.split(chr(10)))
-        except Exception: _TRK['set'] = None
-        _TRK['t'] = time.time()
-    tracked = _TRK['set']
-    for mp in glob.glob(os.path.join(NSY, 'web', '*.meta.json')):
-        try:
-            m = json.load(open(mp, encoding='utf-8')); f_ = 'data/' + m['file'] + '.html'
-            if (f_ in tracked) if tracked else os.path.exists(os.path.join(TIPI, f_)): out.add(int(m['sheet']))
-        except Exception: pass
-    # a sheet whose Pali book(s) already have a nissaya on the web (data/nissaya_books.json) is listed too - also when its own web file was removed / was published earlier without a .meta.json
-    try:
-        web_books = set(json.load(open(os.path.join(TIPI, 'data', 'nissaya_books.json'), encoding='utf-8')))
-        web_books |= set(json.load(open(os.path.join(TIPI, 'data', 'nissaya_editions.json'), encoding='utf-8')))
-        for r in json.load(open(os.path.join(NSY, 'catalog.json'), encoding='utf-8')):
-            b = (r.get('final') or {}).get('books') or []
-            if b and all(x in web_books for x in b): out.add(r['n'])
-    except Exception: pass
-    return out
+import m_status
+def published(): return m_status.on_web_set()          # one shared rule for run_tool and run_translate (scripts/m_status.py)
 STATE = os.path.join(HERE, 'gui_state.json')
 def load_state():
     try: return json.load(open(STATE, encoding='utf-8'))
@@ -51,24 +30,7 @@ hidepub = tk.BooleanVar(value=load_state().get('hide_pub', True))
 def _json(path, default):
     try: return json.load(open(path, encoding='utf-8'))
     except Exception: return default
-import m_gcheck
-_GDF = os.path.join(HERE, 'gem_done_cache.json')
-try: _GD = json.load(open(_GDF, encoding='utf-8'))        # {sheet: [key, ok]} - kept between runs (the check reads big files: first time ~15 s, then instant)
-except Exception: _GD = {}
-def gemini_done(n):
-    """the nissaya of sheet n is completely checked by Gemini: pages collected, no page missing, no Gemini file still waiting (a book that is not checked yet is not translated)"""
-    cp = os.path.join(NSY, 'gold', 'gemini', '%03d_collected.json' % n)
-    try: key = [os.path.getmtime(cp), len(glob.glob(os.path.join(NSY, 'output', 'gemini', '%03d_*.txt' % n))), os.path.getmtime(os.path.join(NSY, 'paired', '%03d.json' % n)), 2]
-    except OSError: return False
-    if _GD.get(str(n), [None, None])[0] == key: return _GD[str(n)][1]
-    try:
-        miss, waiting = m_gcheck.missing_pages(n)
-        ok = key[1] == 0 and not miss and len(json.load(open(cp, encoding='utf-8'))) > 0
-    except Exception: ok = False
-    _GD[str(n)] = [key, ok]
-    try: json.dump(_GD, open(_GDF, 'w', encoding='utf-8'))
-    except Exception: pass
-    return ok
+gemini_done = m_status.gemini_done          # the nissaya of the sheet is completely checked by Gemini (same rule as run_tool)
 def get_sheets(keep=None):
     keep = keep if keep is not None else load_state().get('sheet')     # the book chosen / published last stays in the list (even when it would be hidden)
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
@@ -138,7 +100,7 @@ def go1():
 def work_pub(n, auto=False):
     try:
         if not auto and not messagebox.askyesno('web သို့ တင်မည်', 'စာအုပ် %03d ၏ မြန်မာပြန်ပြီးသည့် စာမျက်နှာများကို web (GitHub) သို့ တင်မည်လား?' % n): return
-        say('web သို့ တင်နေသည်...'); t_core.publish(n, say); _TRK['t'] = 0; save_state(sheet=n, last_pub=n)
+        say('web သို့ တင်နေသည်...'); t_core.publish(n, say); m_status._TRK['t'] = 0; save_state(sheet=n, last_pub=n)
         say('📌 နောက်ဆုံး web တင်ပြီးသော စာအုပ်: %03d (စာရင်းထဲ ဆက်ထားသည်)' % n)
     except BaseException as e: say('အမှား: %r' % e)
     finally: root.after(0, lambda: bpub.config(state='normal'))
