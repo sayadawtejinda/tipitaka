@@ -3007,6 +3007,17 @@
    "edition_of": "annya_vi_01_02"
   },
   {
+   "id": "annya_vi_01_02_sheet226",
+   "title": "ကင်္ခါဝိတရဏီအဋ္ဌကထာ (ကင်္ခါဝိတရဏီအဋ္ဌကထာနိသျ)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "ဝိနည်းဆိုင်ရာ",
+   "cat_key": "vi",
+   "size": 5397810,
+   "date": "2026-11-19",
+   "edition_of": "annya_vi_01_02"
+  },
+  {
    "id": "annya_vi_01_03_sheet437",
    "title": "ကင်္ခါဝိတရဏီပုရာဏဋီကာ (အရှင်ပညာဓိက-ကင်္ခါဋီဟော)",
    "basket": "အည",
@@ -3314,5 +3325,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 211
+ "n_editions": 212
 }
