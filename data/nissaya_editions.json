@@ -1657,16 +1657,16 @@
  ],
  "tika_di_02": [
   {
-   "label": "ဦးပညိဿရမူ (ဒု)",
-   "file": "tika_di_02_sheet199",
-   "from": 193,
-   "to": 358
-  },
-  {
    "label": "ဦးပညိဿရမူ (ပ)",
    "file": "tika_di_02_sheet198",
    "from": 1,
    "to": 192
+  },
+  {
+   "label": "ဦးပညိဿရမူ (ဒု)",
+   "file": "tika_di_02_sheet199",
+   "from": 193,
+   "to": 358
   }
  ]
 }
