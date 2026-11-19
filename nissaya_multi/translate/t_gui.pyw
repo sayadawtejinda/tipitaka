@@ -232,6 +232,8 @@ def poll():
 def _resume_start():
     try: t_core.resume_partial(say)
     except Exception as e: say('resume အမှား: %r' % e)
+    try: t_core.ensure_missing_lang(say)
+    except Exception as e: say('resume (vi/en) အမှား: %r' % e)
 root.after(1500, _resume_start)          # half-translated input files get their _rest file when the tool starts
 root.after(2000, poll)
 root.mainloop()

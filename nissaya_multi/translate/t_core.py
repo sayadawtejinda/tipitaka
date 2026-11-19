@@ -295,6 +295,24 @@ def resume_partial(log=print):
     return n_made
 
 
+def ensure_missing_lang(log=print):
+    """Vietnamese / English that were started (some pages translated) but are not finished and have NO input file waiting: the missing pages get their file by themselves
+    (a page that was rejected, a page nobody sent ...).  Done when the tool starts.  A language that was never started for a sheet is left alone (button ①)."""
+    made = 0
+    for lang in ('vi', 'en'):
+        for f in sorted(glob.glob(os.path.join(GOLD, 'tr_*_%s.json' % lang))):
+            m = re.match(r'tr_(\d+)_%s[.]json$' % lang, os.path.basename(f))
+            if not m: continue
+            n = int(m.group(1))
+            try:
+                tot, got = lang_progress(n, lang)
+                if not got or got >= tot or glob.glob(os.path.join(OUT, 'tr_%03d_*_for%s.txt' % (n, lang))): continue
+                log('↻ စာအုပ် %03d %sပြန် %d / %d မျက်နှာ — ကျန် %d မျက်နှာကို ဖိုင်အသစ် ထုတ်မည်' % (n, LANGS[lang], got, tot, tot - got))
+                build_lang(n, lang, rest=True, log=log); made += 1
+            except BaseException as e: log('⚠ %s: %r' % (os.path.basename(f), e))
+    return made
+
+
 def export_book(n):
     d = load_translations(n)
     p = os.path.join(GOLD, 'tr_%03d.txt' % n)
