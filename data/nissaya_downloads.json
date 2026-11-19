@@ -2624,17 +2624,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "tika_di_01_02_sheet194",
-   "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ပ) (ညောင်ရမ်းမူ (ပ))",
-   "basket": "ဋီကာ",
-   "basket_key": "tika",
-   "category": "ဒီဃနိကာယ်",
-   "cat_key": "di",
-   "size": 5687358,
-   "date": "2026-11-18",
-   "edition_of": "tika_di_01_02"
-  },
-  {
    "id": "tika_di_01_02_sheet195",
    "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ပ) (ညောင်ရမ်းမူ (ဒု))",
    "basket": "ဋီကာ",
@@ -2642,6 +2631,17 @@
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
    "size": 6650383,
+   "date": "2026-11-18",
+   "edition_of": "tika_di_01_02"
+  },
+  {
+   "id": "tika_di_01_02_sheet194",
+   "title": "သီလက္ခန္ဓဝဂ္ဂအဘိနဝဋီကာ (ပ) (ညောင်ရမ်းမူ (ပ))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 5720363,
    "date": "2026-11-18",
    "edition_of": "tika_di_01_02"
   },
