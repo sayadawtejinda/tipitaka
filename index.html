@@ -3225,7 +3225,20 @@ let isRomanPali = false;
     const body = t => {          // Gemini မြန်မာပြန် - "## " ဖြင့်စသော စာကြောင်း = ခေါင်းစဉ် (အလယ်၊ စာလုံးမည်း)၊ ကျန်တာ စာပိုဒ် (ကွက်လပ်စာကြောင်းဖြင့် ခွဲ)
       if(!t) return ""; if(isHtml) return t;
       const out = []; let buf = [];
-      const flush = () => { if(buf.length){ out.push(`<p class="bodytext">${buf.map(esc).join("<br>")}</p>`); buf = []; } };
+      const KEY = "ဟူသည်မှာ", fmt = l => {      // "ဘဂဝန္တံ" ဟူသည်မှာ - ... : ရှင်းပြခံ စကားလုံး (ဟူသည်မှာ ရှေ့က) ကို စာလုံးမည်ဖြင့် ပြသည်
+        let res = "", pos = 0, i;
+        while((i = l.indexOf(KEY, pos)) >= 0){
+          const before = l.slice(pos, i), tr = before.replace(/\s+$/, ""); let st = -1;
+          if(/[”"]$/.test(tr)){ const q = Math.max(tr.lastIndexOf("“"), tr.slice(0, -1).lastIndexOf('"')); if(q >= 0 && tr.length - q <= 120) st = q; }
+          else { const b = Math.max(tr.lastIndexOf("။"), tr.lastIndexOf(":"), tr.lastIndexOf("-")) + 1; if(tr.length - b <= 70) st = b; }
+          while(st >= 0 && st < tr.length && /\s/.test(tr[st])) st++;
+          if(st >= 0 && st < tr.length) res += esc(before.slice(0, st)) + "<b>" + esc(tr.slice(st)) + "</b>" + esc(before.slice(tr.length)) + KEY;
+          else res += esc(before) + KEY;
+          pos = i + KEY.length;
+        }
+        return res + esc(l.slice(pos));
+      };
+      const flush = () => { if(buf.length){ out.push(`<p class="bodytext">${buf.map(fmt).join("<br>")}</p>`); buf = []; } };
       t = t.replace(/([^\n#])[ \t]*(##\s)/g, "$1\n$2");      // Gemini က "## ခေါင်းစဉ်" ကို စာကြောင်းအလယ်မှာ ထည့်မိလျှင်လည်း ခေါင်းစဉ်ကို စာကြောင်းအသစ်ဖြင့် စပေးသည်
       const hd = h => { let m = h.match(/^(.*?။)\s+(\S[\s\S]*)$/); if(m) return [m[1], m[2]]; if(h.length > 90){ m = h.match(/^(\S*(?:ကထာ|အဖွင့်|ဝတ္ထု|ခန္ဓက|ဝဂ္ဂ))\s+(\S[\s\S]*)$/) || h.match(/^(\S+)\s+(\S[\s\S]*)$/); if(m) return [m[1], m[2]]; } return [h, ""]; };      // ခေါင်းစဉ်နောက် စာပိုဒ်စာသား ကပ်လာလျှင် ခွဲသည်
       t.split(/\n/).forEach(line => { const l = line.trim(); if(!l){ flush(); return; } const hm = l.match(/^#{1,3}\s+(.*)$/); if(hm){ flush(); const [h1, rest] = hd(hm[1]); out.push(`<p style="text-align:center;font-weight:bold;color:#1e3a5f;margin:.9em 0 .4em">${esc(h1)}</p>`); if(rest) buf.push(rest); } else buf.push(l); });
