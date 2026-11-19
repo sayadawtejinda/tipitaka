@@ -3049,17 +3049,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "annya_bi_05_sheet353",
-   "title": "အဘိဓမ္မတ္ထသင်္ဂဟော (အခြေပြု)",
-   "basket": "အည",
-   "basket_key": "annya",
-   "category": "အဘိဓမ္မာဆိုင်ရာ",
-   "cat_key": "bi",
-   "size": 2693606,
-   "date": "2026-11-17",
-   "edition_of": "annya_bi_05"
-  },
-  {
    "id": "annya_bi_05_sheet352",
    "title": "အဘိဓမ္မတ္ထသင်္ဂဟော (ဗားကရာ)",
    "basket": "အည",
@@ -3067,6 +3056,17 @@
    "category": "အဘိဓမ္မာဆိုင်ရာ",
    "cat_key": "bi",
    "size": 1893673,
+   "date": "2026-11-18",
+   "edition_of": "annya_bi_05"
+  },
+  {
+   "id": "annya_bi_05_sheet353",
+   "title": "အဘိဓမ္မတ္ထသင်္ဂဟော (အခြေပြု)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 2715649,
    "date": "2026-11-18",
    "edition_of": "annya_bi_05"
   },
