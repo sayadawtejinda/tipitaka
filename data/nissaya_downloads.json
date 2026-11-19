@@ -1390,17 +1390,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "attha_di_02_sheet106",
-   "title": "မဟာဝဂ္ဂဋ္ဌကထာ (ပခုက္ကူမူ (ဒု))",
-   "basket": "အဋ္ဌကထာ",
-   "basket_key": "attha",
-   "category": "ဒီဃနိကာယ်",
-   "cat_key": "di",
-   "size": 5091189,
-   "date": "2026-11-12",
-   "edition_of": "attha_di_02"
-  },
-  {
    "id": "attha_di_02_sheet108",
    "title": "မဟာဝဂ္ဂဋ္ဌကထာ (ဘာဋီမူ (ဒု))",
    "basket": "အဋ္ဌကထာ",
@@ -1441,6 +1430,17 @@
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
    "size": 6058661,
+   "date": "2026-11-18",
+   "edition_of": "attha_di_02"
+  },
+  {
+   "id": "attha_di_02_sheet106",
+   "title": "မဟာဝဂ္ဂဋ္ဌကထာ (ပခုက္ကူမူ (ဒု))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 5098900,
    "date": "2026-11-18",
    "edition_of": "attha_di_02"
   },
