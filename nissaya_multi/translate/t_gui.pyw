@@ -137,20 +137,19 @@ def go1():
     threading.Thread(target=work1, args=(n, m, k), daemon=True).start()
 
 
-def work_pub(n, auto=False):
+def work_pub(n, auto=False, lang=''):
     try:
-        if not auto and not messagebox.askyesno('web သို့ တင်မည်', 'စာအုပ် %03d ၏ မြန်မာပြန်ပြီးသည့် စာမျက်နှာများကို web (GitHub) သို့ တင်မည်လား?' % n): return
-        say('web သို့ တင်နေသည်...'); t_core.publish(n, say); m_status._TRK['t'] = 0; save_state(sheet=n, last_pub=n)
+        if not auto and not messagebox.askyesno('web သို့ တင်မည်', 'စာအုပ် %03d ၏ %sပြန်ပြီးသည့် စာမျက်နှာများကို web (GitHub) သို့ တင်မည်လား?' % (n, LANG_NAME[lang or 'my'])): return
+        say('web သို့ တင်နေသည်...'); t_core.publish(n, say, lang); m_status._TRK['t'] = 0; save_state(sheet=n, last_pub=n)
+        if lang: return say('✔ %sပြန်ကို web သို့ တင်ပြီး — ပင်မစာမျက်နှာ၏ "%s" ခလုပ်ထဲ ပေါ်ပါလိမ့်မည်' % (LANG_NAME[lang], {'vi': 'Tiếng Việt', 'en': 'English'}[lang]))
         say('📌 နောက်ဆုံး web တင်ပြီးသော စာအုပ်: %03d (စာရင်းထဲ ဆက်ထားသည်)' % n)
     except BaseException as e: say('အမှား: %r' % e)
     finally: root.after(0, lambda: bpub.config(state='normal'))
 
 
 def go_pub():
-    n = sel()
-    if lang_var.get() in ('vi', 'en'): return messagebox.showinfo('', 'ဗီယက်နမ် / အင်္ဂလိပ်ပြန်ကို web ပေါ် ပြမည့် နည်းလမ်း မရေးရသေးပါ။ ရလဒ်ကို gold/tr_%03d_%s.json ထဲ သိမ်းထားသည် (③ ဖြင့် .txt ထုတ်နိုင်)။' % (n, lang_var.get()))
-    bpub.config(state='disabled')
-    threading.Thread(target=work_pub, args=(n,), daemon=True).start()
+    n = sel(); bpub.config(state='disabled')
+    threading.Thread(target=work_pub, args=(n, False, lang_var.get() if lang_var.get() in ('vi', 'en') else ''), daemon=True).start()
 
 
 def after_ingest(n):       # a whole book is translated (no input file waiting any more) -> published by itself when the box is ticked
@@ -158,6 +157,12 @@ def after_ingest(n):       # a whole book is translated (no input file waiting a
     if autopub.get() and t_core.is_complete(n):
         say('✔ စာအုပ် %03d မြန်မာပြန် ပြည့်စုံပြီ — အလိုအလျောက် web သို့ တင်မည်' % n)
         threading.Thread(target=work_pub, args=(n, True), daemon=True).start()
+
+
+def after_ingest_lang(n, lang):       # Vietnamese / English of a sheet finished (no input file waiting) -> published by itself when the box is ticked
+    if autopub.get() and not glob.glob(os.path.join(t_core.OUT, 'tr_%03d_*_for%s.txt' % (n, lang))):
+        say('✔ စာအုပ် %03d %sပြန် ပြည့်စုံပြီ — အလိုအလျောက် web သို့ တင်မည်' % (n, LANG_NAME[lang]))
+        threading.Thread(target=work_pub, args=(n, True, lang), daemon=True).start()
 
 
 def work_extra(n, pages):
@@ -207,7 +212,7 @@ ttk.Label(f, text='လုပ်ပုံ: ① → ဖိုင်ကို Gemin
 
 def poll():
     try:
-        if t_core.ingest_downloads(say, after_ingest): pass
+        if t_core.ingest_downloads(say, after_ingest, after_ingest_lang): pass
     except Exception as e: say('ingest အမှား: %r' % e)
     try: refresh_books()
     except Exception as e: say('စာရင်း အမှား: %r' % e)

@@ -146,7 +146,7 @@ def _heads(text):
 _NAME = re.compile(r'tr_(DD+)_(.+?)_pali(DD+)-(DD+)(?:_rest)?(?:_translated(?:_(vi|en))?|_for(?:vi|en)_(vi|en))(?: [(]DD+[)])?[.]txt$'.replace('DD', chr(92) + 'd'))
 
 
-def ingest_downloads(log=print, after=None):
+def ingest_downloads(log=print, after=None, after_lang=None):
     got = 0
     for f in sorted(glob.glob(os.path.join(DOWNLOADS, 'tr_*_translated*.txt')) + glob.glob(os.path.join(DOWNLOADS, 'tr_*_for??_??*.txt'))):
         name = os.path.basename(f); m = _NAME.match(name)
@@ -164,7 +164,11 @@ def ingest_downloads(log=print, after=None):
                 want = set(parse_pages(open(inp, encoding='utf-8').read()))
                 if want <= set(d): os.remove(inp); log('  ✔ ထည့်ဖိုင်ပြီးစီးသဖြင့် ဖျက်ပြီး')
                 else: log('  ပြန်မလာသေးသော ပါဠိစာမျက်နှာ: %s — ဖိုင်ကို ဆက်ထားသည် (ကျန်တာကို ① ထပ်နှိပ်၍ ပြန်ထုတ်)' % ' '.join(map(str, sorted(want - set(d)))))
-            got += 1; continue
+            got += 1
+            if after_lang:
+                try: after_lang(n, lang)
+                except BaseException as e: log('⚠ after-step (web တင်) အမှား: %r' % e)
+            continue
 
         inp = os.path.join(OUT, re.sub(r'_translated.*$', '.txt', name))
         if os.path.exists(inp):
@@ -216,11 +220,12 @@ def is_complete(n):
     return not glob.glob(os.path.join(OUT, 'tr_%03d_*.txt' % n))
 
 
-def publish(n, log=print):
+def publish(n, log=print, lang=''):
     """data/nissaya_translations/<book>.json {Pali page: Burmese} (merged with what is already there) + index.json (the books that have a translation) -> git commit ONLY these files + push.
     The reader (index.html) shows the 'မြန်မာ' button of a nissaya book when its id is in index.json."""
-    d = load_translations(n)
-    if not d: raise RuntimeError('စာအုပ် %03d: မြန်မာပြန် မရှိသေးပါ' % n)
+    d = load_translations(n, lang)
+    if not d: raise RuntimeError('စာအုပ် %03d: %sပြန် မရှိသေးပါ' % (n, LANGS.get(lang, 'မြန်မာ')))
+    WEBDIR = os.path.join(REPO, 'data', 'nissaya_translations' if not lang else 'translations_' + lang)          # vi / en: data/translations_vi/<book>.json + index.json (the reader's Tiếng Việt / English buttons)
     P = _paired(n)
     keys = {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
     books = sorted({b for b, p in keys})
@@ -261,7 +266,7 @@ def publish(n, log=print):
         r = subprocess.run(['git', 'pull', '--rebase', '--autostash'], cwd=REPO, capture_output=True, text=True)
         if r.returncode: subprocess.run(['git', 'rebase', '--abort'], cwd=REPO); raise RuntimeError('git pull --rebase မအောင်မြင်ပါ')
     _git('add', '--', *paths)
-    msg = 'Nissaya translation (Burmese, per Pali page): ' + ', '.join(sorted(b for b, p in per.items() if p)) + chr(10) * 2 + 'Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>'
+    msg = 'Nissaya translation (%s, per Pali page): ' % {'': 'Burmese', 'vi': 'Vietnamese', 'en': 'English'}[lang] + ', '.join(sorted(b for b, p in per.items() if p)) + chr(10) * 2 + 'Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>'
     _git('commit', '-m', msg, '--', *paths)
     _git('push')
     log('✔ web သို့ တင်ပြီး (GitHub Pages ပေါ် ၁–၂ မိနစ်အတွင်း ပေါ်လာမည်)')

@@ -376,6 +376,10 @@ let isMmSplitOpen = false, mmViaMm = false, mmSplitIndex = null, mmSplitCache = 
 // { "mula_vi_01": [ {"label":"မူလနိဿယ","file":"mula_vi_01"}, {"label":"ဘုရားကြီးမူ","file":"mula_vi_01_bhurakyi"} ], ... }   (file = data/ ထဲက .html ဖိုင်အမည်၊ .html မပါ)
 let TP_NISSAYA_EDITIONS = { "mula_vi_01": [ {label:"မူလနိဿယ", file:"mula_vi_01"}, {label:"ဘုရားကြီးမူ", file:"mula_vi_01_bhurakyi"} ] };   // ဖိုင်ဖတ်မရလျှင် သုံးမည့် အရန်
 let tpEditionsLoaded = false;
+let trLang = "my", trRomanForced = false;      // "vi" / "en" = the Tiếng Việt / English translation reader (Pali + book names in Roman, translation of that language beside it)
+const TR_LANG_DIR = {my: "nissaya_translations", vi: "translations_vi", en: "translations_en"}, TR_LANG_NAME = {vi: "Tiếng Việt", en: "English"};
+let TP_TR_VARS_X = {vi: {}, en: {}};             // {book: [file, ...]} of data/translations_vi|en/index.json
+function tp_leaveLang(){ if(trLang !== "my"){ trLang = "my"; if(trRomanForced){ isRomanPali = false; trRomanForced = false; } } }       // back to the Burmese reader: the Roman Pali that the language reader switched on goes off again
 let TP_TR_BOOKS = new Set(), tpTrCache = {}, TP_TR_VARS = {};   // မြန်မာပြန်ပြီးသော နိဿယစာအုပ်များ (data/nissaya_translations/index.json) နှင့် စာအုပ်တစ်အုပ်ချင်း၏ မြန်မာပြန် (ပါဠိစာမျက်နှာ → စာ)
 let nsyBtScroll = null;   // ဘာသာဋီကာ split view ဖွင့်လျှင် ရွှေ့ရမည့် နိဿယစာအုပ်စာမျက်နှာ
 let nsyBtPdf = null;     // ဘာသာဋီကာ split view ဖွင့်ထားစဉ် 📕 ခလုပ်အတွက် PDF လင့်
@@ -2688,6 +2692,7 @@ let isRomanPali = false;
   }
 
   async function showMmCategories(){
+    tp_leaveLang();
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်"}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     await ensureBurmeseToc();
@@ -2734,6 +2739,7 @@ let isRomanPali = false;
   }
 
   function showSayadawList(){
+    tp_leaveLang();
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ"}]);
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid"><div class="tp-card" data-sayadaw="minkun">မင်းကွန်းဆရာတော်<span class="tp-count">${toMyanmarDigits(MBV_BOOKS.length)} အုပ်</span></div><div class="tp-card" data-sayadaw="skp">ရွှေကျင်စာပေ<span class="tp-count">၅၂ အုပ်</span></div><div class="tp-card" data-sayadaw="paauk">ဖားအောက်ဆရာတော်</div></div>`;
     document.querySelector("[data-sayadaw='paauk']").addEventListener("click", showPaBooks);
@@ -2891,19 +2897,42 @@ let isRomanPali = false;
       return base + extra;
     }catch(e){ return null; }
   }
+  async function showTrLangBooks(lang){
+    tp_leaveLang(); setFloatSearchVisible(true);
+    renderBreadcrumb([{label:"Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: TR_LANG_NAME[lang]}]);
+    document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
+    const idx = await ensureIndex(); try{ await tp_loadEditions(); }catch(e){}
+    const ids = Object.keys(TP_TR_VARS_X[lang]), books = idx.books.filter(b => ids.includes(b.id));
+    let html = "";
+    Object.keys(idx.basket_labels).forEach(bs => {
+      const bb = books.filter(b => b.basket === bs); if(!bb.length) return;
+      html += `<h3 style="margin:14px 4px 6px;color:#5a3d1e">${esc2(myanmarToRoman(idx.basket_labels[bs]))}</h3><div class="tp-grid">${bb.map(b => `<div class="tp-card" data-trbook="${b.id}">${esc2(myanmarToRoman(b.name))}<span class="tp-count">${b.pagecount} ${lang === "vi" ? "trang" : "pages"}</span></div>`).join("")}</div>`;
+    });
+    document.getElementById("tp-view").innerHTML = html || `<p style="color:#888;padding:16px">${lang === "vi" ? "Chưa có sách nào được dịch sang tiếng Việt." : "No book has been translated into English yet."}</p>`;
+    document.querySelectorAll("[data-trbook]").forEach(el => el.addEventListener("click", () => {
+      const b = books.find(x => x.id === el.dataset.trbook); trLang = lang;
+      if(!isRomanPali){ isRomanPali = true; trRomanForced = true; }
+      isNissayaOpen = false; nisViaList = false; nsyShowTr = 1; isMmSplitOpen = true; mmViaMm = false; mmGemini = true;
+      loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage);
+    }));
+    setParams({basket: "tr_" + lang});
+  }
+  const esc2 = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;");
   async function showBaskets(){
+    tp_leaveLang(); try{ await tp_loadEditions(); }catch(e){}
     setFloatSearchVisible(true); const idx = await ensureIndex(); const nisBooks = await nissayaBooksIn(idx); renderBreadcrumb([{label:"တိပိဋက"}]);
     const mmN = await mmHomeCount();
-    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${nisCountText(nisBooks)}</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်${mmN != null ? `<span class="tp-count">${toMyanmarDigits(mmN)} အုပ်</span>` : ""}</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div>`;
+    const html = Object.keys(idx.basket_labels).map(b => { const count = idx.books.filter(bk => bk.basket === b).length; return `<div class="tp-card" data-basket="${b}">${idx.basket_labels[b]}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("") + `<div class="tp-card" data-basket="nissaya">နိဿယများ<span class="tp-count">${nisCountText(nisBooks)}</span></div><div class="tp-card" data-basket="myanmar">မြန်မာပြန်${mmN != null ? `<span class="tp-count">${toMyanmarDigits(mmN)} အုပ်</span>` : ""}</div><div class="tp-card" data-basket="sayadaw">ဆရာတော်များ</div><div class="tp-card" data-basket="tr_vi">ဗီယက်နမ် (Tiếng Việt)<span class="tp-count">${toMyanmarDigits(Object.keys(TP_TR_VARS_X.vi).length)} အုပ်</span></div><div class="tp-card" data-basket="tr_en">အင်္ဂလိပ် (English)<span class="tp-count">${toMyanmarDigits(Object.keys(TP_TR_VARS_X.en).length)} အုပ်</span></div>`;
     let last = null; try{ last = JSON.parse(localStorage.getItem("tp_last_read")); }catch(e){}
     const resume = last && last.name ? `<div class="tp-resume" style="margin:0 0 14px;padding:10px 14px;border:2px solid #5a8f6c;border-radius:10px;background:#eef3ea;cursor:pointer;color:#2d5c3d;font-weight:bold;">📌 ဆက်ဖတ်ရန် — ${last.name}<span style="font-weight:normal;color:#666;"> (${last.type === "mm" ? "စာမျက်နှာ " + toMyanmarDigits(last.pageIdx || 1) : "စာမျက်နှာ " + toMyanmarDigits(last.pageNum || 1)})</span></div>` : "";
     document.getElementById("tp-view").innerHTML = resume + `<div class="tp-grid">${html}</div>`;
     const rs = document.querySelector("#tp-view .tp-resume"); if(rs) rs.addEventListener("click", () => openRecentBook(last));
-    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{ if(el.dataset.basket === "myanmar") showMmCategories(); else if(el.dataset.basket === "nissaya") showNissayaCategories(); else if(el.dataset.basket === "sayadaw") showSayadawList(); else showCategories(el.dataset.basket); }));
+    document.querySelectorAll("[data-basket]").forEach(el=> el.addEventListener("click", ()=>{ if(el.dataset.basket === "tr_vi") showTrLangBooks("vi"); else if(el.dataset.basket === "tr_en") showTrLangBooks("en"); else if(el.dataset.basket === "myanmar") showMmCategories(); else if(el.dataset.basket === "nissaya") showNissayaCategories(); else if(el.dataset.basket === "sayadaw") showSayadawList(); else showCategories(el.dataset.basket); }));
     setParams({});
   }
 
   async function showCategories(basketId){
+    tp_leaveLang();
     setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId}]);
     const cats = [...new Set(idx.books.filter(b=>b.basket===basketId).map(b=>b.category))];
     const html = cats.map(c => { const count = idx.books.filter(b=>b.basket===basketId && b.category===c).length; return `<div class="tp-card" data-category="${c}">${idx.category_labels[c] || c}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span></div>`; }).join("");
@@ -2913,6 +2942,7 @@ let isRomanPali = false;
   }
 
   async function showBookList(basketId, categoryId){
+    tp_leaveLang();
     setFloatSearchVisible(true); const idx = await ensureIndex(); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId}]);
     const books = idx.books.filter(b=>b.basket===basketId && b.category===categoryId);
     const html = books.map(b=> `<div class="tp-card" data-book="${b.id}" data-firstpage="${b.firstpage}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ</span></div>`).join("");
@@ -3009,6 +3039,7 @@ let isRomanPali = false;
   }
 
   async function showNissayaCategories(){                       // level 1: ပါဠိတော် / အဋ္ဌကထာ / ဋီကာ / အညပေါင်းကျမ်း (နိဿယရှိတာချည်း)
+    tp_leaveLang();
     setFloatSearchVisible(true); const idx = await ensureIndex(); nisCrumb(idx, [{label:"နိဿယများ"}]);
     const books = await nissayaBooksIn(idx), baskets = Object.keys(idx.basket_labels).filter(b => books.some(x => x.basket === b));
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${baskets.map(b => `<div class="tp-card" data-nb="${b}">${idx.basket_labels[b]}<span class="tp-count">${nisCountText(books.filter(x => x.basket === b))}</span><button class="tp-dl-btn" data-dlnis="${b}" title="နိဿယ ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
@@ -3062,6 +3093,7 @@ let isRomanPali = false;
     try{ const j = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_editions.json`)); if(j && typeof j === "object") TP_NISSAYA_EDITIONS = j; }catch(e){ /* အရန်စာရင်းကိုပဲ သုံးမည် */ }
     try{ await ensureMmSplitIndex(); }catch(e){ /* မြန်မာပြန် Split View စာရင်း မရသေးပါ */ }
     try{ const t = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/index.json`)); if(Array.isArray(t)){ TP_TR_BOOKS = new Set(t); t.forEach(b => TP_TR_VARS[b] = [b + ".json"]); } else if(t && typeof t === "object"){ TP_TR_BOOKS = new Set(Object.keys(t)); Object.keys(t).forEach(b => TP_TR_VARS[b] = t[b].map(x => x.file)); } }catch(e){ /* မြန်မာပြန် မရှိသေးပါ */ }
+    for(const L of ["vi", "en"]){ try{ const t = await fetchJson(cdnUrl(`${DATA_FOLDER}/translations_${L}/index.json`)); if(t && typeof t === "object" && !Array.isArray(t)) Object.keys(t).forEach(b => TP_TR_VARS_X[L][b] = t[b].map(x => x.file)); }catch(e){ /* မရှိသေးပါ */ } }
   }
   async function ensureMmSplitIndex(){
     if(!mmSplitIndex){
@@ -3110,7 +3142,7 @@ let isRomanPali = false;
   async function tp_trLoad(bookId){
     const srcs = tp_trSources(bookId), src = srcs[Math.max(0, (nsyShowTr || 1) - 1)] || srcs[0]; if(!src) return null;
     if(src.type === "mm"){ if(!mmSplitCache[bookId]) mmSplitCache[bookId] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${bookId}.json`)); return {d: mmSplitCache[bookId], isHtml: true}; }
-    let d = tpTrCache[src.file]; if(!d){ d = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/${src.file}?v=${Date.now()}`)); tpTrCache[src.file] = d; }
+    let d = tpTrCache[trLang + "/" + src.file]; if(!d){ d = await fetchJson(cdnUrl(`${DATA_FOLDER}/${TR_LANG_DIR[trLang]}/${src.file}?v=${Date.now()}`)); tpTrCache[trLang + "/" + src.file] = d; }
     return {d, isHtml: false};
   }
   async function tp_nissayaCopyPanel(file, curPage, minP, maxP, bookId){
@@ -3209,7 +3241,7 @@ let isRomanPali = false;
   }
   let nsyShowTr = 0;           // "မြန်မာ" ခလုပ် - 0 = ပိတ်၊ k = မြန်မာပြန် k ခုမြောက် (မူကွဲ နိဿယ နှစ်ခုကို ဘာသာပြန်ထားလျှင် "မြန်မာ ၁"၊ "မြန်မာ ၂") ကို နိဿယဘက်ခြမ်းမှာ ပြမည် (အလယ် = လက်ရှိစာမျက်နှာ၊ အပေါ်အောက် = ရှေ့/နောက်စာမျက်နှာ၊ ပါဠိဘက်ခြမ်းလိုပဲ)
   // စာအုပ်တစ်အုပ်၏ မြန်မာပြန်များ: ရှိပြီးသား မြန်မာပြန် Split View (mm_split) ကို ဦးစွာ၊ ထို့နောက် Gemini မြန်မာပြန် (nissaya_translations) ဖိုင်တစ်ခုချင်းကို
-  const tp_trSources = bookId => { const v = []; if(mmSplitIndex && mmSplitIndex[bookId]) v.push({type: "mm"}); (TP_TR_VARS[bookId] || []).forEach(f => v.push({type: "tr", file: f})); return v; };
+  const tp_trSources = bookId => { if(trLang !== "my") return (TP_TR_VARS_X[trLang][bookId] || []).map(f => ({type: "tr", file: f})); const v = []; if(mmSplitIndex && mmSplitIndex[bookId]) v.push({type: "mm"}); (TP_TR_VARS[bookId] || []).forEach(f => v.push({type: "tr", file: f})); return v; };
   const tp_hasTr = bookId => tp_trSources(bookId).length > 0;
   async function tp_renderTranslation(bookId, pageNum, contentEl, forceSrc){
     const src = forceSrc || tp_trSources(bookId)[Math.max(0, nsyShowTr - 1)] || tp_trSources(bookId)[0];
@@ -3217,8 +3249,8 @@ let isRomanPali = false;
     if(src && src.type === "mm"){          // ရှိပြီးသား မြန်မာပြန် Split View (ပါဠိစာမျက်နှာအတိုင်း စီပြီးသား HTML)
       try{ if(!mmSplitCache[bookId]) mmSplitCache[bookId] = await fetchJson(cdnUrl(`${DATA_FOLDER}/mm_split/${bookId}.json`)); d = mmSplitCache[bookId]; isHtml = true; }catch(e){ d = null; }
     } else if(src){
-      d = tpTrCache[src.file];
-      if(!d){ try{ d = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/${src.file}?v=${Date.now()}`)); }catch(e){ d = {}; } tpTrCache[src.file] = d; }
+      d = tpTrCache[trLang + "/" + src.file];
+      if(!d){ try{ d = await fetchJson(cdnUrl(`${DATA_FOLDER}/${TR_LANG_DIR[trLang]}/${src.file}?v=${Date.now()}`)); }catch(e){ d = {}; } tpTrCache[trLang + "/" + src.file] = d; }
     }
     if(!d) d = {};
     const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -3233,11 +3265,11 @@ let isRomanPali = false;
       t.split(/\n/).forEach(line => { const l = line.trim(); if(!l){ flush(); return; } const hm = l.match(/^#{1,3}\s+(.*)$/); if(hm){ flush(); const [h1, rest] = hd(hm[1]); if(h1) out.push(`<p style="text-align:center;font-weight:bold;color:#1e3a5f;margin:.9em 0 .4em">${esc(h1)}</p>`); if(rest) buf.push(rest); } else buf.push(l); });
       flush(); return out.join("");
     };
-    const div = n => `<div class="tp-page-divider">မြန်မာပြန် — စာမျက်နှာ ${toMyanmarDigits(n)}</div>`;
+    const div = n => trLang === "my" ? `<div class="tp-page-divider">မြန်မာပြန် — စာမျက်နှာ ${toMyanmarDigits(n)}</div>` : `<div class="tp-page-divider">${TR_LANG_NAME[trLang]} — Pāli p. ${n}</div>`;
     const prev = d[pageNum - 1], cur = d[pageNum], next = d[pageNum + 1];
     let html = "";
     if(prev){ html += `<div class="tp-adjacent-page">${body(prev)}</div>` + div(pageNum); }
-    html += `<div id="tp-tr-current">${cur ? body(cur) : (isHtml ? "<p style='color:#888'>(ဤစာမျက်နှာတွင် စာပိုဒ်အသစ် မစပါ — ရှေ့စာမျက်နှာမှ ဆက်နေသည်)</p>" : "<p style='color:#999'>ဤစာမျက်နှာ၏ မြန်မာပြန် မရှိသေးပါ။</p>")}</div>`;
+    html += `<div id="tp-tr-current">${cur ? body(cur) : (isHtml ? "<p style='color:#888'>(ဤစာမျက်နှာတွင် စာပိုဒ်အသစ် မစပါ — ရှေ့စာမျက်နှာမှ ဆက်နေသည်)</p>" : ("<p style='color:#999'>" + (trLang === "vi" ? "(Chưa có bản dịch của trang này.)" : trLang === "en" ? "(No translation of this page yet.)" : "ဤစာမျက်နှာ၏ မြန်မာပြန် မရှိသေးပါ။") + "</p>"))}</div>`;
     if(next){ html += div(pageNum + 1) + `<div class="tp-adjacent-page">${body(next)}</div>`; }
     contentEl.classList.toggle("tp-mm-split", isHtml); contentEl.innerHTML = html; nsyEntries = [];
     const box = document.getElementById("tp-nissaya-container"), curEl = document.getElementById("tp-tr-current");
@@ -3246,7 +3278,7 @@ let isRomanPali = false;
   async function openNissaya(bookId, pageNum, keepMm) {          // keepMm: opened by the မြန်မာပြန် route (openMmSplit) - its flags / breadcrumb stay; the pane is the same one (နိဿယ မူခလုပ်များ + မူလ + မြန်မာ)
       if(!keepMm){ isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; }
       await tp_loadEditions(); try{ await ensureNissayaIds(); }catch(e){}
-      const hasNsy = (tpNissayaIds || []).includes(bookId) || (TP_NISSAYA_EDITIONS[bookId] || []).length > 0;       // နိဿယရှိသော စာအုပ်လား (မြန်မာပြန်သက်သက်ရှိသော စာအုပ်မှာ နိဿယမူ ခလုပ်များ မပါ)
+      const hasNsy = trLang === "my" && (tpNissayaIds || []).includes(bookId) || (TP_NISSAYA_EDITIONS[bookId] || []).length > 0;       // နိဿယရှိသော စာအုပ်လား (မြန်မာပြန်သက်သက်ရှိသော စာအုပ်မှာ နိဿယမူ ခလုပ်များ မပါ)
       if(tp_hasTr(bookId)){ if(!hasNsy && nsyShowTr < 1) nsyShowTr = 1; if(nsyShowTr > tp_trSources(bookId).length) nsyShowTr = 1; } else nsyShowTr = 0;
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
@@ -3282,7 +3314,7 @@ let isRomanPali = false;
                 const nTr = tp_trSources(bookId).length;
                 {      // "မြန်မာ" ခလုပ် တစ်ခုတည်း - မြန်မာပြန် မူကွဲ အများရှိလျှင် နှိပ်လိုက်တိုင်း ၁ → ၂ → ... → ၁ တစ်လှည့်စီ ပြမည် (နိဿယသို့ ပြန်ရန် နိဿယမူခလုပ်)
                   const on = nsyShowTr > 0, mb = document.createElement("button");
-                  mb.textContent = nTr > 1 && on ? "မြန်မာ " + toMyanmarDigits(nsyShowTr) + "/" + toMyanmarDigits(nTr) : "မြန်မာ";
+                  mb.textContent = trLang !== "my" ? TR_LANG_NAME[trLang] : nTr > 1 && on ? "မြန်မာ " + toMyanmarDigits(nsyShowTr) + "/" + toMyanmarDigits(nTr) : "မြန်မာ";
                   mb.title = "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည်" + (nTr > 1 ? " (နှိပ်တိုင်း မူကွဲ တစ်လှည့်စီ)" : " / နိဿယ ပြန်ပြမည်");
                   mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (on ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
                   mb.addEventListener("click", () => { nsyShowTr = !on ? 1 : nTr > 1 ? (nsyShowTr % nTr) + 1 : (hasNsy ? 0 : 1); openNissaya(bookId, pageNum, keepMm); });
@@ -3645,6 +3677,7 @@ let isRomanPali = false;
         }catch(e){ mmCrumbs = null; }
       }
       if(!mmCrumbs && isNissayaOpen && nisViaList) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showNissayaSubjects(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showNissayaBooks(basketId, categoryId);}}, {label: bookMeta.name || bookId}];     // နိဿယများ စာရင်းကနေ ဖွင့်ထားလျှင် လမ်းကြောင်းကို နိဿယများအတိုင်းပဲ ထား
+      if(!mmCrumbs && isMmSplitOpen && mmGemini && trLang !== "my"){ const _bk = idx.books.find(x => x.id === bookId); mmCrumbs = [{label:"Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: TR_LANG_NAME[trLang], onclick:(e)=>{e.preventDefault(); showTrLangBooks(trLang);}}, {label: myanmarToRoman(_bk ? _bk.name : bookId)}]; }
       if(!mmCrumbs && isMmSplitOpen && mmGemini) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = mmGemini = false; showMmCategories();}}, {label:"Gemini မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = mmGemini = false; showMmGeminiBooks();}}, {label: bookMeta.name || bookId}];
       renderBreadcrumb(mmCrumbs || [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}}, {label: bookMeta.name || bookId}]);
       if(!row){ document.getElementById("tp-view").innerHTML = `<p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`; return; }
