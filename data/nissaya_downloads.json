@@ -87,17 +87,6 @@
    "date": "2026-08-20"
   },
   {
-   "id": "mula_vi_03_bhasatika",
-   "title": "မဟာဝဂ္ဂပါဠိ (ဘာသာဋီကာ)",
-   "basket": "ပါဠိတော်",
-   "basket_key": "mula",
-   "category": "ဝိနည်းပိဋက",
-   "cat_key": "vi",
-   "size": 4832290,
-   "date": "2026-11-16",
-   "edition_of": "mula_vi_03"
-  },
-  {
    "id": "mula_vi_03_sheet006",
    "title": "မဟာဝဂ္ဂပါဠိ (ဝေယံဘုံသာမူ (ပ))",
    "basket": "ပါဠိတော်",
@@ -106,6 +95,17 @@
    "cat_key": "vi",
    "size": 2469223,
    "date": "2026-11-17",
+   "edition_of": "mula_vi_03"
+  },
+  {
+   "id": "mula_vi_03_bhasatika",
+   "title": "မဟာဝဂ္ဂပါဠိ (ဘာသာဋီကာ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4880244,
+   "date": "2026-11-18",
    "edition_of": "mula_vi_03"
   },
   {
