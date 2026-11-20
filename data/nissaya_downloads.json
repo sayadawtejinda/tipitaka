@@ -3271,6 +3271,17 @@
    "edition_of": "annya_bi_01"
   },
   {
+   "id": "annya_bi_01_sheet317",
+   "title": "ဝိသုဒ္ဓိမဂ္ဂေါ (ပ) (ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိသျမူ (ဒု))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 3895273,
+   "date": "2026-11-19",
+   "edition_of": "annya_bi_01"
+  },
+  {
    "id": "annya_bi_02_sheet170",
    "title": "ဝိသုဒ္ဓိမဂ္ဂေါ (ဒု) (ပြည်မူ (တ))",
    "basket": "အည",
@@ -3534,5 +3545,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 231
+ "n_editions": 232
 }
