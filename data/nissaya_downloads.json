@@ -1051,8 +1051,8 @@
    "basket_key": "attha",
    "category": "ဝိနည်းပိဋက",
    "cat_key": "vi",
-   "size": 3225000,
-   "date": "2026-11-18",
+   "size": 3173333,
+   "date": "2026-11-19",
    "edition_of": "attha_vi_01_01"
   },
   {
@@ -1128,7 +1128,7 @@
    "basket_key": "attha",
    "category": "ဝိနည်းပိဋက",
    "cat_key": "vi",
-   "size": 4400062,
+   "size": 4449000,
    "date": "2026-11-19",
    "edition_of": "attha_vi_01_01"
   },
@@ -1583,7 +1583,7 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 2090958,
+   "size": 1922064,
    "date": "2026-11-19",
    "edition_of": "attha_di_02"
   },
@@ -1594,7 +1594,7 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 1730365,
+   "size": 1728184,
    "date": "2026-11-19",
    "edition_of": "attha_di_02"
   },
@@ -1616,7 +1616,7 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 4470622,
+   "size": 4378998,
    "date": "2026-11-19",
    "edition_of": "attha_di_02"
   },
@@ -1627,7 +1627,7 @@
    "basket_key": "attha",
    "category": "ဒီဃနိကာယ်",
    "cat_key": "di",
-   "size": 4155041,
+   "size": 3955150,
    "date": "2026-11-19",
    "edition_of": "attha_di_02"
   },
@@ -3233,7 +3233,7 @@
    "basket_key": "annya",
    "category": "အဘိဓမ္မာဆိုင်ရာ",
    "cat_key": "bi",
-   "size": 3797470,
+   "size": 3789650,
    "date": "2026-11-19",
    "edition_of": "annya_bi_01"
   },
@@ -3244,7 +3244,18 @@
    "basket_key": "annya",
    "category": "အဘိဓမ္မာဆိုင်ရာ",
    "cat_key": "bi",
-   "size": 2754942,
+   "size": 2734519,
+   "date": "2026-11-19",
+   "edition_of": "annya_bi_01"
+  },
+  {
+   "id": "annya_bi_01_sheet315",
+   "title": "ဝိသုဒ္ဓိမဂ္ဂေါ (ပ) (ဝိသုဒ္ဓိမဂ်အဋ္ဌကထာနိဿယသစ်မူ (ဒု))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 2713176,
    "date": "2026-11-19",
    "edition_of": "annya_bi_01"
   },
@@ -3512,5 +3523,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 229
+ "n_editions": 230
 }
