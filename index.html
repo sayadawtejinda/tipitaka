@@ -1511,7 +1511,7 @@ let isRomanPali = false;
   }
   function tp_openSearchChoice(anchor, openSutta, forceMenu){
     if(openSutta) tp_lastOpenSutta = openSutta; else openSutta = tp_lastOpenSutta;
-    if(tp_lastKind && !forceMenu){ tp_reopenLast(); return; }
+    if(tp_lastKind && !forceMenu && (trUi === "my" || tp_lastKind === "fts" || tp_dsCur === "sutta")){ tp_reopenLast(); return; }
     let menu = document.getElementById("tp-search-choice");
     if(!menu){
       menu = document.createElement("div");
@@ -2979,7 +2979,9 @@ let isRomanPali = false;
     "📖 မြန်မာပြန် (Split View ဖတ်ရန်)": ["📖 Bản dịch (xem song song)", "📖 Translation (side-by-side)"],
     "မြန်မာပါဠိ": ["Pāḷi Myanmar", "Myanmar-script Pāḷi"],
     "🏠 Blog သို့": ["🏠 Về Blog", "🏠 Back to Blog"], "မူရင်း Blogspot သို့ ပြန်သွားရန်": ["Quay về Blogspot gốc", "Back to the original Blogspot"],
-    "ဆက်စပ်ကျမ်းများ": ["Sách liên quan", "Related texts"], "ရှာရန်": ["Tìm", "Search"],
+    "ဆက်စပ်ကျမ်းများ": ["Sách liên quan", "Related texts"],
+    "📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်": ["📖 Tìm trong toàn bộ Tipiṭaka", "📖 Search the whole Tipiṭaka"], "📚 သုတ္တန်ရှာရန်": ["📚 Tìm kinh", "📚 Search suttas"],
+    "↩ ခုနက ရှာထားတာ ပြန်ကြည့်ရန်": ["↩ Xem lại kết quả vừa tìm", "↩ Back to the last search"],
     "ရှေ့သို့": ["Trước", "Previous"], "နောက်သို့": ["Sau", "Next"], "ပိတ်မည်": ["Đóng", "Close"], "ပိတ်": ["Đóng", "Close"], "ကူးယူမည်": ["Sao chép", "Copy"], "ရွေးပါ": ["Chọn", "Choose"],
   };
   const TP_MYD = "၀၁၂၃၄၅၆၇၈၉";
@@ -3001,7 +3003,7 @@ let isRomanPali = false;
   }
   window.tpUiStart = function(){
     if(tpUiObs) return;
-    if(!document.getElementById("tp-lang-css")){ const st = document.createElement("style"); st.id = "tp-lang-css"; st.textContent = "body.tp-lang-mode #tp-ai-toggle, body.tp-lang-mode #tp-search-toggle { display: none !important; }"; document.head.appendChild(st); }       // the Burmese-only tools (AI prompts, Burmese translation / nissaya menu, Burmese searches) are not offered
+    if(!document.getElementById("tp-lang-css")){ const st = document.createElement("style"); st.id = "tp-lang-css"; st.textContent = "body.tp-lang-mode #tp-search-choice button[data-c=mm], body.tp-lang-mode #tp-search-choice .tp-sc-row { display: none !important; } body.tp-lang-mode #tp-ai-toggle, body.tp-lang-mode #tp-search-toggle { display: none !important; }"; document.head.appendChild(st); }       // the Burmese-only tools (AI prompts, Burmese translation / nissaya menu, Burmese searches) are not offered
     document.body.classList.add("tp-lang-mode");
     tpUiRun(document.body);
     tpUiObs = new MutationObserver(ms => { ms.forEach(m => { if(m.type === "characterData") tpUiRun(m.target); else if(m.type === "attributes") tpUiRun(m.target); else m.addedNodes.forEach(n => tpUiRun(n)); }); });
