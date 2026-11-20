@@ -19,8 +19,16 @@ def _published(): return m_status.on_web_set()          # one shared rule for ru
 def _hide_on():
     try: return bool(_jj.load(open(os.path.join(ROOT, 'gui_state.json'), encoding='utf-8')).get('hide_pub', True))
     except Exception: return True
-def visible_sheets(hide=None, keep=None):
+def _only_db_on():
+    try: return bool(_jj.load(open(os.path.join(ROOT, 'gui_state.json'), encoding='utf-8')).get('only_db', False))
+    except Exception: return False
+def _db_agree():          # sheets whose database book name AND page content agree (catalog check 'db+content agree')
+    try: return {r['n'] for r in _jj.load(open(os.path.join(ROOT, 'catalog.json'), encoding='utf-8')) if (r.get('check') or '').startswith('db+content agree')}
+    except Exception: return set()
+def visible_sheets(hide=None, keep=None, only_db=None):
     allb = m_tool.list_sheets()
+    if (_only_db_on() if only_db is None else only_db):
+        ok = _db_agree(); allb = [(n, t) for n, t in allb if n == keep or n in ok]
     if hide is None: hide = _hide_on()
     if not hide: return allb
     pub = _published()          # a book leaves the list only when it is on the web AND Gemini has checked all of it (otherwise run_tool still has work there)
@@ -44,16 +52,19 @@ try:                                                                            
         if _n == _last: cb.current(_i)
 except Exception: pass
 hidepub = tk.BooleanVar(value=_hide_on())
+onlydb = tk.BooleanVar(value=_only_db_on())
 def _toggle_hide():
     keep = sheets[cb.current()][0] if cb.current() >= 0 else None
     try:
         st = _jj.load(open(STATE, encoding='utf-8'))
     except Exception: st = {}
-    st['hide_pub'] = bool(hidepub.get())
+    st['hide_pub'] = bool(hidepub.get()); st['only_db'] = bool(onlydb.get())
     try: _jj.dump(st, open(STATE, 'w', encoding='utf-8'))
     except Exception: pass
     refresh_books(keep)
-ttk.Checkbutton(f, text='web ပေါ်တင်ပြီး + Gemini အပြည့်စစ်ပြီးသော စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).grid(row=0, column=6, sticky='w', padx=4)
+_cbf = ttk.Frame(f); _cbf.grid(row=0, column=6, sticky='w', padx=4)
+ttk.Checkbutton(_cbf, text='web ပေါ်တင်ပြီး + Gemini အပြည့်စစ်ပြီးသော စာအုပ်များ ဖျောက်', variable=hidepub, command=_toggle_hide).pack(anchor='w')
+ttk.Checkbutton(_cbf, text='database နဲ့ ကိုက်ညီတဲ့ စာအုပ်ပဲ ပြ (မနှိပ်ရင် စာအုပ်အားလုံး)', variable=onlydb, command=_toggle_hide).pack(anchor='w')
 cur_lbl = tk.Label(f, text='', font=('', 12, 'bold'), anchor='w', width=36); cur_lbl.grid(row=0, column=5, sticky='w', padx=8)
 def show_book(*_):
     import json as _j
@@ -61,7 +72,7 @@ def show_book(*_):
     _t = ' '.join(str(sheets[cb.current()][1]).split()); _t = (_t[:32] + '…') if len(_t) > 32 else _t       # one short line only (a long / multi-line sheet name used to take the whole right half of the window)
     cur_lbl.config(text='● ' + _t, fg='#1b5e20')
     root.after(300, lambda: threading.Thread(target=_auto_missing, args=(sheets[cb.current()][0],), daemon=True).start())     # the chosen book: pages nobody has sent to Gemini yet get their file by themselves
-    try: _j.dump({'sheet': sheets[cb.current()][0], 'hide_pub': bool(hidepub.get())}, open(STATE, 'w', encoding='utf-8'))
+    try: _j.dump({'sheet': sheets[cb.current()][0], 'hide_pub': bool(hidepub.get()), 'only_db': bool(onlydb.get())}, open(STATE, 'w', encoding='utf-8'))
     except Exception: pass
 cb.bind('<<ComboboxSelected>>', show_book); show_book()
 ttk.Label(f, text='Google Sheet မှ download လုပ်ထားသော .xlsx').grid(row=1, column=0, sticky='w')
@@ -292,7 +303,7 @@ b10.config(command=go10)
 
 def refresh_books(keep=None):
     global sheets
-    sheets = visible_sheets(bool(hidepub.get()), keep); cb['values'] = [t for n, t in sheets]
+    sheets = visible_sheets(bool(hidepub.get()), keep, bool(onlydb.get())); cb['values'] = [t for n, t in sheets]
     cb.set('')
     for i, (n_, t_) in enumerate(sheets):
         if n_ == keep: cb.current(i)
