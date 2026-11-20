@@ -2337,6 +2337,17 @@
    "edition_of": "attha_ku_08_02"
   },
   {
+   "id": "attha_ku_09_sheet334",
+   "title": "ထေရီဂါထာအဋ္ဌကထာ (သကျဓီတာ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 5795823,
+   "date": "2026-11-20",
+   "edition_of": "attha_ku_09"
+  },
+  {
    "id": "attha_ku_10",
    "title": "အပဒါနအဋ္ဌကထာ (ပ)",
    "basket": "အဋ္ဌကထာ",
@@ -3699,5 +3710,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 246
+ "n_editions": 247
 }
