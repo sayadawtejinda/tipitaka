@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="my"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Excel ၃ ဖိုင် — စာရင်းနှင့် စာမျက်နှာ</title>
+<style>
+:root{--bg:#fbf7ee;--fg:#2b2418;--card:#fff;--bd:#d9d0b8;--ac:#7a5a2e;--mut:#8a7a5a}
+@media (prefers-color-scheme:dark){:root{--bg:#1c1a15;--fg:#ece4d2;--card:#26231c;--bd:#4a4333;--ac:#d6b36a;--mut:#a89a78}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,"Noto Sans Myanmar","Myanmar Text",sans-serif}
+#wrap{display:flex;height:100vh}
+#left{width:430px;max-width:46vw;border-right:1px solid var(--bd);display:flex;flex-direction:column}
+#right{flex:1;display:flex;flex-direction:column;min-width:0}
+.bar{padding:8px 10px;border-bottom:1px solid var(--bd);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+button,select,input{font:inherit;color:inherit;background:var(--card);border:1px solid var(--bd);border-radius:6px;padding:3px 9px}
+button{cursor:pointer}button.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+#q{flex:1;min-width:120px}
+#list{overflow:auto;flex:1}
+.it{padding:6px 10px;border-bottom:1px solid var(--bd);cursor:pointer}.it:hover{background:rgba(122,90,46,.1)}.it.sel{background:rgba(122,90,46,.22)}
+.it b{color:var(--ac)}.it small{color:var(--mut);display:block}
+#head{padding:8px 14px;border-bottom:1px solid var(--bd)}#head small{color:var(--mut)}
+#page{flex:1;overflow:auto;padding:14px 18px;white-space:pre-wrap;font-size:16px;line-height:1.9}
+.note{color:var(--mut)}
+@media(max-width:800px){#wrap{flex-direction:column;height:auto}#left{width:auto;max-width:none;max-height:45vh}#right{min-height:60vh}}
+</style></head><body>
+<div id="wrap">
+ <div id="left">
+  <div class="bar" id="tabs"></div>
+  <div class="bar"><input id="q" placeholder="အမည် / မူ / ပါဠိစာအုပ် ရှာရန်..."><span class="note" id="cnt"></span></div>
+  <div id="list"></div>
+ </div>
+ <div id="right">
+  <div id="head"><span class="note">ဘယ်ဘက်က sheet တစ်ခုကို ရွေးပါ။</span></div>
+  <div class="bar" id="nav" style="display:none">
+   <button id="prev">◀</button><select id="sel"></select><button id="next">▶</button>
+   <input id="jump" size="6" placeholder="စာမျက်နှာ"><button id="go">သွား</button><span class="note" id="pos"></span>
+  </div>
+  <div id="page"></div>
+ </div>
+</div>
+<script>
+const SRC = {"နိဿယပေါင်းစုံ.xlsx":"နိဿယပေါင်းစုံ", "နိဿယပေါင်းစုံ-၂.xlsx":"နိသျ (-၂)", "နိသျ.xlsx":"နိသျ", "OCR Books (auto).xlsx":"OCR Books (auto)"};
+let IDX = [], tab = "*", cur = null, rows = [], pos = 0;
+const $ = id => document.getElementById(id), esc = s => String(s == null ? "" : s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nm = e => SRC[e.src] || e.src;
+function tabs(){
+  const c = {}; IDX.forEach(e => c[e.src] = (c[e.src]||0) + 1);
+  const keys = ["*", ...Object.keys(c)];
+  $("tabs").innerHTML = keys.map(k => `<button data-k="${esc(k)}" class="${k===tab?'on':''}">${k==="*"?"အားလုံး":esc(SRC[k]||k)} ${k==="*"?IDX.length:c[k]}</button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { tab = b.dataset.k; tabs(); list(); });
+}
+function list(){
+  const q = $("q").value.trim().toLowerCase();
+  const L = IDX.filter(e => (tab==="*" || e.src===tab) && (!q || (e.n+" "+e.sheet+" "+e.edition+" "+e.meta.join(" ")+" "+e.pali.join(" ")+" "+nm(e)).toLowerCase().includes(q)));
+  $("cnt").textContent = L.length + " ခု";
+  $("list").innerHTML = L.map(e => `<div class="it ${cur&&cur.n===e.n?'sel':''}" data-n="${e.n}"><b>${e.n}</b> ${esc(e.sheet)}<small>${esc(nm(e))} · ${e.rows} မျက်နှာ${e.pali.length?' · ပါဠိ: '+esc(e.pali.join(', ')):' · ပါဠိစာအုပ် မချိတ်ရသေး'}${e.edition?'<br>'+esc(e.edition):''}</small></div>`).join("");
+  $("list").querySelectorAll(".it").forEach(d => d.onclick = () => open(+d.dataset.n));
+}
+async function open(n){
+  cur = IDX.find(e => e.n === n); list();
+  $("head").innerHTML = `<b>${cur.n} · ${esc(cur.sheet)}</b><br><small>${esc(nm(cur))} · ${cur.rows} မျက်နှာ${cur.pali.length?' · ပါဠိ: '+esc(cur.pali.join(', ')):''}${cur.mode?' · ('+esc(cur.mode)+')':''}${cur.check?' · '+esc(cur.check):''}</small>`;
+  $("page").innerHTML = '<span class="note">ဖတ်နေပါသည်...</span>';
+  try{
+    const d = await (await fetch("sheets/" + String(n).padStart(3,"0") + ".json")).json();
+    rows = d.rows || [];
+  }catch(e){ rows = []; $("page").textContent = "ဖိုင်မဖတ်နိုင်ပါ: " + e.message + " (run_sheets.bat နဲ့ ဖွင့်ထားပါသလား)"; return; }
+  $("sel").innerHTML = rows.map((r,i) => `<option value="${i}">${esc(r.label || ('(label မရှိ) '+(i+1)))}</option>`).join("");
+  $("nav").style.display = rows.length ? "flex" : "none"; show(0);
+}
+function show(i){
+  if(!rows.length){ $("page").textContent = "စာမျက်နှာ မရှိပါ။"; return; }
+  pos = Math.max(0, Math.min(rows.length-1, i)); const r = rows[pos];
+  $("sel").value = pos; $("pos").textContent = (pos+1) + " / " + rows.length;
+  $("page").textContent = (r.text != null ? r.text : "") || "(ဗလာ)"; $("page").scrollTop = 0;
+}
+$("prev").onclick = () => show(pos-1); $("next").onclick = () => show(pos+1); $("sel").onchange = e => show(+e.target.value);
+$("go").onclick = () => { const v = $("jump").value.trim(); if(!v) return; const mm = "၀၁၂၃၄၅၆၇၈၉"; const t = v.replace(/[၀-၉]/g, c => mm.indexOf(c));
+  let i = rows.findIndex(r => (r.num != null && String(r.num) === t) || (r.tok && r.tok.replace(/^0+/,"") === t.replace(/^0+/,"")) || (r.label||"").endsWith("-"+t)); if(i >= 0) show(i); else $("pos").textContent = "မတွေ့ပါ"; };
+$("jump").onkeydown = e => { if(e.key === "Enter") $("go").click(); };
+$("q").oninput = list;
+document.onkeydown = e => { if(e.target.tagName==="INPUT"||e.target.tagName==="SELECT") return; if(e.key==="ArrowRight") show(pos+1); if(e.key==="ArrowLeft") show(pos-1); };
+fetch("sheets_browser_index.json").then(r => r.json()).then(d => { IDX = d; tabs(); list(); const n = +new URLSearchParams(location.search).get("n"); if(n) open(n); })
+  .catch(e => { $("list").textContent = "စာရင်းဖိုင် မဖတ်နိုင်ပါ (run_sheets.bat နဲ့ ဖွင့်ပါ): " + e.message; });
+</script></body></html>
