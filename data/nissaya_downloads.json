@@ -2716,6 +2716,17 @@
    "edition_of": "attha_bi_02"
   },
   {
+   "id": "attha_bi_02_sheet320",
+   "title": "ဝိဘင်္ဂအဋ္ဌကထာ (သမ္မောဟဝိနောဒနီအဋ္ဌကထာနိသျမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2536949,
+   "date": "2026-11-19",
+   "edition_of": "attha_bi_02"
+  },
+  {
    "id": "attha_bi_03_sheet184",
    "title": "ပဉ္စပကရဏအဋ္ဌကထာ (ဘာဋီ)",
    "basket": "အဋ္ဌကထာ",
@@ -3556,5 +3567,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 233
+ "n_editions": 234
 }
