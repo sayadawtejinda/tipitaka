@@ -380,6 +380,21 @@ let trLang = "my", trUi = "my", trRomanForced = false;      // trUi = the reader
       // "vi" / "en" = the Tiếng Việt / English translation reader (Pali + book names in Roman, translation of that language beside it)
 const TR_LANG_DIR = {my: "nissaya_translations", vi: "translations_vi", en: "translations_en"}, TR_LANG_NAME = {vi: "Tiếng Việt", en: "English"};
 let TP_TR_VARS_X = {vi: {}, en: {}};             // {book: [file, ...]} of data/translations_vi|en/index.json
+function tp_reopenBtn(was){          // ◧ in the corner of the Pāli side: brings the translation / nissaya side back (also offered when the page opens without it)
+  const pc = document.getElementById("tp-content"), container = document.getElementById("tp-nissaya-container");
+  if(!pc || !container || document.getElementById("tp-reopen-nsy")) return;
+  const rb = document.createElement("button"); rb.id = "tp-reopen-nsy"; rb.className = "tp-icon-btn"; rb.textContent = "◧";
+  rb.title = trUi === "vi" ? "Mở bản dịch" : trUi === "en" ? "Show the translation" : "နိဿယ/မြန်မာပြန် ဖွင့်ရန်";
+  rb.style.cssText = "position:sticky;top:6px;float:right;z-index:50;padding:2px 8px;margin:0 0 4px 6px;";
+  rb.addEventListener("click", () => {
+    rb.remove(); isNissayaOpen = was.nis; isMmSplitOpen = was.mm; mmViaMm = was.via; nisViaList = was.list; mmGemini = was.gem; nsyShowTr = was.tr;
+    if(was.fresh){ nissayaFile = null; nsyBtPdf = null; }
+    container.style.display = "";
+    const pg = (currentRow && parseInt(currentRow.page, 10)) || 1;
+    openNissaya(currentBookId, pg);
+  });
+  pc.insertBefore(rb, pc.firstChild);
+}
 function tp_leaveLang(){ if(trLang !== "my" || trUi !== "my"){ trLang = "my"; trUi = "my"; if(window.tpUiStop) window.tpUiStop(); if(trRomanForced){ isRomanPali = false; trRomanForced = false; } } }       // back to the Burmese reader: the Roman Pali that the language reader switched on goes off again
 let TP_TR_BOOKS = new Set(), tpTrCache = {}, TP_TR_VARS = {};   // မြန်မာပြန်ပြီးသော နိဿယစာအုပ်များ (data/nissaya_translations/index.json) နှင့် စာအုပ်တစ်အုပ်ချင်း၏ မြန်မာပြန် (ပါဠိစာမျက်နှာ → စာ)
 let nsyBtHl = null;      // the headword that was searched in the ဘာသာဋီကာအဘိဓာန် (highlighted in the page that opens)
@@ -3530,19 +3545,7 @@ function tp_edLabel(l){
             const sw = document.getElementById("tp-split-wrapper"); if(sw) sw.classList.remove("mm-first");
             isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = mmGemini = false;
             // a small button in the corner of the Pāli side brings the translation / nissaya side back
-            const pc = document.getElementById("tp-content");
-            if(pc && !document.getElementById("tp-reopen-nsy")){
-              const rb = document.createElement("button"); rb.id = "tp-reopen-nsy"; rb.className = "tp-icon-btn"; rb.textContent = "◧";
-              rb.title = trUi === "vi" ? "Mở lại bản dịch" : trUi === "en" ? "Show the translation again" : "နိဿယ/ဘာသာပြန် ပြန်ဖွင့်ရန်";
-              rb.style.cssText = "position:sticky;top:6px;float:right;z-index:50;padding:2px 8px;margin:0 0 4px 6px;";
-              rb.addEventListener("click", () => {
-                rb.remove(); isNissayaOpen = was.nis; isMmSplitOpen = was.mm; mmViaMm = was.via; nisViaList = was.list; mmGemini = was.gem; nsyShowTr = was.tr;
-                container.style.display = "";
-                const pg = (currentRow && parseInt(currentRow.page, 10)) || 1;
-                openNissaya(currentBookId, pg);
-              });
-              pc.insertBefore(rb, pc.firstChild);
-            }
+            tp_reopenBtn(was);
         });
       }
   }
@@ -4039,6 +4042,7 @@ function tp_edLabel(l){
       } else {
          const nissayaContainer = document.getElementById("tp-nissaya-container");
          if(nissayaContainer) nissayaContainer.style.display = "none";
+         tp_reopenBtn({nis: true, mm: false, via: false, list: false, gem: false, tr: 0, fresh: true});
       }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; tp_blinkRecent(); }
   }
