@@ -2978,6 +2978,8 @@ let isRomanPali = false;
     "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည် (နှိပ်တိုင်း မူကွဲ တစ်လှည့်စီ)": ["Hiện bản dịch của trang Pāli này", "Show the translation of this Pāli page"],
     "📖 မြန်မာပြန် (Split View ဖတ်ရန်)": ["📖 Bản dịch (xem song song)", "📖 Translation (side-by-side)"],
     "မြန်မာပါဠိ": ["Pāḷi Myanmar", "Myanmar-script Pāḷi"],
+    "🏠 Blog သို့": ["🏠 Về Blog", "🏠 Back to Blog"], "မူရင်း Blogspot သို့ ပြန်သွားရန်": ["Quay về Blogspot gốc", "Back to the original Blogspot"],
+    "ဆက်စပ်ကျမ်းများ": ["Sách liên quan", "Related texts"], "ရှာရန်": ["Tìm", "Search"],
     "ရှေ့သို့": ["Trước", "Previous"], "နောက်သို့": ["Sau", "Next"], "ပိတ်မည်": ["Đóng", "Close"], "ပိတ်": ["Đóng", "Close"], "ကူးယူမည်": ["Sao chép", "Copy"], "ရွေးပါ": ["Chọn", "Choose"],
   };
   const TP_MYD = "၀၁၂၃၄၅၆၇၈၉";
@@ -2986,6 +2988,7 @@ let isRomanPali = false;
   function tpUiConv(str){
     const t = str.trim(); if(!/[က-႟]/.test(t)) return str;
     const e = TP_UI[t]; if(e) return str.replace(t, e[trUi === "vi" ? 0 : 1]);
+    const pm = t.match(/^စာပိုဒ်\s*-\s*([၀-၉0-9]+)$/); if(pm) return str.replace(t, (trUi === "vi" ? "Đoạn - " : "Paragraph - ") + pm[1].replace(/[၀-၉]/g, c => TP_MYD.indexOf(c)));
     return myanmarToRoman(str.replace(/[၀-၉]/g, c => TP_MYD.indexOf(c)));
   }
   function tpUiRun(root){
