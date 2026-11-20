@@ -2941,9 +2941,14 @@ let isRomanPali = false;
     const idx = await ensureIndex(); try{ await tp_loadEditions(); }catch(e){}
     const ids = Object.keys(TP_TR_VARS_X[lang]), books = idx.books.filter(b => ids.includes(b.id));
     let html = "";
+    const unit = n => lang === "vi" ? `${n} sách` : (n === 1 ? "1 book" : `${n} books`);      // số sách / number of books
     Object.keys(idx.basket_labels).forEach(bs => {
       const bb = books.filter(b => b.basket === bs); if(!bb.length) return;
-      html += `<h3 style="margin:14px 4px 6px;color:#5a3d1e">${esc2(myanmarToRoman(idx.basket_labels[bs]))}</h3><div class="tp-grid">${bb.map(b => `<div class="tp-card" data-trbook="${b.id}">${esc2(myanmarToRoman(b.name))}<span class="tp-count">${b.pagecount} ${lang === "vi" ? "trang" : "pages"}</span></div>`).join("")}</div>`;
+      html += `<h3 style="margin:18px 4px 4px;color:#5a3d1e">${esc2(myanmarToRoman(idx.basket_labels[bs]))} <span style="font-weight:normal;font-size:.8em;color:#8a6a3a">· ${unit(bb.length)}</span></h3>`;
+      [...new Set(bb.map(b => b.category))].forEach(cat => {      // each nikāya (category) of the basket on its own, with its number of books
+        const cb = bb.filter(b => b.category === cat);
+        html += `<h4 style="margin:10px 6px 4px;color:#7a5a2e">${esc2(myanmarToRoman((idx.category_labels && idx.category_labels[cat]) || cat))} <span style="font-weight:normal;font-size:.85em;color:#8a6a3a">· ${unit(cb.length)}</span></h4><div class="tp-grid">${cb.map(b => `<div class="tp-card" data-trbook="${b.id}">${esc2(myanmarToRoman(b.name))}<span class="tp-count">${b.pagecount} ${lang === "vi" ? "trang" : "pages"}</span></div>`).join("")}</div>`;
+      });
     });
     document.getElementById("tp-view").innerHTML = html || `<p style="color:#888;padding:16px">${lang === "vi" ? "Chưa có sách nào được dịch sang tiếng Việt." : "No book has been translated into English yet."}</p>`;
     document.querySelectorAll("[data-trbook]").forEach(el => el.addEventListener("click", () => {
