@@ -2587,6 +2587,7 @@ let isRomanPali = false;
     const contentEl = document.getElementById("tp-nissaya-content");
     container.style.display = "block";
     contentEl.innerHTML = "<p class='tp-loading'>ကိုးကားချက် ဆွဲယူနေပါသည်...</p>";
+    document.querySelectorAll("#tp-nissaya-editions [data-ed]").forEach(b => { b.style.background = "transparent"; b.style.color = "#8a5a1a"; });      // the pane shows a reference page: no edition is selected, a click on any button opens it (as usual)
     try{
       const idx = await ensureIndex();
       const bookMeta = findBookMetaByPageRange(idx, bookId, pageNum) || {};
@@ -3418,6 +3419,7 @@ function tp_edLabel(l){
       await tp_loadEditions(); try{ await ensureNissayaIds(); }catch(e){}
       const hasNsy = trUi === "my" && (tpNissayaIds || []).includes(bookId) || (TP_NISSAYA_EDITIONS[bookId] || []).length > 0;       // နိဿယရှိသော စာအုပ်လား (မြန်မာပြန်သက်သက်ရှိသော စာအုပ်မှာ နိဿယမူ ခလုပ်များ မပါ)
       if(tp_hasTr(bookId)){ if(!hasNsy && nsyShowTr < 1) nsyShowTr = 1; if(nsyShowTr > tp_trSources(bookId).length) nsyShowTr = 1; } else nsyShowTr = 0;
+      const livePage = () => (currentBookId === bookId && currentRow && parseInt(currentRow.page, 10)) || pageNum;      // the buttons act on the Pali page that is open NOW (a reference page may have been shown in this pane, or the Pali page turned, since the buttons were drawn)
       const container = document.getElementById("tp-nissaya-container");
       const contentEl = document.getElementById("tp-nissaya-content");
       tp_splitFirst(container);
@@ -3431,14 +3433,14 @@ function tp_edLabel(l){
           const edBox = document.getElementById("tp-nissaya-editions");
           if (edBox) {
               edBox.innerHTML = editions.length > 1 ? editions.map(e => `<button data-ed="${e.file}" style="padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;${(nsyShowTr === 0 && e.file === chosen.file) ? "background:#8a5a1a;color:#fff;" : "background:transparent;color:#8a5a1a;"}">${tp_edLabel(e.label)}</button>`).join("") : (editions.length === 1 && editions[0].label && !tp_hasTr(bookId) ? `<span style="padding:2px 9px;font-size:.8em;border-radius:12px;border:1px solid #8a5a1a;color:#8a5a1a;">${editions[0].label}</span>` : "");
-              edBox.querySelectorAll("[data-ed]").forEach(b => b.addEventListener("click", () => { nissayaFile = b.dataset.ed; nsyShowTr = 0; openNissaya(bookId, pageNum, keepMm); }));
+              edBox.querySelectorAll("[data-ed]").forEach(b => b.addEventListener("click", () => { nissayaFile = b.dataset.ed; nsyShowTr = 0; openNissaya(bookId, livePage(), keepMm); }));
           }
           if (edBox) {      // 📋 ကူးမည် - ဤမူမှ စာမျက်နှာ ဘယ်လောက်ကနေ ဘယ်လောက်ထိ ကူးယူရန်
               if(hasNsy || tp_hasTr(bookId)){
               const cb = document.createElement("button");
               cb.textContent = "📋"; cb.title = "နိဿယကို စာမျက်နှာ အကွာအဝေးရွေး၍ ကူးယူမည်";
               cb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #2a7a3a;background:transparent;color:#2a7a3a;";
-              cb.addEventListener("click", () => tp_nissayaCopyPanel(hasNsy ? (chosen ? chosen.file : bookId) : null, pageNum, chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null, bookId));
+              cb.addEventListener("click", () => tp_nissayaCopyPanel(hasNsy ? (chosen ? chosen.file : bookId) : null, livePage(), chosen && chosen.from != null ? chosen.from : null, chosen && chosen.to != null ? chosen.to : null, bookId));
               edBox.appendChild(cb);
               }
               if (trUi !== "my") {
@@ -3448,7 +3450,7 @@ function tp_edLabel(l){
                   const lb = document.createElement("button"), on = trLang === k;
                   lb.textContent = k === "my" ? "Myanmar" : TR_LANG_NAME[k];
                   lb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (on ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
-                  lb.addEventListener("click", () => { trLang = k; nsyShowTr = 1; openNissaya(bookId, pageNum, keepMm); });
+                  lb.addEventListener("click", () => { trLang = k; nsyShowTr = 1; openNissaya(bookId, livePage(), keepMm); });
                   edBox.appendChild(lb);
                 });
               }
@@ -3457,7 +3459,7 @@ function tp_edLabel(l){
                   const ob = document.createElement("button"), onO = nsyShowTr === 0, lbl0 = editions.length === 1 && editions[0].label && editions[0].label !== "မူလနိဿယ" ? tp_edLabel(editions[0].label) : "မူလ";
                   ob.textContent = lbl0; ob.title = "နိဿယကို ပြမည်";
                   ob.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #8a5a1a;background:" + (onO ? "#8a5a1a;color:#fff;" : "transparent;color:#8a5a1a;");
-                  ob.addEventListener("click", () => { nsyShowTr = 0; openNissaya(bookId, pageNum, keepMm); });
+                  ob.addEventListener("click", () => { nsyShowTr = 0; openNissaya(bookId, livePage(), keepMm); });
                   edBox.appendChild(ob);
                 }      // မြန်မာပြန်ထားသော စာအုပ်မှာသာ "မြန်မာ" ခလုပ် (မြန်မာပြန် တစ်ခုထက်ပိုလျှင် "မြန်မာ ၁"၊ "မြန်မာ ၂" ...)
                 const nTr = tp_trSources(bookId).length;
@@ -3466,7 +3468,7 @@ function tp_edLabel(l){
                   mb.textContent = trLang !== "my" ? TR_LANG_NAME[trLang] : nTr > 1 && on ? "မြန်မာ " + toMyanmarDigits(nsyShowTr) + "/" + toMyanmarDigits(nTr) : "မြန်မာ";
                   mb.title = "ဤပါဠိစာမျက်နှာ၏ မြန်မာပြန်ကို ပြမည်" + (nTr > 1 ? " (နှိပ်တိုင်း မူကွဲ တစ်လှည့်စီ)" : " / နိဿယ ပြန်ပြမည်");
                   mb.style.cssText = "padding:2px 9px;font-size:.8em;border-radius:12px;cursor:pointer;border:1px solid #7a2a6a;background:" + (on ? "#7a2a6a;color:#fff;" : "transparent;color:#7a2a6a;");
-                  mb.addEventListener("click", () => { nsyShowTr = !on ? 1 : nTr > 1 ? (nsyShowTr % nTr) + 1 : (hasNsy ? 0 : 1); openNissaya(bookId, pageNum, keepMm); });
+                  mb.addEventListener("click", () => { nsyShowTr = !on ? 1 : nTr > 1 ? (nsyShowTr % nTr) + 1 : (hasNsy ? 0 : 1); openNissaya(bookId, livePage(), keepMm); });
                   edBox.appendChild(mb);
                 }
               }
