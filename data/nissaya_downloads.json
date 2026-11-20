@@ -2389,6 +2389,17 @@
    "edition_of": "attha_ku_12"
   },
   {
+   "id": "attha_ku_12_sheet335",
+   "title": "ဗုဒ္ဓဝံသအဋ္ဌကထာ (ဗုဒ္ဓဝသအဋ္ဌကထာ နိဿယမူ (ပထမတွဲ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4250689,
+   "date": "2026-11-20",
+   "edition_of": "attha_ku_12"
+  },
+  {
    "id": "attha_ku_13_sheet150",
    "title": "စရိယာပိဋကအဋ္ဌကထာ (ရှေးဆရာတော်)",
    "basket": "အဋ္ဌကထာ",
@@ -3721,5 +3732,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 248
+ "n_editions": 249
 }
