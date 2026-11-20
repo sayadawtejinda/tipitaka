@@ -251,7 +251,16 @@ def build(n, log=print):
             FOOT_SKIPPED.append(k); foot = None
         pages_html[k] = ''.join(out) + (('<p class="nsy-foot">%s</p>' % _html.escape(' '.join(foot.split()))) if foot else '')
     per = {}
-    for key, rng in P['ppmap'].items():
+    try: _st = int((json.load(open(os.path.join(ROOT, 'catalog_overrides.json'), encoding='utf-8')).get(str(n), {})).get('start') or 0)
+    except Exception: _st = 0
+    ppm = dict(P['ppmap'])
+    if _st:                                   # 'start': the nissaya book (a second volume) really begins at this Pali page; what the aligner put on earlier Pali pages (front matter, stray matches) goes to the start page - nothing is dropped
+        for key in list(ppm):
+            book, pg = key.split('|')
+            if int(pg) < _st:
+                k2 = '%s|%d' % (book, _st); lo, hi = ppm.pop(key)
+                ppm[k2] = [min(lo, ppm[k2][0]), max(hi, ppm[k2][1])] if k2 in ppm else [lo, hi]
+    for key, rng in ppm.items():
         book, pg = key.split('|'); lo, hi = rng
         ks = [k for k in range(lo, hi + 1) if k in pages_html]
         if not ks: continue
