@@ -2998,7 +2998,7 @@ let isRomanPali = false;
   }
   window.tpUiStart = function(){
     if(tpUiObs) return;
-    if(!document.getElementById("tp-lang-css")){ const st = document.createElement("style"); st.id = "tp-lang-css"; st.textContent = "body.tp-lang-mode #tp-ai-toggle, body.tp-lang-mode #tp-lang-toggle, body.tp-lang-mode #tp-search-toggle { display: none !important; }"; document.head.appendChild(st); }       // the Burmese-only tools (AI prompts, Burmese translation / nissaya menu, Burmese searches) are not offered
+    if(!document.getElementById("tp-lang-css")){ const st = document.createElement("style"); st.id = "tp-lang-css"; st.textContent = "body.tp-lang-mode #tp-ai-toggle, body.tp-lang-mode #tp-search-toggle { display: none !important; }"; document.head.appendChild(st); }       // the Burmese-only tools (AI prompts, Burmese translation / nissaya menu, Burmese searches) are not offered
     document.body.classList.add("tp-lang-mode");
     tpUiRun(document.body);
     tpUiObs = new MutationObserver(ms => { ms.forEach(m => { if(m.type === "characterData") tpUiRun(m.target); else if(m.type === "attributes") tpUiRun(m.target); else m.addedNodes.forEach(n => tpUiRun(n)); }); });
@@ -3520,9 +3520,24 @@ function tp_edLabel(l){
       if(!container.dataset.closeWired){        // ✕ ခလုပ်ကို တစ်ခါတည်း wire လုပ်ပါမည် (openNissaya ထပ်ခေါ်တိုင်း listener ထပ်ပေါင်းမသွားစေရန်)
         container.dataset.closeWired = "1";
         document.getElementById("tp-nissaya-close").addEventListener("click", () => {
+            const was = {nis: isNissayaOpen, mm: isMmSplitOpen, via: mmViaMm, list: nisViaList, gem: mmGemini, tr: nsyShowTr};
             container.style.display = "none";
             const sw = document.getElementById("tp-split-wrapper"); if(sw) sw.classList.remove("mm-first");
             isNissayaOpen = isMmSplitOpen = mmViaMm = nisViaList = mmGemini = false;
+            // a small button in the corner of the Pāli side brings the translation / nissaya side back
+            const pc = document.getElementById("tp-content");
+            if(pc && !document.getElementById("tp-reopen-nsy")){
+              const rb = document.createElement("button"); rb.id = "tp-reopen-nsy"; rb.className = "tp-icon-btn"; rb.textContent = "◧";
+              rb.title = trUi === "vi" ? "Mở lại bản dịch" : trUi === "en" ? "Show the translation again" : "နိဿယ/ဘာသာပြန် ပြန်ဖွင့်ရန်";
+              rb.style.cssText = "position:sticky;top:6px;float:right;z-index:50;padding:2px 8px;margin:0 0 4px 6px;";
+              rb.addEventListener("click", () => {
+                rb.remove(); isNissayaOpen = was.nis; isMmSplitOpen = was.mm; mmViaMm = was.via; nisViaList = was.list; mmGemini = was.gem; nsyShowTr = was.tr;
+                container.style.display = "";
+                const pg = (currentRow && parseInt(currentRow.page, 10)) || 1;
+                openNissaya(currentBookId, pg);
+              });
+              pc.insertBefore(rb, pc.firstChild);
+            }
         });
       }
   }
@@ -3940,6 +3955,8 @@ function tp_edLabel(l){
              {label: isRomanPali ? "မြန်မာပါဠိ" : "🔠 Roman Pāli", action: "toggle_roman"} 
           ];
           
+          const langMode = trUi !== "my";          // vi / en reader: only the SuttaCentral links (no Burmese nissaya / translation split items)
+          if(langMode) allOptions = [];
           if(suttaId) {
               const scData = await ensureSuttaCentral(), matches = scData.filter(s => s.sutta_id === suttaId);
               allOptions.push(...matches.map(s => ({label: `${s.author} (English)`, url: s.url})));
@@ -3948,9 +3965,11 @@ function tp_edLabel(l){
           } else {
               allOptions.push({label: "(ဒီစာမျက်နှာအတွက် SC သုတ္တန်မတွေ့ပါ)", action: "none"});
           }
+          if(!langMode){
           allOptions.push({label: "📖 နိဿယ (Split View ဖတ်ရန်)", action: "nissaya"});
           const mmSplitIdx = await ensureMmSplitIndex().catch(() => ({}));
           allOptions.push((mmSplitIdx[bookId] || (TP_TR_VARS[bookId] && TP_TR_VARS[bookId].length)) ? {label: "📖 မြန်မာပြန် (Split View ဖတ်ရန်)", action: "mmsplit"} : {label: "(ဒီစာအုပ်အတွက် မြန်မာပြန် Split View မရှိသေးပါ)", action: "none"});
+          }
           
           langList.innerHTML = allOptions.map((o, i) => `<div class="tp-sutta-item" ${o.action !== 'none' ? `data-idx="${i}"` : `style="color:#888;cursor:default;"`}>${o.label}</div>`).join("");
           
