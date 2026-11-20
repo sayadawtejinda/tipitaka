@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-19",
+ "generated": "2026-11-20",
  "books": [
   {
    "id": "mula_vi_01",
@@ -3106,6 +3106,17 @@
    "edition_of": "tika_bi_03"
   },
   {
+   "id": "tika_bi_03_sheet332",
+   "title": "ပဉ္စပကရဏမူလဋီကာ (ဂူကြီး)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2148982,
+   "date": "2026-11-20",
+   "edition_of": "tika_bi_03"
+  },
+  {
    "id": "annya_vi_01_01_bhasatika",
    "title": "ဒွေမာတိကာ (ဘာသာဋီကာ)",
    "basket": "အည",
@@ -3589,5 +3600,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 236
+ "n_editions": 237
 }
