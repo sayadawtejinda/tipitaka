@@ -64,6 +64,9 @@ def _put_one(n, meta, dry, log):
     try:                                                  # Pali pages this file covers: the reader shows an edition only on the pages it has (e.g. vol.1 and vol.2 of one book)
         nums = [int(x.translate(str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789'))) for x in re.findall(r'\[စာမျက်နှာ-([၀-၉]+)\]', open(src, encoding='utf-8').read())]
         if nums: ent['from'], ent['to'] = min(nums), max(nums)
+        try:
+            import m_edpages; ent['pg'] = m_edpages.page_ranges(open(src, encoding='utf-8').read())          # only pages that really have text (a button on an empty page is wrong)
+        except Exception: pass
     except Exception: pass
     ent['label'] = nice_label(edition)
     lst.append(ent)

@@ -3343,7 +3343,11 @@ let isRomanPali = false;
       });
   }
   // မူအမည်ကို ဖုန်းအတွက် တိုအောင် ပြရန်: မူလနိဿယ→မူလ၊ ပခုက္ကူမူ (ပ)→ပခုက္ကူ (ပ)၊ ဘာသာဋီကာ-ဘေဒစိန္တာ→ဘာသာဋီကာ
-  function tp_edLabel(l){
+  function tp_edHas(e, pg){      // ဤမူမှာ ပါဠိစာမျက်နှာ pg အတွက် နိဿယစာ တကယ်ပါသလား (pg = "1,28-29,31-40" စာရင်း၊ မရှိသောမူ - from/to)
+  if(e.pg){ const q = String(pg); if(!e._pgs){ e._pgs = String(e.pg).split(",").map(t => t.split("-").map(Number)); } return e._pgs.some(r => pg >= r[0] && pg <= (r[1] != null ? r[1] : r[0])); }
+  return !(e.from != null && (pg < e.from || pg > e.to));
+}
+function tp_edLabel(l){
     l = String(l || "").trim();
     if (l === "မူလနိဿယ") return "မူလ";
     l = l.replace(/^(ဘာသာဋီကာ)-.+$/, "$1");
@@ -3412,7 +3416,7 @@ let isRomanPali = false;
       contentEl.innerHTML = "<p class='tp-loading'>နိဿယ ဒေတာ ဆွဲယူနေပါသည်...</p>";
       
       try {
-          const editions = trUi !== "my" ? [] : (TP_NISSAYA_EDITIONS[bookId] || []).filter(e => !(e.from != null && (pageNum < e.from || pageNum > e.to)));       // မူတစ်ခုမှာ ဤစာမျက်နှာ မပါလျှင် (ဥပမာ ပထမတွဲ/ဒုတိယတွဲ) မပြ
+          const editions = trUi !== "my" ? [] : (TP_NISSAYA_EDITIONS[bookId] || []).filter(e => tp_edHas(e, pageNum));       // မူတစ်ခုမှာ ဤစာမျက်နှာ မပါလျှင် (ဥပမာ ပထမတွဲ/ဒုတိယတွဲ) မပြ
           const chosen = editions.find(e => e.file === nissayaFile) || editions[0] || null;       // မူရွေးထားသည့်အတိုင်း (မရွေးရသေးလျှင် ပထမမူ)
           const edBox = document.getElementById("tp-nissaya-editions");
           if (edBox) {
