@@ -3434,6 +3434,17 @@
    "edition_of": "annya_bi_05"
   },
   {
+   "id": "annya_bi_07_sheet326",
+   "title": "ပရမတ္ထဒီပနီ (သစ္စ_သင်္ခေပအဋ္ဌကထာနိဿယ)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 1367892,
+   "date": "2026-11-20",
+   "edition_of": "annya_bi_07"
+  },
+  {
    "id": "annya_sadda_01_sheet355",
    "title": "ကစ္စာယနဗျာကရဏံ (ဘာသာဋီကာမူ (ပ))",
    "basket": "အည",
@@ -3600,5 +3611,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 237
+ "n_editions": 238
 }
