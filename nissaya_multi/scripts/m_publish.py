@@ -22,7 +22,11 @@ def git(*args, check=True, log=print):
 
 def nice_label(edition):
     """label shown in the reader:  'Z05 044 ဦးဗုဓ် (ပ)-ပဒမာလာ' -> 'ဦးဗုဓ် (ပ)'  (the sheet code and the book title after the volume are dropped);  'ပြည် (ပ)' -> 'ပြည်မူ (ပ)' (edition + volume)"""
-    e = edition.strip(); e2 = re.sub(r'^Z\d+\s+\d+\s+', '', e).strip(); z = e2 != e
+    e = edition.strip()
+    if 'ကူကြီး' in e:                                       # the author's short name only (ဂူကြီး) + volume, never the book title
+        v = re.search(r'\(([^)]*?)\s*(?:ကူကြီး)?\)', e)
+        return 'ဂူကြီး' + (' (' + v.group(1).strip() + ')' if v and v.group(1).strip() else '')
+    e2 = re.sub(r'^Z\d+\s+\d+\s+', '', e).strip(); z = e2 != e
     e2 = re.sub(r'^(.*?\([^)]*\))\s*[-–—].*$', lambda m_: m_.group(1), e2)
     mm = re.match(r'^(.*?)\s*(\([^)]*\))\s*$', e2)
     if mm and mm.group(1).strip():
