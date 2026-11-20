@@ -270,11 +270,11 @@ def build(n, log=print):
 
 
 def _peel(items):
-    """number of Pali pages at the start of items [(page, lo, hi)] that all point into a very small stretch of nissaya pages (about 3 Pali pages per nissaya page or more) - the pages of a real run advance"""
+    """number of Pali pages at the start of items [(page, lo, hi)] that all point into a very small stretch of nissaya pages (2 Pali pages per nissaya page or more) - the pages of a real run advance"""
     best = 0; lo, hi = 10 ** 9, -1
     for k, (pg, l, h) in enumerate(items[:-1], 1):
         lo = min(lo, l); hi = max(hi, h)
-        if k >= 2 and (hi - lo + 1) * 3 <= k: best = k
+        if k >= 2 and (hi - lo + 1) * 2 <= k: best = k
     return best
 
 
