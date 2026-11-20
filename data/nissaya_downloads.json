@@ -2815,6 +2815,17 @@
    "edition_of": "attha_bi_03"
   },
   {
+   "id": "attha_bi_03_sheet323",
+   "title": "ပဉ္စပကရဏအဋ္ဌကထာ (ပဉ္စပကြိုဏ်အဋ္ဌကထာနိသျမူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 3234582,
+   "date": "2026-11-20",
+   "edition_of": "attha_bi_03"
+  },
+  {
    "id": "tika_vi_01",
    "title": "သာရတ္ထဒီပနီဋီကာ (ပ)",
    "basket": "ဋီကာ",
@@ -3666,5 +3677,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 243
+ "n_editions": 244
 }
