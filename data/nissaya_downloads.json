@@ -3337,6 +3337,17 @@
    "edition_of": "annya_vi_01_04"
   },
   {
+   "id": "annya_vi_01_04_sheet327",
+   "title": "ကင်္ခါဝိတရဏီအဘိနဝဋီကာ (ပခုက္ကူမူ (ပ))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "ဝိနည်းဆိုင်ရာ",
+   "cat_key": "vi",
+   "size": 7340672,
+   "date": "2026-11-20",
+   "edition_of": "annya_vi_01_04"
+  },
+  {
    "id": "annya_vi_02_sheet096",
    "title": "ဝိနယသင်္ဂဟအဋ္ဌကထာ (မလှိုင်ဆရာတော်မူ (ဒု))",
    "basket": "အည",
@@ -3732,5 +3743,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 249
+ "n_editions": 250
 }
