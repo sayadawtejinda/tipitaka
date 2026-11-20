@@ -253,13 +253,7 @@ def build(n, log=print):
     per = {}
     try: _st = int((json.load(open(os.path.join(ROOT, 'catalog_overrides.json'), encoding='utf-8')).get(str(n), {})).get('start') or 0)
     except Exception: _st = 0
-    ppm = dict(P['ppmap'])
-    if _st:                                   # 'start': the nissaya book (a second volume) really begins at this Pali page; what the aligner put on earlier Pali pages (front matter, stray matches) goes to the start page - nothing is dropped
-        for key in list(ppm):
-            book, pg = key.split('|')
-            if int(pg) < _st:
-                k2 = '%s|%d' % (book, _st); lo, hi = ppm.pop(key)
-                ppm[k2] = [min(lo, ppm[k2][0]), max(hi, ppm[k2][1])] if k2 in ppm else [lo, hi]
+    ppm = fix_strays(P['ppmap'], _st, (P.get('stats') or {}).get('mode') == 'content')
     for key, rng in ppm.items():
         book, pg = key.split('|'); lo, hi = rng
         ks = [k for k in range(lo, hi + 1) if k in pages_html]
@@ -273,6 +267,45 @@ def build(n, log=print):
            'missing numbers inside the run: %s' % sorted(set(range(chain_vals[0], chain_vals[-1] + 1)) - set(chain_vals))[:60] if chain_vals else 'no numbers']
     log('\n'.join(rep))
     return per, rep, P
+
+
+def _peel(items):
+    """number of Pali pages at the start of items [(page, lo, hi)] that all point into a very small stretch of nissaya pages (about 3 Pali pages per nissaya page or more) - the pages of a real run advance"""
+    best = 0; lo, hi = 10 ** 9, -1
+    for k, (pg, l, h) in enumerate(items[:-1], 1):
+        lo = min(lo, l); hi = max(hi, h)
+        if k >= 2 and (hi - lo + 1) * 3 <= k: best = k
+    return best
+
+
+def fix_strays(ppmap, start=0, content_mode=True):
+    """Pali pages the aligner pointed a few nissaya pages at far away from where the book really runs (front matter put on Pali p.1, stray matches after the end) are not pages of this nissaya.
+    A page is a stray when it lies outside the main run of Pali pages (largest group with gaps of at most 3 pages, at least 60% of all) AND it belongs to the first / last pages that all point into a tiny stretch
+    of nissaya pages.  Stray pages before the main run go to its first page, after it to its last page (the nissaya pages are kept, nothing is dropped).  'start' (catalog_overrides) = the first page given by hand.
+    returns a new ppmap"""
+    ppm = dict(ppmap); books = {}
+    for key in ppm: b_, pg = key.split('|'); books.setdefault(b_, []).append(int(pg))
+    for b_, pgs in books.items():
+        pgs.sort()
+        if start:
+            first = min([x for x in pgs if x >= start] or [start]); last = pgs[-1]; early = {x for x in pgs if x < first}; late = set()
+        else:
+            if not content_mode or len(pgs) < 8: continue
+            groups = [[pgs[0]]]
+            for x in pgs[1:]:
+                if x - groups[-1][-1] <= 3: groups[-1].append(x)
+                else: groups.append([x])
+            main = max(groups, key=len)
+            if len(main) < 5 or len(main) < 0.6 * len(pgs): continue
+            first, last = main[0], main[-1]
+            it = [(x,) + tuple(ppm['%s|%d' % (b_, x)]) for x in pgs]
+            e, l = _peel(it), _peel(it[::-1])
+            early = {x for x in pgs[:e] if x < first}; late = {x for x in pgs[::-1][:l] if x > last}
+        for x in early | late:
+            k = '%s|%d' % (b_, first if x < first else last); lo, hi = ppm[k]; l2, h2 = ppm['%s|%d' % (b_, x)]
+            if x < first and h2 <= hi: ppm['%s|%d' % (b_, x)] = None; ppm[k] = [min(lo, l2), hi]
+            elif x > last and l2 >= lo: ppm['%s|%d' % (b_, x)] = None; ppm[k] = [lo, max(hi, h2)]
+    return {k: v for k, v in ppm.items() if v is not None}
 
 
 EDITION_SLUG = {'ဘုရားကြီးမူ': 'bhurakyi', 'ပခုက္ကူမူ': 'pakhokku', 'ဘာသာဋီကာ': 'bhasatika'}
