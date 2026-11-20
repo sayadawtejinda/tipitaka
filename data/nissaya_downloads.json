@@ -3029,6 +3029,17 @@
    "edition_of": "tika_bi_01"
   },
   {
+   "id": "tika_bi_01_sheet328",
+   "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ (ဂူကြီး)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2232364,
+   "date": "2026-11-20",
+   "edition_of": "tika_bi_01"
+  },
+  {
    "id": "tika_bi_02_01_sheet209",
    "title": "ဝိဘင်္ဂမူလဋီကာ (ပ) (ဘာဋီမူ (ဒု))",
    "basket": "ဋီကာ",
@@ -3644,5 +3655,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 241
+ "n_editions": 242
 }
