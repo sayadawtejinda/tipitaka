@@ -3374,16 +3374,21 @@ function tp_edLabel(l){
       t = t.split(String.fromCharCode(92) + "n").join("\n");      // a literal backslash-n inside the text (Gemini double-escaped it) is a line break
       const out = []; let buf = [];
       const fmt = l => {      // "..." / “...” quotations are bold.  The straight quotes are paired by their look (an opener stands after a space / at the start and before a letter, a closer after a letter and before a space / mark), so one stray or very long quotation cannot turn the others inside out
-        let t = esc(l), o = "", last = 0, open = -1;
+        let t = esc(l);
         const isOp = i => (i === 0 || /[\s(\[၊။\-]/.test(t[i - 1])) && i + 1 < t.length && !/\s/.test(t[i + 1]);
         const isCl = i => i > 0 && !/\s/.test(t[i - 1]) && (i + 1 >= t.length || /[\s၊။,.;:!?)\]]/.test(t[i + 1]));
-        for(let i = 0; i < t.length; i++){
-          if(t[i] !== '"') continue;
-          if(open < 0){ if(isCl(i) && !isOp(i)) continue; open = i; }
-          else if(isOp(i) && !isCl(i)){ open = i; }
-          else { o += t.slice(last, open) + "<b>" + t.slice(open, i + 1) + "</b>"; last = i + 1; open = -1; }
-        }
-        t = o + t.slice(last);
+        const pairQ = (ch, maxLen) => {      // the same look-based pairing for the straight " and the straight ' (a quotation longer than maxLen is not a quotation: 'ဘူတေန' is, a stray apostrophe is not)
+          let o = "", last = 0, open = -1;
+          for(let i = 0; i < t.length; i++){
+            if(t[i] !== ch) continue;
+            if(open < 0){ if(isCl(i) && !isOp(i)) continue; if(ch === "'" && !isOp(i)) continue; open = i; }      // an apostrophe inside a word (it's) never opens a quotation
+            else if(isOp(i) && !isCl(i)){ open = i; }
+            else if(i - open > maxLen){ open = isOp(i) && !isCl(i) ? i : -1; }
+            else { o += t.slice(last, open) + "<b>" + t.slice(open, i + 1) + "</b>"; last = i + 1; open = -1; }
+          }
+          t = o + t.slice(last);
+        };
+        pairQ('"', 100000); pairQ("'", 400);
         return t.replace(/“[^“”\n]{1,400}”|‘[^‘’\n]{1,400}’/g, m => "<b>" + m + "</b>");
       };
       const flush = () => { if(buf.length){ out.push(`<p class="bodytext">${buf.map(fmt).join("<br>")}</p>`); buf = []; } };
