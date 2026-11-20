@@ -3073,6 +3073,17 @@
    "edition_of": "tika_bi_02_01"
   },
   {
+   "id": "tika_bi_02_01_sheet330",
+   "title": "ဝိဘင်္ဂမူလဋီကာ (ပ) (ဝိဘင်း မူလဋီကာနိသျမူ (တ ကူကြီး))",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 2486073,
+   "date": "2026-11-20",
+   "edition_of": "tika_bi_02_01"
+  },
+  {
    "id": "tika_bi_03_sheet213",
    "title": "ပဉ္စပကရဏမူလဋီကာ (ဘာဋီမူ (ဒု))",
    "basket": "ဋီကာ",
@@ -3633,5 +3644,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 240
+ "n_editions": 241
 }
