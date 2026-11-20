@@ -3194,6 +3194,17 @@
    "edition_of": "tika_bi_03"
   },
   {
+   "id": "tika_bi_03_sheet333",
+   "title": "ပဉ္စပကရဏမူလဋီကာ (ဂူကြီး)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 3079202,
+   "date": "2026-11-20",
+   "edition_of": "tika_bi_03"
+  },
+  {
    "id": "annya_vi_01_01_bhasatika",
    "title": "ဒွေမာတိကာ (ဘာသာဋီကာ)",
    "basket": "အည",
@@ -3688,5 +3699,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 245
+ "n_editions": 246
 }
