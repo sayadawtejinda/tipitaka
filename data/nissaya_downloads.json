@@ -1007,6 +1007,17 @@
    "date": "2026-10-14"
   },
   {
+   "id": "mula_ku_13_sheet049",
+   "title": "စရိယာပိဋကပါဠိ (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 552274,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_13"
+  },
+  {
    "id": "mula_ku_14",
    "title": "ဇာတကပါဠိ (ပ)",
    "basket": "ပါဠိတော်",
@@ -3754,5 +3765,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 251
+ "n_editions": 252
 }
