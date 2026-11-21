@@ -687,6 +687,17 @@
    "date": "2026-10-12"
   },
   {
+   "id": "mula_ku_03_sheet038",
+   "title": "ဥဒါနပါဠိ (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2291267,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_03"
+  },
+  {
    "id": "mula_ku_04",
    "title": "ဣတိဝုတ္တကပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3490,5 +3501,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 227
+ "n_editions": 228
 }
