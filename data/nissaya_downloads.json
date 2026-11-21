@@ -784,6 +784,17 @@
    "date": "2026-10-12"
   },
   {
+   "id": "mula_ku_05_sheet040",
+   "title": "သုတ္တနိပါတပါဠိ (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2848227,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_05"
+  },
+  {
    "id": "mula_ku_06",
    "title": "ဝိမာနဝတ္ထုပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3567,5 +3578,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 234
+ "n_editions": 235
 }
