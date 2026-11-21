@@ -743,6 +743,17 @@
    "date": "2026-10-17"
   },
   {
+   "id": "mula_ku_02_sheet037",
+   "title": "ဓမ္မပဒပါဠိ (သင်္ဂဇာမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1295888,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_02"
+  },
+  {
    "id": "mula_ku_03",
    "title": "ဥဒါနပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3578,5 +3589,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 235
+ "n_editions": 236
 }
