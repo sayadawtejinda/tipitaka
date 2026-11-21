@@ -965,6 +965,17 @@
    "edition_of": "mula_ku_11"
   },
   {
+   "id": "mula_ku_11_sheet047",
+   "title": "အပဒါနပါဠိ (ဒု) (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1736638,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_11"
+  },
+  {
    "id": "mula_ku_12",
    "title": "ဗုဒ္ဓဝံသပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3743,5 +3754,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 250
+ "n_editions": 251
 }
