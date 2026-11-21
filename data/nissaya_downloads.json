@@ -565,6 +565,17 @@
    "date": "2026-10-09"
   },
   {
+   "id": "mula_an_04_sheet032",
+   "title": "စတုက္ကနိပါတပါဠိ (ဦးပညိဿရမူ (ဒု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 4606044,
+   "date": "2026-11-21",
+   "edition_of": "mula_an_04"
+  },
+  {
    "id": "mula_an_05",
    "title": "ပဉ္စကနိပါတပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3611,5 +3622,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 238
+ "n_editions": 239
 }
