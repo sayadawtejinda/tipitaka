@@ -975,6 +975,17 @@
    "date": "2026-10-14"
   },
   {
+   "id": "mula_ku_12_sheet048",
+   "title": "ဗုဒ္ဓဝံသပါဠိ (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 1523189,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_12"
+  },
+  {
    "id": "mula_ku_13",
    "title": "စရိယာပိဋကပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3688,5 +3699,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 245
+ "n_editions": 246
 }
