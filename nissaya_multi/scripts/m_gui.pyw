@@ -23,7 +23,7 @@ def _only_db_on():
     try: return bool(_jj.load(open(os.path.join(ROOT, 'gui_state.json'), encoding='utf-8')).get('only_db', False))
     except Exception: return False
 def _db_agree():          # sheets whose database book name AND page content agree (catalog check 'db+content agree')
-    try: return {r['n'] for r in _jj.load(open(os.path.join(ROOT, 'catalog.json'), encoding='utf-8')) if (r.get('check') or '').startswith('db+content agree')}
+    try: return {r['n'] for r in _jj.load(open(os.path.join(ROOT, 'catalog.json'), encoding='utf-8')) if (r.get('check') or '').startswith('db+content agree') or (r['n'] >= 510 and r.get('check') == 'db only')}          # 510-540 = OCR Books (auto) A01-A31: db + id are in the sheet title (from the user's list)
     except Exception: return set()
 def visible_sheets(hide=None, keep=None, only_db=None):
     allb = [(n, ('⏸ ' if m_authors.on_hold(n) else '') + t) for n, t in m_tool.list_sheets()]          # ⏸ = Gemini done, author not known yet, kept off the web

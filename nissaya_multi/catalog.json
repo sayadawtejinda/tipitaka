@@ -2415,7 +2415,7 @@
   "file": "330.json",
   "sheet": "မူလဋီ(တ)",
   "rows": 383,
-  "edition": "ဂူကြီး (တ)",
+  "edition": "ဝိဘင်း မူလဋီကာနိသျ (တ ကူကြီး)",
   "sid": null,
   "excel_pages": 383,
   "status": "",
@@ -2485,7 +2485,7 @@
   "file": "331.json",
   "sheet": "မူလဋီ(စ)",
   "rows": 352,
-  "edition": "ဂူကြီး (စ)",
+  "edition": "ဝိဘင်း မူလဋီကာနိသျ (စ) ကူကြီး",
   "sid": null,
   "excel_pages": 352,
   "status": "",
@@ -3519,9 +3519,7 @@
    "nsy_id": "001",
    "books": [
     "annya_vi_01_01"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:001 ဦးဗုဓ် (consistency 0.73, 133 anchors)",
   "found": {
@@ -3733,9 +3731,7 @@
    "books": [
     "annya_vi_05_01",
     "annya_vi_06_01"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:004 ဦးဗုဓ် (consistency 0.65, 2181 anchors)",
   "found": {
@@ -3808,9 +3804,7 @@
    "books": [
     "annya_vi_05_01",
     "annya_vi_06_01"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:005 မေဒိနီ (consistency 0.65, 964 anchors)",
   "found": {
@@ -3954,9 +3948,7 @@
    "nsy_id": "010",
    "books": [
     "annya_bi_05"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:010 ဗားကရာ (consistency 0.79, 1635 anchors)",
   "found": {
@@ -4070,9 +4062,7 @@
    "nsy_id": "017",
    "books": [
     "annya_bi_06"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:017 တောင်မြို့ (consistency 0.79, 2857 anchors)",
   "found": {
@@ -4141,9 +4131,7 @@
    "nsy_id": "022",
    "books": [
     "annya_sadda_01"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:022 ဘာသာဋီကာ (ပ) (consistency 0.56, 1455 anchors)",
   "found": {
@@ -4504,9 +4492,7 @@
    "nsy_id": "031",
    "books": [
     "annya_sadda_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:031 ဂဏ္ဌိ (ပ) (consistency 0.70, 1353 anchors)",
   "found": {
@@ -4575,9 +4561,7 @@
    "nsy_id": "032",
    "books": [
     "annya_sadda_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:032 ဂဏ္ဌိ (ဒု) (consistency 0.57, 2281 anchors)",
   "found": {
@@ -4646,9 +4630,7 @@
    "nsy_id": "033",
    "books": [
     "annya_sadda_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:033 ဘာသာဋီကာ (ပ) (consistency 0.68, 2579 anchors)",
   "found": {
@@ -4717,9 +4699,7 @@
    "nsy_id": "034",
    "books": [
     "annya_sadda_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:034 ဘာသာဋီကာ (ဒု) (consistency 0.74, 2945 anchors)",
   "found": {
@@ -9409,14 +9389,10 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "113",
+   "mode": "content",
    "books": [
     "annya_vi_01_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "content guess annya_vi_01_02 (0.18); database said -"
  },
@@ -9477,14 +9453,10 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "114",
+   "mode": "content",
    "books": [
     "annya_vi_01_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "content guess annya_vi_01_02 (0.23); database said -"
  },
@@ -9523,14 +9495,10 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "111",
+   "mode": "content",
    "books": [
     "annya_vi_01_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "content guess annya_vi_01_02 (0.42); database said -"
  },
@@ -9569,14 +9537,10 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "112",
+   "mode": "content",
    "books": [
     "annya_vi_01_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "content guess annya_vi_01_02 (0.52); database said -"
  },
@@ -10456,8 +10420,7 @@
    "nsy_id": "048",
    "books": [
     "attha_di_02"
-   ],
-   "offset": 19
+   ]
   },
   "check": "db+content agree"
  },
@@ -10866,8 +10829,7 @@
    "nsy_id": "055",
    "books": [
     "attha_di_03"
-   ],
-   "offset": 0
+   ]
   },
   "check": "db+content agree"
  },
@@ -13766,8 +13728,7 @@
    "nsy_id": "113",
    "books": [
     "attha_ku_20"
-   ],
-   "offset": 0
+   ]
   },
   "check": "db+content agree"
  },
@@ -15065,8 +15026,7 @@
    "nsy_id": "003",
    "books": [
     "tika_vi_04"
-   ],
-   "offset": 33
+   ]
   },
   "check": "db+content agree"
  },
@@ -15205,14 +15165,18 @@
   ],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "117",
+   "mode": "content",
    "books": [
     "annya_vi_01_04"
    ],
-   "offset": 0,
-   "as_is": true
+   "alt": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "006",
+    "books": [
+     "attha_vi_01_01"
+    ]
+   }
   },
   "check": "content guess annya_vi_01_04 (0.41); database said ['attha_vi_01_01']"
  },
@@ -15228,14 +15192,10 @@
   "cand": [],
   "label": "ကင်္ခါ",
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "118",
+   "mode": "content",
    "books": [
     "annya_vi_01_04"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "content guess annya_vi_01_04 (0.43); database said -"
  },
@@ -15895,14 +15855,18 @@
   ],
   "label": "နီ မူဋီ",
   "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "020",
+   "mode": "content",
    "books": [
     "tika_bi_01"
    ],
-   "offset": 0,
-   "as_is": true
+   "alt": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "020",
+    "books": [
+     "attha_vi_03"
+    ]
+   }
   },
   "check": "content guess tika_bi_01 (0.50); database said ['attha_vi_03']"
  },
@@ -15985,14 +15949,18 @@
   ],
   "label": "နီ မူဋီ",
   "final": {
-   "mode": "db",
-   "db": "tika",
-   "nsy_id": "021",
+   "mode": "content",
    "books": [
     "tika_bi_01"
    ],
-   "offset": 0,
-   "as_is": true
+   "alt": {
+    "mode": "db",
+    "db": "attha",
+    "nsy_id": "021",
+    "books": [
+     "attha_vi_03"
+    ]
+   }
   },
   "check": "content guess tika_bi_01 (0.54); database said ['attha_vi_03']"
  },
@@ -17339,9 +17307,7 @@
    "nsy_id": "035",
    "books": [
     "annya_sadda_02"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:035 စည်ရှင် (consistency 0.94, 787 anchors)",
   "found": {
@@ -17406,16 +17372,12 @@
   "cand": [],
   "label": null,
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "037",
+   "mode": "content",
    "books": [
-    "annya_sadda_03"
-   ],
-   "offset": 0,
-   "as_is": true
+    "annya_sadda_10"
+   ]
   },
-  "check": "annya_nsy 037 chosen by name (မောဂ္ဂလ္လာန်-၁ = အဘယာရာမ (ပ))"
+  "check": "content guess annya_sadda_10 (0.24); database said -"
  },
  {
   "n": 508,
@@ -17434,9 +17396,7 @@
    "nsy_id": "038",
    "books": [
     "annya_sadda_03"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
   "check": "id found by content: annya:038 အဘယာရာမ (ဒု) (consistency 0.87, 460 anchors)",
   "found": {
@@ -17500,15 +17460,1448 @@
   "status": "no-id",
   "cand": [],
   "final": {
-   "mode": "db",
-   "db": "annya",
-   "nsy_id": "053",
+   "mode": "content",
    "books": [
     "annya_sadda_11"
-   ],
-   "offset": 0,
-   "as_is": true
+   ]
   },
-  "check": "annya_nsy 053 chosen by name (တောင်ပေါက်-အဘိဓာန်)"
+  "check": "content guess annya_sadda_11 (0.47); database said -"
+ },
+ {
+  "n": 510,
+  "file": "510.json",
+  "sheet": "A01 attha_214_မဟာဇေယျမင်းကျောင်",
+  "rows": 443,
+  "edition": "မဟာဇေယျမင်းကျောင်း",
+  "sid": "214",
+  "excel_pages": 443,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "attha",
+    "nsy_id": "214",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဇာတ် (တိက - ၂)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "attha_ku_zat_02",
+      "maprows": 161,
+      "pali_pages": [
+       248,
+       408
+      ],
+      "nsy_pages": [
+       8,
+       442
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "214",
+   "books": [
+    "attha_ku_zat_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 511,
+  "file": "511.json",
+  "sheet": "A02 attha_217_မဟာဇေယျမင်းကျောင်",
+  "rows": 711,
+  "edition": "မဟာဇေယျမင်းကျောင်း",
+  "sid": "217",
+  "excel_pages": 711,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "attha",
+    "nsy_id": "217",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဇာတ် (ဒသကာဒိ - ၄)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "attha_ku_zat_04",
+      "maprows": 275,
+      "pali_pages": [
+       1,
+       275
+      ],
+      "nsy_pages": [
+       8,
+       688
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "217",
+   "books": [
+    "attha_ku_zat_04"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 512,
+  "file": "512.json",
+  "sheet": "A03 attha_218_မဟာဇေယျမင်းကျောင်",
+  "rows": 684,
+  "edition": "မဟာဇေယျမင်းကျောင်း",
+  "sid": "218",
+  "excel_pages": 684,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "attha",
+    "nsy_id": "218",
+    "name": "မဟာဇေယျမင်းကျောင်း",
+    "category": "ဇာတ် (ပကိဏ္ဏကာဒိ - ၄)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "attha_ku_zat_04",
+      "maprows": 229,
+      "pali_pages": [
+       276,
+       504
+      ],
+      "nsy_pages": [
+       7,
+       646
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "218",
+   "books": [
+    "attha_ku_zat_04"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 513,
+  "file": "513.json",
+  "sheet": "A04 attha_223_နပသ-(မန်း+ရန်ကုန်",
+  "rows": 607,
+  "edition": "နပသ",
+  "sid": "223",
+  "excel_pages": 607,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "attha",
+    "nsy_id": "223",
+    "name": "နပသ",
+    "category": "(မန်း+ရန်ကုန်) (အသီတိ - ၅)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "attha_ku_zat_05",
+      "maprows": 199,
+      "pali_pages": [
+       355,
+       553
+      ],
+      "nsy_pages": [
+       11,
+       582
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "223",
+   "books": [
+    "attha_ku_zat_05"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 514,
+  "file": "514.json",
+  "sheet": "A05 attha_233_နပသ(ရန်ကုန်)(ပ)-အ",
+  "rows": 482,
+  "edition": "နပသ(ရန်ကုန်)(ပ)",
+  "sid": "233",
+  "excel_pages": 482,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "attha",
+    "nsy_id": "233",
+    "name": "နပသ(ရန်ကုန်) (ပ)",
+    "category": "အပါဒါန(ဒု)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "attha_ku_11",
+      "maprows": 161,
+      "pali_pages": [
+       1,
+       161
+      ],
+      "nsy_pages": [
+       8,
+       466
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "233",
+   "books": [
+    "attha_ku_11"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 515,
+  "file": "515.json",
+  "sheet": "A06 attha_234_နပသ(ရန်ကုန်)(ဒု)-",
+  "rows": 429,
+  "edition": "နပသ(ရန်ကုန်)(ဒု)",
+  "sid": "234",
+  "excel_pages": 429,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "attha",
+    "nsy_id": "234",
+    "name": "နပသ(ရန်ကုန်) (ဒု)",
+    "category": "အပါဒါန(ဒု)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "attha_ku_11",
+      "maprows": 142,
+      "pali_pages": [
+       162,
+       303
+      ],
+      "nsy_pages": [
+       8,
+       429
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "attha",
+   "nsy_id": "234",
+   "books": [
+    "attha_ku_11"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 516,
+  "file": "516.json",
+  "sheet": "A07 pali_50006_ဗားကရာမူ-အံ၁",
+  "rows": 599,
+  "edition": "ဗားကရာမူ",
+  "sid": "50006",
+  "excel_pages": 599,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "50006",
+    "name": "ဗားကရာမူ",
+    "category": "အံ ၁",
+    "pagecount": 599,
+    "pali": [
+     {
+      "book": "mula_an_01",
+      "maprows": 48,
+      "pali_pages": [
+       1,
+       48
+      ],
+      "nsy_pages": [
+       5,
+       45
+      ]
+     },
+     {
+      "book": "mula_an_02",
+      "maprows": 50,
+      "pali_pages": [
+       49,
+       98
+      ],
+      "nsy_pages": [
+       46,
+       104
+      ]
+     },
+     {
+      "book": "mula_an_03",
+      "maprows": 207,
+      "pali_pages": [
+       99,
+       305
+      ],
+      "nsy_pages": [
+       104,
+       347
+      ]
+     },
+     {
+      "book": "mula_an_04",
+      "maprows": 275,
+      "pali_pages": [
+       306,
+       580
+      ],
+      "nsy_pages": [
+       347,
+       598
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "50006",
+   "books": [
+    "mula_an_01",
+    "mula_an_02",
+    "mula_an_03",
+    "mula_an_04"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 517,
+  "file": "517.json",
+  "sheet": "A08 pali_50007_ဗားကရာမူ-အံ၂",
+  "rows": 497,
+  "edition": "ဗားကရာမူ",
+  "sid": "50007",
+  "excel_pages": 497,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "50007",
+    "name": "ဗားကရာမူ",
+    "category": "အံ ၂",
+    "pagecount": 497,
+    "pali": [
+     {
+      "book": "mula_an_05",
+      "maprows": 246,
+      "pali_pages": [
+       1,
+       246
+      ],
+      "nsy_pages": [
+       1,
+       206
+      ]
+     },
+     {
+      "book": "mula_an_06",
+      "maprows": 147,
+      "pali_pages": [
+       247,
+       393
+      ],
+      "nsy_pages": [
+       209,
+       365
+      ]
+     },
+     {
+      "book": "mula_an_07",
+      "maprows": 119,
+      "pali_pages": [
+       394,
+       512
+      ],
+      "nsy_pages": [
+       365,
+       497
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "50007",
+   "books": [
+    "mula_an_05",
+    "mula_an_06",
+    "mula_an_07"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 518,
+  "file": "518.json",
+  "sheet": "A09 pali_50008_ဗားကရာမူ-အံ၃",
+  "rows": 512,
+  "edition": "ဗားကရာမူ",
+  "sid": "50008",
+  "excel_pages": 512,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "50008",
+    "name": "ဗားကရာမူ",
+    "category": "အံ ၃",
+    "pagecount": 512,
+    "pali": [
+     {
+      "book": "mula_an_08",
+      "maprows": 162,
+      "pali_pages": [
+       1,
+       162
+      ],
+      "nsy_pages": [
+       1,
+       156
+      ]
+     },
+     {
+      "book": "mula_an_09",
+      "maprows": 94,
+      "pali_pages": [
+       163,
+       256
+      ],
+      "nsy_pages": [
+       159,
+       251
+      ]
+     },
+     {
+      "book": "mula_an_10",
+      "maprows": 257,
+      "pali_pages": [
+       257,
+       513
+      ],
+      "nsy_pages": [
+       255,
+       467
+      ]
+     },
+     {
+      "book": "mula_an_11",
+      "maprows": 44,
+      "pali_pages": [
+       515,
+       558
+      ],
+      "nsy_pages": [
+       469,
+       499
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "50008",
+   "books": [
+    "mula_an_08",
+    "mula_an_09",
+    "mula_an_10",
+    "mula_an_11"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 519,
+  "file": "519.json",
+  "sheet": "A10 pali_60027_သဇ္ဇနောဒယ-ဥဒါန",
+  "rows": 439,
+  "edition": "သဇ္ဇနောဒယ",
+  "sid": "60027",
+  "excel_pages": 439,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "60027",
+    "name": "သဇ္ဇနောဒယ",
+    "category": "ဥဒါန",
+    "pagecount": 439,
+    "pali": [
+     {
+      "book": "mula_ku_03",
+      "maprows": 117,
+      "pali_pages": [
+       77,
+       193
+      ],
+      "nsy_pages": [
+       1,
+       438
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "60027",
+   "books": [
+    "mula_ku_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 520,
+  "file": "520.json",
+  "sheet": "A11 pali_60028_သဇ္ဇနောဒယ-ဣတိဝုတ",
+  "rows": 368,
+  "edition": "သဇ္ဇနောဒယ",
+  "sid": "60028",
+  "excel_pages": 368,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "60028",
+    "name": "သဇ္ဇနောဒယ",
+    "category": "ဣတိဝုတ်",
+    "pagecount": 368,
+    "pali": [
+     {
+      "book": "mula_ku_04",
+      "maprows": 83,
+      "pali_pages": [
+       195,
+       277
+      ],
+      "nsy_pages": [
+       1,
+       366
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "60028",
+   "books": [
+    "mula_ku_04"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 521,
+  "file": "521.json",
+  "sheet": "A12 pali_60029_သဇ္ဇနောဒယ-သုတ္တန",
+  "rows": 879,
+  "edition": "သဇ္ဇနောဒယ",
+  "sid": "60029",
+  "excel_pages": 879,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "60029",
+    "name": "သဇ္ဇနောဒယ",
+    "category": "သုတ္တနိ",
+    "pagecount": 879,
+    "pali": [
+     {
+      "book": "mula_ku_05",
+      "maprows": 177,
+      "pali_pages": [
+       279,
+       455
+      ],
+      "nsy_pages": [
+       1,
+       878
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "60029",
+   "books": [
+    "mula_ku_05"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 522,
+  "file": "522.json",
+  "sheet": "A13 pali_60030_အာဒိစ္စဝံသမူ-မိလ",
+  "rows": 605,
+  "edition": "အာဒိစ္စဝံသမူ",
+  "sid": "60030",
+  "excel_pages": 605,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "60030",
+    "name": "အာဒိစ္စဝံသမူ",
+    "category": "မိလိန္ဒ",
+    "pagecount": 605,
+    "pali": [
+     {
+      "book": "mula_ku_19",
+      "maprows": 408,
+      "pali_pages": [
+       1,
+       408
+      ],
+      "nsy_pages": [
+       1,
+       592
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "60030",
+   "books": [
+    "mula_ku_19"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 523,
+  "file": "523.json",
+  "sheet": "A14 pali_60031_ပန်းကုံး-ဓမ္မပဒ",
+  "rows": 523,
+  "edition": "ပန်းကုံး",
+  "sid": "60031",
+  "excel_pages": 523,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "pali",
+    "nsy_id": "60031",
+    "name": "ပန်းကုံး",
+    "category": "ဓမ္မပဒ",
+    "pagecount": 523,
+    "pali": [
+     {
+      "book": "mula_ku_02",
+      "maprows": 64,
+      "pali_pages": [
+       13,
+       76
+      ],
+      "nsy_pages": [
+       21,
+       496
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "pali",
+   "nsy_id": "60031",
+   "books": [
+    "mula_ku_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 524,
+  "file": "524.json",
+  "sheet": "A15 tika_020_ဘာဋီ(ပ)-နီမူဋီ",
+  "rows": 259,
+  "edition": "ဘာဋီ(ပ)",
+  "sid": "020",
+  "excel_pages": 259,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "020",
+    "name": "ဘာဋီ (ပ)",
+    "category": "နီ မူဋီ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_bi_01",
+      "maprows": 58,
+      "pali_pages": [
+       1,
+       58
+      ],
+      "nsy_pages": [
+       1,
+       259
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "020",
+   "books": [
+    "tika_bi_01"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 525,
+  "file": "525.json",
+  "sheet": "A16 tika_021_ဘာဋီ(ဒု)-နီမူဋီ",
+  "rows": 205,
+  "edition": "ဘာဋီ(ဒု)",
+  "sid": "021",
+  "excel_pages": 205,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "021",
+    "name": "ဘာဋီ (ဒု)",
+    "category": "နီ မူဋီ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_bi_01",
+      "maprows": 46,
+      "pali_pages": [
+       59,
+       104
+      ],
+      "nsy_pages": [
+       3,
+       204
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "021",
+   "books": [
+    "tika_bi_01"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 526,
+  "file": "526.json",
+  "sheet": "A17 tika_037_မဟာဇေယျမင်းကျာင်း-",
+  "rows": 625,
+  "edition": "မဟာဇေယျမင်းကျောင်း",
+  "sid": "037",
+  "excel_pages": 625,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "037",
+    "name": "မဟာဇေယျမင်းကျာင်း",
+    "category": "ပါထိက",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_di_03",
+      "maprows": 292,
+      "pali_pages": [
+       1,
+       292
+      ],
+      "nsy_pages": [
+       15,
+       620
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "037",
+   "books": [
+    "tika_di_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 527,
+  "file": "527.json",
+  "sheet": "A18 tika_038_ရှေးမူ-သာရတ္ထဝေရဉ္",
+  "rows": 543,
+  "edition": "ရှေးမူ",
+  "sid": "038",
+  "excel_pages": 543,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "038",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ ဝေရဉ္ဇ (ပ)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_01",
+      "maprows": 160,
+      "pali_pages": [
+       195,
+       354
+      ],
+      "nsy_pages": [
+       11,
+       540
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "038",
+   "books": [
+    "tika_vi_01"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 528,
+  "file": "528.json",
+  "sheet": "A19 tika_039_ရှေးမူ-သာရတ္ထဝေရဉ္",
+  "rows": 345,
+  "edition": "ရှေးမူ",
+  "sid": "039",
+  "excel_pages": 345,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "039",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ ဝေရဉ္ဇ (ဒု)",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_01",
+      "maprows": 106,
+      "pali_pages": [
+       355,
+       460
+      ],
+      "nsy_pages": [
+       4,
+       343
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "039",
+   "books": [
+    "tika_vi_01"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 529,
+  "file": "529.json",
+  "sheet": "A20 tika_040_ရှေးမူ-သာရတ္ထပ+ဒုပ",
+  "rows": 489,
+  "edition": "ရှေးမူ",
+  "sid": "040",
+  "excel_pages": 489,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "040",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ ပ+ဒု ပါရာဇိက",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_02",
+      "maprows": 169,
+      "pali_pages": [
+       1,
+       169
+      ],
+      "nsy_pages": [
+       7,
+       487
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "040",
+   "books": [
+    "tika_vi_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 530,
+  "file": "530.json",
+  "sheet": "A21 tika_041_ရှေးမူ-သာရတ္ထတ+စပါ",
+  "rows": 407,
+  "edition": "ရှေးမူ",
+  "sid": "041",
+  "excel_pages": 407,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "041",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ တ+စ ပါရာဇိက",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_02",
+      "maprows": 130,
+      "pali_pages": [
+       170,
+       299
+      ],
+      "nsy_pages": [
+       5,
+       404
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "041",
+   "books": [
+    "tika_vi_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 531,
+  "file": "531.json",
+  "sheet": "A22 tika_042_ရှေးမူ-သာရတ္ထသံဃာဒ",
+  "rows": 462,
+  "edition": "ရှေးမူ",
+  "sid": "042",
+  "excel_pages": 462,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "042",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ သံဃာဒိသေသာဒိ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_02",
+      "maprows": 149,
+      "pali_pages": [
+       300,
+       448
+      ],
+      "nsy_pages": [
+       5,
+       460
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "042",
+   "books": [
+    "tika_vi_02"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 532,
+  "file": "532.json",
+  "sheet": "A23 tika_043_ရှေးမူ-သာရတ္ထဥဘတော",
+  "rows": 761,
+  "edition": "ရှေးမူ",
+  "sid": "043",
+  "excel_pages": 761,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "043",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ ဥဘတောဝိဘင်္ဂါဒိ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_03",
+      "maprows": 268,
+      "pali_pages": [
+       1,
+       268
+      ],
+      "nsy_pages": [
+       11,
+       759
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "043",
+   "books": [
+    "tika_vi_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 533,
+  "file": "533.json",
+  "sheet": "A24 tika_044_ရှေးမူ-သာရတ္ထမဟာဝဂ",
+  "rows": 602,
+  "edition": "ရှေးမူ",
+  "sid": "044",
+  "excel_pages": 602,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "044",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ မဟာဝဂ္ဂါဒိ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_03",
+      "maprows": 228,
+      "pali_pages": [
+       269,
+       496
+      ],
+      "nsy_pages": [
+       15,
+       597
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "044",
+   "books": [
+    "tika_vi_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 534,
+  "file": "534.json",
+  "sheet": "A25 tika_045_ရှေးမူ-သာရတ္ထဗာဟိရ",
+  "rows": 583,
+  "edition": "ရှေးမူ",
+  "sid": "045",
+  "excel_pages": 583,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "045",
+    "name": "ရှေးမူ",
+    "category": "သာရတ္ထ ဗာဟိရနိဒါန်း",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_vi_01",
+      "maprows": 194,
+      "pali_pages": [
+       1,
+       194
+      ],
+      "nsy_pages": [
+       5,
+       583
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "045",
+   "books": [
+    "tika_vi_01"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 535,
+  "file": "535.json",
+  "sheet": "A26 tika_052_ကြာခံ-ဏီမူဋီ",
+  "rows": 553,
+  "edition": "ကြာခံ",
+  "sid": "052",
+  "excel_pages": 553,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "052",
+    "name": "ကြာခံ",
+    "category": "ဏီ မူဋီ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_bi_01",
+      "maprows": 84,
+      "pali_pages": [
+       1,
+       84
+      ],
+      "nsy_pages": [
+       10,
+       536
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "052",
+   "books": [
+    "tika_bi_01"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 536,
+  "file": "536.json",
+  "sheet": "A27 tika_058_ကြာခံ-ဓာမူဋီ",
+  "rows": 158,
+  "edition": "ကြာခံ",
+  "sid": "058",
+  "excel_pages": 158,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "tika",
+    "nsy_id": "058",
+    "name": "ကြာခံ",
+    "category": "ဓာ မူဋီ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "tika_bi_03",
+      "maprows": 26,
+      "pali_pages": [
+       1,
+       26
+      ],
+      "nsy_pages": [
+       9,
+       155
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "tika",
+   "nsy_id": "058",
+   "books": [
+    "tika_bi_03"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 537,
+  "file": "537.json",
+  "sheet": "A28 annya_012_ဘာသာဋီကာ-သင်္ဂဟ",
+  "rows": 897,
+  "edition": "ဘာသာဋီကာ",
+  "sid": "012",
+  "excel_pages": 897,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "012",
+    "name": "ဘာသာဋီကာ",
+    "category": "သင်္ဂဟ",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_bi_05",
+      "maprows": 167,
+      "pali_pages": [
+       1,
+       167
+      ],
+      "nsy_pages": [
+       0,
+       891
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "012",
+   "books": [
+    "annya_bi_05"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 538,
+  "file": "538.json",
+  "sheet": "A29 annya_018_မေဒိနီ-ဋီကာကျော်",
+  "rows": 284,
+  "edition": "မေဒိနီ",
+  "sid": "018",
+  "excel_pages": 284,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "018",
+    "name": "မေဒိနီ",
+    "category": "ဋီကာကျော်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_bi_06",
+      "maprows": 92,
+      "pali_pages": [
+       69,
+       160
+      ],
+      "nsy_pages": [
+       17,
+       282
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "018",
+   "books": [
+    "annya_bi_06"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 539,
+  "file": "539.json",
+  "sheet": "A30 annya_019_မေဒိနီ-ဋီကာကျော်",
+  "rows": 327,
+  "edition": "မေဒိနီ",
+  "sid": "019",
+  "excel_pages": 327,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "019",
+    "name": "မေဒိနီ",
+    "category": "ဋီကာကျော်",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_bi_06",
+      "maprows": 119,
+      "pali_pages": [
+       161,
+       279
+      ],
+      "nsy_pages": [
+       4,
+       324
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "019",
+   "books": [
+    "annya_bi_06"
+   ]
+  },
+  "check": "db only"
+ },
+ {
+  "n": 540,
+  "file": "540.json",
+  "sheet": "A31 annya_021_အခြေပြု-ကစ္စည်း",
+  "rows": 652,
+  "edition": "အခြေပြု",
+  "sid": "021",
+  "excel_pages": 652,
+  "status": "ok",
+  "cand": [
+   {
+    "db": "annya",
+    "nsy_id": "021",
+    "name": "အခြေပြု",
+    "category": "ကစ္စည်း",
+    "pagecount": null,
+    "pali": [
+     {
+      "book": "annya_sadda_01",
+      "maprows": 316,
+      "pali_pages": [
+       1,
+       315
+      ],
+      "nsy_pages": [
+       0,
+       635
+      ]
+     }
+    ],
+    "score": 5
+   }
+  ],
+  "final": {
+   "mode": "db",
+   "db": "annya",
+   "nsy_id": "021",
+   "books": [
+    "annya_sadda_01"
+   ]
+  },
+  "check": "db only"
  }
 ]
