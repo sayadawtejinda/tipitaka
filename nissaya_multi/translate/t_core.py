@@ -370,6 +370,15 @@ def publish(n, log=print, lang=''):
                     od = json.load(open(fo, encoding='utf-8')) if os.path.exists(fo) else {}
                     same = sum(1 for k, t in pages.items() if od.get(str(k)) == t)
                     if same >= max(1, len(pages) // 2): x['sheet'] = n; v = x; break
+        try:
+            sys.path.insert(0, os.path.join(NSY, 'scripts')); import m_authors; au = (m_authors.author(n) or '').strip()
+        except Exception: au = ''
+        if v is None and au:                                          # an author is given in run_tool: ONE variant ("မြန်မာ k") for one author - every volume (ပ ဒု တ ...) joins it, whether or not the Pali pages overlap; another author = another variant
+            v = next((x for x in vs if x.get('author') == au), None)
+            if v is not None: v['sheets'] = sorted(set((v.get('sheets') or [v.get('sheet')]) + [n]), key=lambda q: (q is None, q)); log('  %s : %s ၏ မူတစ်ခုတည်းထဲ ထည့်သည် (အတွဲ %s)' % (v['file'], au, n))
+            else:
+                v = {'file': (b + '.json') if not vs else '%s__%d.json' % (b, n), 'sheet': n, 'author': au}; vs.append(v)
+                log('  %s : %s ၏ မြန်မာပြန်မူ အသစ်' % (v['file'], au))
         if v is None:                                                 # another VOLUME of the same Pali book (its Pali pages do not overlap with this sheet's): the same file, not a second variant ("မြန်မာ ၂" is for another EDITION of the same pages)
             for x in vs:
                 fo = os.path.join(WEBDIR, x['file']); od = json.load(open(fo, encoding='utf-8')) if os.path.exists(fo) else {}
