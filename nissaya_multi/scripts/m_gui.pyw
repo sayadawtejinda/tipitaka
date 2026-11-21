@@ -10,7 +10,7 @@ class _NoWinPopen(subprocess.Popen):
         if os.name == 'nt': k.setdefault('creationflags', 0x08000000)
         super().__init__(*a, **k)
 subprocess.Popen = _NoWinPopen
-import m_tool, m_bundle, m_gcheck
+import m_tool, m_bundle, m_gcheck, m_authors
 
 root = tk.Tk(); root.title('နိဿယ ပြင်ဆင်ကိရိယာ'); root.geometry('1000x860')
 import json as _jj
@@ -26,7 +26,7 @@ def _db_agree():          # sheets whose database book name AND page content agr
     try: return {r['n'] for r in _jj.load(open(os.path.join(ROOT, 'catalog.json'), encoding='utf-8')) if (r.get('check') or '').startswith('db+content agree')}
     except Exception: return set()
 def visible_sheets(hide=None, keep=None, only_db=None):
-    allb = m_tool.list_sheets()
+    allb = [(n, ('⏸ ' if m_authors.on_hold(n) else '') + t) for n, t in m_tool.list_sheets()]          # ⏸ = Gemini done, author not known yet, kept off the web
     if (_only_db_on() if only_db is None else only_db):
         ok = _db_agree(); allb = [(n, t) for n, t in allb if n == keep or n in ok]
     if hide is None: hide = _hide_on()
@@ -71,10 +71,12 @@ def show_book(*_):
     if cb.current() < 0: cur_lbl.config(text='⚠ စာအုပ် မရွေးရသေးပါ', fg='#b00020'); return
     _t = ' '.join(str(sheets[cb.current()][1]).split()); _t = (_t[:32] + '…') if len(_t) > 32 else _t       # one short line only (a long / multi-line sheet name used to take the whole right half of the window)
     cur_lbl.config(text='● ' + _t, fg='#1b5e20')
+    if '_load_author' in globals(): _load_author()
     root.after(300, lambda: threading.Thread(target=_auto_missing, args=(sheets[cb.current()][0],), daemon=True).start())     # the chosen book: pages nobody has sent to Gemini yet get their file by themselves
     try: _j.dump({'sheet': sheets[cb.current()][0], 'hide_pub': bool(hidepub.get()), 'only_db': bool(onlydb.get())}, open(STATE, 'w', encoding='utf-8'))
     except Exception: pass
 cb.bind('<<ComboboxSelected>>', show_book); show_book()
+root.after(100, lambda: _load_author() if '_load_author' in globals() else None)
 ttk.Label(f, text='Google Sheet မှ download လုပ်ထားသော .xlsx').grid(row=1, column=0, sticky='w')
 xl = ttk.Entry(f); xl.grid(row=1, column=1, columnspan=3, sticky='we'); xl.insert(0, newest_xlsx())
 ttk.Button(f, text='ရွေးမည်...', command=lambda: (lambda p: p and (xl.delete(0, 'end'), xl.insert(0, p)))(filedialog.askopenfilename(initialdir=TIPI, filetypes=[('Excel', '*.xlsx')]))).grid(row=1, column=4)
@@ -122,6 +124,30 @@ autopub = tk.BooleanVar(value=True)
 ttk.Checkbutton(g4, text='စာအုပ်တစ်အုပ်လုံး ပြီးလျှင် အလိုအလျောက် တင်', variable=autopub).pack(side='left', padx=3)
 _pub_lock = threading.Lock()
 ttk.Label(g4, text='စာအုပ်ကို အပေါ်မှ ရွေးပြီး နှိပ်ပါ - အတည်ပြုမေးပြီးမှ တင်သည်').pack(side='left', padx=8)
+g45 = group('ဆရာတော်နာမည် (ကျမ်းရေးသူ)  —  web ခလုပ်မှာ ပေါ်မည့် အတိုခေါက်အမည်')
+ttk.Label(g45, text='အမည်').pack(side='left'); au_e = ttk.Entry(g45, width=18); au_e.pack(side='left', padx=3)
+hold = tk.BooleanVar(value=False)
+ttk.Checkbutton(g45, text='ဆရာတော်မသိသေး - web မတင်သေးဘူး (⏸)', variable=hold).pack(side='left', padx=3)
+bau = ttk.Button(g45, text='💾 မှတ်ထား'); bau.pack(side='left', padx=3)
+bhl = ttk.Button(g45, text='⏸ မတင်ဘဲ ထားသော စာအုပ်များ ပြ'); bhl.pack(side='left', padx=3)
+def _load_author(*_):
+    if cb.current() < 0: au_e.delete(0, 'end'); hold.set(False); return
+    n = sheets[cb.current()][0]; au_e.delete(0, 'end'); au_e.insert(0, m_authors.author(n)); hold.set(m_authors.on_hold(n))
+def _save_author():
+    if cb.current() < 0: messagebox.showinfo('နိဿယ', 'စာအုပ် အရင်ရွေးပါ'); return
+    n = sheets[cb.current()][0]; m_authors.save(n, au_e.get(), hold.get()); say('  💾 စာအုပ် %03d: ဆရာတော် "%s"%s' % (n, m_authors.author(n), ' · ⏸ web မတင်သေး' if hold.get() else ''))
+    refresh_books(n)
+def _show_held():
+    held = [(n, t) for n, t in visible_sheets(False, None, False) if m_authors.on_hold(n)]
+    w = tk.Toplevel(root); w.title('ဆရာတော်မသိသေး၍ web မတင်သေးသော စာအုပ်များ'); w.geometry('640x360')
+    if not held: tk.Label(w, text='ခွဲမှတ်ထားတဲ့ စာအုပ် မရှိသေးပါ').pack(pady=20); return
+    lb = tk.Listbox(w, font=('', 11)); lb.pack(fill='both', expand=True, padx=8, pady=8)
+    for n, t in held: lb.insert('end', t + ('   ✔ Gemini ပြီး' if m_status.gemini_done(n) else '   … Gemini မပြီးသေး'))
+    def pick(*_):
+        if not lb.curselection(): return
+        n = held[lb.curselection()[0]][0]; w.destroy(); refresh_books(n)
+    lb.bind('<Double-Button-1>', pick); ttk.Button(w, text='ဒီစာအုပ်ကို ရွေး', command=pick).pack(pady=4)
+bau.config(command=_save_author); bhl.config(command=_show_held)
 g5 = group('၅။ စာအုပ်အသစ်များ  (နိဿယပေါင်းစုံ.xlsx ထဲက စာအုပ်တွေ ကုန်သွားလျှင် - တခြား .xlsx ဖိုင်)')
 b12 = ttk.Button(g5, text='➕ တခြား xlsx ဖိုင်ထဲက စာအုပ်အသစ်များ ထည့်'); b12.pack(side='left', padx=3)
 ttk.Label(g5, text='ရှိပြီးသား စာအုပ်ကို မထိ၊ sheet အသစ်ကိုပဲ ယူပြီး စာအုပ်စာရင်းထဲ ထည့်သည်').pack(side='left', padx=8)
@@ -286,6 +312,8 @@ def work10(n):
 def go10():
     name = cb.get(); nl = chr(10)
     msg = 'ရွေးထားသော စာအုပ်:' + nl + name + nl * 2 + 'web ဖိုင် ပြန်ထုတ်ပြီး GitHub (sayadawtejinda/tipitaka) သို့ တင်မည်။' + nl + 'ဆိုက်ပေါ် ပြောင်းလဲမည် - တင်မလား?'
+    _n = sel()
+    if m_authors.on_hold(_n): msg = '⏸ ဒီစာအုပ်ကို ဆရာတော်မသိသေးလို့ ခွဲမှတ်ထားသည်။' + nl + 'ဆရာတော်နာမည် မထည့်ရသေးရင် ခလုပ်မှာ စာအုပ်အမည်အရှည် ပေါ်နေမည်။' + nl * 2 + msg
     if not messagebox.askyesno('web သို့ တင်မည်', msg): return
     b10.config(state='disabled'); say('web သို့ တင်နေသည်... (၂-၃ မိနစ်)')
     threading.Thread(target=work10, args=(sel(),), daemon=True).start()
@@ -381,6 +409,7 @@ def _auto_publish(n):
     try:
         if m_gcheck.make_missing(n, say): return          # pages nobody has sent yet get their own file first (the book is not finished, nothing is published)
     except BaseException as e: say('  ⚠ မစစ်ရသေးသော စာမျက်နှာ ဖိုင်ထုတ်ရာ အမှား: %r' % e)
+    if m_authors.on_hold(n): say('  ⏸ စာအုပ် %03d — ဆရာတော်မသိသေးလို့ ခွဲမှတ်ထားသည်၊ web မတင်သေးပါ' % n); return
     left = glob.glob(os.path.join(ROOT, 'output', 'gemini', '%03d_*.txt' % n))
     if left: say('  (စာအုပ် %03d — Gemini ဖိုင် %d ခု ကျန်သေး၊ အားလုံးပြီးမှ web တင်မည်)' % (n, len(left))); return
     if not autopub.get(): say('  (စာအုပ် %03d အားလုံးပြီးပြီ - အလိုအလျောက် web တင်ခြင်း ပိတ်ထားသည်၊ ကိုယ်တိုင် တင်ပါ)' % n); return

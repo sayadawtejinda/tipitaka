@@ -72,7 +72,9 @@ def _put_one(n, meta, dry, log):
             import m_edpages; ent['pg'] = m_edpages.page_ranges(open(src, encoding='utf-8').read())          # only pages that really have text (a button on an empty page is wrong)
         except Exception: pass
     except Exception: pass
-    ent['label'] = nice_label(edition)
+    try:
+        import m_authors; ent['label'] = m_authors.label(n, edition) or nice_label(edition)          # an author given in run_tool: '<author> (<volume>)'
+    except Exception: ent['label'] = nice_label(edition)
     lst.append(ent)
     editions[book] = lst
     json.dump(editions, open(ep, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
