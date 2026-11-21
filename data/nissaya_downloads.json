@@ -109,6 +109,17 @@
    "edition_of": "mula_vi_03"
   },
   {
+   "id": "mula_vi_03_sheet007",
+   "title": "မဟာဝဂ္ဂပါဠိ (ဝေယံဘုံသာမူ (ဒု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 2885715,
+   "date": "2026-11-20",
+   "edition_of": "mula_vi_03"
+  },
+  {
    "id": "mula_vi_04",
    "title": "စူဠဝဂ္ဂပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3787,5 +3798,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 254
+ "n_editions": 255
 }
