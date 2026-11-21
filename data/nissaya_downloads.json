@@ -564,6 +564,17 @@
    "date": "2026-10-09"
   },
   {
+   "id": "mula_an_05_sheet033",
+   "title": "ပဉ္စကနိပါတပါဠိ (ဦးပညိဿရမူ (တ))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 4195093,
+   "date": "2026-11-21",
+   "edition_of": "mula_an_05"
+  },
+  {
    "id": "mula_an_06",
    "title": "ဆက္ကနိပါတပါဠိ",
    "basket": "ပါဠိတော်",
@@ -572,6 +583,17 @@
    "cat_key": "an",
    "size": 2514711,
    "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_06_sheet033",
+   "title": "ဆက္ကနိပါတပါဠိ (ဦးပညိဿရမူ (တ))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 2673819,
+   "date": "2026-11-21",
+   "edition_of": "mula_an_06"
   },
   {
    "id": "mula_an_07",
@@ -3534,5 +3556,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 231
+ "n_editions": 233
 }
