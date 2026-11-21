@@ -2044,6 +2044,22 @@ let isRomanPali = false;
 
     return str;
   }
+  // Burmese names of books / groups for the Tiếng Việt / English reader: fixed Roman Pāḷi names for the known groups, volume letters (ပ ဒု တ ...) as numbers, words of the title separated;
+  //   a Burmese word ending in ယ် is ...ya (nikāya), not ...y
+  const TP_NAME_FIX = {"ပါဠိတော်": ["Pāḷi", "Pāḷi"], "အဋ္ဌကထာ": ["Aṭṭhakathā", "Aṭṭhakathā"], "ဋီကာ": ["Ṭīkā", "Ṭīkā"], "အည": ["Khác", "Others"],
+    "ဝိနည်းပိဋက": ["Vinaya Piṭaka", "Vinaya Piṭaka"], "ဒီဃနိကာယ်": ["Dīgha Nikāya", "Dīgha Nikāya"], "မဇ္ဈိမနိကာယ်": ["Majjhima Nikāya", "Majjhima Nikāya"], "သံယုတ်နိကာယ်": ["Saṃyutta Nikāya", "Saṃyutta Nikāya"],
+    "အင်္ဂုတ္တိုရ်နိကာယ်": ["Aṅguttara Nikāya", "Aṅguttara Nikāya"], "ခုဒ္ဒကနိကာယ်": ["Khuddaka Nikāya", "Khuddaka Nikāya"], "အဘိဓမ္မာပိဋက": ["Abhidhamma Piṭaka", "Abhidhamma Piṭaka"],
+    "ဝိနည်းဆိုင်ရာ": ["Liên quan Luật", "Vinaya-related"], "အဘိဓမ္မာဆိုင်ရာ": ["Liên quan Vi Diệu Pháp", "Abhidhamma-related"], "သဒ္ဒါဆိုင်ရာ": ["Ngữ pháp", "Grammar"]};
+  const TP_VOL = {"ပ": 1, "ဒု": 2, "တ": 3, "စ": 4, "ပဉ္စ": 5, "ဆ": 6, "သတ္တ": 7, "အ": 8, "န": 9};
+  function tpRomanName(text){
+    const t = String(text == null ? "" : text).trim(); if(!t) return "";
+    const f = TP_NAME_FIX[t]; if(f) return f[trUi === "vi" ? 0 : 1];
+    const vi = trUi === "vi";
+    let s = t.replace(/\s*\(သုတ်\)\s*$/, " (sutta)").replace(/\s*\(([က-အ္ဥ-ဿ]+)\)\s*$/, (m, v) => TP_VOL[v] ? " (" + (vi ? "tập " : "vol. ") + TP_VOL[v] + ")" : m);
+    s = s.replace(/(အဋ္ဌကထာ|ပါဠိ|ဋီကာ|နိသျ|နိဿယ)/g, " $1").replace(/ယ်/g, "ယ").replace(/^\s+/, "");
+    s = myanmarToRoman(s.replace(/[၀-၉]/g, c => "၀၁၂၃၄၅၆၇၈၉".indexOf(c))).replace(/\s+/g, " ").trim();
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
   function setFloatSearchVisible(visible){
     const btn = document.getElementById("tp-float-search-toggle"); if(!btn) return;
     btn.style.display = visible ? "block" : "none";
@@ -2960,10 +2976,10 @@ let isRomanPali = false;
     const unit = n => lang === "vi" ? `${n} sách` : (n === 1 ? "1 book" : `${n} books`);      // số sách / number of books
     Object.keys(idx.basket_labels).forEach(bs => {
       const bb = books.filter(b => b.basket === bs); if(!bb.length) return;
-      html += `<h3 style="margin:18px 4px 4px;color:#5a3d1e">${esc2(myanmarToRoman(idx.basket_labels[bs]))} <span style="font-weight:normal;font-size:.8em;color:#8a6a3a">· ${unit(bb.length)}</span></h3>`;
+      html += `<h3 style="margin:18px 4px 4px;color:#5a3d1e">${esc2(tpRomanName(idx.basket_labels[bs]))} <span style="font-weight:normal;font-size:.8em;color:#8a6a3a">· ${unit(bb.length)}</span></h3>`;
       [...new Set(bb.map(b => b.category))].forEach(cat => {      // each nikāya (category) of the basket on its own, with its number of books
         const cb = bb.filter(b => b.category === cat);
-        html += `<h4 style="margin:10px 6px 4px;color:#7a5a2e">${esc2(myanmarToRoman((idx.category_labels && idx.category_labels[cat]) || cat))} <span style="font-weight:normal;font-size:.85em;color:#8a6a3a">· ${unit(cb.length)}</span></h4><div class="tp-grid">${cb.map(b => `<div class="tp-card" data-trbook="${b.id}">${esc2(myanmarToRoman(b.name))}<span class="tp-count">${b.pagecount} ${lang === "vi" ? "trang" : "pages"}</span></div>`).join("")}</div>`;
+        html += `<h4 style="margin:10px 6px 4px;color:#7a5a2e">${esc2(tpRomanName((idx.category_labels && idx.category_labels[cat]) || cat))} <span style="font-weight:normal;font-size:.85em;color:#8a6a3a">· ${unit(cb.length)}</span></h4><div class="tp-grid">${cb.map(b => `<div class="tp-card" data-trbook="${b.id}">${esc2(tpRomanName(b.name))}<span class="tp-count">${b.pagecount} ${lang === "vi" ? "trang" : "pages"}</span></div>`).join("")}</div>`;
       });
     });
     document.getElementById("tp-view").innerHTML = html || `<p style="color:#888;padding:16px">${lang === "vi" ? "Chưa có sách nào được dịch sang tiếng Việt." : "No book has been translated into English yet."}</p>`;
@@ -3006,7 +3022,7 @@ let isRomanPali = false;
     const t = str.trim(); if(!/[က-႟]/.test(t)) return str;
     const e = TP_UI[t]; if(e) return str.replace(t, e[trUi === "vi" ? 0 : 1]);
     const pm = t.match(/^စာပိုဒ်\s*-\s*([၀-၉0-9]+)$/); if(pm) return str.replace(t, (trUi === "vi" ? "Đoạn - " : "Paragraph - ") + pm[1].replace(/[၀-၉]/g, c => TP_MYD.indexOf(c)));
-    return myanmarToRoman(str.replace(/[၀-၉]/g, c => TP_MYD.indexOf(c)));
+    return tpRomanName(str);
   }
   function tpUiRun(root){
     if(trUi === "my" || !root) return;
@@ -3852,7 +3868,7 @@ function tp_edLabel(l){
         }catch(e){ mmCrumbs = null; }
       }
       if(!mmCrumbs && isNissayaOpen && nisViaList) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"နိဿယများ", onclick:(e)=>{e.preventDefault(); showNissayaCategories();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showNissayaSubjects(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showNissayaBooks(basketId, categoryId);}}, {label: bookMeta.name || bookId}];     // နိဿယများ စာရင်းကနေ ဖွင့်ထားလျှင် လမ်းကြောင်းကို နိဿယများအတိုင်းပဲ ထား
-      if(!mmCrumbs && isMmSplitOpen && mmGemini && trUi !== "my"){ const _bk = idx.books.find(x => x.id === bookId); mmCrumbs = [{label:"Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: TR_LANG_NAME[trUi], onclick:(e)=>{e.preventDefault(); showTrLangBooks(trUi);}}, {label: myanmarToRoman(_bk ? _bk.name : bookId)}]; }
+      if(!mmCrumbs && isMmSplitOpen && mmGemini && trUi !== "my"){ const _bk = idx.books.find(x => x.id === bookId); mmCrumbs = [{label:"Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: TR_LANG_NAME[trUi], onclick:(e)=>{e.preventDefault(); showTrLangBooks(trUi);}}, {label: tpRomanName(_bk ? _bk.name : bookId)}]; }
       if(!mmCrumbs && isMmSplitOpen && mmGemini) mmCrumbs = [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = mmGemini = false; showMmCategories();}}, {label:"Gemini မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); isNissayaOpen = isMmSplitOpen = mmViaMm = mmGemini = false; showMmGeminiBooks();}}, {label: bookMeta.name || bookId}];
       renderBreadcrumb(mmCrumbs || [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: idx.basket_labels[basketId] || basketId, onclick:(e)=>{e.preventDefault(); showCategories(basketId);}}, {label: idx.category_labels[categoryId] || categoryId, onclick:(e)=>{e.preventDefault(); showBookList(basketId, categoryId);}}, {label: bookMeta.name || bookId}]);
       if(!row){ document.getElementById("tp-view").innerHTML = `<p>ဒီစာမျက်နှာ (${pageNum}) မတွေ့ပါ။</p>`; return; }
