@@ -205,6 +205,17 @@
    "edition_of": "mula_di_01"
   },
   {
+   "id": "mula_di_01_sheet014",
+   "title": "သီလက္ခန္ဓဝဂ္ဂပါဠိ (နေရင်းမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3485840,
+   "date": "2026-11-20",
+   "edition_of": "mula_di_01"
+  },
+  {
    "id": "mula_di_02",
    "title": "မဟာဝဂ္ဂပါဠိ(သုတ်)",
    "basket": "ပါဠိတော်",
@@ -3776,5 +3787,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 253
+ "n_editions": 254
 }
