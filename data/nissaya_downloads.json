@@ -281,6 +281,17 @@
    "edition_of": "mula_di_02"
   },
   {
+   "id": "mula_di_02_sheet018",
+   "title": "မဟာဝဂ္ဂပါဠိ(သုတ်) (နေရင်းမူ (ဒု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 1912514,
+   "date": "2026-11-20",
+   "edition_of": "mula_di_02"
+  },
+  {
    "id": "mula_di_03",
    "title": "ပါထိကဝဂ္ဂပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3820,5 +3831,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 257
+ "n_editions": 258
 }
