@@ -127,7 +127,7 @@ ttk.Label(g4, text='စာအုပ်ကို အပေါ်မှ ရွေ�
 g45 = group('ဆရာတော်နာမည် (ကျမ်းရေးသူ)  —  web ခလုပ်မှာ ပေါ်မည့် အတိုခေါက်အမည်')
 ttk.Label(g45, text='အမည်').pack(side='left'); au_e = ttk.Entry(g45, width=18); au_e.pack(side='left', padx=3)
 hold = tk.BooleanVar(value=False)
-ttk.Checkbutton(g45, text='ဆရာတော်မသိသေး - web မတင်သေးဘူး (⏸)', variable=hold).pack(side='left', padx=3)
+ttk.Checkbutton(g45, text='ကိုယ်တိုင် ခဏဆိုင်းမည် (⏸)', variable=hold).pack(side='left', padx=3)
 bau = ttk.Button(g45, text='💾 မှတ်ထား'); bau.pack(side='left', padx=3)
 bhl = ttk.Button(g45, text='⏸ မတင်ဘဲ ထားသော စာအုပ်များ ပြ'); bhl.pack(side='left', padx=3)
 def _load_author(*_):
@@ -135,14 +135,14 @@ def _load_author(*_):
     n = sheets[cb.current()][0]; au_e.delete(0, 'end'); au_e.insert(0, m_authors.author(n)); hold.set(m_authors.on_hold(n))
 def _save_author():
     if cb.current() < 0: messagebox.showinfo('နိဿယ', 'စာအုပ် အရင်ရွေးပါ'); return
-    n = sheets[cb.current()][0]; m_authors.save(n, au_e.get(), hold.get()); say('  💾 စာအုပ် %03d: ဆရာတော် "%s"%s' % (n, m_authors.author(n), ' · ⏸ web မတင်သေး' if hold.get() else ''))
+    n = sheets[cb.current()][0]; m_authors.save(n, au_e.get(), hold.get()); _r = m_authors.hold_reason(n); say('  💾 စာအုပ် %03d: ဆရာတော် "%s"%s' % (n, m_authors.author(n), (' · ⏸ ' + _r) if _r else ' · ✔ အလိုအလျောက်တင်နိုင်ပြီ (web ကြိုကြည့်ပြီး ▲ နှိပ်ပါ)'))
     refresh_books(n)
 def _show_held():
     held = [(n, t) for n, t in visible_sheets(False, None, False) if m_authors.on_hold(n)]
-    w = tk.Toplevel(root); w.title('ဆရာတော်မသိသေး၍ web မတင်သေးသော စာအုပ်များ'); w.geometry('640x360')
+    w = tk.Toplevel(root); w.title('web မတင်ဘဲ ဆိုင်းထားသော စာအုပ်များ (ဆရာတော်/map မသိ)'); w.geometry('900x420')
     if not held: tk.Label(w, text='ခွဲမှတ်ထားတဲ့ စာအုပ် မရှိသေးပါ').pack(pady=20); return
     lb = tk.Listbox(w, font=('', 11)); lb.pack(fill='both', expand=True, padx=8, pady=8)
-    for n, t in held: lb.insert('end', t + ('   ✔ Gemini ပြီး' if m_status.gemini_done(n) else '   … Gemini မပြီးသေး'))
+    for n, t in held: lb.insert('end', t + ('   ✔ Gemini ပြီး' if m_status.gemini_done(n) else '   … Gemini မပြီးသေး') + '   [' + m_authors.hold_reason(n) + ']')
     def pick(*_):
         if not lb.curselection(): return
         n = held[lb.curselection()[0]][0]; w.destroy(); refresh_books(n)
@@ -313,7 +313,7 @@ def go10():
     name = cb.get(); nl = chr(10)
     msg = 'ရွေးထားသော စာအုပ်:' + nl + name + nl * 2 + 'web ဖိုင် ပြန်ထုတ်ပြီး GitHub (sayadawtejinda/tipitaka) သို့ တင်မည်။' + nl + 'ဆိုက်ပေါ် ပြောင်းလဲမည် - တင်မလား?'
     _n = sel()
-    if m_authors.on_hold(_n): msg = '⏸ ဒီစာအုပ်ကို ဆရာတော်မသိသေးလို့ ခွဲမှတ်ထားသည်။' + nl + 'ဆရာတော်နာမည် မထည့်ရသေးရင် ခလုပ်မှာ စာအုပ်အမည်အရှည် ပေါ်နေမည်။' + nl * 2 + msg
+    if m_authors.on_hold(_n): msg = '⏸ ဒီစာအုပ် ဆိုင်းထားသည်: ' + m_authors.hold_reason(_n) + nl + '(ဆရာတော်နာမည် မထည့်ရသေးရင် ခလုပ်မှာ စာအုပ်အမည်အရှည် ပေါ်နိုင်သည်)' + nl * 2 + msg
     if not messagebox.askyesno('web သို့ တင်မည်', msg): return
     b10.config(state='disabled'); say('web သို့ တင်နေသည်... (၂-၃ မိနစ်)')
     threading.Thread(target=work10, args=(sel(),), daemon=True).start()
@@ -409,7 +409,7 @@ def _auto_publish(n):
     try:
         if m_gcheck.make_missing(n, say): return          # pages nobody has sent yet get their own file first (the book is not finished, nothing is published)
     except BaseException as e: say('  ⚠ မစစ်ရသေးသော စာမျက်နှာ ဖိုင်ထုတ်ရာ အမှား: %r' % e)
-    if m_authors.on_hold(n): say('  ⏸ စာအုပ် %03d — ဆရာတော်မသိသေးလို့ ခွဲမှတ်ထားသည်၊ web မတင်သေးပါ' % n); return
+    if m_authors.on_hold(n): say('  ⏸ စာအုပ် %03d — web မတင်သေးပါ (%s)' % (n, m_authors.hold_reason(n))); return
     left = glob.glob(os.path.join(ROOT, 'output', 'gemini', '%03d_*.txt' % n))
     if left: say('  (စာအုပ် %03d — Gemini ဖိုင် %d ခု ကျန်သေး၊ အားလုံးပြီးမှ web တင်မည်)' % (n, len(left))); return
     if not autopub.get(): say('  (စာအုပ် %03d အားလုံးပြီးပြီ - အလိုအလျောက် web တင်ခြင်း ပိတ်ထားသည်၊ ကိုယ်တိုင် တင်ပါ)' % n); return
