@@ -313,6 +313,17 @@
    "edition_of": "mula_di_03"
   },
   {
+   "id": "mula_di_03_sheet022",
+   "title": "ပါထိကဝဂ္ဂပါဠိ (နေရင်းမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 3692197,
+   "date": "2026-11-20",
+   "edition_of": "mula_di_03"
+  },
+  {
    "id": "mula_ma_01",
    "title": "မူလပဏ္ဏာသပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3402,5 +3413,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 219
+ "n_editions": 220
 }
