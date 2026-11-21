@@ -1017,6 +1017,17 @@
    "edition_of": "mula_ku_14"
   },
   {
+   "id": "mula_ku_14_sheet051",
+   "title": "ဇာတကပါဠိ (ပ) (ညောင်ကန်မူ (ဒု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2378050,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_14"
+  },
+  {
    "id": "mula_ku_15",
    "title": "ဇာတကပါဠိ (ဒု)",
    "basket": "ပါဠိတော်",
@@ -3710,5 +3721,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 247
+ "n_editions": 248
 }
