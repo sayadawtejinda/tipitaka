@@ -152,6 +152,17 @@
    "edition_of": "mula_vi_04"
   },
   {
+   "id": "mula_vi_04_sheet009",
+   "title": "စူဠဝဂ္ဂပါဠိ (စံကျောင်းမူ (ပ))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 3329642,
+   "date": "2026-11-20",
+   "edition_of": "mula_vi_04"
+  },
+  {
    "id": "mula_vi_05",
    "title": "ပရိဝါရပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3809,5 +3820,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 256
+ "n_editions": 257
 }
