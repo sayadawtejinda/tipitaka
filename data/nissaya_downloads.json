@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-20",
+ "generated": "2026-11-21",
  "books": [
   {
    "id": "mula_vi_01",
@@ -551,6 +551,17 @@
    "date": "2026-10-09"
   },
   {
+   "id": "mula_an_07_sheet034",
+   "title": "သတ္တကနိပါတပါဠိ (ဦးပညိဿရမူ (စ))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 2483253,
+   "date": "2026-11-21",
+   "edition_of": "mula_an_07"
+  },
+  {
    "id": "mula_an_08",
    "title": "အဋ္ဌကနိပါတပါဠိ",
    "basket": "ပါဠိတော်",
@@ -559,6 +570,17 @@
    "cat_key": "an",
    "size": 2598107,
    "date": "2026-10-09"
+  },
+  {
+   "id": "mula_an_08_sheet034",
+   "title": "အဋ္ဌကနိပါတပါဠိ (ဦးပညိဿရမူ (စ))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 3169711,
+   "date": "2026-11-21",
+   "edition_of": "mula_an_08"
   },
   {
    "id": "mula_an_09",
@@ -3424,5 +3446,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 221
+ "n_editions": 223
 }
