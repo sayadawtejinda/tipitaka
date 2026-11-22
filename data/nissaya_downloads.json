@@ -1092,6 +1092,17 @@
    "edition_of": "mula_ku_16"
   },
   {
+   "id": "mula_ku_16_sheet055",
+   "title": "မဟာနိဒ္ဒေသပါဠိ (မိုးထိမူ (ဒု))",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3837896,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_16"
+  },
+  {
    "id": "mula_ku_17",
    "title": "စူဠနိဒ္ဒေသပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3787,5 +3798,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 254
+ "n_editions": 255
 }
