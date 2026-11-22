@@ -2771,6 +2771,17 @@
    "edition_of": "attha_ku_zat_04"
   },
   {
+   "id": "attha_ku_zat_05_sheet513",
+   "title": "ဇာတကအဋ္ဌကထာ (ပဉ္စ) (နပသ)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4048075,
+   "date": "2026-11-21",
+   "edition_of": "attha_ku_zat_05"
+  },
+  {
    "id": "attha_ku_zat_06_sheet151",
    "title": "ဇာတကအဋ္ဌကထာ (ဆ) (ဒန့်တိုင်)",
    "basket": "အဋ္ဌကထာ",
@@ -3831,5 +3842,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 258
+ "n_editions": 259
 }
