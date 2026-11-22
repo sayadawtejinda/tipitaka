@@ -147,13 +147,6 @@
    "pg": "122-338"
   },
   {
-   "label": "နေရင်းမူ (ပ)",
-   "file": "attha_di_01_sheet099",
-   "from": 1,
-   "to": 121,
-   "pg": "1-121"
-  },
-  {
    "label": "ဘာဋီမူ (ပ)",
    "file": "attha_di_01_sheet101",
    "from": 1,
@@ -184,6 +177,13 @@
   {
    "label": "ပခုက္ကူမူ (ပ)",
    "file": "attha_di_01_sheet097",
+   "from": 1,
+   "to": 121,
+   "pg": "1-121"
+  },
+  {
+   "label": "နေရင်းမူ (ပ)",
+   "file": "attha_di_01_sheet099",
    "from": 1,
    "to": 121,
    "pg": "1-121"
