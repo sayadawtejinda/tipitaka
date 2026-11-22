@@ -3610,17 +3610,6 @@
    "edition_of": "annya_bi_05"
   },
   {
-   "id": "annya_sadda_01_sheet356",
-   "title": "ကစ္စာယနဗျာကရဏံ (ဘာသာဋီကာမူ (ဒု))",
-   "basket": "အည",
-   "basket_key": "annya",
-   "category": "သဒ္ဒါဆိုင်ရာ",
-   "cat_key": "sadda",
-   "size": 4268520,
-   "date": "2026-11-18",
-   "edition_of": "annya_sadda_01"
-  },
-  {
    "id": "annya_sadda_01_sheet355",
    "title": "ကစ္စာယနဗျာကရဏံ (ဘာသာဋီကာမူ (ပ))",
    "basket": "အည",
@@ -3628,6 +3617,17 @@
    "category": "သဒ္ဒါဆိုင်ရာ",
    "cat_key": "sadda",
    "size": 4286472,
+   "date": "2026-11-21",
+   "edition_of": "annya_sadda_01"
+  },
+  {
+   "id": "annya_sadda_01_sheet356",
+   "title": "ကစ္စာယနဗျာကရဏံ (ဘာသာဋီကာမူ (ဒု))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "သဒ္ဒါဆိုင်ရာ",
+   "cat_key": "sadda",
+   "size": 4270529,
    "date": "2026-11-21",
    "edition_of": "annya_sadda_01"
   },
