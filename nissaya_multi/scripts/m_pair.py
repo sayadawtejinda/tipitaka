@@ -238,6 +238,33 @@ def _evidence(t, vocab, fidx, cache):
     return len(re.findall('[က-အ]', t)) >= 3 and '္' in t                  # ဥဒ္ဒိဿေထ: Pali in form even when the spelling is not known
 
 
+def _eq_info(bz, vocab, fidx, cache):
+    """'=' style nissaya (ပါဠိ=အနက်၊): returns (head spans, gloss ranges).  The head of a unit = the run of Pali words standing right before its '=' (after the last ၊ ။ or after the gloss of the
+    unit before: '(ဟောတိ=ဖြစ်၏) အယံ=...' -> အယံ);  the gloss = from the '=' to the next ၊ ။ or to the head of the next unit.  Gloss words are never bold."""
+    eqs = [m.start() for m in re.finditer('=', bz)]
+    heads = []; gl = []; hstart = []
+    for k, pos in enumerate(eqs):
+        prev = eqs[k - 1] + 1 if k else 0
+        seg = bz[prev:pos]; cut = max(seg.rfind('၊'), seg.rfind('။'))
+        rs = prev + cut + 1 if cut >= 0 else prev
+        toks = [(mm.start() + rs, mm.end() + rs, canon(re.sub('[' + ZW + ']', '', mm.group()))) for mm in TOK.finditer(bz[rs:pos])]
+        run = []; nxt_s = pos
+        for s_, e_, t in reversed(toks):
+            if re.search('[)\]）]', bz[e_:nxt_s]): break                                   # a closing bracket: the words before it are the gloss of the unit before
+            if t in AMBIG_BURMESE or t in ('သော', 'ဟု', 'ဟူ', 'ပေ', 'ကို'): break
+            if not (t == 'ဝါ' or _evidence(t, vocab, fidx, cache) or (t in vocab and len(t) >= 1)): break
+            run.append((s_, e_)); nxt_s = s_
+        if not run and (cut >= 0 or prev == 0) and 1 <= len(toks) <= 3 and not any(t in AMBIG_BURMESE or t in ('သော', 'ဟု', 'ဟူ', 'ပေ', 'ကို') or any(t.endswith(x) and len(t) > len(x) + 2 for x in ('သည်', 'ကို', 'တို့', 'ဖြင့်', 'နှင့်', 'အလို', 'သော', 'ကား', 'အား', 'တည်း', 'ပင်')) for _, _, t in toks):
+            run = [(s_, e_) for s_, e_, t in reversed(toks)]                          # right after a ၊ ။ and before '=': it is a Pali head even when its spelling is not known
+        run.reverse(); heads += [list(x) for x in run]; hstart.append(run[0][0] if run else pos)
+    for k, pos in enumerate(eqs):
+        nxt = [m.start() for m in re.finditer('[၊။]', bz[pos + 1:])][:1]
+        end = pos + 1 + nxt[0] if nxt else len(bz)
+        if k + 1 < len(eqs): end = min(end, hstart[k + 1])
+        gl.append((pos + 1, end))
+    return heads, gl
+
+
 def pali_spans(body, vocab, fidx, cache):
     """character spans [start, end) of the Pali words inside one cleaned nissaya page (shown in bold).
     nissaya form:   Pali words ၊ Burmese gloss ။     - ONLY the Pali part (before the ၊) is bold, never the Burmese gloss (ဘိက္ခုနိယာ၊ ဘိက္ခုနီ၏။ - the second word is Burmese).
@@ -280,6 +307,10 @@ def pali_spans(body, vocab, fidx, cache):
                     for s_, e_, t in use: spans.append([s_, e_])
             state = 'head'
         if m: start = m.end()
+    gl = []
+    if bz.count('=') >= 3:                                                  # '=' style (Pali=gloss၊): ONLY the Pali head before '=' is bold, never the gloss after it
+        heads, gl = _eq_info(bz, vocab, fidx, cache)
+        spans = [sp for sp in spans if not any(a <= sp[0] < b for a, b in gl)] + heads
     spans.sort(); merged = []
     for s, e in spans:
         if merged and KEEP_GAP.match(bz[merged[-1][1]:s]) and '။' not in bz[merged[-1][1]:s] and '၊' not in bz[merged[-1][1]:s]: merged[-1][1] = e
@@ -288,7 +319,7 @@ def pali_spans(body, vocab, fidx, cache):
         import m_auto
         for k, (s, e, t) in enumerate([(mm.start(), mm.end(), mm.group()) for mm in TOK.finditer(bz)]):     # a gloss glued in front of a Pali word (ကိုဝစီဒုစ္စရိတေန): only the Pali tail is bold
             i = m_auto.glued_split(canon(t))
-            if i and not any(a <= s < b for a, b in merged): merged.append([s + i, e])
+            if i and not any(a <= s < b for a, b in merged) and not any(a <= s < b for a, b in gl): merged.append([s + i, e])
         merged.sort()
     except FileNotFoundError:
         pass
