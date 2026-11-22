@@ -1252,6 +1252,17 @@
    "date": "2026-10-15"
   },
   {
+   "id": "mula_ku_21_sheet061",
+   "title": "ပေဋကောပဒေသပါဠိ (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3574868,
+   "date": "2026-11-22",
+   "edition_of": "mula_ku_21"
+  },
+  {
    "id": "mula_bi_01",
    "title": "ဓမ္မသင်္ဂဏီပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3897,5 +3908,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 264
+ "n_editions": 265
 }
