@@ -1050,6 +1050,17 @@
    "edition_of": "mula_ku_14"
   },
   {
+   "id": "mula_ku_14_sheet052",
+   "title": "ဇာတကပါဠိ (ပ) (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 5576881,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_14"
+  },
+  {
    "id": "mula_ku_15",
    "title": "ဇာတကပါဠိ (ဒု)",
    "basket": "ပါဠိတော်",
@@ -3798,5 +3809,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 255
+ "n_editions": 256
 }
