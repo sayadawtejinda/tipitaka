@@ -1198,6 +1198,17 @@
    "date": "2026-10-15"
   },
   {
+   "id": "mula_ku_20_sheet060",
+   "title": "နေတ္တိပ္ပကရဏပါဠိ (မိုးထိမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3513395,
+   "date": "2026-11-21",
+   "edition_of": "mula_ku_20"
+  },
+  {
    "id": "mula_ku_21",
    "title": "ပေဋကောပဒေသပါဠိ",
    "basket": "ပါဠိတော်",
@@ -3809,5 +3820,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 256
+ "n_editions": 257
 }
