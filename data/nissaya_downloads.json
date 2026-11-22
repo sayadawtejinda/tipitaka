@@ -2760,6 +2760,17 @@
    "edition_of": "attha_ku_zat_01"
   },
   {
+   "id": "attha_ku_zat_04_sheet512",
+   "title": "ဇာတကအဋ္ဌကထာ (စ) (မဟာဇေယျမင်းကျောင်း)",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 4369014,
+   "date": "2026-11-21",
+   "edition_of": "attha_ku_zat_04"
+  },
+  {
    "id": "attha_ku_zat_06_sheet151",
    "title": "ဇာတကအဋ္ဌကထာ (ဆ) (ဒန့်တိုင်)",
    "basket": "အဋ္ဌကထာ",
@@ -3820,5 +3831,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 257
+ "n_editions": 258
 }
