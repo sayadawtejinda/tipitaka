@@ -3632,17 +3632,6 @@
    "edition_of": "annya_sadda_01"
   },
   {
-   "id": "annya_sadda_02_sheet363",
-   "title": "ပဒရူပသိဒ္ဓိ (ဘာသာဋီကာမူ (ဒု))",
-   "basket": "အည",
-   "basket_key": "annya",
-   "category": "သဒ္ဒါဆိုင်ရာ",
-   "cat_key": "sadda",
-   "size": 4774546,
-   "date": "2026-11-18",
-   "edition_of": "annya_sadda_02"
-  },
-  {
    "id": "annya_sadda_02_sheet506",
    "title": "ပဒရူပသိဒ္ဓိ (စည်ရှင်)",
    "basket": "အည",
@@ -3661,6 +3650,17 @@
    "category": "သဒ္ဒါဆိုင်ရာ",
    "cat_key": "sadda",
    "size": 5989630,
+   "date": "2026-11-21",
+   "edition_of": "annya_sadda_02"
+  },
+  {
+   "id": "annya_sadda_02_sheet363",
+   "title": "ပဒရူပသိဒ္ဓိ (ဘာသာဋီကာမူ (ဒု))",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "သဒ္ဒါဆိုင်ရာ",
+   "cat_key": "sadda",
+   "size": 4774658,
    "date": "2026-11-21",
    "edition_of": "annya_sadda_02"
   },
