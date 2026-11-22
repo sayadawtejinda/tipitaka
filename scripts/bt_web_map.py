@@ -23,6 +23,7 @@ for b in B:
     refs[b['key']] = lst
 E = json.load(open(os.path.join(ROOT, 'data', 'nissaya_editions.json'), encoding='utf-8'))
 files = sorted({x['file'] for v in E.values() for x in v})
+files += [f[:-5] for f in sorted(os.listdir(os.path.join(ROOT, 'data'))) if f.startswith('bt_') and f.endswith('.html')]      # books that have no Pali book (no nissaya edition): data/bt_<name>.html with '(နိဿယစာအုပ် စာမျက်နှာ N)' page marks
 out = {}
 for f in files:
     p = os.path.join(ROOT, 'data', f + '.html')

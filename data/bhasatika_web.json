@@ -3,7 +3,7 @@
   "file": "annya_sadda_01_sheet355",
   "delta": 7,
   "name": "ကစ္စည်းဘာသာဋီကာ (ပတွဲ)",
-  "fit": "165/194",
+  "fit": "165/193",
   "pages": "1-555"
  },
  "KS_BT_02.pdf": {
@@ -278,5 +278,19 @@
   "name": "ပရိဝါဘာသာဋီကာ",
   "fit": "79/89",
   "pages": "1-349"
+ },
+ "ATAP.pdf": {
+  "file": "bt_annya_366_ATAP",
+  "delta": 0,
+  "name": "အဋ္ဌကထာအခြေပြု",
+  "fit": "269/300",
+  "pages": "1-368"
+ },
+ "VT_TCS_BT.pdf": {
+  "file": "bt_annya_407_VT_TCS_BT",
+  "delta": 0,
+  "name": "ဝီထိနှင့် သုံးချက်စုဘာသာဋီကာ",
+  "fit": "38/45",
+  "pages": "1-408"
  }
 }
