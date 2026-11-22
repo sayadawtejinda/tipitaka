@@ -907,6 +907,17 @@
    "edition_of": "mula_ku_03"
   },
   {
+   "id": "mula_ku_03_sheet519",
+   "title": "ဥဒါနပါဠိ (သဇ္ဇနောဒယ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2324758,
+   "date": "2026-11-22",
+   "edition_of": "mula_ku_03"
+  },
+  {
    "id": "mula_ku_04",
    "title": "ဣတိဝုတ္တကပါဠိ",
    "basket": "ပါဠိတော်",
@@ -4062,5 +4073,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 279
+ "n_editions": 280
 }
