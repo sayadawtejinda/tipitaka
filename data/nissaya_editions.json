@@ -1414,18 +1414,18 @@
  ],
  "annya_sadda_01": [
   {
-   "label": "ဘာသာဋီကာမူ (ပ)",
-   "file": "annya_sadda_01_sheet355",
-   "from": 38,
-   "to": 177,
-   "pg": "38-177"
-  },
-  {
    "label": "ဘာသာဋီကာမူ (ဒု)",
    "file": "annya_sadda_01_sheet356",
    "from": 177,
    "to": 315,
    "pg": "177-315"
+  },
+  {
+   "label": "ဘာသာဋီကာမူ (ပ)",
+   "file": "annya_sadda_01_sheet355",
+   "from": 38,
+   "to": 177,
+   "pg": "38-177"
   }
  ],
  "annya_sadda_02": [
