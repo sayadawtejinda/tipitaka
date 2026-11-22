@@ -2775,6 +2775,17 @@
    "edition_of": "attha_ku_11"
   },
   {
+   "id": "attha_ku_11_sheet514",
+   "title": "အပဒါနအဋ္ဌကထာ (ဒု) (နပသ(ရန်ကုန်)မူ (ပ))",
+   "basket": "အဋ္ဌကထာ",
+   "basket_key": "attha",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 3207809,
+   "date": "2026-11-22",
+   "edition_of": "attha_ku_11"
+  },
+  {
    "id": "attha_ku_12",
    "title": "ဗုဒ္ဓဝံသအဋ္ဌကထာ",
    "basket": "အဋ္ဌကထာ",
@@ -4007,5 +4018,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 274
+ "n_editions": 275
 }
