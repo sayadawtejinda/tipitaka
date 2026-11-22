@@ -513,6 +513,17 @@
    "edition_of": "mula_an_01"
   },
   {
+   "id": "mula_an_01_sheet516",
+   "title": "ဧကကနိပါတပါဠိ (ဗားကရာမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 508862,
+   "date": "2026-11-22",
+   "edition_of": "mula_an_01"
+  },
+  {
    "id": "mula_an_02",
    "title": "ဒုကနိပါတပါဠိ",
    "basket": "ပါဠိတော်",
@@ -531,6 +542,17 @@
    "cat_key": "an",
    "size": 869485,
    "date": "2026-11-21",
+   "edition_of": "mula_an_02"
+  },
+  {
+   "id": "mula_an_02_sheet516",
+   "title": "ဒုကနိပါတပါဠိ (ဗားကရာမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 628773,
+   "date": "2026-11-22",
    "edition_of": "mula_an_02"
   },
   {
@@ -555,6 +577,17 @@
    "edition_of": "mula_an_03"
   },
   {
+   "id": "mula_an_03_sheet516",
+   "title": "တိကနိပါတပါဠိ (ဗားကရာမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 2789817,
+   "date": "2026-11-22",
+   "edition_of": "mula_an_03"
+  },
+  {
    "id": "mula_an_04",
    "title": "စတုက္ကနိပါတပါဠိ",
    "basket": "ပါဠိတော်",
@@ -573,6 +606,17 @@
    "cat_key": "an",
    "size": 4639539,
    "date": "2026-11-21",
+   "edition_of": "mula_an_04"
+  },
+  {
+   "id": "mula_an_04_sheet516",
+   "title": "စတုက္ကနိပါတပါဠိ (ဗားကရာမူ)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "အင်္ဂုတ္တိုရ်နိကာယ်",
+   "cat_key": "an",
+   "size": 3306002,
+   "date": "2026-11-22",
    "edition_of": "mula_an_04"
   },
   {
@@ -3952,5 +3996,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 269
+ "n_editions": 273
 }
