@@ -3777,6 +3777,17 @@
    "edition_of": "tika_bi_03"
   },
   {
+   "id": "tika_bi_03_sheet536",
+   "title": "ပဉ္စပကရဏမူလဋီကာ (ကြာခံ)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 1037588,
+   "date": "2026-11-22",
+   "edition_of": "tika_bi_03"
+  },
+  {
    "id": "annya_vi_01_01_bhasatika",
    "title": "ဒွေမာတိကာ (ဘာသာဋီကာ)",
    "basket": "အည",
@@ -4172,5 +4183,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 289
+ "n_editions": 290
 }
