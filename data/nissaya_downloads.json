@@ -3514,6 +3514,17 @@
    "edition_of": "tika_di_02"
   },
   {
+   "id": "tika_di_03_sheet526",
+   "title": "ပါထိကဝဂ္ဂဋီကာ (မဟာဇေယျမင်းကျောင်း)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဒီဃနိကာယ်",
+   "cat_key": "di",
+   "size": 6512502,
+   "date": "2026-11-22",
+   "edition_of": "tika_di_03"
+  },
+  {
    "id": "tika_bi_01",
    "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ",
    "basket": "ဋီကာ",
@@ -4139,5 +4150,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 286
+ "n_editions": 287
 }
