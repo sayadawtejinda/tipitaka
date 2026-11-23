@@ -58,6 +58,14 @@ def mbv_build_toc(n, lang, log=print):
     return os.path.relpath(p, REPO).replace(os.sep, '/')
 
 
+def mbv_toc_missing(n, lang):
+    """number of table-of-contents titles that are still in Burmese: not a translated heading of the book, not translated by Gemini, not written by hand in mbv_toc.json"""
+    d = load_translations(n, lang); hd = _toc_from_headings(n, lang)
+    p = os.path.join(REPO, 'data', 'translations_' + lang, 'mbv_toc.json')
+    old = (json.load(open(p, encoding='utf-8')) if os.path.exists(p) else {}).get(MBV[n]) or []
+    return sum(1 for i in range(len(_mbv_toc(n))) if i not in hd and not (d.get(TOCP + i) or '').strip() and not (i < len(old) and old[i]))
+
+
 def _mbv_text(html):
     h = re.sub(r'(?is)<(script|style)[^>]*>.*?</(?:script|style)>', '', html)
     h = re.sub(r'(?i)<h[1-6][^>]*>(.*?)</h[1-6]>', lambda m: NL + '## ' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + NL, h)

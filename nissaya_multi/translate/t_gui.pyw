@@ -157,7 +157,15 @@ def work_pub(n, auto=False, lang=''):
     try:
         if not auto and not messagebox.askyesno('web သို့ တင်မည်', 'စာအုပ် %03d ၏ %sပြန်ပြီးသည့် စာမျက်နှာများကို web (GitHub) သို့ တင်မည်လား?' % (n, LANG_NAME[lang or 'my'])): return
         say('web သို့ တင်နေသည်...'); t_core.publish(n, say, lang); m_status._TRK['t'] = 0; save_state(sheet=n, last_pub=n)
-        if lang: return say('✔ %sပြန်ကို web သို့ တင်ပြီး — ပင်မစာမျက်နှာ၏ "%s" ခလုပ်ထဲ ပေါ်ပါလိမ့်မည်' % (LANG_NAME[lang], {'vi': 'Tiếng Việt', 'en': 'English'}[lang]))
+        if lang:
+            say('✔ %sပြန်ကို web သို့ တင်ပြီး — ပင်မစာမျက်နှာ၏ "%s" ခလုပ်ထဲ ပေါ်ပါလိမ့်မည်' % (LANG_NAME[lang], {'vi': 'Tiếng Việt', 'en': 'English'}[lang]))
+            if n in t_core.MBV:          # Mahabuddhavamsa: the titles that are not headings of the book still need Gemini -> their input file is made by itself (only the missing titles), once
+                miss = t_core.mbv_toc_missing(n, lang)
+                if miss and not glob.glob(os.path.join(t_core.OUT, 'tr_%03d_toc_*_for%s.txt' % (n, lang))):
+                    out, files = t_core.build_lang(n, lang, 10000, 10, say, toc=True)
+                    if files: say('📑 မာတိကာ ခေါင်းစဉ် %d ခု ကျန်သည် — မာတိကာဖိုင် အလိုအလျောက် ထုတ်ပေးပြီး (%s) — Gemini Canvas ထဲ upload → %sပြန် ▶ လုပ်ပါ၊ ရလဒ်ကို ဤကိရိယာက Downloads မှ ယူပြီး မာတိကာကို web တင်ပေးမည်' % (miss, files[0], LANG_NAME[lang])); os.startfile(out)
+                elif not miss: say('✔ မာတိကာ ခေါင်းစဉ် အားလုံး %sပြန် ပြည့်စုံပြီး' % LANG_NAME[lang])
+            return
         say('📌 နောက်ဆုံး web တင်ပြီးသော စာအုပ်: %03d (စာရင်းထဲ ဆက်ထားသည်)' % n)
     except BaseException as e: say('အမှား: %r' % e)
     finally: root.after(0, lambda: bpub.config(state='normal'))
