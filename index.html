@@ -2818,7 +2818,7 @@ let isRomanPali = false;
     for(let i = 0; i < vars.length; i++){
       const d = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/${vars[i]}?v=${Date.now()}`));
       const rows = Object.keys(d).map(Number).sort((x, y) => x - y).filter(pg => (d[String(pg)] || "").trim()).map(pg => `<section id="p${pg}" class="row"><div class="pg">ပါဠိစာမျက်နှာ ${toMyanmarDigits(pg)}</div>`
-        + String(d[String(pg)]).split(String.fromCharCode(92) + "n").join(BS+"n").split(/BS+n/).map(l => l.trim()).filter(Boolean).map(l => l.startsWith("## ") ? `<h3>${esc2(l.slice(3))}</h3>` : `<p>${esc2(l)}</p>`).join("") + `</section>`).join("\n");
+        + String(d[String(pg)]).split(String.fromCharCode(92) + "n").join("\n").split(/\n/).map(l => l.trim()).filter(Boolean).map(l => l.startsWith("## ") ? `<h3>${esc2(l.slice(3))}</h3>` : `<p>${esc2(l)}</p>`).join("") + `</section>`).join("\n");
       out.push({ name: dlSafeName(b.name) + (vars.length > 1 ? " (မူ " + (i + 1) + ")" : "") + ".html", text: dlComposeHtml(b.name, "Gemini မြန်မာပြန် - စာမျက်နှာနံပါတ်က ပါဠိတော်၏ စာမျက်နှာအတိုင်း", rows, []) });
     }
     return out;
