@@ -4061,6 +4061,17 @@
    "edition_of": "annya_bi_06"
   },
   {
+   "id": "annya_bi_06_sheet538",
+   "title": "အဘိဓမ္မတ္ထဝိဘာဝိနီဋီကာ (မေဒိနီ)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 1938166,
+   "date": "2026-11-23",
+   "edition_of": "annya_bi_06"
+  },
+  {
    "id": "annya_sadda_01_sheet355",
    "title": "ကစ္စာယနဗျာကရဏံ (ဘာသာဋီကာမူ (ပ))",
    "basket": "အည",
@@ -4227,5 +4238,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 294
+ "n_editions": 295
 }
