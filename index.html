@@ -2810,7 +2810,7 @@ let isRomanPali = false;
   // Gemini ဖြင့် မြန်မာပြန်ထားသော စာအုပ်များ (ပါဠိစာအုပ်) - ရှိပြီးသား Split View မရှိသော၊ data/nissaya_translations/index.json ထဲပါသော စာအုပ်များ
   async function tpGeminiBooks(){
     const idx = await ensureIndex(); await ensureNissayaIds(); try{ await ensureMmSplitIndex(); }catch(e){}
-    return Object.keys(TP_TR_VARS).filter(b => !(mmSplitIndex && mmSplitIndex[b])).map(b => idx.books.find(x => x.id === b)).filter(Boolean);
+    const seen = new Set(); return idx.books.filter(x => TP_TR_VARS[x.id] && !(mmSplitIndex && mmSplitIndex[x.id]) && !seen.has(x.id) && seen.add(x.id));      // အစီအစဉ် = ပါဠိတော်အတိုင်း
   }
   // ⬇ Gemini မြန်မာပြန် (data/nissaya_translations/<book>.json = {ပါဠိစာမျက်နှာ: စာ}) - စာအုပ်တစ်အုပ် = html တစ်ဖိုင် (မူကွဲရှိလျှင် တစ်မူ တစ်ဖိုင်)၊ အားလုံး = zip
   async function gemBuildFiles(b){
@@ -3170,7 +3170,7 @@ let isRomanPali = false;
   }
   // "၉၉ အုပ်" (+ နိဿယမူ အပိုရှိလျှင် " · ၂ မူပို") - မူအပို = data/nissaya_editions.json ထဲမှာ မူလအပြင် ထပ်ရှိသော မူများ
   const nisCountText = books => `${toMyanmarDigits(books.reduce((n, b) => n + Math.max(1, (TP_NISSAYA_EDITIONS[b.id] || []).length), 0))} အုပ်`;   // နိဿယမူ တစ်မျိုးချင်းစီကို တစ်အုပ်စီ ရေတွက် (data/nissaya_editions.json)
-  async function nissayaBooksIn(idx){ const ids = await ensureNissayaIds(); return ids.map(id => idx.books.find(b => b.id === id)).filter(Boolean); }
+  async function nissayaBooksIn(idx){ const ids = new Set(await ensureNissayaIds()); const seen = new Set(); return idx.books.filter(b => ids.has(b.id) && !seen.has(b.id) && seen.add(b.id)); }   // အစီအစဉ် = တိပိဋက › ပါဠိတော် (idx.books) အတိုင်း
   const nisCrumb = (idx, parts) => renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}].concat(parts));
 
 
