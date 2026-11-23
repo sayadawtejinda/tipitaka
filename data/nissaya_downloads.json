@@ -3386,6 +3386,17 @@
    "edition_of": "tika_vi_02"
   },
   {
+   "id": "tika_vi_03_sheet533",
+   "title": "သာရတ္ထဒီပနီဋီကာ (တ) (ရှေးမူ)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "ဝိနည်းပိဋက",
+   "cat_key": "vi",
+   "size": 4477114,
+   "date": "2026-11-22",
+   "edition_of": "tika_vi_03"
+  },
+  {
    "id": "tika_vi_04_sheet191",
    "title": "ဝဇိရဗုဒ္ဓိဋီကာ (ဆင်တဲမူ (ဒု))",
    "basket": "ဋီကာ",
@@ -4183,5 +4194,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 290
+ "n_editions": 291
 }
