@@ -4050,6 +4050,17 @@
    "edition_of": "annya_bi_05"
   },
   {
+   "id": "annya_bi_05_bhasatika",
+   "title": "အဘိဓမ္မတ္ထသင်္ဂဟော (ဘာသာဋီကာ)",
+   "basket": "အည",
+   "basket_key": "annya",
+   "category": "အဘိဓမ္မာဆိုင်ရာ",
+   "cat_key": "bi",
+   "size": 4860362,
+   "date": "2026-11-23",
+   "edition_of": "annya_bi_05"
+  },
+  {
    "id": "annya_bi_06_sheet539",
    "title": "အဘိဓမ္မတ္ထဝိဘာဝိနီဋီကာ (မေဒိနီ)",
    "basket": "အည",
@@ -4249,5 +4260,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 296
+ "n_editions": 297
 }
