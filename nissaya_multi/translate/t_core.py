@@ -17,6 +17,37 @@ HEAD_CLS = {'nikaya', 'book', 'chapter', 'subhead', 'subsubhead', 'title', 'cent
 MBV = {900 + i: 'mbv_%d' % i for i in range(1, 9)}      # Minkun Sayadaw's Mahabuddhavamsa (8 volumes, data/mbv_N.json): pseudo book numbers 901-908. Source = the Burmese book itself (page index = the reader's page), translated into vi / en only
 
 
+TOCP = 100000
+
+
+def _mbv_toc(n): return json.load(open(os.path.join(os.path.dirname(NSY), 'data', MBV[n] + '.json'), encoding='utf-8'))['toc']
+
+
+def mbv_build_toc(n, lang, log=print):
+    """data/translations_<lang>/mbv_toc.json  {mbv_N: [title of every table-of-contents entry]}: (1) the title translated by Gemini (page 100000+i of tr_90N_<lang>.json), else (2) the translated '## ' heading of the entry's page
+    that is the same heading as the Burmese title (k-th heading of the source page = k-th heading of the translated page), else (3) kept as it is (a title written by hand stays).  Returns the path (or None)"""
+    d = load_translations(n, lang); src = load_translations(n); toc = _mbv_toc(n)
+    p = os.path.join(REPO, 'data', 'translations_' + lang, 'mbv_toc.json')
+    allt = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else {}
+    old = allt.get(MBV[n]) or []; out = []; got = [0, 0]
+    for i, e in enumerate(toc):
+        t = (d.get(TOCP + i) or '').strip()
+        if t: got[0] += 1
+        else:
+            heads = [l[3:].strip() for l in src.get(e['page'], '').split(NL) if l.startswith('## ')]
+            ht = [l[3:].strip() for l in (d.get(e['page']) or '').split(NL) if l.startswith('## ')]
+            key = re.sub(r'\s', '', e['title'])
+            for k, h in enumerate(heads):
+                hh = re.sub(r'\s', '', h)
+                if k < len(ht) and len(heads) == len(ht) and (key[:12] in hh or hh[:12] in key): t = ht[k]; got[1] += 1; break
+        out.append(t or (old[i] if i < len(old) and old[i] else ''))
+    if not any(out): return None
+    allt[MBV[n]] = out; os.makedirs(os.path.dirname(p), exist_ok=True)
+    json.dump(allt, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
+    log('  မာတိကာ %d ခု: Gemini ပြန် %d၊ ခေါင်းစဉ်မှ %d၊ ကျန် မြန်မာမာတိကာအတိုင်း/လက်ရေး' % (len(toc), got[0], got[1]))
+    return os.path.relpath(p, REPO).replace(os.sep, '/')
+
+
 def _mbv_text(html):
     h = re.sub(r'(?is)<(script|style)[^>]*>.*?</(?:script|style)>', '', html)
     h = re.sub(r'(?i)<h[1-6][^>]*>(.*?)</h[1-6]>', lambda m: NL + '## ' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + NL, h)
@@ -101,12 +132,15 @@ def build(n, lo, hi, maxchars=10000, sets=10, raw_ok=False, log=print, redo=Fals
 LANGS = {'vi': 'ဗီယက်နမ်', 'en': 'အင်္ဂလိပ်'}
 
 
-def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=None, rest=False):
+def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=None, rest=False, toc=False):
     """Vietnamese / English input files: every Pali page that HAS a Burmese translation (gold/tr_NNN.json) -> '### ပါဠိ' (the Pali text, to look at when the Burmese is unclear) + '### မြန်မာပြန်'
     (the text to translate).  Pages already translated into the language (gold/tr_NNN_<lang>.json) are left out unless redo.  -> output/tr_NNN_<book>_pali<a>-<b>_for<lang>.txt
     (the Canvas app's answer comes back as ..._for<lang>_<lang>.txt and is ingested by ingest_downloads)"""
     P = None if n in MBV else _paired(n); my = load_translations(n)
     if not my: raise RuntimeError('စာအုပ် %03d: မြန်မာပြန် မရှိသေးပါ' % n)
+    if n in MBV:           # table of contents titles = extra pages 100000+i of the book (translated by the same flow, kept in tr_90N_<lang>.json, used by mbv_build_toc at publish); normal files leave them out
+        for i, e in enumerate(_mbv_toc(n)): my[TOCP + i] = e['title']
+        only = ({p for p in my if p >= TOCP} if toc else (only if only is not None else {p for p in my if p < TOCP}))
     done = {} if redo else load_translations(n, lang)
     keyset = set() if P is None else {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
     books = [MBV[n]] if P is None else sorted({b for b, p in keyset}); blocks = {}
@@ -127,10 +161,10 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
         cur.append((g, t)); size += len(t)
     if cur: groups.append(cur)
     os.makedirs(OUT, exist_ok=True); files = []
-    for old in ([] if rest else glob.glob(os.path.join(OUT, 'tr_%03d_*_for%s.txt' % (n, lang)))): os.remove(old); log('  🗑 ဖိုင်အဟောင်း ဖျက်ပြီး: ' + os.path.basename(old))          # the _rest file of a half-finished input does not delete the old files
+    for old in ([] if rest else [f_ for f_ in glob.glob(os.path.join(OUT, 'tr_%03d_*_for%s.txt' % (n, lang))) if ('_toc_pali' in f_) == bool(toc)]): os.remove(old); log('  🗑 ဖိုင်အဟောင်း ဖျက်ပြီး: ' + os.path.basename(old))          # the _rest file of a half-finished input does not delete the old files
     for j in range(0, len(groups), sets):
         chunk = groups[j:j + sets]; first, last = chunk[0][0][0], chunk[-1][-1][0]
-        name = 'tr_%03d_%s_pali%d-%d%s_for%s.txt' % (n, first[0], first[1], last[1], '_rest' if rest else '', lang)
+        name = 'tr_%03d_%s_pali%d-%d%s_for%s.txt' % (n, 'toc' if toc else first[0], first[1], last[1], '_rest' if rest else '', lang)
         body = NL.join('===== အစု %d / %d =====' % (k + 1, len(chunk)) + NL + NL.join(t for g, t in s_) for k, s_ in enumerate(chunk))
         open(os.path.join(OUT, name), 'w', encoding='utf-8').write(body)
         files.append(name); log('  %s : %d sets (ပါဠိ %d-%d), %d characters' % (name, len(chunk), first[1], last[1], len(body)))
@@ -418,6 +452,9 @@ def publish(n, log=print, lang=''):
         paths.append(os.path.relpath(fp, REPO).replace(os.sep, '/')); log('  %s : မြန်မာပြန် ပါဠိ %d မျက်နှာ' % (v['file'], len(old)))
     json.dump(idx, open(ip, 'w', encoding='utf-8'), ensure_ascii=False)
     paths.append(os.path.relpath(ip, REPO).replace(os.sep, '/'))
+    if n in MBV and lang:
+        tp_ = mbv_build_toc(n, lang, log)
+        if tp_: paths.append(tp_)
     if not _git('status', '--porcelain', '--', *paths).stdout.strip(): log('  (web ပေါ်ရှိနှင့် တူနေသည် — ပြောင်းစရာ မရှိ)'); return paths
     _git('fetch', 'origin')
     if int(_git('rev-list', '--count', 'HEAD..origin/main').stdout.strip() or 0):

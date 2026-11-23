@@ -214,6 +214,17 @@ def count():
 
 
 b1 = ttk.Button(bf, text='① Gemini ဖိုင် ထုတ်မည်', command=go1); b1.pack(side='left', padx=3)
+def go_toc():
+    n = sel(); L = lang_var.get()
+    if n not in t_core.MBV or L not in ('vi', 'en'): return messagebox.showinfo('မာတိကာ ဖိုင်', 'မဟာဗုဒ္ဓဝင် (မင်းကွန်းဆရာတော်) စာအုပ်ကို ရွေးပြီး ဘာသာပြန်မည့်ဘာသာ ဗီယက်နမ် / အင်္ဂလိပ် ရွေးမှ မာတိကာဖိုင် ထုတ်နိုင်သည်။')
+    def w():
+        try:
+            out, files = t_core.build_lang(n, L, 10000, 10, say, redo=redo.get(), toc=True)
+            say('✔ မာတိကာ ဖိုင် %d ခု ထွက်ပြီ — Gemini Canvas "Pali Translate AI" ထဲ upload → %sပြန် ရွေးပြီး ▶။ ရလဒ်ကို ဤကိရိယာက Downloads မှ ယူပြီး web တင်ချိန် မာတိကာထဲ ထည့်မည်' % (len(files), LANG_NAME[L]))
+            if files: os.startfile(out)
+        except BaseException as e: say('အမှား: %r' % e)
+    threading.Thread(target=w, daemon=True).start()
+ttk.Button(bf, text='④ မာတိကာဖိုင် ထုတ်မည် (မဟာဗုဒ္ဓဝင်)', command=go_toc).pack(side='left', padx=3)
 ttk.Button(bf, text='output folder', command=lambda: (os.makedirs(t_core.OUT, exist_ok=True), os.startfile(t_core.OUT))).pack(side='left', padx=3)
 ttk.Button(bf, text='② မြန်မာပြန်ပြီး စာမျက်နှာ အရေအတွက်', command=count).pack(side='left', padx=3)
 ttk.Button(bf, text='③ မြန်မာပြန် စာအုပ် ထုတ် (.txt)', command=export).pack(side='left', padx=3)
