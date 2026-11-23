@@ -221,6 +221,14 @@
     #tp-fts-panel{ width:90vw; min-width:0; max-width:340px; right:5vw; top:60px; max-height:calc(100vh - 80px); }
   }
 
+  /* Mahabuddhavamsa: Burmese (left) | Tiếng Việt / English (right); phone: the translation first (top) */
+  #mbv-wrap { display:flex; flex-wrap:wrap; gap:20px; align-items:flex-start; }
+  #mbv-wrap > #tp-content { flex:1 1 300px; min-width:0; }
+  #mbv-tr { flex:1 1 300px; min-width:0; max-height:calc(100vh - 150px); overflow-y:auto; background:#fffdf7; border-left:2px dashed #d9d0b8; border-radius:8px; padding:16px; box-shadow:inset 0 0 8px rgba(0,0,0,.03); line-height:1.8; }
+  #mbv-tr p{margin:.5em 0} #mbv-tr .mbv-h{text-align:center;font-weight:bold;color:#1e3a5f;margin:.9em 0 .4em}
+  .mbv-lang-on{background:#7a5a2e !important;color:#fff !important}
+  @media (max-width:768px){ #mbv-tr{order:-1;max-height:none;overflow-y:visible;border-left:none;border-bottom:2px dashed #d9d0b8} }
+
   /* Split View Layout */
   #tp-split-wrapper { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
   .tp-split-pane { flex: 1 1 300px; min-width: 0; }
@@ -376,6 +384,7 @@ let isMmSplitOpen = false, mmViaMm = false, mmSplitIndex = null, mmSplitCache = 
 // { "mula_vi_01": [ {"label":"မူလနိဿယ","file":"mula_vi_01"}, {"label":"ဘုရားကြီးမူ","file":"mula_vi_01_bhurakyi"} ], ... }   (file = data/ ထဲက .html ဖိုင်အမည်၊ .html မပါ)
 let TP_NISSAYA_EDITIONS = { "mula_vi_01": [ {label:"မူလနိဿယ", file:"mula_vi_01"}, {label:"ဘုရားကြီးမူ", file:"mula_vi_01_bhurakyi"} ] };   // ဖိုင်ဖတ်မရလျှင် သုံးမည့် အရန်
 let tpEditionsLoaded = false;
+let mbvLang = (function(){ try{ return localStorage.getItem("mbvLang") || ""; }catch(e){ return ""; } })(), mbvTocCache = {};
 let trLang = "my", trUi = "my", trRomanForced = false;      // trUi = the reader language (my / vi / en: Roman Pali, page chrome in that language);  trLang = the language of the translation shown in the pane (en / my / vi buttons)
       // "vi" / "en" = the Tiếng Việt / English translation reader (Pali + book names in Roman, translation of that language beside it)
 const TR_LANG_DIR = {my: "nissaya_translations", vi: "translations_vi", en: "translations_en"}, TR_LANG_NAME = {vi: "Tiếng Việt", en: "English"};
@@ -2198,6 +2207,26 @@ let isRomanPali = false;
     } catch(e){ document.getElementById("tp-view").innerHTML = `<p>မြန်မာပြန် ဖတ်၍မရပါ (${e.message})</p>`; }
   }
 
+  async function mbvRenderTr(L, bookId, page){      // right pane: the middle page first (the previous page above, the next below), like the Pali pages
+    const box = document.getElementById("mbv-tr"); if(!box) return;
+    const files = TP_TR_VARS_X[L][bookId] || []; const key = L + "/" + files[0];
+    let d = tpTrCache[key];
+    if(!d){ try{ d = await fetchJson(cdnUrl(`${DATA_FOLDER}/${TR_LANG_DIR[L]}/${files[0]}`)); }catch(e){ d = {}; } tpTrCache[key] = d; }
+    if(bookId !== mmCurrentBookId || page !== mmCurrentPageIdx || !document.getElementById("mbv-tr")) return;
+    const esc = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    const body = t => !t ? "" : String(t).split(String.fromCharCode(92) + "n").join("\n").split(/\n/).map(l => l.trim()).filter(Boolean).map(l => l.startsWith("## ") ? `<p class="mbv-h">${esc(l.slice(3))}</p>` : `<p>${esc(l)}</p>`).join("");
+    const lab = n => `<div class="tp-page-divider">${L === "vi" ? "Trang" : "Page"} ${n}</div>`;
+    const prev = d[page - 1], cur = d[page], next = d[page + 1];
+    let html = "";
+    if(prev) html += `<div class="tp-adjacent-page">${body(prev)}</div>` + lab(page);
+    html += `<div id="mbv-tr-cur">${cur ? body(cur) : `<p style="color:#999">(${L === "vi" ? "Trang này chưa có bản dịch" : "This page is not translated yet"})</p>`}</div>`;
+    if(next) html += lab(page + 1) + `<div class="tp-adjacent-page">${body(next)}</div>`;
+    box.innerHTML = html;
+    const curEl = document.getElementById("mbv-tr-cur");
+    const align = () => { if(window.innerWidth <= 768){ try{ curEl.scrollIntoView({block:"start"}); }catch(e){} return; } box.scrollTop = 0; box.scrollTop += curEl.getBoundingClientRect().top - box.getBoundingClientRect().top - 40; };
+    align(); const t0 = box.scrollTop;
+    [60, 250, 700].forEach(ms => setTimeout(() => { if(curEl.isConnected && Math.abs(box.scrollTop - t0) < 4) align(); }, ms));
+  }
   function renderMmPage(highlightText, autoOpenToc){
     setFloatSearchVisible(true);
     const pages = mmPagesCache[mmCurrentBookId] || []; const total = pages.length;
@@ -2227,6 +2256,10 @@ let isRomanPali = false;
 
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
     const isPa = mmCurrentBookId.startsWith("pa_");
+    const mbvIs = mmCurrentBookId.startsWith("mbv_");
+    if(mbvIs && !window._mbvEdLoaded){ window._mbvEdLoaded = true; tp_loadEditions().then(() => renderMmPage(highlightText, autoOpenToc)).catch(() => {}); }
+    const mbvAvail = mbvIs ? ["vi", "en"].filter(L => (TP_TR_VARS_X[L][mmCurrentBookId] || []).length) : [];
+    const mbvL = mbvAvail.includes(mbvLang) ? mbvLang : "";
     const isMbv = mmCurrentBookId.startsWith("mbv_") || isPa;
     const backLabel = isPa ? "← ဖတ်စာစာရင်းသို့" : isMbv ? "← မင်းကွန်းဆရာတော်သို့" : "← ပါဠိတော်သို့";
 
@@ -2237,6 +2270,7 @@ let isRomanPali = false;
           <button id="tp-mm-back" class="tp-icon-btn" title="${backLabel}">${backLabel}</button>
           <button id="tp-toc-toggle" class="tp-icon-btn" title="မာတိကာ">☰</button>
           <button id="tp-jump-toggle" class="tp-icon-btn" title="စာပိုဒ်နံပါတ်ကို-သွားမည်">📄</button>
+          ${mbvAvail.map(L => `<button class="tp-icon-btn mbv-lang-btn${mbvL === L ? " mbv-lang-on" : ""}" data-l="${L}" title="${TR_LANG_NAME[L]}">${TR_LANG_NAME[L]}</button>`).join("")}
 
           <div id="tp-toc-dropdown" class="tp-dropdown-box"><div id="tp-toclist">မာတိကာ ရှာဖွေနေပါသည်...</div></div>
 
@@ -2256,8 +2290,10 @@ let isRomanPali = false;
       <button id="tp-float-prev" class="tp-float-nav" title="ရှေ့စာမျက်နှာ">←</button>
       <button id="tp-float-next" class="tp-float-nav" title="နောက်စာမျက်နှာ">→</button>
       <div id="tp-meta">${isMbv ? "" : "မြန်မာပြန် - "}စာမျက်နှာ ${toMyanmarDigits(mmCurrentPageIdx)} / ${toMyanmarDigits(total)}</div>
-      <div id="tp-content">${pageHtml}</div>
+      ${mbvL ? `<div id="mbv-wrap"><div id="tp-content">${pageHtml}</div><div id="mbv-tr"><span style="color:#999">…</span></div></div>` : `<div id="tp-content">${pageHtml}</div>`}
     `;
+    document.querySelectorAll(".mbv-lang-btn").forEach(b => b.addEventListener("click", () => { mbvLang = mbvLang === b.dataset.l ? "" : b.dataset.l; try{ localStorage.setItem("mbvLang", mbvLang); }catch(e){} renderMmPage(); }));
+    if(mbvL) mbvRenderTr(mbvL, mmCurrentBookId, mmCurrentPageIdx);
 
     document.getElementById("tp-float-prev").disabled = mmCurrentPageIdx <= 1; document.getElementById("tp-float-next").disabled = mmCurrentPageIdx >= total;
     document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
@@ -2319,10 +2355,12 @@ let isRomanPali = false;
          if (entries[i].page <= mmCurrentPageIdx) activeIdx = i; else break;
       }
       
+      let tocTr = null;
+      if(mbvL){ if(!mbvTocCache[mbvL]) { try{ mbvTocCache[mbvL] = await fetchJson(cdnUrl(`${DATA_FOLDER}/translations_${mbvL}/mbv_toc.json`)); }catch(e){ mbvTocCache[mbvL] = {}; } } tocTr = mbvTocCache[mbvL][mmCurrentBookId] || null; }      // ဗီယက်နမ်/အင်္ဂလိပ် မာတိကာ (မရှိသောအတွဲ - မြန်မာမာတိကာအတိုင်း)
       toclistEl.innerHTML = entries.map((e, idx) => {
         const indent = e.indent != null ? e.indent : Math.max(0, Math.round((2.5 - e.level) * 20));
         const activeCls = (idx === activeIdx) ? " tp-toc-active" : "";
-        return `<button class="tp-xref-item-btn tp-toc-item-btn${activeCls}" id="mm-toc-item-${idx}" style="display:block;width:100%;margin-bottom:4px;padding-left:${12+indent}px;" data-page="${e.page}">${e.title}</button>`;
+        return `<button class="tp-xref-item-btn tp-toc-item-btn${activeCls}" id="mm-toc-item-${idx}" style="display:block;width:100%;margin-bottom:4px;padding-left:${12+indent}px;" data-page="${e.page}">${(tocTr && tocTr[idx]) || e.title}</button>`;
       }).join("");
       
       toclistEl.querySelectorAll(".tp-toc-item-btn").forEach(btn=>{ btn.addEventListener("click", ()=>{ closeAllDropdowns(); mmCurrentPageIdx = parseInt(btn.dataset.page, 10); renderMmPage(); }); });
