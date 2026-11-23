@@ -2800,10 +2800,10 @@ let isRomanPali = false;
     const html = slugs.map(slug => {
       const count = Object.values(burmeseBookMeta).filter(m => m.category === slug).length;
       return `<div class="tp-card" data-mmcat="${slug}">${MM_CATEGORY_LABELS[slug] || slug}<span class="tp-count">${toMyanmarDigits(count)} အုပ်</span><button class="tp-dl-btn" data-dlcat="${slug}" title="မြန်မာပြန် ဒေါင်းလုဒ်">⬇</button></div>`;
-    }).join("") + (gemBooks.length ? `<div class="tp-card" data-mmcat="gemini" style="border-style:dashed">Gemini မြန်မာပြန်<span class="tp-count">${toMyanmarDigits(gemBooks.length)} အုပ်</span></div>` : "");   // အောက်ခြေ - Gemini (AI) ဖြင့် မြန်မာပြန်ထားသော နိဿယစာအုပ်များ သီးသန့်
+    }).join("") + (gemBooks.length ? `<div class="tp-card" data-mmcat="gemini" style="border-style:dashed">Gemini မြန်မာပြန်<span class="tp-count">${toMyanmarDigits(gemBooks.length)} အုပ်</span><button class="tp-dl-btn" data-gdl="*" title="Gemini မြန်မာပြန် အားလုံး ဒေါင်းလုဒ် (zip)">⬇</button></div>` : "");   // အောက်ခြေ - Gemini (AI) ဖြင့် မြန်မာပြန်ထားသော နိဿယစာအုပ်များ သီးသန့်
     document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${html}</div>`;
     document.querySelectorAll("[data-mmcat]").forEach(el=> el.addEventListener("click", ()=> el.dataset.mmcat === "gemini" ? showMmGeminiBooks() : showMmBookList(el.dataset.mmcat)));
-    wireMmDownloadButtons();
+    wireMmDownloadButtons(); wireGeminiDl(gemBooks);
     setParams({basket: "myanmar"});
   }
 
@@ -2812,10 +2812,34 @@ let isRomanPali = false;
     const idx = await ensureIndex(); await ensureNissayaIds(); try{ await ensureMmSplitIndex(); }catch(e){}
     return Object.keys(TP_TR_VARS).filter(b => !(mmSplitIndex && mmSplitIndex[b])).map(b => idx.books.find(x => x.id === b)).filter(Boolean);
   }
+  // ⬇ Gemini မြန်မာပြန် (data/nissaya_translations/<book>.json = {ပါဠိစာမျက်နှာ: စာ}) - စာအုပ်တစ်အုပ် = html တစ်ဖိုင် (မူကွဲရှိလျှင် တစ်မူ တစ်ဖိုင်)၊ အားလုံး = zip
+  async function gemBuildFiles(b){
+    const esc2 = t => String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"), out = [], vars = TP_TR_VARS[b.id] || [];
+    for(let i = 0; i < vars.length; i++){
+      const d = await fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_translations/${vars[i]}?v=${Date.now()}`));
+      const rows = Object.keys(d).map(Number).sort((x, y) => x - y).filter(pg => (d[String(pg)] || "").trim()).map(pg => `<section id="p${pg}" class="row"><div class="pg">ပါဠိစာမျက်နှာ ${toMyanmarDigits(pg)}</div>`
+        + String(d[String(pg)]).split(String.fromCharCode(92) + "n").join(BS+"n").split(/BS+n/).map(l => l.trim()).filter(Boolean).map(l => l.startsWith("## ") ? `<h3>${esc2(l.slice(3))}</h3>` : `<p>${esc2(l)}</p>`).join("") + `</section>`).join("\n");
+      out.push({ name: dlSafeName(b.name) + (vars.length > 1 ? " (မူ " + (i + 1) + ")" : "") + ".html", text: dlComposeHtml(b.name, "Gemini မြန်မာပြန် - စာမျက်နှာနံပါတ်က ပါဠိတော်၏ စာမျက်နှာအတိုင်း", rows, []) });
+    }
+    return out;
+  }
+  function wireGeminiDl(books){
+    document.querySelectorAll("[data-gdl]").forEach(btn => btn.addEventListener("click", async e => {
+      e.stopPropagation(); const old = btn.textContent; btn.disabled = true; btn.textContent = "⏳";
+      try{
+        const list = btn.dataset.gdl === "*" ? books : books.filter(x => x.id === btn.dataset.gdl); let files = [];
+        for(let i = 0; i < list.length; i++){ if(list.length > 1) btn.textContent = `⏳ ${i + 1}/${list.length}`; files = files.concat(await gemBuildFiles(list[i])); }
+        if(files.length === 1) dlSaveHtml(files[0].text, files[0].name.replace(/\.html$/, ""));
+        else if(files.length) dlSaveBlob(await zipBuild(files), (btn.dataset.gdl === "*" ? "Gemini မြန်မာပြန် (အားလုံး)" : dlSafeName(list[0].name)) + ".zip");
+      } catch(err){ alert("ဒေါင်းလုဒ် မရပါ (" + err.message + ")"); }
+      btn.disabled = false; btn.textContent = old;
+    }));
+  }
   async function showMmGeminiBooks(){
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်", onclick:(e)=>{e.preventDefault(); showMmCategories();}}, {label:"Gemini မြန်မာပြန်"}]);
     const books = await tpGeminiBooks();
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-gbook="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ</span></div>`).join("")}</div>`;
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${books.map(b => `<div class="tp-card" data-gbook="${b.id}">${b.name}<span class="tp-count">${toMyanmarDigits(b.pagecount)} စာမျက်နှာ</span><button class="tp-dl-btn" data-gdl="${b.id}" title="မြန်မာပြန် ဒေါင်းလုဒ်">⬇</button></div>`).join("")}</div>`;
+    wireGeminiDl(books);
     document.querySelectorAll("[data-gbook]").forEach(el => el.addEventListener("click", () => { const b = books.find(x => x.id === el.dataset.gbook); isNissayaOpen = false; nisViaList = false; nsyShowTr = 1; isMmSplitOpen = true; mmViaMm = false; mmGemini = true; loadPage(b.basket, b.category, b.id, b.firstpage, b.firstpage); }));
     setParams({basket: "myanmar", category: "gemini"});
   }
