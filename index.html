@@ -3448,7 +3448,11 @@ function tp_edLabel(l){
     if(next){ html += div(pageNum + 1) + `<div class="tp-adjacent-page">${body(next)}</div>`; }
     contentEl.classList.toggle("tp-mm-split", isHtml); contentEl.innerHTML = html; nsyEntries = [];
     const box = document.getElementById("tp-nissaya-container"), curEl = document.getElementById("tp-tr-current");
-    if(box && curEl){ box.scrollTop = 0; box.scrollTop += curEl.getBoundingClientRect().top - box.getBoundingClientRect().top - 40; }      // လက်ရှိစာမျက်နှာ ထိပ်ဆုံးမှာ (အပေါ်က ရှေ့စာမျက်နှာအတွက် နေရာ အနည်းငယ်ချန်)
+    if(box && curEl){
+      const align = () => { box.scrollTop = 0; box.scrollTop += curEl.getBoundingClientRect().top - box.getBoundingClientRect().top - 40; };
+      align(); const t0 = box.scrollTop, stamp = contentEl.innerHTML.length;
+      [60, 250, 700].forEach(ms => setTimeout(() => { if(curEl.isConnected && Math.abs(box.scrollTop - t0) < 4 || curEl.isConnected && box.scrollTop === 0) align(); }, ms));      // Next နှိပ်ပြီး ဖောင့်/အလျား ပြောင်းသွားလျှင်လည်း အလည်စာမျက်နှာကိုပဲ ထိပ်မှာ ပြန်ချိန်ညှိ (သုံးသူ မရွှေ့သေးမှသာ)
+    }      // လက်ရှိစာမျက်နှာ ထိပ်ဆုံးမှာ (အပေါ်က ရှေ့စာမျက်နှာအတွက် နေရာ အနည်းငယ်ချန်)
   }
   async function openNissaya(bookId, pageNum, keepMm) {          // keepMm: opened by the မြန်မာပြန် route (openMmSplit) - its flags / breadcrumb stay; the pane is the same one (နိဿယ မူခလုပ်များ + မူလ + မြန်မာ)
       if(!keepMm){ isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; }
