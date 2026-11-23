@@ -3656,6 +3656,17 @@
    "edition_of": "tika_bi_01"
   },
   {
+   "id": "tika_bi_01_sheet535",
+   "title": "ဓမ္မသင်္ဂဏီမူလဋီကာ (ကြာခံ)",
+   "basket": "ဋီကာ",
+   "basket_key": "tika",
+   "category": "အဘိဓမ္မာပိဋက",
+   "cat_key": "bi",
+   "size": 3561476,
+   "date": "2026-11-22",
+   "edition_of": "tika_bi_01"
+  },
+  {
    "id": "tika_bi_02_01_sheet209",
    "title": "ဝိဘင်္ဂမူလဋီကာ (ပ) (ဘာဋီမူ (ဒု))",
    "basket": "ဋီကာ",
@@ -4194,5 +4205,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 291
+ "n_editions": 292
 }
