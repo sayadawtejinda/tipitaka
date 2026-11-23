@@ -886,6 +886,17 @@
    "edition_of": "mula_ku_02"
   },
   {
+   "id": "mula_ku_02_sheet523",
+   "title": "ဓမ္မပဒပါဠိ (ပန်းကုံး)",
+   "basket": "ပါဠိတော်",
+   "basket_key": "mula",
+   "category": "ခုဒ္ဒကနိကာယ်",
+   "cat_key": "ku",
+   "size": 2968623,
+   "date": "2026-11-22",
+   "edition_of": "mula_ku_02"
+  },
+  {
    "id": "mula_ku_03",
    "title": "ဥဒါနပါဠိ",
    "basket": "ပါဠိတော်",
@@ -4117,5 +4128,5 @@
   }
  ],
  "n_books": 99,
- "n_editions": 284
+ "n_editions": 285
 }
