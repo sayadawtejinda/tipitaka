@@ -23,6 +23,19 @@ TOCP = 100000
 def _mbv_toc(n): return json.load(open(os.path.join(os.path.dirname(NSY), 'data', MBV[n] + '.json'), encoding='utf-8'))['toc']
 
 
+def _toc_from_headings(n, lang):
+    """{toc index: translated title} for the entries whose Burmese title is a '## ' heading of its page (k-th heading of the source page = k-th heading of the translated page, same heading count)"""
+    d = load_translations(n, lang); src = load_translations(n); res = {}
+    for i, e in enumerate(_mbv_toc(n)):
+        heads = [l[3:].strip() for l in src.get(e['page'], '').split(NL) if l.startswith('## ')]
+        ht = [l[3:].strip() for l in (d.get(e['page']) or '').split(NL) if l.startswith('## ')]
+        key = re.sub(r'\s', '', e['title'])
+        for k, h in enumerate(heads):
+            hh = re.sub(r'\s', '', h)
+            if k < len(ht) and len(heads) == len(ht) and (key[:12] in hh or hh[:12] in key): res[i] = ht[k]; break
+    return res
+
+
 def mbv_build_toc(n, lang, log=print):
     """data/translations_<lang>/mbv_toc.json  {mbv_N: [title of every table-of-contents entry]}: (1) the title translated by Gemini (page 100000+i of tr_90N_<lang>.json), else (2) the translated '## ' heading of the entry's page
     that is the same heading as the Burmese title (k-th heading of the source page = k-th heading of the translated page), else (3) kept as it is (a title written by hand stays).  Returns the path (or None)"""
@@ -30,16 +43,13 @@ def mbv_build_toc(n, lang, log=print):
     p = os.path.join(REPO, 'data', 'translations_' + lang, 'mbv_toc.json')
     allt = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else {}
     old = allt.get(MBV[n]) or []; out = []; got = [0, 0]
+    hd = _toc_from_headings(n, lang)
     for i, e in enumerate(toc):
-        t = (d.get(TOCP + i) or '').strip()
-        if t: got[0] += 1
+        t = hd.get(i, '')
+        if t: got[1] += 1
         else:
-            heads = [l[3:].strip() for l in src.get(e['page'], '').split(NL) if l.startswith('## ')]
-            ht = [l[3:].strip() for l in (d.get(e['page']) or '').split(NL) if l.startswith('## ')]
-            key = re.sub(r'\s', '', e['title'])
-            for k, h in enumerate(heads):
-                hh = re.sub(r'\s', '', h)
-                if k < len(ht) and len(heads) == len(ht) and (key[:12] in hh or hh[:12] in key): t = ht[k]; got[1] += 1; break
+            t = (d.get(TOCP + i) or '').strip()
+            if t: got[0] += 1
         out.append(t or (old[i] if i < len(old) and old[i] else ''))
     if not any(out): return None
     allt[MBV[n]] = out; os.makedirs(os.path.dirname(p), exist_ok=True)
@@ -140,6 +150,10 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
     if not my: raise RuntimeError('စာအုပ် %03d: မြန်မာပြန် မရှိသေးပါ' % n)
     if n in MBV:           # table of contents titles = extra pages 100000+i of the book (translated by the same flow, kept in tr_90N_<lang>.json, used by mbv_build_toc at publish); normal files leave them out
         for i, e in enumerate(_mbv_toc(n)): my[TOCP + i] = e['title']
+        if toc:
+            hd = _toc_from_headings(n, lang)
+            if len(hd) == 0 and not load_translations(n, lang): log('  ⚠ ဤစာအုပ်၏ စာမျက်နှာ %sပြန် မရှိသေးပါ — မာတိကာအားလုံး ပို့မည် (စာအုပ်ကို အရင်ပြန်ပြီးမှ ထုတ်လျှင် ခေါင်းစဉ်တူများကို ချန်ပေးမည်)' % LANGS[lang])
+            for i in hd: my.pop(TOCP + i, None)
         only = ({p for p in my if p >= TOCP} if toc else (only if only is not None else {p for p in my if p < TOCP}))
     done = {} if redo else load_translations(n, lang)
     keyset = set() if P is None else {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
