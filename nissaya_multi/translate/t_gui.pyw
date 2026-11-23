@@ -69,6 +69,10 @@ def get_sheets(keep=None):
             web = lang_on_web(n, L)
             if n != keep and hidepub.get() and web: continue                 # the ticked box: a sheet whose Vietnamese / English is ON THE WEB (all its Burmese-translated pages) is hidden
             out.append((n, '%s   [%s %d/%d%s]' % (t, LANG_NAME[L], got, tot, ' · web ✓' if web else '')))
+        for n, bid in sorted(t_core.MBV.items()):      # Minkun Sayadaw's Mahabuddhavamsa (Burmese book itself -> vi / en)
+            t_core.mbv_source(n); tot, got = t_core.lang_progress(n, L)
+            if n != keep and hidepub.get() and lang_on_web(n, L): continue
+            out.append((n, 'မင်းကွန်းဆရာတော် မဟာဗုဒ္ဓဝင် (%s)   [%s %d/%d]' % (bid, LANG_NAME[L], got, tot)))
         return out
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
     pub = published()

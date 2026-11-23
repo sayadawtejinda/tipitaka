@@ -14,6 +14,26 @@ NL = chr(10)
 HEAD_CLS = {'nikaya', 'book', 'chapter', 'subhead', 'subsubhead', 'title', 'centered', 'center_bold', 'center', 'ending'}      # Pali block classes that are headings
 
 
+MBV = {900 + i: 'mbv_%d' % i for i in range(1, 9)}      # Minkun Sayadaw's Mahabuddhavamsa (8 volumes, data/mbv_N.json): pseudo book numbers 901-908. Source = the Burmese book itself (page index = the reader's page), translated into vi / en only
+
+
+def _mbv_text(html):
+    h = re.sub(r'(?is)<(script|style)[^>]*>.*?</(?:script|style)>', '', html)
+    h = re.sub(r'(?i)<h[1-6][^>]*>(.*?)</h[1-6]>', lambda m: NL + '## ' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + NL, h)
+    h = re.sub(r'(?i)<br\s*/?>|</(p|div|tr|li)>', NL, h); h = re.sub(r'<[^>]+>', '', h)
+    h = h.replace('&nbsp;', ' ').replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>')
+    return NL.join(l.strip() for l in h.split(NL) if l.strip())
+
+
+def mbv_source(n):
+    """gold/tr_90N.json {page: Burmese text of the book page}: made from data/mbv_N.json the first time"""
+    p = os.path.join(GOLD, 'tr_%03d.json' % n)
+    if not os.path.exists(p):
+        pages = json.load(open(os.path.join(os.path.dirname(NSY), 'data', MBV[n] + '.json'), encoding='utf-8'))['pages']
+        os.makedirs(GOLD, exist_ok=True)
+        json.dump({str(i + 1): _mbv_text(h) for i, h in enumerate(pages)}, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+
+
 def _paired(n): return json.load(open(os.path.join(NSY, 'paired', '%03d.json' % n), encoding='utf-8'))
 
 
@@ -85,12 +105,12 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
     """Vietnamese / English input files: every Pali page that HAS a Burmese translation (gold/tr_NNN.json) -> '### ပါဠိ' (the Pali text, to look at when the Burmese is unclear) + '### မြန်မာပြန်'
     (the text to translate).  Pages already translated into the language (gold/tr_NNN_<lang>.json) are left out unless redo.  -> output/tr_NNN_<book>_pali<a>-<b>_for<lang>.txt
     (the Canvas app's answer comes back as ..._for<lang>_<lang>.txt and is ingested by ingest_downloads)"""
-    P = _paired(n); my = load_translations(n)
+    P = None if n in MBV else _paired(n); my = load_translations(n)
     if not my: raise RuntimeError('စာအုပ် %03d: မြန်မာပြန် မရှိသေးပါ' % n)
     done = {} if redo else load_translations(n, lang)
-    keyset = {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
-    books = sorted({b for b, p in keyset}); blocks = {}
-    for b in P['blocks']: blocks.setdefault((b['book'], b['page']), []).append(b)
+    keyset = set() if P is None else {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
+    books = [MBV[n]] if P is None else sorted({b for b, p in keyset}); blocks = {}
+    for b in ([] if P is None else P['blocks']): blocks.setdefault((b['book'], b['page']), []).append(b)
     have = [p for p in my if my[p].strip() and (only is None or p in only)]
     pages = sorted(p for p in have if p not in done)
     if len(pages) < len(have): log('  %sပြီးသား ပါဠိ %d မျက်နှာ ချန်ထားသည်' % (LANGS[lang], len(have) - len(pages)))
@@ -99,6 +119,7 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
         owners = [b for b in books if (b, pg) in blocks] or books[:1]
         bk = owners[0]; bl = sorted(blocks.get((bk, pg), []), key=lambda b: b['i'])
         pali = NL.join(('## ' if (b.get('cls') or '').strip() in HEAD_CLS else '') + b['pali'] for b in bl)
+        if P is None: built.append(((bk, pg), '--- စာမျက်နှာ %d ---' % pg + NL + my[pg].strip() + NL)); continue
         built.append(((bk, pg), '--- စာမျက်နှာ %d ---' % pg + NL + '### ပါဠိ' + NL + (pali.strip() or '(ပါဠိစာ မတွေ့)') + NL + '### မြန်မာပြန်' + NL + my[pg].strip() + NL))
     groups = []; cur = []; size = 0
     for g, t in built:
@@ -129,6 +150,7 @@ def parse_pages(text):
 
 
 def load_translations(n, lang=''):
+    if n in MBV and not lang: mbv_source(n)
     p = os.path.join(GOLD, 'tr_%03d%s.json' % (n, ('_' + lang) if lang else ''))
     return {int(k): v for k, v in json.load(open(p, encoding='utf-8')).items()} if os.path.exists(p) else {}
 
@@ -199,7 +221,7 @@ def ingest_downloads(log=print, after=None, after_lang=None):
         if lang:             # every page is checked: nothing Burmese, not cut short, headings kept.  A page that fails is NOT stored - it is sent again (the _rest file); after 3 failures of a page that is not Burmese-only it is stored and marked
             inp0 = os.path.join(OUT, re.sub('_' + lang + r'(?: [(]\d+[)])?[.]txt$', '.txt', name)); srcs = {}
             if '_for' + lang in name and os.path.exists(inp0):
-                srcs = {k: v.split('### မြန်မာပြန်', 1)[1].strip() for k, v in parse_pages(open(inp0, encoding='utf-8').read()).items() if '### မြန်မာပြန်' in v}
+                srcs = {k: (v.split('### မြန်မာပြန်', 1)[1] if '### မြန်မာပြန်' in v else v).strip() for k, v in parse_pages(open(inp0, encoding='utf-8').read()).items()}
             rp, rj = _rejects(n, lang); bad = {}
             for k, v in list(pg.items()):
                 why = check_lang_page(v.replace(chr(92) + 'n', NL), srcs.get(k))
@@ -346,9 +368,11 @@ def publish(n, log=print, lang=''):
     d = load_translations(n, lang)
     if not d: raise RuntimeError('စာအုပ် %03d: %sပြန် မရှိသေးပါ' % (n, LANGS.get(lang, 'မြန်မာ')))
     WEBDIR = os.path.join(REPO, 'data', 'nissaya_translations' if not lang else 'translations_' + lang)          # vi / en: data/translations_vi/<book>.json + index.json (the reader's Tiếng Việt / English buttons)
-    P = _paired(n)
-    keys = {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
-    books = sorted({b for b, p in keys})
+    if n in MBV: P = {}; keys = {(MBV[n], pg) for pg in d}; books = [MBV[n]]      # Mahabuddhavamsa: the 'Pali page' is the book page
+    else:
+        P = _paired(n)
+        keys = {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
+        books = sorted({b for b, p in keys})
     per = {b: {} for b in books}
     for pg, txt in d.items():
         owners = [b for b in books if (b, pg) in keys]
