@@ -3098,19 +3098,24 @@ let isRomanPali = false;
     {id: "paramattha", name: "ပရမတ်", sub: "Paramattha", url: "https://sayadawtejinda.github.io/dhamma/paramattha"},
     {id: "abhidhamma", name: "အဘိဓမ္မာ ဇယားများ", sub: "Abhidhamma Charts", url: "https://sayadawtejinda.github.io/dhamma/abhidhamma-charts.html"}
   ];
-  function showChartsList(){
-    tp_leaveLang(); setFloatSearchVisible(true);
-    renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဇယားများ"}]);
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${TP_CHARTS.map(c => `<div class="tp-card" data-chart="${c.id}">${c.name}<span class="tp-count">${c.sub}</span></div>`).join("")}</div>`;
-    document.querySelectorAll("[data-chart]").forEach(el => el.addEventListener("click", () => showChart(el.dataset.chart)));
-    setParams({basket: "charts"});
+  const TP_CHART_NAMES = {vithicitta: ["Vithi Citta", "Lộ trình tâm (Vithi Citta)", "Cognitive process (Vithi Citta)"], paramattha: ["Paramattha", "Chân đế (Paramattha)", "Ultimate realities (Paramattha)"], abhidhamma: ["Abhidhamma Charts", "Bảng Vi Diệu Pháp", "Abhidhamma charts"]};
+  function tpChartEnter(lang){ tp_leaveLang(); if(lang){ trLang = lang; trUi = lang; if(window.tpUiStart) window.tpUiStart(); } setFloatSearchVisible(true); }
+  function showChartsList(lang){
+    tpChartEnter(lang); const k = lang === "vi" ? 1 : lang === "en" ? 2 : 0;
+    const crumb = lang ? [{label: "Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: lang === "vi" ? "Bảng biểu" : "Charts"}] : [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဇယားများ"}];
+    renderBreadcrumb(crumb);
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${TP_CHARTS.map(c => `<div class="tp-card" data-chart="${c.id}">${lang ? TP_CHART_NAMES[c.id][k] : c.name}<span class="tp-count">${c.sub}</span></div>`).join("")}</div>`;
+    document.querySelectorAll("[data-chart]").forEach(el => el.addEventListener("click", () => showChart(el.dataset.chart, lang)));
+    setParams(lang ? {basket: "tr_" + lang, category: "charts"} : {basket: "charts"});
   }
-  function showChart(id){
-    const c = TP_CHARTS.find(x => x.id === id); if(!c) return showChartsList();
-    tp_leaveLang(); setFloatSearchVisible(true);
-    renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဇယားများ", onclick:(e)=>{e.preventDefault(); showChartsList();}}, {label: c.name}]);
-    document.getElementById("tp-view").innerHTML = `<iframe title="${c.name}" src="${c.url}" style="width:100%;height:calc(100vh - 150px);min-height:480px;border:0;border-radius:8px;background:#fff;"></iframe>`;
-    setParams({basket: "charts", category: id});
+  function showChart(id, lang){
+    const c = TP_CHARTS.find(x => x.id === id); if(!c) return showChartsList(lang);
+    tpChartEnter(lang); const k = lang === "vi" ? 1 : lang === "en" ? 2 : 0, nm = lang ? TP_CHART_NAMES[id][k] : c.name;
+    const crumb = lang ? [{label: "Tipiṭaka", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label: lang === "vi" ? "Bảng biểu" : "Charts", onclick:(e)=>{e.preventDefault(); showChartsList(lang);}}, {label: nm}] : [{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဇယားများ", onclick:(e)=>{e.preventDefault(); showChartsList();}}, {label: c.name}];
+    renderBreadcrumb(crumb);
+    const src = c.url + (lang && c.id !== "abhidhamma" ? (c.url.includes("?") ? "&" : "?") + "lang=" + lang : "");
+    document.getElementById("tp-view").innerHTML = `<iframe title="${nm}" src="${src}" style="width:100%;height:calc(100vh - 150px);min-height:480px;border:0;border-radius:8px;background:#fff;"></iframe>`;
+    setParams(lang ? {basket: "tr_" + lang, category: "chart:" + id} : {basket: "charts", category: id});
   }
   // Tiếng Việt / English book lists: drill down like Tipiṭaka › Pāḷi: basket (Pāḷi / Aṭṭhakathā / Ṭīkā / Aññā) › category (nikāya ...) › books, all in the order of the Pāḷi lists
   let tpTrLast = {lang: "", bs: "", cat: ""};
@@ -3119,6 +3124,8 @@ let isRomanPali = false;
     bs = bs || ""; cat = cat || ""; tpTrLast = {lang, bs, cat};
     tp_leaveLang(); trLang = lang; trUi = lang; if(window.tpUiStart) window.tpUiStart(); setFloatSearchVisible(true);
     const idx = await ensureIndex(); try{ await tp_loadEditions(); }catch(e){}
+    if(bs === "charts") return showChartsList(lang);
+    if(bs === "chart") return showChart(cat, lang);
     const seen = new Set(), ids = Object.keys(TP_TR_VARS_X[lang]), books = idx.books.filter(b => ids.includes(b.id) && !seen.has(b.id) && seen.add(b.id));      // Pāḷi order, each book once
     const unit = n => lang === "vi" ? `${n} sách` : (n === 1 ? "1 book" : `${n} books`), rn = t => esc2(tpRomanName(t));
     const mbvBooks = MBV_BOOKS.filter(b => (TP_TR_VARS_X[lang][b.id] || []).length);      // Minkun Sayadaw's Mahābuddhavaṃsa (a Burmese book translated into this language)
@@ -3144,6 +3151,7 @@ let isRomanPali = false;
     }else{
       bs = ""; tpTrLast.bs = ""; tpTrLast.cat = ""; crumb.push(crumbLang(true));
       html = Object.keys(idx.basket_labels).filter(k => books.some(b => b.basket === k)).map(k => card(`data-trbs="${k}"`, rn(idx.basket_labels[k]), unit(books.filter(b => b.basket === k).length))).join("");
+      html += card(`data-trbs="charts"`, lang === "vi" ? "Bảng biểu (Charts)" : "Charts", lang === "vi" ? "3 bảng" : "3 charts");
       if(mbvBooks.length) html += card(`data-trbs="mbv"`, lang === "vi" ? "Ngài Mingun Sayadaw" : "Mingun Sayadaw", unit(mbvBooks.length));
       html = html ? `<div class="tp-grid">${html}</div>` : `<p style="color:#888;padding:16px">${lang === "vi" ? "Chưa có sách nào được dịch sang tiếng Việt." : "No book has been translated into English yet."}</p>`;
     }
