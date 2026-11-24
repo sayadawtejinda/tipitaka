@@ -52,6 +52,11 @@
   #tp-breadcrumb a{color:#0645ad;cursor:pointer;text-decoration:none;}
   #tp-breadcrumb a:hover{text-decoration:underline;}
   .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:16px 0;}
+    #skp-pane{position:fixed;top:0;right:0;width:50%;height:100vh;z-index:40;background:#fffdf7;border-left:2px solid #d9d0b8;display:flex;flex-direction:column;box-shadow:-3px 0 10px rgba(0,0,0,.12)}
+    #skp-pane iframe{flex:1;width:100%;border:0}.skp-pane-h{display:flex;align-items:center;gap:8px;padding:6px 10px;background:#f3ead2;font-size:13px}.skp-pane-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.skp-pane-new{text-decoration:none;color:#7a5c1e;font-size:16px}.skp-pane-x{border:1px solid #d9d0b8;background:#fff;border-radius:50%;width:26px;height:26px;cursor:pointer}
+    body.skp-split #tp-view,body.skp-split #tp-breadcrumb,body.skp-split #tp-recent-books{width:calc(50% - 36px)}
+    body.skp-split #tp-float-next{right:calc(50% + 6px)}
+    @media (max-width:768px){ #skp-pane{top:auto;bottom:0;width:100%;height:48vh;border-left:0;border-top:2px solid #d9d0b8} body.skp-split #tp-view,body.skp-split #tp-breadcrumb,body.skp-split #tp-recent-books{width:auto} body.skp-split{padding-bottom:50vh} body.skp-split #tp-float-next{right:6px} }
     .skp-ph{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;padding-bottom:3px;border-bottom:1px dashed #d9d0b8;color:#a08040;font-size:12px}.skp-pdf{border:1px solid #d9d0b8;background:#fff;border-radius:8px;padding:1px 7px;cursor:pointer;font-size:14px;line-height:1.3}.skp-pdf:hover{background:#f3ead2}
     .tp-dl-btn{position:absolute;top:5px;right:5px;width:26px;height:26px;border-radius:50%;border:1px solid #d9d0b8;background:#fff;font-size:13px;line-height:1;padding:0;cursor:pointer;color:#7a5c1e;}
     .tp-dl-btn:hover{background:#f3ead2;}
@@ -405,7 +410,7 @@ function tp_reopenBtn(was){          // ◧ in the corner of the Pāli side: bri
   });
   pc.insertBefore(rb, pc.firstChild);
 }
-function tp_leaveLang(){ mbvViaTr = ""; if(trLang !== "my" || trUi !== "my"){ trLang = "my"; trUi = "my"; if(window.tpUiStop) window.tpUiStop(); if(trRomanForced){ isRomanPali = false; trRomanForced = false; } } }       // back to the Burmese reader: the Roman Pali that the language reader switched on goes off again
+function tp_leaveLang(){ if(typeof skpClosePane === "function") skpClosePane(); mbvViaTr = ""; if(trLang !== "my" || trUi !== "my"){ trLang = "my"; trUi = "my"; if(window.tpUiStop) window.tpUiStop(); if(trRomanForced){ isRomanPali = false; trRomanForced = false; } } }       // back to the Burmese reader: the Roman Pali that the language reader switched on goes off again
 let TP_TR_BOOKS = new Set(), tpTrCache = {}, TP_TR_VARS = {};   // မြန်မာပြန်ပြီးသော နိဿယစာအုပ်များ (data/nissaya_translations/index.json) နှင့် စာအုပ်တစ်အုပ်ချင်း၏ မြန်မာပြန် (ပါဠိစာမျက်နှာ → စာ)
 let nsyBtHl = null;      // the headword that was searched in the ဘာသာဋီကာအဘိဓာန် (highlighted in the page that opens)
 let nsyBtScroll = null;   // ဘာသာဋီကာ split view ဖွင့်လျှင် ရွှေ့ရမည့် နိဿယစာအုပ်စာမျက်နှာ
@@ -2972,7 +2977,16 @@ let isRomanPali = false;
   const SKP_PDF_BASE = "https://sayadawtejinda.github.io/shwekyin-pdf/";
   let skpPromise = null;
   function ensureSkp(){ if(!skpPromise){ skpPromise = fetchJson(cdnUrl(`${DATA_FOLDER}/skp_index.json`)); skpPromise.catch(() => { skpPromise = null; }); } return skpPromise; }
-  function skpOpenPdf(bookId, page, title){ tp_btOpenPdf(SKP_PDF_BASE + bookId + ".pdf" + (page > 1 ? "#page=" + page : ""), title); }
+  function skpClosePane(){ const el = document.getElementById("skp-pane"); if(el) el.remove(); document.body.classList.remove("skp-split"); }
+  function skpOpenPdf(bookId, page, title){
+    const url = SKP_PDF_BASE + bookId + ".pdf" + (page > 1 ? "#page=" + page : "");
+    let pane = document.getElementById("skp-pane");
+    if(!pane){ pane = document.createElement("div"); pane.id = "skp-pane"; pane.innerHTML = '<div class="skp-pane-h"><span class="skp-pane-t"></span><a class="skp-pane-new" target="_blank" rel="noopener" title="tab အသစ်ထဲ ဖွင့်မည်">↗</a><button class="skp-pane-x" title="ပိတ်မည်">✕</button></div><iframe></iframe>'; document.body.appendChild(pane); pane.querySelector(".skp-pane-x").addEventListener("click", skpClosePane); }
+    pane.querySelector(".skp-pane-t").textContent = "📕 " + (title || "PDF") + (page > 1 ? " — စာ " + page : "");
+    pane.querySelector(".skp-pane-new").href = url;
+    pane.querySelector("iframe").src = tp_pdfViewerUrl(url);
+    document.body.classList.add("skp-split");
+  }
   function skpCrumb(...more){ renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, ...more]); }
 
   // ရွှေကျင်စာပေ OCR စာအုပ်များ (data/skp_ocr.json + data/skp/<id>.json - scripts/build_skp_ocr.py) - စာမျက်နှာတိုင်း၏ ထိပ်မှာ 📕 PDF ခလုပ်

@@ -4,13 +4,18 @@
   source  : C:/Users/sayad/Documents/spellcheck/out/html/*.html  (D = the 52-book Shwekyin app, numbered 01-66 and W = other books of the Shwekyin collection)
   the page of the reader = one "စာမျက်နှာ-N" marker of the HTML (the chunk before the first marker is page 1);  each page starts with a head: printed page number + 📕 (the PDF page)
   PDF page = printed page + offset (offset = page_number - actual_page_number of the book's tocs in ShweKyin+Sarpay/database/shwekyin.db);  books without a PDF get no 📕
-  usage: python scripts/build_skp_ocr.py
+  usage: python scripts/build_skp_ocr.py [--push] [--all]
+     (default: only the D books = the books of the Shwekyin app, which are what the web shows;  --all also builds the numbered 01-66 and W books, NOT put on the web yet)
+     --push : after building, commit data/skp + data/skp_ocr.json and push to GitHub (the web updates in 1-5 minutes)
 """
-import glob, json, os, re, sqlite3, statistics, sys
+import glob, json, os, re, sqlite3, statistics, subprocess, sys
+ALL = '--all' in sys.argv; PUSH = '--push' in sys.argv
 sys.stdout.reconfigure(encoding='utf-8')
 SRC = r'C:/Users/sayad/Documents/spellcheck/out/html'
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(REPO, 'data', 'skp'); os.makedirs(OUT, exist_ok=True)
+for _f in glob.glob(os.path.join(OUT, '*.json')):
+    if not ('--all' in sys.argv or os.path.basename(_f)[3:5].isdigit()): os.remove(_f)      # old files of books that are not published (numbered / W)
 DB = sqlite3.connect(os.path.join(REPO, 'ShweKyin+Sarpay', 'database', 'shwekyin.db'))
 TR = str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789'); MY = str.maketrans('0123456789', '၀၁၂၃၄၅၆၇၈၉')
 MARK = re.compile(r'<p><font color="#999999" size="1">စာမျက်နှာ-([၀-၉]+)</font></p>\s*|<span class="pg" id="p\d+">\[([၀-၉]+)\]</span>\s*')      # the second form: older exports (13 ဓမ္မဂီတိကာ) - the marker is inside a paragraph
@@ -46,7 +51,7 @@ books = {}
 files = sorted(glob.glob(os.path.join(SRC, '*.html')))
 for f in files:
     name = os.path.basename(f)
-    if name.startswith('c0'): continue                      # c01 / c02 = the Bhasatika dictionary texts (already on the web elsewhere)
+    if name.startswith('c0') or (not ALL and not name.startswith('D')): continue                      # c01 / c02 = the Bhasatika dictionary texts (already on the web elsewhere)
     s = open(f, encoding='utf-8').read(); body = body_of(s)
     if not strip_tags(body): print('empty, skipped:', name); continue
     m = re.match(r'D\d+_(\d+)_(\d+)_(\d+)_', name)
@@ -107,3 +112,11 @@ for gid, gname in (('x1', 'ဓမ္မစာပေများ'), ('x2', 'ဝ�
     if ids: glist.append({'id': gid, 'name': gname, 'books': ids})
 json.dump({'books': books, 'groups': glist}, open(os.path.join(REPO, 'data', 'skp_ocr.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 print(len(books), 'books;', sum(os.path.getsize(p) for p in glob.glob(os.path.join(OUT, '*.json'))) // 1024 // 1024, 'MB')
+
+if PUSH:
+    g = lambda *a: subprocess.run(['git', *a], cwd=REPO, capture_output=True, text=True)
+    g('add', '-A', '--', 'data/skp', 'data/skp_ocr.json')
+    if not g('status', '--porcelain', '--', 'data/skp', 'data/skp_ocr.json').stdout.strip(): print('nothing changed - the web is already the same')
+    else:
+        print(g('commit', '-m', 'Shwekyin OCR books: corrections from the spellcheck HTML', '-m', 'Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>', '--', 'data/skp', 'data/skp_ocr.json').stdout)
+        g('pull', '--rebase', '--autostash'); r = g('push'); print('pushed' if r.returncode == 0 else 'PUSH FAILED: ' + r.stderr)
