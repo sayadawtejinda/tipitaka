@@ -3215,7 +3215,7 @@ let isRomanPali = false;
     [/ဆက်တိုက်ပါဝင်သော စာမျက်နှာ\s*/g, "cụm từ liên tiếp trong ", "exact phrase on "],
     [/ပါဝင်သော စာမျက်နှာပေါင်း\s*/g, "xuất hiện trong tổng cộng ", "found in a total of "],
     [/\s*မျက်နှာ တွေ့ရှိရပါသည်။/g, " trang.", " pages."],
-    [/^\s*မျက်နှာ\s*$/g, " trang", " pages"],
+    [/^\s*မျက်နှာ(?=\s*(?:\(|$))/g, " trang", " pages"],
     [/"(.*)" ဟူသော စကားလုံး ကျမ်းစာထဲတွင် မရှိပါ။/g, "Không có từ \"$1\" trong Tipiṭaka.", "The word \"$1\" is not in the Tipiṭaka."],
     [/"(.*)" အတွက် စာမျက်နှာ မတွေ့ပါ။/g, "Không có trang nào cho \"$1\".", "No page found for \"$1\"."],
     [/စကားလုံးများ \((.*)\) အားလုံး တစ်ပြိုင်နက်တည်း ပါဝင်သော စာမျက်နှာ မတွေ့(?:ပါ|ရှိ)[^။]*။/g, "Không có trang nào chứa đồng thời tất cả các từ ($1).", "No page contains all of these words together ($1)."],
