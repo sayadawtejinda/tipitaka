@@ -20,6 +20,46 @@ MBV = {900 + i: 'mbv_%d' % i for i in range(1, 9)}      # Minkun Sayadaw's Mahab
 TOCP = 100000
 
 
+def _mms_map():
+    """MMS = the old books of the reader that already have a Burmese translation aligned to the Pali pages (data/mm_split/<Pali book>.json = {Pali page: Burmese html}):  pseudo book numbers 1001, 1002 ...  -> Pali book id.
+    The numbers are kept in gold/mms_ids.json (a book that is added to mm_split later gets the next free number; the numbers never change)."""
+    p = os.path.join(GOLD, 'mms_ids.json'); ids = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else {}
+    idx = os.path.join(os.path.dirname(NSY), 'data', 'mm_split', 'index.json')
+    now = sorted(json.load(open(idx, encoding='utf-8'))) if os.path.exists(idx) else []
+    new = [b for b in now if b not in ids]
+    if new:
+        nxt = max([int(k) for k in ids] + [1000]) + 1
+        for b in new: ids[str(nxt)] = b; nxt += 1
+        os.makedirs(GOLD, exist_ok=True); json.dump(ids, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=0)
+    return {int(k): v for k, v in ids.items()}
+
+
+MMS = _mms_map()
+
+
+def _pali_pages(bid):
+    """{Pali page: text} of a Pali book (data/<id>.json)"""
+    rows = json.load(open(os.path.join(os.path.dirname(NSY), 'data', bid + '.json'), encoding='utf-8'))
+    return {int(r['page']): _mbv_text(r['content']) for r in rows}
+
+
+def mms_book_name(bid):
+    try:
+        for b in json.load(open(os.path.join(os.path.dirname(NSY), 'books.json'), encoding='utf-8'))['books']:
+            if b['id'] == bid: return b['name']
+    except Exception: pass
+    return bid
+
+
+def mms_source(n):
+    """gold/tr_100N.json {Pali page: Burmese text}: made from data/mm_split/<book>.json the first time (the Burmese translation that is already on the web, page for page)"""
+    p = os.path.join(GOLD, 'tr_%03d.json' % n)
+    if not os.path.exists(p):
+        d = json.load(open(os.path.join(os.path.dirname(NSY), 'data', 'mm_split', MMS[n] + '.json'), encoding='utf-8'))
+        os.makedirs(GOLD, exist_ok=True)
+        json.dump({str(k): _mbv_text(d[k]) for k in sorted(d, key=int) if _mbv_text(d[k]).strip()}, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+
+
 def _mbv_toc(n): return json.load(open(os.path.join(os.path.dirname(NSY), 'data', MBV[n] + '.json'), encoding='utf-8'))['toc']
 
 
@@ -154,7 +194,8 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
     """Vietnamese / English input files: every Pali page that HAS a Burmese translation (gold/tr_NNN.json) -> '### ပါဠိ' (the Pali text, to look at when the Burmese is unclear) + '### မြန်မာပြန်'
     (the text to translate).  Pages already translated into the language (gold/tr_NNN_<lang>.json) are left out unless redo.  -> output/tr_NNN_<book>_pali<a>-<b>_for<lang>.txt
     (the Canvas app's answer comes back as ..._for<lang>_<lang>.txt and is ingested by ingest_downloads)"""
-    P = None if n in MBV else _paired(n); my = load_translations(n)
+    P = None if (n in MBV or n in MMS) else _paired(n); my = load_translations(n)
+    palit = _pali_pages(MMS[n]) if n in MMS else {}
     if not my: raise RuntimeError('စာအုပ် %03d: မြန်မာပြန် မရှိသေးပါ' % n)
     if n in MBV:           # table of contents titles = extra pages 100000+i of the book (translated by the same flow, kept in tr_90N_<lang>.json, used by mbv_build_toc at publish); normal files leave them out
         for i, e in enumerate(_mbv_toc(n)): my[TOCP + i] = e['title']
@@ -165,7 +206,7 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
         only = ({p for p in my if p >= TOCP} if toc else (only if only is not None else {p for p in my if p < TOCP}))
     done = {} if redo else load_translations(n, lang)
     keyset = set() if P is None else {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}
-    books = [MBV[n]] if P is None else sorted({b for b, p in keyset}); blocks = {}
+    books = [MMS[n]] if n in MMS else ([MBV[n]] if P is None else sorted({b for b, p in keyset})); blocks = {}
     for b in ([] if P is None else P['blocks']): blocks.setdefault((b['book'], b['page']), []).append(b)
     have = [p for p in my if my[p].strip() and (only is None or p in only)]
     pages = sorted(p for p in have if p not in done)
@@ -175,6 +216,7 @@ def build_lang(n, lang, maxchars=10000, sets=10, log=print, redo=False, only=Non
         owners = [b for b in books if (b, pg) in blocks] or books[:1]
         bk = owners[0]; bl = sorted(blocks.get((bk, pg), []), key=lambda b: b['i'])
         pali = NL.join(('## ' if (b.get('cls') or '').strip() in HEAD_CLS else '') + b['pali'] for b in bl)
+        if n in MMS: built.append(((bk, pg), '--- စာမျက်နှာ %d ---' % pg + NL + '### ပါဠိ' + NL + (palit.get(pg, '').strip() or '(ပါဠိစာ မတွေ့)') + NL + '### မြန်မာပြန်' + NL + my[pg].strip() + NL)); continue
         if P is None: built.append(((bk, pg), '--- စာမျက်နှာ %d ---' % pg + NL + my[pg].strip() + NL)); continue
         built.append(((bk, pg), '--- စာမျက်နှာ %d ---' % pg + NL + '### ပါဠိ' + NL + (pali.strip() or '(ပါဠိစာ မတွေ့)') + NL + '### မြန်မာပြန်' + NL + my[pg].strip() + NL))
     groups = []; cur = []; size = 0
@@ -207,6 +249,7 @@ def parse_pages(text):
 
 def load_translations(n, lang=''):
     if n in MBV and not lang: mbv_source(n)
+    if n in MMS and not lang: mms_source(n)
     p = os.path.join(GOLD, 'tr_%03d%s.json' % (n, ('_' + lang) if lang else ''))
     return {int(k): v for k, v in json.load(open(p, encoding='utf-8')).items()} if os.path.exists(p) else {}
 
@@ -425,6 +468,7 @@ def publish(n, log=print, lang=''):
     if not d: raise RuntimeError('စာအုပ် %03d: %sပြန် မရှိသေးပါ' % (n, LANGS.get(lang, 'မြန်မာ')))
     WEBDIR = os.path.join(REPO, 'data', 'nissaya_translations' if not lang else 'translations_' + lang)          # vi / en: data/translations_vi/<book>.json + index.json (the reader's Tiếng Việt / English buttons)
     if n in MBV: P = {}; keys = {(MBV[n], pg) for pg in d}; books = [MBV[n]]      # Mahabuddhavamsa: the 'Pali page' is the book page
+    elif n in MMS: P = {}; keys = {(MMS[n], pg) for pg in d}; books = [MMS[n]]      # an old book of the reader (Burmese translation aligned to the Pali pages): the key is the Pali page
     else:
         P = _paired(n)
         keys = {(k.split('|')[0], int(k.split('|')[1])) for k in P['ppmap']}

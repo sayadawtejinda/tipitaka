@@ -14,7 +14,7 @@ import t_core, m_tool
 
 root = tk.Tk(); root.title('ပါဠိ မြန်မာပြန် ကိရိယာ'); root.geometry('900x640')
 f = ttk.Frame(root, padding=10); f.pack(fill='both', expand=True); f.columnconfigure(1, weight=1); f.rowconfigure(6, weight=1)
-import glob, json
+import glob, json, time
 TIPI = os.path.dirname(NSY)
 import m_status
 def published(): return m_status.on_web_set()          # one shared rule for run_tool and run_translate (scripts/m_status.py)
@@ -57,6 +57,7 @@ def translated_here(n, books, tri):
         need = {int(k.split('|')[1]) for k in P if k.split('|')[0] == x}
         if not need or not need <= have: return False
     return True
+_MMS_CACHE = {}
 def get_sheets(keep=None):
     keep = keep if keep is not None else load_state().get('sheet')     # the book chosen / published last stays in the list (even when it would be hidden)
     L = lang_var.get()
@@ -73,6 +74,17 @@ def get_sheets(keep=None):
             t_core.mbv_source(n); tot, got = t_core.lang_progress(n, L)
             if n != keep and hidepub.get() and lang_on_web(n, L): continue
             out.append((n, 'မင်းကွန်းဆရာတော် မဟာဗုဒ္ဓဝင် (%s)   [%s %d/%d]' % (bid, LANG_NAME[L], got, tot)))
+        ck = (L, hidepub.get(), keep)          # old books of the reader (57 files): the list is rebuilt at most once a minute (reading all of them every 5 seconds would be slow)
+        if _MMS_CACHE.get('k') != ck or time.time() - _MMS_CACHE.get('t', 0) > 60:
+            rows = []
+            for n, bid in sorted(t_core.MMS.items()):      # the Burmese translation that is already on the web (mm_split) + the Pali page -> vi / en
+                try:
+                    t_core.mms_source(n); tot, got = t_core.lang_progress(n, L); web = lang_on_web(n, L)
+                except Exception: continue
+                if n != keep and hidepub.get() and web: continue
+                rows.append((n, '📖 %s (%s)   [%s %d/%d%s]' % (t_core.mms_book_name(bid), bid, LANG_NAME[L], got, tot, ' · web ✓' if web else '')))
+            _MMS_CACHE.update(k=ck, t=time.time(), rows=rows)
+        out.extend(_MMS_CACHE['rows'])
         return out
     """books of run_tool that are on the web, WITHOUT the books that already have a Myanmar translation Split View (data/mm_split: not translated again) and (when ticked) without the books whose translation is already on the web"""
     pub = published()
@@ -156,7 +168,7 @@ def go1():
 def work_pub(n, auto=False, lang=''):
     try:
         if not auto and not messagebox.askyesno('web သို့ တင်မည်', 'စာအုပ် %03d ၏ %sပြန်ပြီးသည့် စာမျက်နှာများကို web (GitHub) သို့ တင်မည်လား?' % (n, LANG_NAME[lang or 'my'])): return
-        say('web သို့ တင်နေသည်...'); t_core.publish(n, say, lang); m_status._TRK['t'] = 0; save_state(sheet=n, last_pub=n)
+        say('web သို့ တင်နေသည်...'); t_core.publish(n, say, lang); m_status._TRK['t'] = 0; _MMS_CACHE.clear(); save_state(sheet=n, last_pub=n)
         if lang:
             say('✔ %sပြန်ကို web သို့ တင်ပြီး — ပင်မစာမျက်နှာ၏ "%s" ခလုပ်ထဲ ပေါ်ပါလိမ့်မည်' % (LANG_NAME[lang], {'vi': 'Tiếng Việt', 'en': 'English'}[lang]))
             if n in t_core.MBV:          # Mahabuddhavamsa: the titles that are not headings of the book still need Gemini -> their input file is made by itself (only the missing titles), once
