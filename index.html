@@ -52,6 +52,7 @@
   #tp-breadcrumb a{color:#0645ad;cursor:pointer;text-decoration:none;}
   #tp-breadcrumb a:hover{text-decoration:underline;}
   .tp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin:16px 0;}
+    .skp-ph{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px;padding-bottom:3px;border-bottom:1px dashed #d9d0b8;color:#a08040;font-size:12px}.skp-pdf{border:1px solid #d9d0b8;background:#fff;border-radius:8px;padding:1px 7px;cursor:pointer;font-size:14px;line-height:1.3}.skp-pdf:hover{background:#f3ead2}
     .tp-dl-btn{position:absolute;top:5px;right:5px;width:26px;height:26px;border-radius:50%;border:1px solid #d9d0b8;background:#fff;font-size:13px;line-height:1;padding:0;cursor:pointer;color:#7a5c1e;}
     .tp-dl-btn:hover{background:#f3ead2;}
     .tp-dl-btn[disabled]{opacity:.6;cursor:wait;width:auto;padding:0 7px;border-radius:13px;font-size:11px;}
@@ -516,6 +517,12 @@ let isRomanPali = false;
       }
     }
     if(!mmPagesCache[mmBookId] && mmBookId.startsWith("pa_")){ await ensurePaText(mmBookId); }
+    if(!mmPagesCache[mmBookId] && mmBookId.startsWith("sk_")){
+      await ensureBurmeseToc();
+      const d = await fetchJson(cdnUrl(`${DATA_FOLDER}/skp/${mmBookId}.json`));
+      mmPagesCache[mmBookId] = d.pages;
+      burmeseTocIndex[mmBookId] = d.toc.map(t => ({ level: t.level, title: t.title, page: t.page, indent: t.level >= 2 ? 30 : 10 }));
+    }
     if(!mmPagesCache[mmBookId] && mmBookId.startsWith("mbv_")){
       await ensureBurmeseToc();
       const d = await fetchJson(cdnUrl(`${DATA_FOLDER}/${mmBookId}.json`));
@@ -999,6 +1006,7 @@ let isRomanPali = false;
       });
     } catch(e){ console.error("Error loading Myanmar TOC/Books", e); }
     MBV_BOOKS.forEach(b => { burmeseBookMeta[b.id] = { title: b.title, pagecount: b.pages, category: "mbv" }; });
+    try{ const o = await ensureSkpOcr(); Object.keys(o.books).forEach(id => { burmeseBookMeta[id] = { title: o.books[id].title, pagecount: o.books[id].pages, category: "skp" }; }); }catch(e){}      // ရွှေကျင်စာပေ OCR စာအုပ်များ (data/skp_ocr.json)
   }
   return burmeseTocIndex;
 }
@@ -2239,7 +2247,11 @@ let isRomanPali = false;
     // Breadcrumb တွင် မြန်မာပြန် စာအုပ်အမည် အပြည့်အစုံ ပြသရန် ပေါင်းထည့်ခြင်း
     if (burmeseBookMeta && burmeseBookMeta[mmCurrentBookId]) {
        const meta = burmeseBookMeta[mmCurrentBookId];
-       if(meta.category === "paauk") renderBreadcrumb([
+       if(meta.category === "skp"){ const so = skpOcrData, gr = so && so.groups.find(g => g.books.includes(mmCurrentBookId)); renderBreadcrumb([
+           {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
+           {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}},
+           {label:"ရွှေကျင်စာပေ", onclick:(e)=>{e.preventDefault(); showSkpAuthors();}}
+       ].concat(gr ? [{label: gr.name, onclick:(e)=>{e.preventDefault(); showSkpBooks(gr.id);}}] : [], [{label: meta.title}])); } else if(meta.category === "paauk") renderBreadcrumb([
            {label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}},
            {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}},
            {label:"ဖားအောက်ဆရာတော်", onclick:(e)=>{e.preventDefault(); showPaBooks();}},
@@ -2268,8 +2280,9 @@ let isRomanPali = false;
     if(mbvIs && !window._mbvEdLoaded){ window._mbvEdLoaded = true; tp_loadEditions().then(() => renderMmPage(highlightText, autoOpenToc)).catch(() => {}); }
     const mbvAvail = mbvIs ? ["vi", "en"].filter(L => (TP_TR_VARS_X[L][mmCurrentBookId] || []).length) : [];
     const mbvL = mbvSplit && mbvAvail.length ? (mbvAvail.includes(mbvLang) ? mbvLang : mbvAvail[0]) : "";
-    const isMbv = mmCurrentBookId.startsWith("mbv_") || isPa;
-    const backLabel = isPa ? "← ဖတ်စာစာရင်းသို့" : (mbvIs && mbvViaTr) ? "← " + TR_LANG_NAME[mbvViaTr] : isMbv ? "← မင်းကွန်းဆရာတော်သို့" : "← ပါဠိတော်သို့";
+    const isSk = mmCurrentBookId.startsWith("sk_");
+    const isMbv = mmCurrentBookId.startsWith("mbv_") || isPa || isSk;
+    const backLabel = isSk ? "← ရွှေကျင်စာပေသို့" : isPa ? "← ဖတ်စာစာရင်းသို့" : (mbvIs && mbvViaTr) ? "← " + TR_LANG_NAME[mbvViaTr] : isMbv ? "← မင်းကွန်းဆရာတော်သို့" : "← ပါဠိတော်သို့";
 
     // "စာပိုဒ်နံပါတ်ကို-သွားမည်" ဟု ပြင်ဆင်ပြီး
     document.getElementById("tp-view").innerHTML = `
@@ -2312,6 +2325,7 @@ let isRomanPali = false;
     document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
     document.getElementById("tp-mm-back").addEventListener("click", async ()=>{
       if(mmCurrentBookId.startsWith("pa_")){ closeAllDropdowns(); showPaBooks(); return; }
+      if(mmCurrentBookId.startsWith("sk_")){ closeAllDropdowns(); const so = skpOcrData, gr = so && so.groups.find(g => g.books.includes(mmCurrentBookId)); if(gr) showSkpBooks(gr.id); else showSkpAuthors(); return; }
       if(mmCurrentBookId.startsWith("mbv_")){ closeAllDropdowns(); if(mbvViaTr){ showTrLangBooks(mbvViaTr); return; } showMbvBooks(); return; }
       try {
         const bMap = await ensureBurmeseMap();
@@ -2795,7 +2809,7 @@ let isRomanPali = false;
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"မြန်မာပြန်"}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     await ensureBurmeseToc();
-    const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))].filter(slug => slug !== "other" && slug !== "mbv" && slug !== "paauk");
+    const slugs = [...new Set(Object.values(burmeseBookMeta).map(m => m.category))].filter(slug => slug !== "other" && slug !== "mbv" && slug !== "paauk" && slug !== "skp");
     const gemBooks = await tpGeminiBooks();
     const html = slugs.map(slug => {
       const count = Object.values(burmeseBookMeta).filter(m => m.category === slug).length;
@@ -2961,21 +2975,33 @@ let isRomanPali = false;
   function skpOpenPdf(bookId, page, title){ tp_btOpenPdf(SKP_PDF_BASE + bookId + ".pdf" + (page > 1 ? "#page=" + page : ""), title); }
   function skpCrumb(...more){ renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, ...more]); }
 
+  // ရွှေကျင်စာပေ OCR စာအုပ်များ (data/skp_ocr.json + data/skp/<id>.json - scripts/build_skp_ocr.py) - စာမျက်နှာတိုင်း၏ ထိပ်မှာ 📕 PDF ခလုပ်
+  let skpOcrData = null, skpOcrPromise = null;
+  function ensureSkpOcr(){ if(!skpOcrPromise){ skpOcrPromise = fetchJson(cdnUrl(`${DATA_FOLDER}/skp_ocr.json`)).then(d => (skpOcrData = d)); skpOcrPromise.catch(() => { skpOcrPromise = null; }); } return skpOcrPromise; }
+  function skpOpenOcr(sid, pageIdx){ mmCurrentBookId = sid; mmCurrentPageIdx = pageIdx || 1; mmBackContext = null; mbvViaTr = ""; mbvSplit = false; (async () => { document.getElementById("tp-view").innerHTML = '<p class="tp-loading">Loading...</p>'; try{ await ensureMmPages(sid); renderMmPage(null, false); }catch(e){ document.getElementById("tp-view").innerHTML = `<p>ဖတ်၍မရပါ (${e.message})</p>`; } })(); }
+  document.addEventListener("click", e => { const b = e.target.closest && e.target.closest(".skp-pdf"); if(b){ e.preventDefault(); const bm = burmeseBookMeta && burmeseBookMeta[mmCurrentBookId]; skpOpenPdf(b.dataset.pdf, parseInt(b.dataset.pg, 10) || 1, (bm && bm.title) || ""); } });
+
   async function showSkpAuthors(){
     setFloatSearchVisible(true); skpCrumb({label:"ရွှေကျင်စာပေ"});
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
-    try{ const d = await ensureSkp();
-      document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${d.authors.map(a => `<div class="tp-card" data-skpauthor="${a.id}">${a.name}<span class="tp-count">${toMyanmarDigits(a.books.length)} အုပ်</span></div>`).join("")}</div>`;
-      document.querySelectorAll("[data-skpauthor]").forEach(el=> el.addEventListener("click", ()=> showSkpBooks(parseInt(el.dataset.skpauthor,10))));
+    try{ const d = await ensureSkp(); let o = null; try{ o = await ensureSkpOcr(); }catch(e){}
+      const extra = o ? o.groups.filter(g => typeof g.id === "string") : [];
+      document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${d.authors.map(a => `<div class="tp-card" data-skpauthor="${a.id}">${a.name}<span class="tp-count">${toMyanmarDigits(a.books.length)} အုပ်</span></div>`).join("")}${extra.map(g => `<div class="tp-card" data-skpauthor="${g.id}">${g.name}<span class="tp-count">${toMyanmarDigits(g.books.length)} အုပ်</span></div>`).join("")}</div>`;
+      document.querySelectorAll("[data-skpauthor]").forEach(el=> el.addEventListener("click", ()=> showSkpBooks(/^\d+$/.test(el.dataset.skpauthor) ? parseInt(el.dataset.skpauthor,10) : el.dataset.skpauthor)));
     }catch(e){ document.getElementById("tp-view").innerHTML = `<p>ဖတ်၍မရပါ (${e.message})</p>`; }
     setParams({basket: "sayadaw", category: "skp"});
   }
 
   async function showSkpBooks(authorId){
-    const d = await ensureSkp(); const a = d.authors.find(x => x.id === authorId); if(!a) return;
+    const d = await ensureSkp(); let o = null; try{ o = await ensureSkpOcr(); }catch(e){}
+    const og = o && o.groups.find(g => g.id === authorId);
+    const a = d.authors.find(x => x.id === authorId) || (og && { id: authorId, name: og.name, books: [] }); if(!a) return;
     setFloatSearchVisible(true); skpCrumb({label:"ရွှေကျင်စာပေ", onclick:(e)=>{e.preventDefault(); showSkpAuthors();}}, {label: a.name});
-    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${a.books.map(id => `<div class="tp-card" data-skpbook="${id}">${d.books[id].title}</div>`).join("")}</div>`;
-    document.querySelectorAll("[data-skpbook]").forEach(el=> el.addEventListener("click", ()=> showSkpBook(el.dataset.skpbook, authorId)));
+    const cards = [];
+    a.books.forEach(id => { const sid = "sk_" + id, ob = o && o.books[sid]; cards.push(`<div class="tp-card" data-skpbook="${id}"${ob ? ` data-skpocr="${sid}"` : ""}>${d.books[id].title}${ob ? `<span class="tp-count">${toMyanmarDigits(ob.pages)} စာမျက်နှာ</span>` : `<span class="tp-count">PDF</span>`}</div>`); });
+    if(og && typeof authorId === "string") og.books.forEach(sid => { const ob = o.books[sid]; cards.push(`<div class="tp-card" data-skpocr="${sid}">${tp_sayEsc(ob.title)}<span class="tp-count">${toMyanmarDigits(ob.pages)} စာမျက်နှာ</span></div>`); });
+    document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${cards.join("")}</div>`;
+    document.querySelectorAll("[data-skpbook],[data-skpocr]").forEach(el=> el.addEventListener("click", ()=> { if(el.dataset.skpocr) skpOpenOcr(el.dataset.skpocr, 1); else showSkpBook(el.dataset.skpbook, authorId); }));
     setParams({basket: "sayadaw", category: "skp_" + authorId});
   }
 
@@ -3014,7 +3040,7 @@ let isRomanPali = false;
   async function mmHomeCount(){
     try{
       const books = await fetchJson(cdnUrl(BURMESE_BOOKS_FILE));
-      const base = books.filter(b => !["other", "mbv", "paauk"].includes(mmCategoryFromId(b.id))).length;
+      const base = books.filter(b => !["other", "mbv", "paauk", "skp"].includes(mmCategoryFromId(b.id))).length;
       await ensureNissayaIds(); try{ await ensureMmSplitIndex(); }catch(e){}
       const extra = [...TP_TR_BOOKS].filter(b => !(mmSplitIndex && mmSplitIndex[b])).length;
       return base + extra;
@@ -4161,7 +4187,7 @@ function tp_edLabel(l){
     try{
       if(basket === "charts" && !book){ if(category) showChart(category); else showChartsList(); }
       else if(book){ const idx = await ensureIndex(); const meta = findBookMeta(idx, book, firstpage); loadPage(basket || (meta && meta.basket) || "", category || (meta && meta.category) || "", book, page || (meta && meta.firstpage) || 1, firstpage); } 
-      else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && (category === "paauk" || category === "paauk_texts")){ showPaBooks(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\d+$/.test(category)){ showSkpBooks(parseInt(category.slice(4),10)); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
+      else if(basket === "nissaya" && category && category.includes(":")){ const [nb, nc] = category.split(":"); showNissayaBooks(nb, nc); } else if(basket === "nissaya" && category){ showNissayaSubjects(category); } else if(basket === "nissaya"){ showNissayaCategories(); } else if(basket === "sayadaw" && (category === "paauk" || category === "paauk_texts")){ showPaBooks(); } else if(basket === "sayadaw" && category === "skp"){ showSkpAuthors(); } else if(basket === "sayadaw" && /^skp_\w+$/.test(category)){ const sa = category.slice(4); showSkpBooks(/^\d+$/.test(sa) ? parseInt(sa,10) : sa); } else if(basket === "sayadaw" && category === "minkun"){ showMbvBooks(); } else if(basket === "sayadaw"){ showSayadawList(); } else if(category && basket === "myanmar"){ showMmBookList(category); } else if(category && basket){ showBookList(basket, category); } else if(basket === "myanmar"){ showMmCategories(); } else if(basket){ showCategories(basket); } else { showBaskets(); }
     }catch(err){ document.getElementById("tp-view").innerHTML = "<p style='color:red'>Error: " + err.message + "</p>"; }
   })();
 
