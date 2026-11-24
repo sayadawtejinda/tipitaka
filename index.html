@@ -3585,7 +3585,7 @@ function tp_edLabel(l){
       const n = parseInt(tp_btToArabic(mt[1]), 10), pg = n + (m.off || 0); if(!(pg >= 1)) return;
       const b = document.createElement("button"); b.className = "nsy-pdf"; b.textContent = "📕"; b.title = "PDF စာမျက်နှာ " + pg + " ကို ဖွင့်မည်";
       b.style.cssText = "margin-left:8px;border:1px solid #d9d0b8;background:#fff;border-radius:8px;padding:0 6px;cursor:pointer;font-size:13px;line-height:1.4;";
-      b.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); tp_btOpenPdf(`https://archive.org/download/${m.id}/${m.id}.pdf#page=${pg}`, "နိဿယစာအုပ် " + m.id.replace("nsy-pdf-", "") + " — စာ " + pg); });
+      b.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); tp_btOpenPdf(m.url ? m.url + "#page=" + pg : `https://archive.org/download/${m.id}/${m.id}.pdf#page=${pg}`, "နိဿယစာအုပ် " + (m.id ? m.id.replace("nsy-pdf-", "") : decodeURIComponent(m.url.split("/").pop())) + " — စာ " + pg); });
       p.appendChild(b);
     });
   }

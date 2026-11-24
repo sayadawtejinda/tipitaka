@@ -58,6 +58,13 @@ for stem, book in sorted(files.items()):
     iid = 'nsy-pdf-%s-%s' % (kind, best[1])
     if iid not in avail: stats['pdf not on archive.org yet'] += 1; continue
     out[stem] = {'id': iid, 'off': best[2]}; stats['ok'] += 1
+# Bhasatika books whose PDFs are already on GitHub (bhasatika_web.json: web file <-> PDF; pdf page = mark - delta + page_offset, same rule as the Bhasatika dictionary)
+idx = open(os.path.join(REPO, 'index.html'), encoding='utf-8').read()
+BASE = re.search(r'const TP_BT_BASE = "([^"]+)"', idx).group(1); LOC = json.loads(re.search(r'const TP_BT_LOC = (\{.*?\});', idx).group(1))
+BTB = {x['file']: x.get('page_offset', 0) for x in json.loads(re.search(r'const TP_BT_BOOKS = (\[.*?\]);', idx, re.S).group(1))}
+for pdf, w in json.load(open(os.path.join(DATA, 'bhasatika_web.json'), encoding='utf-8')).items():
+    if w['file'].startswith('bt_') or not os.path.exists(os.path.join(DATA, w['file'] + '.html')): continue
+    out[w['file']] = {'url': (LOC.get(pdf) or BASE) + pdf, 'off': BTB.get(pdf, 0) - w['delta']}; stats['bhasatika (GitHub PDF)'] += 1
 json.dump(out, open(os.path.join(DATA, 'nissaya_pdf.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'), sort_keys=True)
 print(dict(stats), len(out), 'files')
 if '--push' in sys.argv:
