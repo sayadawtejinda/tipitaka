@@ -3185,15 +3185,49 @@ let isRomanPali = false;
     "ဆက်စပ်ကျမ်းများ": ["Sách liên quan", "Related texts"],
     "📖 ပိဋကတ်တော် အနှံ့ ရှာဖွေရန်": ["📖 Tìm trong toàn bộ Tipiṭaka", "📖 Search the whole Tipiṭaka"], "📚 သုတ္တန်ရှာရန်": ["📚 Tìm kinh", "📚 Search suttas"],
     "↩ ခုနက ရှာထားတာ ပြန်ကြည့်ရန်": ["↩ Xem lại kết quả vừa tìm", "↩ Back to the last search"],
+    "📚 အဘိဓာန်/ကျမ်းညွှန်း": ["📚 Từ điển / Tham khảo", "📚 Dictionaries / References"], "📖 ပိဋကတ်စာ": ["📖 Văn bản Tipiṭaka", "📖 Tipiṭaka text"],
+    "ရှာဖွေရေး အမျိုးအစား ပြောင်းရန်": ["Đổi loại tìm kiếm", "Change search type"], "ပေါင်းရှာရန် ရွေးပါ": ["Chọn nơi tìm", "Choose where to search"],
+    "လက်ရှိကျမ်းစာ": ["Sách đang đọc", "Current book"], "ဝိနည်း": ["Luật (Vinaya)", "Vinaya"], "သုတ္တန်": ["Kinh (Sutta)", "Suttas"], "အဘိဓမ္မာ": ["Vi Diệu Pháp (Abhidhamma)", "Abhidhamma"], "အခြား": ["Khác", "Other"],
+    "စကားလုံး သို့မဟုတ် စကားစု ရိုက်ထည့်ပါ...": ["Nhập từ hoặc cụm từ (chữ Roman)...", "Type a word or phrase (Roman letters)..."],
+    "ရှာဖွေနေပါသည်... ခဏစောင့်ပါ။": ["Đang tìm... xin chờ.", "Searching... please wait."], "နောက်ရလာဒ်": ["Kết quả tiếp", "Next results"],
+    "စာမျက်နှာများ ဖွင့်နေပါသည်...": ["Đang mở các trang...", "Opening the pages..."], "ရှာဖွေရန် အနည်းဆုံး တစ်ခု ရွေးချယ်ပါ။": ["Hãy chọn ít nhất một phạm vi tìm.", "Choose at least one place to search."],
+    "ရွေးချယ်ထားသော အပိုင်းများတွင် မတွေ့ပါ။": ["Không tìm thấy trong các phần đã chọn.", "Not found in the selected parts."],
+    "📔 တိပိဋကအဘိဓာန်": ["📔 Từ điển Tipiṭaka", "📔 Tipiṭaka dictionary"], "📑 ပိဋကလမ်းညွန်": ["📑 Hướng dẫn Tipiṭaka", "📑 Tipiṭaka guide"], "📒 သရုပ်စုံအဘိဓာန်": ["📒 Từ điển minh họa (Burmese)", "📒 Illustrated dictionary (Burmese)"],
+    "📕 ဘာသာဋီကာအဘိဓာန်": ["📕 Từ điển Bhāsāṭīkā (Burmese)", "📕 Bhāsāṭīkā dictionary (Burmese)"], "📙 သုတ္တသူစီ ဝိဘာဝိနီ": ["📙 Suttasūcī Vibhāvinī", "📙 Suttasūcī Vibhāvinī"], "📗 ပိဋကဝတ္ထု": ["📗 Chuyện trong Tipiṭaka (Burmese)", "📗 Tipiṭaka stories (Burmese)"], "📘 သုတေသနသရုပ်ပြ": ["📘 Nghiên cứu minh họa (Burmese)", "📘 Illustrated research (Burmese)"],
+    "သရုပ်စုံအဘိဓာန် ရှာဖွေရန်": ["Tìm trong từ điển minh họa", "Search the illustrated dictionary"], "ရှာမည့်နေရာ: သရုပ်စုံအဘိဓာန် ▾": ["Tìm trong: từ điển minh họa ▾", "Search in: illustrated dictionary ▾"],
+    "စာလုံး/စာကြောင်း ရိုက်ရှာပါ (ဥပမာ - ကံ ၁၂ ပါး)": ["Nhập từ / câu cần tìm (tiếng Miến)", "Type a word / phrase to look up (Burmese)"],
     "ရှေ့သို့": ["Trước", "Previous"], "နောက်သို့": ["Sau", "Next"], "ပိတ်မည်": ["Đóng", "Close"], "ပိတ်": ["Đóng", "Close"], "ကူးယူမည်": ["Sao chép", "Copy"], "ရွေးပါ": ["Chọn", "Choose"],
   };
   const TP_MYD = "၀၁၂၃၄၅၆၇၈၉";
+  // sentences of the search panel that are built from pieces (numbers, quoted words): replaced piece by piece, Burmese digits -> 0-9
+  const TP_UI_FRAG = [
+    [/\(နောက်မှာ စကားလုံးများ ကွဲပြားစွာပါသော\s*([၀-၉0-9]+)\s*မျက်နှာ ဆက်ပြထားသည်\)/g, "(tiếp theo: $1 trang chứa các từ riêng rẽ)", "(followed by $1 pages containing the words separately)"],
+    [/\(ကျမ်းစာအားလုံးထဲတွင် စုစုပေါင်း\s*([၀-၉0-9]+)\s*မျက်နှာ ရှိပါသည်\)/g, "(toàn bộ Tipiṭaka có $1 trang)", "(the whole Tipiṭaka has $1 pages)"],
+    [/\(စုစုပေါင်း စာမျက်နှာ\s*([၀-၉0-9]+)\s*အနက်မှ\)/g, "(trong tổng số $1 trang)", "(out of $1 pages)"],
+    [/ဆက်တိုက်ပါဝင်သော စာမျက်နှာ\s*/g, "cụm từ liên tiếp trong ", "exact phrase on "],
+    [/ပါဝင်သော စာမျက်နှာပေါင်း\s*/g, "xuất hiện trong tổng cộng ", "found in a total of "],
+    [/\s*မျက်နှာ တွေ့ရှိရပါသည်။/g, " trang.", " pages."],
+    [/^\s*မျက်နှာ\s*$/g, " trang", " pages"],
+    [/"(.*)" ဟူသော စကားလုံး ကျမ်းစာထဲတွင် မရှိပါ။/g, "Không có từ \"$1\" trong Tipiṭaka.", "The word \"$1\" is not in the Tipiṭaka."],
+    [/"(.*)" အတွက် စာမျက်နှာ မတွေ့ပါ။/g, "Không có trang nào cho \"$1\".", "No page found for \"$1\"."],
+    [/စကားလုံးများ \((.*)\) အားလုံး တစ်ပြိုင်နက်တည်း ပါဝင်သော စာမျက်နှာ မတွေ့(?:ပါ|ရှိ)[^။]*။/g, "Không có trang nào chứa đồng thời tất cả các từ ($1).", "No page contains all of these words together ($1)."],
+    [/ရွေးချယ်ထားသော အပိုင်းများတွင် မတွေ့ပါ\s*/g, "Không tìm thấy trong các phần đã chọn ", "Not found in the selected parts "],
+    [/ရှာဖွေရာတွင် အမှားတစ်ခု ဖြစ်ပေါ်ခဲ့ပါသည်:/g, "Đã xảy ra lỗi khi tìm:", "An error occurred while searching:"],
+    [/စာမျက်နှာများ ဖတ်၍မရပါ/g, "Không đọc được các trang", "Could not read the pages"],
+  ];
+  function tpUiFrag(str){
+    let out = str, hit = false; const k = trUi === "vi" ? 1 : 2;
+    for(const f of TP_UI_FRAG){ const r = out.replace(f[0], (...m) => f[k].replace(/\$(\d)/g, (_, i) => m[+i])); if(r !== out){ out = r; hit = true; } }
+    if(!hit) return null;
+    return out.replace(/[၀-၉]/g, c => TP_MYD.indexOf(c));
+  }
   let tpUiObs = null, tpUiSaved = new Map(), tpUiAttrs = [];
   const tpUiSkip = n => { const a = document.getElementById("tp-content"), b = document.getElementById("tp-nissaya-content"); return (a && a.contains(n)) || (b && b.contains(n)); };
   function tpUiConv(str){
     const t = str.trim(); if(!/[က-႟]/.test(t)) return str;
     const e = TP_UI[t]; if(e) return str.replace(t, e[trUi === "vi" ? 0 : 1]);
     const pm = t.match(/^စာပိုဒ်\s*-\s*([၀-၉0-9]+)$/); if(pm) return str.replace(t, (trUi === "vi" ? "Đoạn - " : "Paragraph - ") + pm[1].replace(/[၀-၉]/g, c => TP_MYD.indexOf(c)));
+    const fr = tpUiFrag(str); if(fr !== null) return /[က-႟]/.test(fr) ? tpRomanName(fr) : fr;
     return tpRomanName(str);
   }
   function tpUiRun(root){
@@ -3204,9 +3238,34 @@ let isRomanPali = false;
     if(root.nodeType === 3 || root.nodeType === 1) doNode(root);
     if(root.nodeType === 1){ const w = document.createTreeWalker(root, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT); let n; while(n = w.nextNode()) doNode(n); }
   }
+  // ⌨ palette: letters that are hard to type (ā ī ū ṃ ṇ ṭ ḍ ḷ ñ ṅ) for the Roman search boxes of the Tiếng Việt / English reader
+  const TP_KB_IDS = ["tp-fts-input", "tp-float-search-input", "tp-sutta-input"], TP_KB_LET = "āīūṃṁṇṭḍḷñṅĀĪŪṂṆṬḌḶÑṄ";
+  let tpKbInput = null, tpKbPal = null;
+  function tpKbInsert(ch){
+    const el = tpKbInput; if(!el) return; el.focus();
+    const a = el.selectionStart == null ? el.value.length : el.selectionStart, b = el.selectionEnd == null ? a : el.selectionEnd;
+    el.setRangeText(ch, a, b, "end"); el.dispatchEvent(new Event("input", {bubbles: true}));
+  }
+  function tpKbToggle(btn){
+    if(tpKbPal){ tpKbPal.remove(); tpKbPal = null; return; }
+    const pal = document.createElement("div"); pal.id = "tp-kb-pal";
+    pal.innerHTML = [...TP_KB_LET].map(c => `<button type="button">${c}</button>`).join("");
+    pal.addEventListener("mousedown", e => e.preventDefault());
+    pal.addEventListener("click", e => { const b = e.target.closest("button"); if(b) tpKbInsert(b.textContent); });
+    const r = btn.getBoundingClientRect(); document.body.appendChild(pal);
+    pal.style.top = Math.min(window.innerHeight - 120, r.bottom + 4) + "px"; pal.style.left = Math.max(4, Math.min(window.innerWidth - 300, r.right - 290)) + "px"; tpKbPal = pal;
+  }
+  document.addEventListener("focusin", e => {
+    const el = e.target; if(!el || !TP_KB_IDS.includes(el.id)) return; tpKbInput = el;
+    if(!el.nextElementSibling || !el.nextElementSibling.classList.contains("tp-kb-btn")){
+      const b = document.createElement("button"); b.type = "button"; b.className = "tp-kb-btn"; b.textContent = "⌨"; b.title = "ā ī ū ṃ ṇ ṭ ḍ ḷ ñ ṅ";
+      b.addEventListener("mousedown", ev => ev.preventDefault()); b.addEventListener("click", ev => { ev.stopPropagation(); tpKbToggle(b); }); el.insertAdjacentElement("afterend", b);
+    }
+  });
+  document.addEventListener("click", e => { if(tpKbPal && !e.target.closest("#tp-kb-pal, .tp-kb-btn")){ tpKbPal.remove(); tpKbPal = null; } });
   window.tpUiStart = function(){
     if(tpUiObs) return;
-    if(!document.getElementById("tp-lang-css")){ const st = document.createElement("style"); st.id = "tp-lang-css"; st.textContent = "body.tp-lang-mode #tp-search-choice button[data-c=mm], body.tp-lang-mode #tp-search-choice .tp-sc-row { display: none !important; } body.tp-lang-mode #tp-ai-toggle, body.tp-lang-mode #tp-search-toggle { display: none !important; }"; document.head.appendChild(st); }       // the Burmese-only tools (AI prompts, Burmese translation / nissaya menu, Burmese searches) are not offered
+    if(!document.getElementById("tp-lang-css")){ const st = document.createElement("style"); st.id = "tp-lang-css"; st.textContent = ".tp-kb-btn{display:none;margin-left:4px;border:1px solid #d9d0b8;background:#fff;border-radius:8px;padding:2px 8px;cursor:pointer;font-size:1.1em}body.tp-lang-mode .tp-kb-btn{display:inline-block}#tp-kb-pal{position:fixed;z-index:100000;display:grid;grid-template-columns:repeat(11,1fr);gap:3px;background:#fffdf7;border:1px solid #d9d0b8;border-radius:10px;padding:6px;box-shadow:0 4px 14px rgba(0,0,0,.2);width:290px}#tp-kb-pal button{border:1px solid #d9d0b8;background:#fff;border-radius:6px;padding:4px 0;font-size:1.05em;cursor:pointer}#tp-kb-pal button:hover{background:#f4ecd8} body.tp-lang-mode #tp-search-choice button[data-c=mm], body.tp-lang-mode #tp-search-choice .tp-sc-row { display: none !important; } body.tp-lang-mode #tp-ai-toggle, body.tp-lang-mode #tp-search-toggle { display: none !important; }"; document.head.appendChild(st); }       // the Burmese-only tools (AI prompts, Burmese translation / nissaya menu, Burmese searches) are not offered
     document.body.classList.add("tp-lang-mode");
     tpUiRun(document.body);
     tpUiObs = new MutationObserver(ms => { ms.forEach(m => { if(m.type === "characterData") tpUiRun(m.target); else if(m.type === "attributes") tpUiRun(m.target); else m.addedNodes.forEach(n => tpUiRun(n)); }); });
