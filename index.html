@@ -4849,6 +4849,62 @@ function tp_edLabel(l){
   function tp_ftsNormWords(text){
     return String(text || "").replace(/[​‌‍⁠﻿]/g, "").replace(/\[[^\]]*\]/g, " ").replace(/[^က-၉၌-႟0-9A-Za-z]+/g, " ").split(" ").filter(Boolean);
   }
+  // Roman Pali -> Myanmar script (best effort; 99.7 % of the index words survive Myanmar -> Roman -> Myanmar). The tall/flat aa (ါ/ာ) varies in the books, so the search tries both spellings.
+  function tpRomanToMy(text){
+    const CONS = {k:"က",kh:"ခ",g:"ဂ",gh:"ဃ","ṅ":"င",c:"စ",ch:"ဆ",j:"ဇ",jh:"ဈ","ñ":"ဉ","ṭ":"ဋ","ṭh":"ဌ","ḍ":"ဍ","ḍh":"ဎ","ṇ":"ဏ",t:"တ",th:"ထ",d:"ဒ",dh:"ဓ",n:"န",p:"ပ",ph:"ဖ",b:"ဗ",bh:"ဘ",m:"မ",y:"ယ",r:"ရ",l:"လ",v:"ဝ",s:"သ",h:"ဟ","ḷ":"ဠ"};
+    const VOW_I = {a:"အ","ā":"အာ",i:"ဣ","ī":"ဤ",u:"ဥ","ū":"ဦ",e:"ဧ",o:"ဩ"}, VOW_D = {a:"","ā":"ာ",i:"ိ","ī":"ီ",u:"ု","ū":"ူ",e:"ေ",o:"ော"};
+    const TALL = "ခဂငဒပဝ"; const MED = {y:"ျ",r:"ြ",v:"ွ"}, HMED = new Set(["ṅ","ñ","ṇ","n","m","y","r","l","v","ḷ"]);
+    const norm = s => s.normalize("NFC").toLowerCase().replace(/ṁ/g, "ṃ").replace(/ŋ/g, "ṃ");
+    function one(w){
+      let out = "", i = 0, baseG = "", lastG = "", prev = null /* last consonant key still without vowel */, prevMed = false;
+      const flush = () => { if(prev !== null){ out += "်"; prev = null; } };
+      while(i < w.length){
+        const two = w.substr(i, 2), ch = w[i];
+        if(two === "ññ" && true){ if(prev !== null){ out += "္"; } if(prev === null) baseG = "ည"; out += "ည"; lastG = baseG; i += 2; prev = "ည"; continue; }
+        if(two === "ss"){ if(prev !== null) out += "္"; if(prev === null) baseG = "ဿ"; out += "ဿ"; lastG = baseG; prev = "ဿ"; i += 2; continue; }
+        let key = CONS[two] && two.length === 2 && /h$/.test(two) ? two : (CONS[ch] ? ch : null);
+        if(key){
+          const hOf = prev !== null && key === "h" && HMED.has(prev);
+          if(prev !== null && MED[key] && prev !== "ṅ" && !(prev in MED && false)){ out += MED[key]; i += key.length; prev = prev; /* medial: still no vowel */ continue; }
+          if(hOf){ out += "ှ"; i++; continue; }
+          if(prev !== null){ out += (prev === "ṅ" && out.endsWith("င") ? "်္" : "္"); if(prev === "ṅ") baseG = ""; }
+          if(prev === null || baseG === "") baseG = CONS[key]; out += CONS[key]; lastG = baseG; prev = key; i += key.length; continue;
+        }
+        if(ch === "ṃ"){ if(prev === null && out === "") out += "အံ"; else { out += "ံ"; } prev = null; i++; continue; }
+        if(VOW_D[ch] !== undefined){
+          if(prev === null && (out === "" )) out += VOW_I[ch]; else if(prev === null) out += VOW_I[ch] ; else out += TALL.includes(lastG) && (ch === "ā" || ch === "o") ? (ch === "ā" ? "ါ" : "ေါ") : VOW_D[ch];
+          prev = null; i++; continue;
+        }
+        out += ch; prev = null; i++;
+      }
+      if(prev !== null) out += "်";
+      return out;
+    }
+    return norm(text).replace(/[a-zāīūṃṅñṭḍṇḷ]+/g, one);
+  }
+
+  const TP_ROMAN_RE = /[A-Za-zāīūṃṁṅñṭḍṇḷĀĪŪṂṄÑṬḌṆḶ]/;
+  const tp_isRomanQuery = t => TP_ROMAN_RE.test(t) && !/[က-႟]/.test(t);
+  function tp_romanSpellings(my){                          // all tall / flat spellings of ā and o  (သာ / သါ, ဒေါ / ဒော ...) , at most 32
+    const pos = []; const re = /ေါ|ော|ါ|ာ/g; let m; while((m = re.exec(my))) pos.push([m.index, m[0]]);
+    const k = Math.min(pos.length, 5), out = [];
+    for(let mask = 0; mask < (1 << k); mask++){
+      let r = "", last = 0;
+      pos.forEach((q, i) => { r += my.slice(last, q[0]); const flip = i < k && (mask >> i) & 1, tall = q[1] === "ါ" || q[1] === "ေါ"; const t = flip ? !tall : tall; r += q[1].length === 2 ? (t ? "ေါ" : "ော") : (t ? "ါ" : "ာ"); last = q[0] + q[1].length; });
+      out.push(r + my.slice(last));
+    }
+    return [...new Set(out)];
+  }
+  async function tp_ftsInWords(S, text){                  // search words of the input: Roman letters -> the Myanmar spelling that exists in the index (the commonest one)
+    if(!tp_isRomanQuery(text)) return tp_ftsNormWords(text);
+    const res = [];
+    for(const w of String(text).split(/[^A-Za-zāīūṃṁṅñṭḍṇḷĀĪŪṂṄÑṬḌṆḶ0-9]+/).filter(Boolean)){
+      const my = tpRomanToMy(w); let best = my, bl = -1;
+      for(const v of tp_romanSpellings(my)){ const pst = await tp_ftsPosting(S, v); if(pst && pst.length > bl){ best = v; bl = pst.length; } }
+      res.push(best);
+    }
+    return res;
+  }
   function tp_ftsShard(k){
     if(!tp_ftsShardCache[k]) tp_ftsShardCache[k] = fetchJson(TP_FTS_BASE + "w/" + k + ".json").catch(e => { delete tp_ftsShardCache[k]; throw e; });
     return tp_ftsShardCache[k];
@@ -4923,15 +4979,15 @@ function tp_edLabel(l){
   }
   async function tp_ftsSearchStatic(ui, S){
     const { input, statusDiv, resultsDiv, scopeBoxes } = ui;
-    const words = tp_ftsNormWords(input.value);
+    const roman = tp_isRomanQuery(input.value), words = await tp_ftsInWords(S, input.value), shown = roman ? input.value.trim() : words.join(" ");
     if(words.length === 0){ statusDiv.innerText = "ကျေးဇူးပြု၍ စကားလုံး သို့မဟုတ် စကားစု ရိုက်ထည့်ပါ။"; return; }
     const selectedScopes = tp_ftsGetSelectedScopes(scopeBoxes);
     if(selectedScopes.length === 0){ statusDiv.innerHTML = `<span style='color:red;'>ရှာဖွေရန် အနည်းဆုံး တစ်ခု ရွေးချယ်ပါ။</span>`; return; }
     statusDiv.innerText = "ရှာဖွေနေပါသည်... ခဏစောင့်ပါ။";
     try{
       const res = await tp_ftsFind(S, words);
-      if(res.missing !== undefined){ statusDiv.innerHTML = `<span style='color:red;'>"${res.missing}" ဟူသော စကားလုံး ကျမ်းစာထဲတွင် မရှိပါ။</span>`; return; }
-      if(!res.all.length){ statusDiv.innerHTML = `<span style='color:red;'>စကားလုံးများ ("${words.join(', ')}") အားလုံး တစ်ပြိုင်နက်တည်း ပါဝင်သော စာမျက်နှာ မတွေ့ပါ။</span>`; return; }
+      if(res.missing !== undefined){ statusDiv.innerHTML = `<span style='color:red;'>"${roman ? shown : res.missing}" ဟူသော စကားလုံး ကျမ်းစာထဲတွင် မရှိပါ။</span>`; return; }
+      if(!res.all.length){ statusDiv.innerHTML = `<span style='color:red;'>စကားလုံးများ ("${roman ? shown : words.join(', ')}") အားလုံး တစ်ပြိုင်နက်တည်း ပါဝင်သော စာမျက်နှာ မတွေ့ပါ။</span>`; return; }
       const inScope = pid => { const m = tp_ftsPageMeta(S, pid); return m && tp_ftsBookMatchesScope(String(m.book_id).trim(), selectedScopes) ? m : null; };
       const phraseSet = new Set(res.phrase);
       const phraseList = res.phrase.map(inScope).filter(Boolean);
@@ -4939,7 +4995,7 @@ function tp_edLabel(l){
       const list = phraseList.concat(otherList);
       if(!list.length){ statusDiv.innerHTML = `<span style='color:red;'>ရွေးချယ်ထားသော အပိုင်းများတွင် မတွေ့ပါ။</span>`; return; }
       const n = x => tp_ftsToBurmeseNumerals(x);
-      let msg = `<strong style='color:#8b0000;'>"${words.join(' ')}"</strong> `;
+      let msg = `<strong style='color:#8b0000;'>"${shown}"</strong> `;
       if(words.length > 1){
         msg += `ဆက်တိုက်ပါဝင်သော စာမျက်နှာ <strong>${n(phraseList.length)}</strong> မျက်နှာ`;
         if(otherList.length) msg += ` (နောက်မှာ စကားလုံးများ ကွဲပြားစွာပါသော ${n(otherList.length)} မျက်နှာ ဆက်ပြထားသည်)`;
@@ -4953,9 +5009,10 @@ function tp_edLabel(l){
   async function tp_ftsSuggestStatic(inputText, ui, S){
     try{
       const trailing = /\s$/.test(inputText);
-      const words = tp_ftsNormWords(inputText);
+      const roman = tp_isRomanQuery(inputText), words = await tp_ftsInWords(S, inputText);
       if(!words.length){ ui.autocompleteList.innerHTML = ""; return; }
       const add = (phrase) => {
+        if(roman) phrase = myanmarToRoman(phrase);                // the Roman query gets Roman suggestions
         const div = document.createElement("div"); div.innerText = phrase;
         div.addEventListener("click", () => { ui.input.value = phrase; ui.autocompleteList.innerHTML = ""; tp_ftsSearchPhrase(ui); });
         ui.autocompleteList.appendChild(div);
@@ -4983,7 +5040,9 @@ function tp_edLabel(l){
         if(res.missing !== undefined || !res.phrase.length){ ui.autocompleteList.innerHTML = ""; return; }
         need = new Set(); res.ends.forEach((ps, pid) => ps.forEach(p => need.add(pid * 65536 + p + 1)));
       }
-      const cands = await tp_ftsPrefix(S, last, need ? 300 : 20);
+      let cands = [];
+      for(const v of (roman ? tp_romanSpellings(last.replace(/[္်]+$/, "")) : [last])) cands = cands.concat(await tp_ftsPrefix(S, v, need ? 300 : 20));
+      if(roman) cands = cands.sort((a, b) => b[1].length - a[1].length);
       ui.autocompleteList.innerHTML = "";
       let shown = 0;
       for(const [w, enc] of cands){
