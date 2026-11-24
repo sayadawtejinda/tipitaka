@@ -1690,7 +1690,8 @@ let isRomanPali = false;
     return box;
   }
   const TP_PDFJS = "https://mozilla.github.io/pdf.js/web/viewer.html";      // PDF.js viewer (PDF ဖိုင်ကို CORS ခွင့်ပြုထားရမည် - GitHub Pages က ခွင့်ပြုထားသည်)
-  function tp_pdfViewerUrl(url){ const m = /#page=(\d+)/.exec(url); return TP_PDFJS + "?file=" + encodeURIComponent(url.split("#")[0]) + (m ? "#page=" + m[1] : ""); }
+  function tp_pdfViewerUrl(url){ if(url.startsWith("https://archive.org/")) return url;      // archive.org PDFs (nissaya books): the browser's own viewer, #page=N
+    const m = /#page=(\d+)/.exec(url); return TP_PDFJS + "?file=" + encodeURIComponent(url.split("#")[0]) + (m ? "#page=" + m[1] : ""); }
   function tp_btOpenPdf(url, title){
     tp_sayHideForPhone();
     const box = tp_pdfBox();
@@ -3574,6 +3575,20 @@ function tp_edLabel(l){
       [60, 250, 700].forEach(ms => setTimeout(() => { if(curEl.isConnected && Math.abs(box.scrollTop - t0) < 4 || curEl.isConnected && box.scrollTop === 0) align(); }, ms));      // Next နှိပ်ပြီး ဖောင့်/အလျား ပြောင်းသွားလျှင်လည်း အလည်စာမျက်နှာကိုပဲ ထိပ်မှာ ပြန်ချိန်ညှိ (သုံးသူ မရွှေ့သေးမှသာ)
     }      // လက်ရှိစာမျက်နှာ ထိပ်ဆုံးမှာ (အပေါ်က ရှေ့စာမျက်နှာအတွက် နေရာ အနည်းငယ်ချန်)
   }
+  // 📕 at every nissaya page mark: opens the nissaya book's PDF (archive.org, data/nissaya_pdf.json - scripts/build_nissaya_pdf.py) at that page, in the floating PDF box
+  let tpNsyPdfP = null;
+  function tp_nsyPdfMap(){ if(!tpNsyPdfP) tpNsyPdfP = fetchJson(cdnUrl(`${DATA_FOLDER}/nissaya_pdf.json`)).catch(() => ({})); return tpNsyPdfP; }
+  async function tp_nsyPdfIcons(contentEl, file){
+    const m = (await tp_nsyPdfMap())[file]; if(!m) return;
+    contentEl.querySelectorAll("p").forEach(p => {
+      const mt = /^\(နိဿယစာအုပ် စာမျက်နှာ ([၀-၉]+)\)$/.exec(p.textContent.trim()); if(!mt || p.querySelector(".nsy-pdf")) return;
+      const n = parseInt(tp_btToArabic(mt[1]), 10), pg = n + (m.off || 0); if(!(pg >= 1)) return;
+      const b = document.createElement("button"); b.className = "nsy-pdf"; b.textContent = "📕"; b.title = "PDF စာမျက်နှာ " + pg + " ကို ဖွင့်မည်";
+      b.style.cssText = "margin-left:8px;border:1px solid #d9d0b8;background:#fff;border-radius:8px;padding:0 6px;cursor:pointer;font-size:13px;line-height:1.4;";
+      b.addEventListener("click", e => { e.preventDefault(); e.stopPropagation(); tp_btOpenPdf(`https://archive.org/download/${m.id}/${m.id}.pdf#page=${pg}`, "နိဿယစာအုပ် " + m.id.replace("nsy-pdf-", "") + " — စာ " + pg); });
+      p.appendChild(b);
+    });
+  }
   async function openNissaya(bookId, pageNum, keepMm) {          // keepMm: opened by the မြန်မာပြန် route (openMmSplit) - its flags / breadcrumb stay; the pane is the same one (နိဿယ မူခလုပ်များ + မူလ + မြန်မာ)
       if(!keepMm){ isMmSplitOpen = mmViaMm = false; isNissayaOpen = true; }
       await tp_loadEditions(); try{ await ensureNissayaIds(); }catch(e){}
@@ -3658,6 +3673,7 @@ function tp_edLabel(l){
               extractedHtml = extractedHtml.replace(startMarker, `<span class="tp-mm-highlight">${startMarker}</span>`);
               contentEl.innerHTML = await tp_nissayaLinkify(extractedHtml);
               nsyEntries = tp_nsyBuildEntries(contentEl);
+              tp_nsyPdfIcons(contentEl, chosen ? chosen.file : bookId);
               if (nsyBtScroll != null) {      // ဘာသာဋီကာ - ဆိုင်ရာ နိဿယစာအုပ်စာမျက်နှာသို့ အလိုအလျောက် ရွှေ့
                 const tg = "(နိဿယစာအုပ် စာမျက်နှာ " + toMyanmarDigits(nsyBtScroll) + ")";
                 const el = [...contentEl.querySelectorAll("p")].find(p => p.textContent.trim() === tg);
