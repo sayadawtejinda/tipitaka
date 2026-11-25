@@ -4548,6 +4548,8 @@ function tp_edLabel(l){
   // (HTML structure မပျက်အောင် TreeWalker ဖြင့် စာသား node များကိုသာ ရှာပြီး လုပ်ဆောင်သည်)
   function tp_ftsHighlightWordsInElement(containerEl, words){
     if(!containerEl || !words || words.length === 0) return;
+    const roman = typeof isRomanPali !== "undefined" && isRomanPali && !/[က-႟]/.test((containerEl.textContent || "").slice(0, 400));       // Roman page: the Myanmar search words are matched in their Roman form, ignoring case
+    if(roman) words = words.map(w => myanmarToRoman(w).normalize("NFC").toLowerCase());
     const uniqueWords = [...new Set(words.filter(Boolean))].sort((a, b) => b.length - a.length);
     if(uniqueWords.length === 0) return;
 
@@ -4557,7 +4559,7 @@ function tp_edLabel(l){
     while((node = walker.nextNode())) textNodes.push(node);
 
     for(const textNode of textNodes){
-      const text = textNode.nodeValue;
+      const text = roman ? textNode.nodeValue.normalize("NFC").toLowerCase() : textNode.nodeValue, orig = roman ? textNode.nodeValue.normalize("NFC") : text;
       let hasMatch = false;
       for(const w of uniqueWords){ if(text.includes(w)){ hasMatch = true; break; } }
       if(!hasMatch) continue;
@@ -4570,7 +4572,7 @@ function tp_edLabel(l){
         if(matchedWord){
           const span = document.createElement("span");
           span.className = "tp-fts-highlight";
-          span.textContent = matchedWord;
+          span.textContent = orig.slice(i, i + matchedWord.length);
           frag.appendChild(span);
           i += matchedWord.length;
         } else {
@@ -4579,7 +4581,7 @@ function tp_edLabel(l){
             for(const w of uniqueWords){ if(text.startsWith(w, j)) break outer; }
             j++;
           }
-          frag.appendChild(document.createTextNode(text.slice(i, j)));
+          frag.appendChild(document.createTextNode(orig.slice(i, j)));
           i = j;
         }
       }
