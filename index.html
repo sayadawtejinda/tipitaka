@@ -4598,6 +4598,7 @@ function tp_edLabel(l){
     const meta = tp_ftsBooksMap[bookId];
     if(!meta){ if(statusDiv) statusDiv.innerHTML = `<span style='color:red;'>ဒီစာမျက်နှာအတွက် စာအုပ်အချက်အလက် မတွေ့ပါ (book_id: ${bookId})။</span>`; return; }
     if(statusDiv) statusDiv.innerText = "စာမျက်နှာ ဖွင့်နေပါသည်...";
+    if(trUi !== "my" && trLang){ if(!isRomanPali){ isRomanPali = true; trRomanForced = true; } }       // opened from the Tiếng Việt / English reader: the Pali page is shown in Roman letters
     await loadPage(meta.basket, meta.category, bookId, pageNum, meta.firstpage);
     const contentEl = document.getElementById("tp-current-page");
     if(contentEl && words && words.length) tp_ftsHighlightWordsInElement(contentEl, words);
