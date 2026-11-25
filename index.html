@@ -2989,11 +2989,16 @@ let isRomanPali = false;
     }catch(e){ box.innerHTML = `<p>ဖတ်၍မရပါ (${e.message})</p>`; }
   }
   // make the references of the Shwekyin page clickable (same recognizer as the nissaya pages)
+  // ဖားအောက်စာအုပ်များ၏ ကျမ်းညွှန်းပုံစံများကို recognizer နားလည်သော ပုံစံသို့ ပြင်သည် ("သံ၊ ၃၊ ၃၆၃" / "ဝိသုဒ္ဓိ-၂-၂၆၇" / စာလုံးမည်း <b>ဝိသုဒ္ဓိ</b>၊၁၊၃၄၆)
+  function tp_paRefPrep(h){
+    return h.replace(/<(b|i)>([^<]{1,40})<\/(?:b|i)>(?=\s*[၊\-]\s*[၀-၉ဝ])/g, "$2").replace(/([၊\-])\s*<(b|i)>([၀-၉ဝ][^<]{0,30})<\/(?:b|i)>/g, "$1$3")
+      .replace(/([က-ဿ])၊[  ]+([၀-၉ဝ]+)၊/g, "$1၊$2၊").replace(/([က-ဿ])-([၀-၉ဝ]+)-([၀-၉ဝ])/g, "$1၊$2၊$3");
+  }
   async function tp_skLinkify(bookId, pageIdx){
     const el = document.getElementById("tp-content"); if(!el) return;
     try{ await tp_sayEnsureRefs(); }catch(e){ return; }
     if(mmCurrentBookId !== bookId || mmCurrentPageIdx !== pageIdx || !el.isConnected || el.querySelector(".tp-say-ref")) return;
-    const html = await tp_nissayaLinkify(/^pa_/.test(bookId) ? el.innerHTML.replace(/([က-ဿ])၊[  ]+([၀-၉]+)၊/g, "$1၊$2၊") : el.innerHTML);      // ဖားအောက်စာအုပ်: "သံ၊ ၃၊ ၃၆၃" -> "သံ၊၃၊ ၃၆၃"
+    const html = await tp_nissayaLinkify(/^pa_/.test(bookId) ? tp_paRefPrep(el.innerHTML) : el.innerHTML);      // ဖားအောက်စာအုပ်: "သံ၊ ၃၊ ၃၆၃" -> "သံ၊၃၊ ၃၆၃"
     if(mmCurrentBookId === bookId && mmCurrentPageIdx === pageIdx && el.isConnected) el.innerHTML = html;
   }
   document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("#tp-content .tp-say-ref[data-book]"); if(a && /^(sk|pa)_/.test(mmCurrentBookId || "")){ e.preventDefault(); e.stopPropagation(); skpOpenPali(a.dataset.book, parseInt(a.dataset.page, 10) || 1, a.dataset.para != null && a.dataset.para !== "" ? parseInt(a.dataset.para, 10) : null); } }, true);
