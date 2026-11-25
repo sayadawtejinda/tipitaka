@@ -2330,6 +2330,10 @@ let isRomanPali = false;
 
     document.getElementById("tp-float-prev").disabled = mmCurrentPageIdx <= 1; document.getElementById("tp-float-next").disabled = mmCurrentPageIdx >= total;
     if(isSk || isPa) tp_skLinkify(mmCurrentBookId, mmCurrentPageIdx);
+    if(isSk || isPa){                       // a PDF is open on the right: turning the page moves the PDF to the same page
+      const pn = document.getElementById("skp-pane"), f = pn && pn.querySelector("iframe"), b = document.querySelector("#tp-content .skp-pdf");
+      if(f && f.style.display !== "none" && f.getAttribute("src") && b){ const bm = burmeseBookMeta && burmeseBookMeta[mmCurrentBookId]; skpOpenPdf(b.dataset.pdf, parseInt(b.dataset.pg, 10) || 1, (bm && bm.title) || ""); }
+    }
     document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
     document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
     document.getElementById("tp-mm-back").addEventListener("click", async ()=>{
