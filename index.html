@@ -2290,7 +2290,7 @@ let isRomanPali = false;
     const mbvL = mbvSplit && mbvAvail.length ? (mbvAvail.includes(mbvLang) ? mbvLang : mbvAvail[0]) : "";
     const isSk = mmCurrentBookId.startsWith("sk_");
     const isMbv = mmCurrentBookId.startsWith("mbv_") || isPa || isSk;
-    const backLabel = isSk ? "← ရွှေကျင်စာပေသို့" : isPa ? "← ဖတ်စာစာရင်းသို့" : (mbvIs && mbvViaTr) ? "← " + TR_LANG_NAME[mbvViaTr] : isMbv ? "← မင်းကွန်းဆရာတော်သို့" : "← ပါဠိတော်သို့";
+    const backLabel = isSk ? "← ရွှေကျင်စာပေသို့" : isPa ? "← ဖားအောက်ဆရာတော်သို့" : (mbvIs && mbvViaTr) ? "← " + TR_LANG_NAME[mbvViaTr] : isMbv ? "← မင်းကွန်းဆရာတော်သို့" : "← ပါဠိတော်သို့";
 
     // "စာပိုဒ်နံပါတ်ကို-သွားမည်" ဟု ပြင်ဆင်ပြီး
     document.getElementById("tp-view").innerHTML = `
@@ -2329,7 +2329,7 @@ let isRomanPali = false;
     }
 
     document.getElementById("tp-float-prev").disabled = mmCurrentPageIdx <= 1; document.getElementById("tp-float-next").disabled = mmCurrentPageIdx >= total;
-    if(isSk) tp_skLinkify(mmCurrentBookId, mmCurrentPageIdx);
+    if(isSk || isPa) tp_skLinkify(mmCurrentBookId, mmCurrentPageIdx);
     document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
     document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
     document.getElementById("tp-mm-back").addEventListener("click", async ()=>{
@@ -2904,56 +2904,30 @@ let isRomanPali = false;
 
   // ================= ဆရာတော်များ › ဖားအောက်ဆရာတော် › 📚 ဖတ်စာ =================
   // ဖားအောက် ဓမ္မစာကြည့်တိုက် (https://sayadawtejinda.github.io/dhamma/library/) ရဲ့ "📚 ဖတ်စာ" ကို တိုက်ရိုက်ဖတ်သည် - စာအုပ်အသစ်တိုးရင် အလိုအလျောက် ပေါ်မည်
-  const PA_BASE = "https://sayadawtejinda.github.io/dhamma/library/texts/";
-  let paIndexPromise = null, paTocPromise = null; const paPageStarts = {};
+  // ဖားအောက်ဆရာတော် စာအုပ် ၆၃ အုပ် (library ရဲ့ PDF စာအုပ်များ) - OCR စာမျက်နှာများ data/pa/<id>.json + data/pa_ocr.json (scripts/build_pa_ocr.py); စာမျက်နှာတိုင်း၏ ထိပ်မှာ 📕 = ထိုစာမျက်နှာ၏ PDF ကို ညာဘက်မှာ ဖွင့်သည်
+  let paIndexPromise = null, paTocPromise = null;
   function ensurePaIndex(){
     if(!paIndexPromise){ paIndexPromise = (async () => {
       await ensureBurmeseToc();
-      const list = await fetchJson(PA_BASE + "index.json");
-      list.forEach(t => { burmeseBookMeta["pa_" + t.id] = { title: t.title, pagecount: t.pages, category: "paauk", group: t.group }; });
-      return list;
+      const o = await fetchJson(cdnUrl(`${DATA_FOLDER}/pa_ocr.json`));
+      o.order.forEach(id => { burmeseBookMeta[id] = { title: o.books[id].title, pagecount: o.books[id].pages, category: "paauk" }; });
+      return o;
     })(); paIndexPromise.catch(() => { paIndexPromise = null; }); }
     return paIndexPromise;
   }
-  // စာအုပ်တစ်အုပ် - block (စာပိုဒ်) တွေကို library ရဲ့ စာမျက်နှာခွဲထားတဲ့အတိုင်း HTML စာမျက်နှာများအဖြစ် ပြောင်းသည်
   async function ensurePaText(mmId){
     await ensurePaIndex();
-    const id = mmId.slice(3);
-    const RB = await fetchJson(PA_BASE + id + ".json");
-    const nch = Math.ceil(RB.n / RB.chunk);
-    const chunks = await Promise.all(Array.from({ length: nch }, (_, k) => fetchJson(PA_BASE + id + "." + k + ".json")));
-    const inl = h => h.replace(/\u0001(\d+)\u0002/g, (m, n) => `<sup>[${toMyanmarDigits(n)}]</sup>`);
-    const pages = RB.pages.map((st, pi) => {
-      const en = pi + 1 < RB.pages.length ? RB.pages[pi + 1] : RB.n; let h = ""; const fns = new Set();
-      for(let i = st; i < en; i++){
-        const [k, x] = chunks[Math.floor(i / RB.chunk)][i % RB.chunk];
-        (x.match(/\u0001(\d+)\u0002/g) || []).forEach(m => fns.add(m.replace(/[^\d]/g, "")));
-        const t = inl(x);
-        if(k === "h2" || k === "h3" || k === "h4") h += `<${k} style="text-align:center">${t}</${k}>`;
-        else if(k === "sh") h += `<h5 style="text-align:center">${t}</h5>`;
-        else if(k === "pl") h += `<p class="pa-pali">${t}</p>`;
-        else if(k === "v") h += `<div class="pa-verse">${t}</div>`;
-        else if(k === "q") h += `<div class="pa-quote">${t}</div>`;
-        else h += `<p>${t}</p>`;
-      }
-      if(fns.size) h += `<div class="pa-fn">${[...fns].map(n => `<div><b>[${toMyanmarDigits(n)}]</b> ${inl((RB.fn || {})[n] || "")}</div>`).join("")}</div>`;
-      return h;
-    });
-    mmPagesCache[mmId] = pages; paPageStarts[mmId] = RB.pages;
-    burmeseTocIndex[mmId] = RB.toc.map(t => ({ level: t[1], title: t[2], page: paPageOf(mmId, t[0]) + 1, indent: 10 + (t[1] - 2) * 14 }));
+    const d = await fetchJson(cdnUrl(`${DATA_FOLDER}/pa/${mmId}.json`));
+    mmPagesCache[mmId] = d.pages;
+    burmeseTocIndex[mmId] = d.toc.map(t => ({ level: t.level, title: t.title, page: t.page, indent: t.level >= 2 ? 30 : 10 }));
   }
-  function paPageOf(mmId, block){ const pg = paPageStarts[mmId]; let lo = 0, hi = pg.length - 1; while(lo < hi){ const m = (lo + hi + 1) >> 1; if(pg[m] <= block) lo = m; else hi = m - 1; } return lo; }
 
   async function showPaBooks(){
     setFloatSearchVisible(true); renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, {label:"ဖားအောက်ဆရာတော်"}]);
     document.getElementById("tp-view").innerHTML = `<p class="tp-loading">Loading...</p>`;
     try{
-      const list = await ensurePaIndex(); let html = "", g = null;
-      list.forEach(t => {
-        if(t.group !== g){ if(g !== null) html += "</div>"; g = t.group; html += `<h4 style="margin:16px 0 8px;color:#1e3a5f;">${tp_sayEsc(g)}</h4><div class="tp-grid">`; }
-        html += `<div class="tp-card" data-mmbook="pa_${t.id}">${tp_sayEsc(t.title)}<span class="tp-count">${toMyanmarDigits(t.pages)} စာမျက်နှာ</span></div>`;
-      });
-      document.getElementById("tp-view").innerHTML = html + "</div>";
+      const o = await ensurePaIndex();
+      document.getElementById("tp-view").innerHTML = `<div class="tp-grid">${o.order.map(id => `<div class="tp-card" data-mmbook="${id}">${tp_sayEsc(o.books[id].title)}<span class="tp-count">${toMyanmarDigits(o.books[id].pages)} စာမျက်နှာ</span></div>`).join("")}</div>`;
       document.querySelectorAll("[data-mmbook]").forEach(el=> el.addEventListener("click", ()=>{ mmBackContext = { kind: "pa" }; mmCurrentBookId = el.dataset.mmbook; mmCurrentPageIdx = 1; openBurmeseTranslationBrowse(el.dataset.mmbook); }));
     }catch(e){ document.getElementById("tp-view").innerHTML = `<p>ဖတ်၍မရပါ (${e.message})</p>`; }
     setParams({basket: "sayadaw", category: "paauk"});
@@ -2963,16 +2937,16 @@ let isRomanPali = false;
     const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
     status.textContent = "ရှာဖွေနေပါသည်...";
     let toc;
-    try{ await ensurePaIndex(); if(!paTocPromise){ paTocPromise = fetchJson(PA_BASE + "toc.json"); paTocPromise.catch(() => { paTocPromise = null; }); } toc = await paTocPromise; }
+    try{ await ensurePaIndex(); if(!paTocPromise){ paTocPromise = fetchJson(cdnUrl(`${DATA_FOLDER}/pa_toc.json`)); paTocPromise.catch(() => { paTocPromise = null; }); } toc = await paTocPromise; }
     catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
     const hits = toc.toc.filter(t => t[3].includes(term));
     status.textContent = hits.length ? `ဖတ်စာ ထဲမှာ တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
     body.innerHTML = "";
     hits.slice(0, 100).forEach(h => {
-      const id = "pa_" + toc.books[h[0]], meta = burmeseBookMeta[id]; if(!meta) return;
+      const id = toc.books[h[0]], meta = burmeseBookMeta[id]; if(!meta) return;
       const item = document.createElement("div"); item.className = "tp-say-item";
       item.innerHTML = `<b>${tp_sayEsc(meta.title)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h[3])}</div>`;
-      item.addEventListener("click", async () => { closeAllDropdowns(); mmBackContext = { kind: "pa" }; await openBurmeseTranslationBrowse(id); mmCurrentPageIdx = paPageOf(id, h[1]) + 1; renderMmPage(); });
+      item.addEventListener("click", async () => { closeAllDropdowns(); mmBackContext = { kind: "pa" }; await openBurmeseTranslationBrowse(id); mmCurrentPageIdx = h[1]; renderMmPage(); });
       body.appendChild(item);
     });
   }
@@ -2988,7 +2962,7 @@ let isRomanPali = false;
     document.body.classList.add("skp-split"); return pane;
   }
   function skpOpenPdf(bookId, page, title){
-    const url = SKP_PDF_BASE + bookId + ".pdf" + (page > 1 ? "#page=" + page : ""), pane = skpPaneEnsure();
+    const url = (/^https?:/.test(bookId) ? bookId : SKP_PDF_BASE + bookId + ".pdf") + (page > 1 ? "#page=" + page : ""), pane = skpPaneEnsure();
     pane.querySelector(".skp-pane-t").textContent = "📕 " + (title || "PDF") + (page > 1 ? " — စာ " + page : "");
     const a = pane.querySelector(".skp-pane-new"); a.style.display = ""; a.href = url;
     pane.querySelector(".skp-pali").style.display = "none"; const f = pane.querySelector("iframe"); f.style.display = ""; f.src = tp_pdfViewerUrl(url);
@@ -3015,10 +2989,10 @@ let isRomanPali = false;
     const el = document.getElementById("tp-content"); if(!el) return;
     try{ await tp_sayEnsureRefs(); }catch(e){ return; }
     if(mmCurrentBookId !== bookId || mmCurrentPageIdx !== pageIdx || !el.isConnected || el.querySelector(".tp-say-ref")) return;
-    const html = await tp_nissayaLinkify(el.innerHTML);
+    const html = await tp_nissayaLinkify(/^pa_/.test(bookId) ? el.innerHTML.replace(/([က-ဿ])၊[  ]+([၀-၉]+)၊/g, "$1၊$2၊") : el.innerHTML);      // ဖားအောက်စာအုပ်: "သံ၊ ၃၊ ၃၆၃" -> "သံ၊၃၊ ၃၆၃"
     if(mmCurrentBookId === bookId && mmCurrentPageIdx === pageIdx && el.isConnected) el.innerHTML = html;
   }
-  document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("#tp-content .tp-say-ref[data-book]"); if(a && /^sk_/.test(mmCurrentBookId || "")){ e.preventDefault(); e.stopPropagation(); skpOpenPali(a.dataset.book, parseInt(a.dataset.page, 10) || 1, a.dataset.para != null && a.dataset.para !== "" ? parseInt(a.dataset.para, 10) : null); } }, true);
+  document.addEventListener("click", e => { const a = e.target.closest && e.target.closest("#tp-content .tp-say-ref[data-book]"); if(a && /^(sk|pa)_/.test(mmCurrentBookId || "")){ e.preventDefault(); e.stopPropagation(); skpOpenPali(a.dataset.book, parseInt(a.dataset.page, 10) || 1, a.dataset.para != null && a.dataset.para !== "" ? parseInt(a.dataset.para, 10) : null); } }, true);
   function skpCrumb(...more){ renderBreadcrumb([{label:"တိပိဋက", onclick:(e)=>{e.preventDefault(); showBaskets();}}, {label:"ဆရာတော်များ", onclick:(e)=>{e.preventDefault(); showSayadawList();}}, ...more]); }
 
   // ရွှေကျင်စာပေ OCR စာအုပ်များ (data/skp_ocr.json + data/skp/<id>.json - scripts/build_skp_ocr.py) - စာမျက်နှာတိုင်း၏ ထိပ်မှာ 📕 PDF ခလုပ်
