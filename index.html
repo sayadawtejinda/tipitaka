@@ -4531,8 +4531,9 @@ function tp_edLabel(l){
       return trimmed.length > 130 ? tp_ftsEscapeHtml(trimmed.slice(0, 130)) + "..." : tp_ftsEscapeHtml(trimmed);
     }
 
-    const start = Math.max(0, idx - 50);
-    const end = Math.min(text.length, idx + matchLen + 70);
+    let start = Math.max(0, idx - 50), end = Math.min(text.length, idx + matchLen + 70);
+    if(start > 0){ let k = start; while(k > Math.max(0, start - 20) && !/\s/.test(text[k - 1])) k--; start = /\s/.test(text[k - 1] || " ") || k === 0 ? k : start; }       // begin / end at a word boundary (a cut inside a Myanmar syllable leaves a stray vowel sign, which the Roman display cannot convert)
+    if(end < text.length){ let k = end; while(k < Math.min(text.length, end + 20) && !/\s/.test(text[k])) k++; end = k; }
     const bodyHtml = tp_ftsSliceToHtml(text, nodeMap, start, end, idx, idx + matchLen);
     return (start > 0 ? "..." : "") + bodyHtml + (end < text.length ? "..." : "");
   }
