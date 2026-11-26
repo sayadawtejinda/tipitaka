@@ -248,6 +248,25 @@ def count():
     d = t_core.load_translations(n); say('စာအုပ် %03d: မြန်မာပြန်ပြီး ပါဠိ %d မျက်နှာ%s' % (n, len(d), (' (%d–%d)' % (min(d), max(d))) if d else ''))
 
 
+def go_pa():
+    if not messagebox.askyesno('ဖားအောက် စာအုပ် ပြန်ယူ', 'ပြင်ပြီးသော ဖားအောက်ဆရာတော် စာအုပ်များ (spellcheck/out/html/E*.html) မှ web စာမျက်နှာ ပြန်ဆောက်ပြီး GitHub သို့တင်မည်၊ ပြီးလျှင် ဘာသာပြန်ရန် စာသား ပြောင်းသွားသည်ကို စစ်မည်။ ဆက်မလား?'): return
+    def w():
+        try:
+            say('ဖားအောက် စာအုပ် ပြန်ဆောက်နေသည် (မိနစ်အနည်းငယ်)...')
+            if not t_core.pa_rebuild(say, True): return
+            rep = t_core.pa_diff(); _MMS_CACHE.clear()
+            if not rep: say('✔ ဖားအောက် စာအုပ်များ ပြန်ယူပြီး — ဘာသာပြန်စာသား ပြောင်းသွားသည် မရှိ'); return
+            tr = {n: {L: len(v) for L, v in r['tr'].items()} for n, r in rep.items()}
+            for n, r in rep.items(): say('  %s : ပြောင်းသော စာမျက်နှာ %d (ဗီယက်နမ်ပြန်ပြီး %d၊ အင်္ဂလိပ်ပြန်ပြီး %d)' % (t_core.MBV[n], len(r['changed']), tr[n]['vi'], tr[n]['en']))
+            nt = sum(sum(v.values()) for v in tr.values())
+            rq = nt > 0 and messagebox.askyesno('ပြန်ပြန်မလား', 'ပြောင်းသွားသော စာမျက်နှာများတွင် ဘာသာပြန်ပြီးသား %d ခု ရှိသည်။
+ဘာသာပြန် ပြန်လုပ်ရန် စာရင်းထဲ ပြန်ထည့်မလား? (အဟောင်းကို gold/tr_NNN_<ဘာသာ>_before_edit.json ထဲ သိမ်းထားမည်)
+မထည့်လျှင် အဟောင်းအတိုင်း ရှိနေမည်။' % nt)
+            t_core.pa_apply(rep, rq, say); _MMS_CACHE.clear()
+            say('✔ ပြီးပါပြီ — %s' % ('ဘာသာပြန်ပြီးသား %d မျက်နှာကို ပြန်ပြန်ရန် ထည့်ပြီး (စာအုပ်ကို ရွေးပြီး ① ဖိုင်ထုတ်ပါ)' % nt if rq else 'စာသားအသစ်ကိုသာ ယူပြီး၊ ဘာသာပြန်အဟောင်းများ မပြောင်း'))
+        except BaseException as e: say('အမှား: %r' % e)
+    threading.Thread(target=w, daemon=True).start()
+ttk.Button(bf, text='🔄 ဖားအောက် စာအုပ် ပြန်ယူ', command=go_pa).pack(side='left', padx=3)
 b1 = ttk.Button(bf, text='① Gemini ဖိုင် ထုတ်မည်', command=go1); b1.pack(side='left', padx=3)
 def go_toc():
     n = sel(); L = lang_var.get()

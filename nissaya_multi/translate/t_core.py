@@ -128,6 +128,44 @@ def mbv_source(n):
         json.dump({str(i + 1): _mbv_text(h) for i, h in enumerate(pages)}, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 
+def pa_rebuild(log=print, push=True):
+    """Pa-Auk Sayadaw books: rebuild data/pa from the corrected OCR html (scripts/build_pa_ocr.py; with push = also to GitHub)"""
+    import subprocess, sys
+    r = subprocess.run([sys.executable, os.path.join(REPO, 'scripts', 'build_pa_ocr.py')] + (['--push'] if push else []), cwd=REPO, capture_output=True, text=True, encoding='utf-8', errors='replace')
+    tail = (r.stdout or '').strip().splitlines()[-3:]
+    if r.returncode: log('build_pa_ocr အမှား: ' + (r.stderr or '')[-400:]); return False
+    for l in tail: log('  ' + l)
+    return True
+
+
+def pa_diff():
+    """{book number: {'changed': [pages whose Burmese text differs from gold/tr_NNN.json], 'tr': {lang: [of them already translated]}, 'new': {page: text}}} for the books that changed"""
+    out = {}
+    for n in sorted(k for k, v in MBV.items() if v.startswith('pa_')):
+        new = {i + 1: _mbv_text(h) for i, h in enumerate(json.load(open(_mbv_file(n), encoding='utf-8'))['pages'])}
+        p = os.path.join(GOLD, 'tr_%03d.json' % n)
+        if not os.path.exists(p): continue                                   # never opened in the tool: its source is made fresh when needed
+        old = {int(k): v for k, v in json.load(open(p, encoding='utf-8')).items()}
+        ch = sorted(k for k in set(old) | set(new) if old.get(k) != new.get(k))
+        if not ch: continue
+        out[n] = {'changed': ch, 'new': new, 'tr': {L: [k for k in ch if (load_translations(n, L).get(k) or '').strip()] for L in ('vi', 'en')}}
+    return out
+
+
+def pa_apply(rep, requeue=False, log=print):
+    """the new Burmese text becomes the source; requeue=True: the already translated pages whose text changed are taken out of gold/tr_NNN_<lang>.json (copy kept in tr_NNN_<lang>_before_edit.json) so that they are translated again"""
+    for n, r in rep.items():
+        save_translations(n, r['new'])
+        if requeue:
+            for L, pg in r['tr'].items():
+                if not pg: continue
+                d = load_translations(n, L); keep = os.path.join(GOLD, 'tr_%03d_%s_before_edit.json' % (n, L))
+                bk = json.load(open(keep, encoding='utf-8')) if os.path.exists(keep) else {}
+                for k in pg: bk[str(k)] = d.pop(k)
+                json.dump(bk, open(keep, 'w', encoding='utf-8'), ensure_ascii=False, indent=1); save_translations(n, d, L)
+        log('  %s : စာမျက်နှာ %d ခု ပြောင်း' % (MBV[n], len(r['changed'])))
+
+
 def _paired(n): return json.load(open(os.path.join(NSY, 'paired', '%03d.json' % n), encoding='utf-8'))
 
 
