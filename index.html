@@ -560,7 +560,8 @@ let isRomanPali = false;
     if(!sc) return;
     if(!sc.dataset.filled){
       const groupOpts = Object.keys(MM_CAT_GROUPS).map(k => `<option value="cat:${k}">📚 ${MM_CAT_GROUPS[k].label}</option>`).join("");
-      sc.innerHTML = `<option value="">-- ရှာမည့်နေရာ ရွေးပါ --</option><optgroup label="ပိဋကအုပ်စုလိုက်">${groupOpts}</optgroup><optgroup label="ဆရာတော်များ"><option value="skp">📚 ရွှေကျင်စာပေ</option><option value="pa">📚 ဖတ်စာ (ဖားအောက်)</option></optgroup>`;
+      sc.innerHTML = `<option value="">-- ရှာမည့်နေရာ ရွေးပါ --</option><optgroup label="ပိဋကအုပ်စုလိုက်">${groupOpts}</optgroup><optgroup label="ဆရာတော်များ"><option value="skp">📚 ရွှေကျင်စာပေ</option><option value="pa">📚 ဖတ်စာ (ဖားအောက်) - စာအုပ်အားလုံး</option></optgroup>`;
+      try{ const po = await ensurePaIndex(); sc.insertAdjacentHTML("beforeend", `<optgroup label="ဖားအောက် (တစ်အုပ်ချင်း)">${po.order.map(id => `<option value="${id}">${tp_sayEsc(po.books[id].title)}</option>`).join("")}</optgroup>`); }catch(e){}
       sc.dataset.filled = "1";
     }
   }
@@ -607,7 +608,7 @@ let isRomanPali = false;
       item.className = "tp-say-item";
       const bookLabel = bookIds.length > 1 ? `${tp_sayEsc((burmeseBookMeta[h.bookId] || {}).title || h.bookId)} — ` : "";
       item.innerHTML = `<b>${bookLabel}စာမျက်နှာ ${toMyanmarDigits(h.page)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h.snippet)}</div>`;
-      item.addEventListener("click", () => { closeAllDropdowns(); openBurmeseTranslation(h.bookId, null, h.page, true); });
+      item.addEventListener("click", async () => { closeAllDropdowns(); if(/^pa_/.test(h.bookId)){ mmBackContext = { kind: "pa" }; await openBurmeseTranslationBrowse(h.bookId); mmCurrentPageIdx = h.page; renderMmPage(); } else openBurmeseTranslation(h.bookId, null, h.page, true); });
       body.appendChild(item);
     });
   }
@@ -2937,22 +2938,37 @@ let isRomanPali = false;
     setParams({basket: "sayadaw", category: "paauk"});
   }
   // 📚 ဖတ်စာ ရှာဖွေခြင်း - library မှာလိုပဲ ဖတ်စာအားလုံးရဲ့ မာတိကာ/ခေါင်းစဉ်ထဲကို ရှာသည် (စာအုပ်တစ်အုပ်ချင်းရွေးရင် စာသားအပြည့်ရှာနိုင်သည်)
+  // ဖားအောက်စာအုပ် ၆၃ အုပ်လုံး၏ စာသားအပြည့်အစုံကို ရှာသည် (မာတိကာကိုသာ မဟုတ်) - စာအုပ်လေးအုပ်စီ ဆွဲယူပြီး ရှာ၊ ရလဒ်ကို တစ်ဆင့်ချင်း ပြသည် (မှတ်ဉာဏ်မထူအောင် စာအုပ်ကို cache မလုပ်ပါ)
+  let paSearchGen = 0;
   async function tp_paRun(term){
-    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body");
+    const status = document.getElementById("tp-say-status"), body = document.getElementById("tp-say-body"), gen = ++paSearchGen;
     status.textContent = "ရှာဖွေနေပါသည်...";
-    let toc;
-    try{ await ensurePaIndex(); if(!paTocPromise){ paTocPromise = fetchJson(cdnUrl(`${DATA_FOLDER}/pa_toc.json`)); paTocPromise.catch(() => { paTocPromise = null; }); } toc = await paTocPromise; }
-    catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
-    const hits = toc.toc.filter(t => t[3].includes(term));
-    status.textContent = hits.length ? `ဖတ်စာ ထဲမှာ တွေ့ရှိမှု ${hits.length} ခု${hits.length > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : "မတွေ့ပါ";
-    body.innerHTML = "";
-    hits.slice(0, 100).forEach(h => {
-      const id = toc.books[h[0]], meta = burmeseBookMeta[id]; if(!meta) return;
-      const item = document.createElement("div"); item.className = "tp-say-item";
-      item.innerHTML = `<b>${tp_sayEsc(meta.title)}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h[3])}</div>`;
-      item.addEventListener("click", async () => { closeAllDropdowns(); mmBackContext = { kind: "pa" }; await openBurmeseTranslationBrowse(id); mmCurrentPageIdx = h[1]; renderMmPage(); });
-      body.appendChild(item);
-    });
+    let o; try{ o = await ensurePaIndex(); }catch(e){ status.innerHTML = "<span style='color:red;'>ဒေတာ ဖတ်မရပါ</span>"; return; }
+    const norm = t => t.replace(/<[^>]+>/g, "").replace(/📕/g, "").replace(/[\s\u00a0]+/g, " "), q = term.replace(/[\s\u00a0]+/g, " ").trim(), ids = o.order, hits = []; let total = 0, books = 0;
+    const show = (done) => {
+      status.textContent = (done ? `ဖားအောက်စာအုပ်များ ထဲမှာ ` : `ရှာဖွေနေပါသည် (${toMyanmarDigits(books)}/${toMyanmarDigits(ids.length)} အုပ်)... `) + (total ? `တွေ့ရှိမှု ${toMyanmarDigits(total)} ခု${total > 100 ? " (ပထမ ၁၀၀ ခုကိုပြ)" : ""}` : (done ? "မတွေ့ပါ" : ""));
+      body.innerHTML = "";
+      hits.slice(0, 100).forEach(h => {
+        const item = document.createElement("div"); item.className = "tp-say-item";
+        item.innerHTML = `<b>${tp_sayEsc(o.books[h.id].title)} — စာမျက်နှာ ${h.lb}</b><div style="font-size:13px;color:#555;margin-top:2px;">${tp_sayEsc(h.pre)}<mark>${tp_sayEsc(h.hit)}</mark>${tp_sayEsc(h.post)}</div>`;
+        item.addEventListener("click", async () => { closeAllDropdowns(); mmBackContext = { kind: "pa" }; await openBurmeseTranslationBrowse(h.id); mmCurrentPageIdx = h.page; renderMmPage(); });
+        body.appendChild(item);
+      });
+    };
+    for(let i = 0; i < ids.length; i += 4){
+      const batch = ids.slice(i, i + 4);
+      const got = await Promise.all(batch.map(id => (mmPagesCache[id] ? Promise.resolve(mmPagesCache[id]) : fetchJson(cdnUrl(`${DATA_FOLDER}/pa/${id}.json`)).then(d => d.pages)).then(pages => [id, pages]).catch(() => [id, null])));
+      if(gen !== paSearchGen) return;                       // a newer search has started
+      got.forEach(([id, pages]) => {
+        books++; if(!pages) return;
+        pages.forEach((html, k) => {
+          const t = norm(html), at = t.indexOf(q); if(at < 0) return;
+          total++; if(hits.length < 100) hits.push({ id, page: k + 1, lb: (html.match(/စာမျက်နှာ-([၀-၉]+)/) || [])[1] || toMyanmarDigits(k + 1), pre: (at > 40 ? "…" : "") + t.slice(Math.max(0, at - 40), at), hit: t.slice(at, at + q.length), post: t.slice(at + q.length, at + q.length + 60) + (at + q.length + 60 < t.length ? "…" : "") });
+        });
+      });
+      show(false);
+    }
+    show(true);
   }
 
   // ဆရာတော်များ › ရွှေကျင်စာပေ (PDF စာအုပ် ၅၂ အုပ်၊ data/skp_index.json - scripts/build_skp_data.py) - ဘာသာဋီကာလို့ပဲ PDF ကို floating box ထဲမှာ ဖွင့်သည်
