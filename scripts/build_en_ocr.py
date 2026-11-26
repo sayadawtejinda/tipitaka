@@ -11,7 +11,8 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA = os.pa
 SRC = r'C:/Users/sayad/Documents/spellcheck/out/html'
 TR = str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789')
 # English file -> [(Pali book, English part)]  (Pali book ids of data/*.json)
-JOBS = {'F06': ['mula_bi_01']}
+JOBS = {'F06': ['mula_bi_01'], 'F07': ['mula_ku_02']}      # Pali book(s) of each English file
+VERSE = {'F07'}                    # files whose anchors are verse numbers ('Verse 12' / 'Verses 3 and 4' / '12. ...')
 
 
 def blocks_of(f):
@@ -31,6 +32,7 @@ def pali_paras(bid):
         pg = int(r['page']); pages.append(pg)
         for m in re.finditer(r'class="paranum">([၀-၉]+)', r['content']):
             start.setdefault(int(m.group(1).translate(TR)), pg)
+        for n in re.findall(r'\d+', r.get('paranum') or ''): start.setdefault(int(n), pg)
     return start, pages
 
 
@@ -46,10 +48,10 @@ def lis(nums):                       # indices of the longest strictly increasin
     return out[::-1]
 
 
-def align(bl, start, pages):
+def align(bl, start, pages, verse=False):
     cand = []
     for i, (t, x) in enumerate(bl):
-        m = re.match(r'(\d+)\s*[\.\-,]', x) if t == 'p' else None
+        m = (re.match(r'Verses?\s+(\d+)', x) or re.match(r'(\d+)\s*[\.\-,]', x)) if (t == 'p' and verse) else (re.match(r'(\d+)\s*[\.\-,]', x) if t == 'p' else None)
         if m and int(m.group(1)) in start: cand.append((i, int(m.group(1))))
     keep = [cand[k] for k in lis([n for _, n in cand])]
     anchor = {i: n for i, n in keep}; res = {}; cur = None; pend = []
@@ -73,8 +75,10 @@ def render(items): return '\n'.join(('## ' + x.replace('\n', ' ') if t != 'p' el
 
 if __name__ == '__main__':
     key = sys.argv[1]; f = glob.glob(os.path.join(SRC, key + '_*.html'))[0]; bl = blocks_of(f)
+    if key in VERSE:                     # Dhammapada: from the first chapter heading to the glossary
+        a = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x.startswith('Chapter I ')); z = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x == 'Glossary'); bl = bl[a:z]
     for bid in JOBS[key]:
-        start, pages = pali_paras(bid); res, nk, nc = align(bl, start, pages)
+        start, pages = pali_paras(bid); res, nk, nc = align(bl, start, pages, key in VERSE)
         cov = len(res); print(key, bid, 'blocks', len(bl), 'numbered', nc, 'anchors', nk, 'pali pages', len(pages), 'with English', cov, 'first/last page', min(res), max(res))
         gaps = [p for p in pages if p not in res]; print('pages without English:', len(gaps), gaps[:40])
         if '--write' in sys.argv:
