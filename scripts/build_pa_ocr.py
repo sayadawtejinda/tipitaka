@@ -51,6 +51,12 @@ for n, (f, lb) in enumerate(zip(files, LB)):
         for lv, hh in re.findall(r'<h([23])[^>]*>(.*?)</h\1>', t, re.S):
             tt = strip_tags(hh)
             if tt: toc.append({'level': int(lv) - 1, 'title': tt, 'page': i + 1})
+    lib = [e for e in TOC['toc'] if e[0] == n]
+    if lib:      # the contents of the library (checked by hand) is the truth: its PDF page -> the reader page whose PDF page is the same (or the nearest before)
+        pgs = [min(max(pg0 + offs[i], 1), lb['pages']) for i, (pg0, _) in enumerate(pages)]; toc = []
+        for e in lib:
+            tp = e[6] if e[6] is not None else e[2]; ok = [i for i, q in enumerate(pgs) if q <= tp]
+            toc.append({'level': 1, 'title': e[1].strip(), 'page': (max(ok, key=lambda i: (pgs[i], i)) if ok else 0) + 1})
     title = lb['title'] if len(lb['title']) >= len(tit) else tit
     json.dump({'title': title, 'pages': hp, 'toc': toc}, open(os.path.join(OUT, pid + '.json'), 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     books[pid] = {'title': title, 'pages': len(hp), 'pdf': lb['id']}; allbooks.append(pid)
