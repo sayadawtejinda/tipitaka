@@ -11,7 +11,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA = os.pa
 SRC = r'C:/Users/sayad/Documents/spellcheck/out/html'
 TR = str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789')
 # English file -> [(Pali book, English part)]  (Pali book ids of data/*.json)
-JOBS = {'F06': ['mula_bi_01'], 'F07': ['mula_ku_02'], 'F09': ['mula_di_02']}      # Pali book(s) of each English file
+JOBS = {'F06': ['mula_bi_01'], 'F07': ['mula_ku_02'], 'F09': ['mula_di_02'], 'F08': ['mula_sa_03']}      # Pali book(s) of each English file
 VERSE = {'F07'}                    # files whose anchors are verse numbers ('Verse 12' / 'Verses 3 and 4' / '12. ...')
 
 
@@ -51,13 +51,13 @@ def lis(nums):                       # indices of the longest strictly increasin
     return out[::-1]
 
 
-def align(bl, start, pages, verse=False):
+def align(bl, start, pages, verse=False, anchors=None, endpage=None):
     cand = []
     for i, (t, x) in enumerate(bl):
         m = (re.match(r'Verses?\s+(\d+)', x) or re.match(r'(\d+)\s*[\.\-,]', x)) if (t == 'p' and verse) else (re.match(r'(\d+)\s*[\.\-,]', x) if t == 'p' else None)
         if m and int(m.group(1)) in start: cand.append((i, int(m.group(1))))
     keep = [cand[k] for k in lis([n for _, n in cand])]
-    anchor = {i: start[n] for i, n in keep}; ai = sorted(anchor); first = pages[0]; res = {}
+    anchor = {i: start[n] for i, n in keep} if anchors is None else dict(anchors); keep = keep if anchors is None else list(anchors); cand = cand if anchors is None else keep; ai = sorted(anchor); first = pages[0]; res = {}
     L = [len(x) for _, x in bl]
     def put(i, pg): res.setdefault(pg, []).append(bl[i])
     # headings stay with the block after them
@@ -66,7 +66,7 @@ def align(bl, start, pages, verse=False):
         return j
     for a_i in range(len(ai) + 1):
         lo = ai[a_i - 1] if a_i else 0; hi = ai[a_i] if a_i < len(ai) else len(bl)
-        p0 = anchor[ai[a_i - 1]] if a_i else first; p1 = anchor[ai[a_i]] if a_i < len(ai) else (pages[-1] if a_i else first)
+        p0 = anchor[ai[a_i - 1]] if a_i else first; p1 = anchor[ai[a_i]] if a_i < len(ai) else ((endpage or pages[-1]) if a_i else first)
         if a_i == 0: p0 = p1 = anchor[ai[0]] if ai else first        # text before the first anchor: with the first anchor
         end = seg_end(hi) if a_i < len(ai) else hi
         end = max(end, lo + 1) if a_i else end
@@ -89,12 +89,30 @@ def render(items): return '\n'.join(('## ' + x.replace('\n', ' ') if t != 'p' el
 
 if __name__ == '__main__':
     key = sys.argv[1]; f = glob.glob(os.path.join(SRC, key + '_*.html'))[0]; bl = blocks_of(f)
+    anchors = endpage = None
+    if key == 'F08':                     # Khandha Samyutta: the sutta headings '12. NAME SUTTA' (numbers restart in every vagga) = the Pali 'subhead' lines '၁၂။ ...သုတ္တံ' of the same (vagga, number)
+        a = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x.startswith('1. NAKULAPITU SUTTA')); z = next(i for i, (t, x) in enumerate(bl) if i > a and t != 'p' and x.startswith('END OF THE KHANDHA')) + 1; bl = bl[a:z]
+        ek = []; v = 1; prev = 0
+        for i, (t, x) in enumerate(bl):
+            m = re.match(r'(\d+)\.\s+\S', x) if t != 'p' else None
+            if m and re.search(r'[A-Z]{3,}', x):
+                n = int(m.group(1)); v += n < prev; prev = n; ek.append(((v, n), i))
+        pk = {}; v = 0; stop = False
+        for r in json.load(open(os.path.join(DATA, 'mula_sa_03.json'), encoding='utf-8')):
+            for m in re.finditer(r'<p class="(\w+)"[^>]*>(.*?)</p>', r['content'], re.S):
+                t = re.sub(r'<[^>]+>', '', m.group(2)).strip(); c = m.group(1)
+                if c == 'chapter' and 'ခန္ဓသံယုတ္တံ' not in t and pk: stop = True; endpage = int(r['page']); break
+                v += c == 'title'
+                mm = re.match(r'([၀-၉]+)။', t) if c == 'subhead' else None
+                if mm: pk.setdefault((v, int(mm.group(1).translate(TR))), int(r['page']))
+            if stop: break
+        anchors = {i: pk[k] for k, i in ek if k in pk}; print('suttas matched', len(anchors), 'of', len(ek), '; Khandha Samyutta ends on Pali page', endpage)
     if key == 'F09':                     # Mahavagga (Sitagu translation): from the first sutta heading to the index
         a = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x.startswith('I. MAHĀPADĀNA SUTTA DISCOURSE')); z = next(i for i, (t, x) in enumerate(bl) if i > a and t != 'p' and x == 'Index'); bl = bl[a:z]
     if key in VERSE:                     # Dhammapada: from the first chapter heading to the glossary
         a = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x.startswith('Chapter I ')); z = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x == 'Glossary'); bl = bl[a:z]
     for bid in JOBS[key]:
-        start, pages = pali_paras(bid); res, nk, nc = align(bl, start, pages, key in VERSE)
+        start, pages = pali_paras(bid); res, nk, nc = align(bl, start, pages, key in VERSE, anchors, endpage)
         cov = len(res); print(key, bid, 'blocks', len(bl), 'numbered', nc, 'anchors', nk, 'pali pages', len(pages), 'with English', cov, 'first/last page', min(res), max(res))
         gaps = [p for p in pages if p not in res]; print('pages without English:', len(gaps), gaps[:40])
         if '--write' in sys.argv:
