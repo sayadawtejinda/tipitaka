@@ -87,8 +87,49 @@ def align(bl, start, pages, verse=False, anchors=None, endpage=None):
 def render(items): return '\n'.join(('## ' + x.replace('\n', ' ') if t != 'p' else x) for t, x in items)
 
 
+NAMEJOBS = {'F01': (['mula_an_01', 'mula_an_02'], 'vagga'), 'F02': (['mula_an_03'], 'sutta'), 'F03': (['mula_an_04'], 'sutta'), 'F04': (['mula_an_05'], 'sutta'), 'F05': (['mula_an_06', 'mula_an_07'], 'sutta')}      # Anguttara: matched by sutta / vagga NAME (scripts/en_names.py)
+
+
+def write_book(key, bid, res):
+    d = os.path.join(DATA, 'translations_en'); fp = os.path.join(d, bid + '.json')
+    json.dump({str(p): render(res[p]) for p in sorted(res)}, open(fp, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+    ip = os.path.join(d, 'index.json'); idx = json.load(open(ip, encoding='utf-8')); ents = idx.setdefault(bid, [])
+    if not any(x['file'] == bid + '.json' for x in ents): ents.append({'file': bid + '.json', 'sheet': 3000 + int(key[1:])})
+    json.dump(idx, open(ip, 'w', encoding='utf-8'), ensure_ascii=False); print('written', fp)
+
+
+def run_names(key, bl):
+    import en_names
+    books, level = NAMEJOBS[key]; E = en_names.en_items(bl, level); Pl = []
+    for bk in books: Pl += en_names.pa_items(bk, DATA, level)
+    pairs = en_names.dp(E, Pl); print(key, level, 'English headings', len(E), 'Pali headings', len(Pl), 'paired', len(pairs))
+    per = {bk: [] for bk in books}
+    for i, j in pairs: per[Pl[j][0]].append((E[i][0], Pl[j][1]))
+    lo = 0
+    for n, bk in enumerate(books):
+        ps = sorted(per[bk])
+        if not ps: print(bk, 'no English headings paired'); continue
+        a0 = ps[0][0]
+        while a0 > lo and bl[a0 - 1][0] != 'p': a0 -= 1                     # the headings in front of the first sutta (nipata / vagga titles)
+        hi = len(bl)
+        if n + 1 < len(books) and per[books[n + 1]]:
+            hi = sorted(per[books[n + 1]])[0][0]
+            while hi > a0 and bl[hi - 1][0] != 'p': hi -= 1
+        else:
+            z = next((i for i, (t, x) in enumerate(bl) if i > ps[-1][0] and t != 'p' and x.strip().lower() in ('glossary', 'index', 'appendix')), len(bl)); hi = min(hi, z)
+        sub = bl[a0:hi]; anchors = {i - a0: pg for i, pg in ps if a0 <= i < hi}
+        start, pages = pali_paras(bk); res, nk, nc = align(sub, start, pages, False, anchors, None)
+        print(bk, 'English blocks', len(sub), 'anchors', len(anchors), 'Pali pages', len(pages), 'with English', len(res), 'first/last', min(res), max(res))
+        miss = [p for p in pages if p not in res]; print('  Pali pages without English:', len(miss), miss[:30])
+        if '--write' in sys.argv: write_book(key, bk, res)
+        lo = hi
+
+
 if __name__ == '__main__':
     key = sys.argv[1]; f = glob.glob(os.path.join(SRC, key + '_*.html'))[0]; bl = blocks_of(f)
+    if key in NAMEJOBS:
+        run_names(key, bl)
+        sys.exit()
     anchors = endpage = None
     if key == 'F08':                     # Khandha Samyutta: the sutta headings '12. NAME SUTTA' (numbers restart in every vagga) = the Pali 'subhead' lines '၁၂။ ...သုတ္တံ' of the same (vagga, number)
         a = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x.startswith('1. NAKULAPITU SUTTA')); z = next(i for i, (t, x) in enumerate(bl) if i > a and t != 'p' and x.startswith('END OF THE KHANDHA')) + 1; bl = bl[a:z]
