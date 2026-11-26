@@ -3135,7 +3135,7 @@ let isRomanPali = false;
     const card = (attr, name, sub) => `<div class="tp-card" ${attr}>${name}<span class="tp-count">${sub}</span></div>`;
     if(bs === "pa" && paBooks.length){
       crumb.push(crumbLang(false), {label: lang === "vi" ? "Ngài Pa-Auk Sayadaw" : "Pa-Auk Sayadaw"}); params.category = "pa";
-      html = `<div class="tp-grid">${paBooks.map(b => `<div class="tp-card" data-mbvtr="${b.id}">${rn(b.title)}</div>`).join("")}</div>`;
+      html = `<div class="tp-grid">${paBooks.map(b => `<div class="tp-card" data-mbvtr="${b.id}">${esc2(b.title)}</div>`).join("")}</div>`;
     }else if(bs === "mbv" && mbvBooks.length){
       crumb.push(crumbLang(false), {label: lang === "vi" ? "Ngài Mingun Sayadaw" : "Mingun Sayadaw"}); params.category = "mbv";
       html = `<div class="tp-grid">${mbvBooks.map(b => `<div class="tp-card" data-mbvtr="${b.id}">${esc2(MBV_TR_NAME[b.id])}</div>`).join("")}</div>`;
