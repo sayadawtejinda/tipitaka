@@ -11,7 +11,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); DATA = os.pa
 SRC = r'C:/Users/sayad/Documents/spellcheck/out/html'
 TR = str.maketrans('၀၁၂၃၄၅၆၇၈၉', '0123456789')
 # English file -> [(Pali book, English part)]  (Pali book ids of data/*.json)
-JOBS = {'F06': ['mula_bi_01'], 'F07': ['mula_ku_02']}      # Pali book(s) of each English file
+JOBS = {'F06': ['mula_bi_01'], 'F07': ['mula_ku_02'], 'F09': ['mula_di_02']}      # Pali book(s) of each English file
 VERSE = {'F07'}                    # files whose anchors are verse numbers ('Verse 12' / 'Verses 3 and 4' / '12. ...')
 
 
@@ -26,10 +26,13 @@ def blocks_of(f):
     return out
 
 
+WT = {}                                 # Pali page -> length of its text (weights for spreading the English text over the pages between two anchors)
+
+
 def pali_paras(bid):
-    P = json.load(open(os.path.join(DATA, bid + '.json'), encoding='utf-8')); start = {}; pages = []
+    P = json.load(open(os.path.join(DATA, bid + '.json'), encoding='utf-8')); start = {}; pages = []; WT.clear()
     for r in P:
-        pg = int(r['page']); pages.append(pg)
+        pg = int(r['page']); pages.append(pg); WT[pg] = max(1, len(re.sub(r'<[^>]+>', '', r['content'])))
         for m in re.finditer(r'class="paranum">([၀-၉]+)', r['content']):
             start.setdefault(int(m.group(1).translate(TR)), pg)
         for n in re.findall(r'\d+', r.get('paranum') or ''): start.setdefault(int(n), pg)
@@ -54,19 +57,30 @@ def align(bl, start, pages, verse=False):
         m = (re.match(r'Verses?\s+(\d+)', x) or re.match(r'(\d+)\s*[\.\-,]', x)) if (t == 'p' and verse) else (re.match(r'(\d+)\s*[\.\-,]', x) if t == 'p' else None)
         if m and int(m.group(1)) in start: cand.append((i, int(m.group(1))))
     keep = [cand[k] for k in lis([n for _, n in cand])]
-    anchor = {i: n for i, n in keep}; res = {}; cur = None; pend = []
-    first = pages[0]
-    for i, (t, x) in enumerate(bl):
-        if i in anchor:
-            cur = start[anchor[i]]
-            for q in pend: res.setdefault(cur, []).append(q)
-            pend = []
-            res.setdefault(cur, []).append(('p', x)); continue
-        if t != 'p' and re.match(r'h', t): pend.append((t, x)); continue
-        if pend and cur is not None:                      # a heading that was not followed by an anchor: it belongs to the previous page
-            for q in pend: res.setdefault(cur, []).append(q)
-            pend = []
-        res.setdefault(cur if cur is not None else first, []).append((t, x))
+    anchor = {i: start[n] for i, n in keep}; ai = sorted(anchor); first = pages[0]; res = {}
+    L = [len(x) for _, x in bl]
+    def put(i, pg): res.setdefault(pg, []).append(bl[i])
+    # headings stay with the block after them
+    def seg_end(j):                       # last block index (exclusive) of the segment that ends before the next anchor, without the headings that lead into it
+        while j > 0 and bl[j - 1][0] != 'p': j -= 1
+        return j
+    for a_i in range(len(ai) + 1):
+        lo = ai[a_i - 1] if a_i else 0; hi = ai[a_i] if a_i < len(ai) else len(bl)
+        p0 = anchor[ai[a_i - 1]] if a_i else first; p1 = anchor[ai[a_i]] if a_i < len(ai) else (pages[-1] if a_i else first)
+        if a_i == 0: p0 = p1 = anchor[ai[0]] if ai else first        # text before the first anchor: with the first anchor
+        end = seg_end(hi) if a_i < len(ai) else hi
+        end = max(end, lo + 1) if a_i else end
+        if a_i and a_i < len(ai) or a_i == len(ai):
+            pr = [q for q in pages if p0 <= q <= p1] or [p0]
+        else: pr = [p0]
+        tot = sum(WT.get(q, 1) for q in pr); cum = []; c = 0
+        for q in pr: c += WT.get(q, 1); cum.append(c / tot)
+        blen = sum(L[lo:end]) or 1; run = 0
+        for b in range(lo, end):
+            f = run / blen; run += L[b]
+            k = next((n for n, v in enumerate(cum) if f < v), len(pr) - 1)
+            put(b, pr[k] if b != lo or not a_i else p0)
+        for b in range(end, hi): put(b, anchor[ai[a_i]] if a_i < len(ai) else p0)       # the headings in front of the next anchor
     return res, len(keep), len(cand)
 
 
@@ -75,6 +89,8 @@ def render(items): return '\n'.join(('## ' + x.replace('\n', ' ') if t != 'p' el
 
 if __name__ == '__main__':
     key = sys.argv[1]; f = glob.glob(os.path.join(SRC, key + '_*.html'))[0]; bl = blocks_of(f)
+    if key == 'F09':                     # Mahavagga (Sitagu translation): from the first sutta heading to the index
+        a = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x.startswith('I. MAHĀPADĀNA SUTTA DISCOURSE')); z = next(i for i, (t, x) in enumerate(bl) if i > a and t != 'p' and x == 'Index'); bl = bl[a:z]
     if key in VERSE:                     # Dhammapada: from the first chapter heading to the glossary
         a = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x.startswith('Chapter I ')); z = next(i for i, (t, x) in enumerate(bl) if t != 'p' and x == 'Glossary'); bl = bl[a:z]
     for bid in JOBS[key]:
