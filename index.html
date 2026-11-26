@@ -2285,7 +2285,7 @@ let isRomanPali = false;
 
     const pageHtml = pages[mmCurrentPageIdx - 1] || "";
     const isPa = mmCurrentBookId.startsWith("pa_");
-    const mbvIs = mmCurrentBookId.startsWith("mbv_");
+    const mbvIs = mmCurrentBookId.startsWith("mbv_") || mmCurrentBookId.startsWith("pa_");
     if(mbvIs && !window._mbvEdLoaded){ window._mbvEdLoaded = true; tp_loadEditions().then(() => renderMmPage(highlightText, autoOpenToc)).catch(() => {}); }
     const mbvAvail = mbvIs ? ["vi", "en"].filter(L => (TP_TR_VARS_X[L][mmCurrentBookId] || []).length) : [];
     const mbvL = mbvSplit && mbvAvail.length ? (mbvAvail.includes(mbvLang) ? mbvLang : mbvAvail[0]) : "";
@@ -2338,7 +2338,7 @@ let isRomanPali = false;
     document.getElementById("tp-float-prev").addEventListener("click", ()=>{ mmCurrentPageIdx--; renderMmPage(); });
     document.getElementById("tp-float-next").addEventListener("click", ()=>{ mmCurrentPageIdx++; renderMmPage(); });
     document.getElementById("tp-mm-back").addEventListener("click", async ()=>{
-      if(mmCurrentBookId.startsWith("pa_")){ closeAllDropdowns(); showPaBooks(); return; }
+      if(mmCurrentBookId.startsWith("pa_")){ closeAllDropdowns(); if(mbvViaTr){ showTrLangBooks(mbvViaTr, "pa"); return; } showPaBooks(); return; }
       if(mmCurrentBookId.startsWith("sk_")){ closeAllDropdowns(); const so = skpOcrData, gr = so && so.groups.find(g => g.books.includes(mmCurrentBookId)); if(gr) showSkpBooks(gr.id); else showSkpAuthors(); return; }
       if(mmCurrentBookId.startsWith("mbv_")){ closeAllDropdowns(); if(mbvViaTr){ showTrLangBooks(mbvViaTr); return; } showMbvBooks(); return; }
       try {
@@ -3128,11 +3128,15 @@ let isRomanPali = false;
     const seen = new Set(), ids = Object.keys(TP_TR_VARS_X[lang]), books = idx.books.filter(b => ids.includes(b.id) && !seen.has(b.id) && seen.add(b.id));      // Pāḷi order, each book once
     const unit = n => lang === "vi" ? `${n} sách` : (n === 1 ? "1 book" : `${n} books`), rn = t => esc2(tpRomanName(t));
     const mbvBooks = MBV_BOOKS.filter(b => (TP_TR_VARS_X[lang][b.id] || []).length);      // Minkun Sayadaw's Mahābuddhavaṃsa (a Burmese book translated into this language)
+    let paBooks = []; try{ const po = await ensurePaIndex(); paBooks = po.order.filter(id => (TP_TR_VARS_X[lang][id] || []).length).map(id => ({id, title: po.books[id].title})); }catch(e){}      // Pa-Auk Sayadaw's books (Burmese books translated into this language)
     const crumb = [{label: "Tipiṭaka", onclick: e => {e.preventDefault(); showBaskets();}}];
     const crumbLang = last => ({label: TR_LANG_NAME[lang], onclick: last ? undefined : (e => {e.preventDefault(); showTrLangBooks(lang, "");})});
     let html = "", params = {basket: "tr_" + lang};
     const card = (attr, name, sub) => `<div class="tp-card" ${attr}>${name}<span class="tp-count">${sub}</span></div>`;
-    if(bs === "mbv" && mbvBooks.length){
+    if(bs === "pa" && paBooks.length){
+      crumb.push(crumbLang(false), {label: lang === "vi" ? "Ngài Pa-Auk Sayadaw" : "Pa-Auk Sayadaw"}); params.category = "pa";
+      html = `<div class="tp-grid">${paBooks.map(b => `<div class="tp-card" data-mbvtr="${b.id}">${rn(b.title)}</div>`).join("")}</div>`;
+    }else if(bs === "mbv" && mbvBooks.length){
       crumb.push(crumbLang(false), {label: lang === "vi" ? "Ngài Mingun Sayadaw" : "Mingun Sayadaw"}); params.category = "mbv";
       html = `<div class="tp-grid">${mbvBooks.map(b => `<div class="tp-card" data-mbvtr="${b.id}">${esc2(MBV_TR_NAME[b.id])}</div>`).join("")}</div>`;
     }else if(bs && idx.basket_labels[bs] && books.some(b => b.basket === bs)){
@@ -3151,6 +3155,7 @@ let isRomanPali = false;
       bs = ""; tpTrLast.bs = ""; tpTrLast.cat = ""; crumb.push(crumbLang(true));
       html = Object.keys(idx.basket_labels).filter(k => books.some(b => b.basket === k)).map(k => card(`data-trbs="${k}"`, rn(idx.basket_labels[k]), unit(books.filter(b => b.basket === k).length))).join("");
       html += card(`data-trbs="charts"`, lang === "vi" ? "Bảng biểu (Charts)" : "Charts", lang === "vi" ? "3 bảng" : "3 charts");
+      if(paBooks.length) html += card(`data-trbs="pa"`, lang === "vi" ? "Ngài Pa-Auk Sayadaw" : "Pa-Auk Sayadaw", unit(paBooks.length));
       if(mbvBooks.length) html += card(`data-trbs="mbv"`, lang === "vi" ? "Ngài Mingun Sayadaw" : "Mingun Sayadaw", unit(mbvBooks.length));
       html = html ? `<div class="tp-grid">${html}</div>` : `<p style="color:#888;padding:16px">${lang === "vi" ? "Chưa có sách nào được dịch sang tiếng Việt." : "No book has been translated into English yet."}</p>`;
     }

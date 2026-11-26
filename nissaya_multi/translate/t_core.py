@@ -14,7 +14,11 @@ NL = chr(10)
 HEAD_CLS = {'nikaya', 'book', 'chapter', 'subhead', 'subsubhead', 'title', 'centered', 'center_bold', 'center', 'ending'}      # Pali block classes that are headings
 
 
-MBV = {900 + i: 'mbv_%d' % i for i in range(1, 9)}      # Minkun Sayadaw's Mahabuddhavamsa (8 volumes, data/mbv_N.json): pseudo book numbers 901-908. Source = the Burmese book itself (page index = the reader's page), translated into vi / en only
+MBV = {900 + i: 'mbv_%d' % i for i in range(1, 9)}
+MBV.update({2000 + i: 'pa_E%02d' % i for i in range(1, 64)})      # Pa-Auk Sayadaw's 63 books (data/pa/pa_Exx.json, scripts/build_pa_ocr.py): pseudo book numbers 2001-2063, handled exactly like the Mahabuddhavamsa volumes (Burmese book itself -> vi / en, page = reader page)
+
+
+def _mbv_file(n): return os.path.join(os.path.dirname(NSY), 'data', ('pa/' if MBV[n].startswith('pa_') else '') + MBV[n] + '.json')      # Minkun Sayadaw's Mahabuddhavamsa (8 volumes, data/mbv_N.json): pseudo book numbers 901-908. Source = the Burmese book itself (page index = the reader's page), translated into vi / en only
 
 
 TOCP = 100000
@@ -26,7 +30,7 @@ def _mms_map():
     p = os.path.join(GOLD, 'mms_ids.json'); ids = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else {}
     idx = os.path.join(os.path.dirname(NSY), 'data', 'mm_split', 'index.json')
     now = sorted(json.load(open(idx, encoding='utf-8'))) if os.path.exists(idx) else []
-    new = [b for b in now if b not in ids]
+    new = [b for b in now if b not in ids.values()]
     if new:
         nxt = max([int(k) for k in ids] + [1000]) + 1
         for b in new: ids[str(nxt)] = b; nxt += 1
@@ -60,7 +64,7 @@ def mms_source(n):
         json.dump({str(k): _mbv_text(d[k]) for k in sorted(d, key=int) if _mbv_text(d[k]).strip()}, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 
 
-def _mbv_toc(n): return json.load(open(os.path.join(os.path.dirname(NSY), 'data', MBV[n] + '.json'), encoding='utf-8'))['toc']
+def _mbv_toc(n): return json.load(open(_mbv_file(n), encoding='utf-8'))['toc']
 
 
 def _toc_from_headings(n, lang):
@@ -108,6 +112,7 @@ def mbv_toc_missing(n, lang):
 
 def _mbv_text(html):
     h = re.sub(r'(?is)<(script|style)[^>]*>.*?</(?:script|style)>', '', html)
+    h = re.sub(r'(?is)<div class="skp-ph">.*?</div>', '', h)                      # page head of the OCR books (page number + PDF button)
     h = re.sub(r'(?i)<h[1-6][^>]*>(.*?)</h[1-6]>', lambda m: NL + '## ' + re.sub(r'<[^>]+>', '', m.group(1)).strip() + NL, h)
     h = re.sub(r'(?i)<br\s*/?>|</(p|div|tr|li)>', NL, h); h = re.sub(r'<[^>]+>', '', h)
     h = h.replace('&nbsp;', ' ').replace('&amp;', '&').replace('&lt;', '<').replace('&gt;', '>')
@@ -118,7 +123,7 @@ def mbv_source(n):
     """gold/tr_90N.json {page: Burmese text of the book page}: made from data/mbv_N.json the first time"""
     p = os.path.join(GOLD, 'tr_%03d.json' % n)
     if not os.path.exists(p):
-        pages = json.load(open(os.path.join(os.path.dirname(NSY), 'data', MBV[n] + '.json'), encoding='utf-8'))['pages']
+        pages = json.load(open(_mbv_file(n), encoding='utf-8'))['pages']
         os.makedirs(GOLD, exist_ok=True)
         json.dump({str(i + 1): _mbv_text(h) for i, h in enumerate(pages)}, open(p, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 

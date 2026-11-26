@@ -58,6 +58,12 @@ def translated_here(n, books, tri):
         if not need or not need <= have: return False
     return True
 _MMS_CACHE = {}
+_PA_TITLES = {}
+def _pa_title(bid):
+    if not _PA_TITLES:
+        try: _PA_TITLES.update({k: v['title'] for k, v in json.load(open(os.path.join(TIPI, 'data', 'pa_ocr.json'), encoding='utf-8'))['books'].items()})
+        except Exception: pass
+    return _PA_TITLES.get(bid, bid)
 def get_sheets(keep=None):
     keep = keep if keep is not None else load_state().get('sheet')     # the book chosen / published last stays in the list (even when it would be hidden)
     L = lang_var.get()
@@ -70,10 +76,19 @@ def get_sheets(keep=None):
             web = lang_on_web(n, L)
             if n != keep and hidepub.get() and web: continue                 # the ticked box: a sheet whose Vietnamese / English is ON THE WEB (all its Burmese-translated pages) is hidden
             out.append((n, '%s   [%s %d/%d%s]' % (t, LANG_NAME[L], got, tot, ' · web ✓' if web else '')))
-        for n, bid in sorted(t_core.MBV.items()):      # Minkun Sayadaw's Mahabuddhavamsa (Burmese book itself -> vi / en)
-            t_core.mbv_source(n); tot, got = t_core.lang_progress(n, L)
-            if n != keep and hidepub.get() and lang_on_web(n, L): continue
-            out.append((n, 'မင်းကွန်းဆရာတော် မဟာဗုဒ္ဓဝင် (%s)   [%s %d/%d]' % (bid, LANG_NAME[L], got, tot)))
+        ckb = ('mbv', L, hidepub.get(), keep)      # Mahabuddhavamsa (8 volumes) + Pa-Auk Sayadaw's 63 books: the Burmese book itself -> vi / en; rebuilt at most once a minute (63 big files)
+        if _MMS_CACHE.get('kb') != ckb or time.time() - _MMS_CACHE.get('tb', 0) > 60:
+            rows = []
+            for n, bid in sorted(t_core.MBV.items()):
+                try:
+                    t_core.mbv_source(n); tot, got = t_core.lang_progress(n, L); web = lang_on_web(n, L)
+                except Exception: continue
+                if n != keep and hidepub.get() and web: continue
+                if bid.startswith('pa_'): name = 'ဖားအောက်ဆရာတော် %s (%s)' % (_pa_title(bid), bid)
+                else: name = 'မင်းကွန်းဆရာတော် မဟာဗုဒ္ဓဝင် (%s)' % bid
+                rows.append((n, '%s   [%s %d/%d%s]' % (name, LANG_NAME[L], got, tot, ' · web ✓' if web else '')))
+            _MMS_CACHE.update(kb=ckb, tb=time.time(), rowsb=rows)
+        out.extend(_MMS_CACHE['rowsb'])
         ck = (L, hidepub.get(), keep)          # old books of the reader (57 files): the list is rebuilt at most once a minute (reading all of them every 5 seconds would be slow)
         if _MMS_CACHE.get('k') != ck or time.time() - _MMS_CACHE.get('t', 0) > 60:
             rows = []
